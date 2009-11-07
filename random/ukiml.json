@@ -1,0 +1,43 @@
+var theme = uki.theme.Default.factory();
+
+var panel = uki.build(
+[
+    {
+        view: 'uki.component.Panel',
+        frame: new common.geometry.Rect.fromCoords(100, 100, 200, 200),
+        anchor: [true, false, false, true], // ''
+        autosize: [true, true],
+        name: 'panel',
+        background: new uki.background.Tiled9('/i/Panel'),
+        subviews: [
+            {
+                view: new uki.component.Tree(),
+                origin: '100px 10%', // new component.geometry.Point(100, parent.frame.percentX(10))
+                size: '200px 200px', // new component.geometry.Rect(200, 200)
+                anchor: 'top left',
+                autosize: 'width height', // both, none, ''
+                background: 'Tiled9(/i/Tree/*.png)' // Image(lt.png), Image(t.png), rt.png, r.png, rb.png, b.png, lb.png, l.png
+            },
+            {
+                view: theme.button(),
+                origin: '100px 100px',
+                label: 'OK'
+            },
+            {
+                view: theme.textField(),
+                background: '#EBACCA', // Plain(#EBACCA)
+                id: 'aaaa',
+                name: 'something'
+            },
+            {
+                view: theme.panel(),
+                background: 'VerticalGradient(#CCCCCC, #FFFFFF)'
+            }
+        ]
+    }
+]
+);
+
+uki.find('Panel project.custom.Tree Button[label=OK]').bind('click', function() {
+    
+});

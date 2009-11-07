@@ -1,0 +1,11 @@
+---
+  environment: development
+  # address: 127.0.0.1
+  port: 4867
+  pid: thin.pid
+  rackup: uki.ru
+  log: thin.log
+  max_conns: 1024
+  timeout: 30
+  max_persistent_conns: 1024
+  daemonize: true
