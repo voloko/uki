@@ -127,7 +127,7 @@ include('../uki.js');
         },
         
         eq: function(rect) {
-            return this.size.eq(rect.size) && this.origin.eq(rect.origin);
+            return rect && this.size.eq(rect.size) && this.origin.eq(rect.origin);
         },
         
         inset: function(dx, dy) {
@@ -198,6 +198,7 @@ include('../uki.js');
     Rect.fromString = function(string, relative) {
         var rawParts = string.split(/\s+/),
             parts = [[rawParts[0], rawParts[1]].join(' '), [rawParts[2], rawParts[3]].join(' ')];
+            
         return new Rect( 
             Point.fromString( parts[0], relative ), 
             Size.fromString( parts[1], relative ) 

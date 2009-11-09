@@ -8,22 +8,23 @@ var root = this,
 
 uki.core.builder = new function() {
 
-    this.build = function(ml) {
-        var result = [];
-        for (var i=0; i < ml.length; i++) {
-            result[i] = createComponent(ml[i]);
-            uki.each(ml[i], function(name, value) {
-                attr(result[i], name, value);
-            })
-        };
-        return result;
+    uki.build = this.build = function(ml, parent) {
+        if (uki.isArray(ml)) return createMulti(ml, parent);
+        return createSingle(ml, parent);
     };
+    
+    function createMulti (ml, parent) {
+        return uki.map(ml, function(mlRow) { return createSingle(mlRow, parent) });
+    }
 
-    function createComponent (mlRow) {
-        var c = mlRow.view || mlRow.type;
+    function createSingle (mlRow, parent) {
+        if (uki.isFunction(mlRow.typeName)) return mlRow;
+        
+        var c = mlRow.view || mlRow.type,
+            result;
         mlRow.type = mlRow.view = undefined;
         if (uki.isFunction(c)) {
-            return c();
+            result = c();
         } else if (typeof c === 'string') {
             var parts = c.split('.'),
                 obj   = root;
@@ -33,11 +34,27 @@ uki.core.builder = new function() {
             for (var i=0; i < parts.length; i++) {
                 obj = obj[parts[i]];
             };
-            return new obj();
+            result = new obj();
         } else {
-            return c;
+            result = c;
         }
+        
+        return copyAttrs(result, mlRow, parent);
+    }
+    
+    function copyAttrs(comp, mlRow, parent) {
+        var orderedAttrs = uki.isFunction(comp.builderAttrs) ? comp.builderAttrs() : [];
+        if (parent) parent.addChild(comp);
+        uki.each(orderedAttrs, function(i, name) {
+            if (mlRow[name]) attr(comp, name, mlRow[name]);
+            mlRow[name] = undefined;
+        });
+        uki.each(mlRow, function(name, value) {
+            attr(comp, name, value);
+        });
+        return comp;
     }
 };
+
     
 })();

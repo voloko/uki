@@ -12,7 +12,6 @@ self.prototype = uki.extend({}, base, {
        this._dom = this._dom = document.createElement('textarea');
        this._domStyle = this._dom.style;
        this._domStyle.cssText = base.defaultCss;
-       this._domResize(this.rect);
    } 
 });
     

@@ -145,3 +145,25 @@ QUnit.test("should set rect from coords", function() {
     QUnit.equals(c.domStyle().width, '790px'); // 1000 -20% -10 = 790
     QUnit.equals(c.domStyle().height, '100px');
 });
+
+
+QUnit.test("should create children from ukiml", function() {
+    var c = new Base();
+    c.rect('0 0 1000px 1000px');
+    c.children([
+        {
+            view: new Base(),
+            rect: '10% 11% 12% 13%', autosize: 'height'
+        },
+        {
+            view: new Base(),
+            rect: '20% 10% 10% 10%', autosize: 'width height'
+        }
+    ]);
+    uki.layout.perform();
+    QUnit.equals(c.children().length, 2);
+    QUnit.equals(c.children()[0].domStyle().left, '100px');
+    QUnit.equals(c.children()[0].domStyle().top, '110px');
+    QUnit.equals(c.children()[0].domStyle().width, '120px');
+    QUnit.equals(c.children()[0].domStyle().height, '130px');
+});
