@@ -8,6 +8,10 @@ var Base = uki.component.Base.prototype,
     };
     
 self.prototype = uki.extend({}, Base, {
+    typeName: function() {
+        return 'uki.component.Label';
+    },
+    
     _domCreate: function() {
         this._selectable = true;
         this._dom = document.createElement('div');

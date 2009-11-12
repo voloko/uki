@@ -84,6 +84,12 @@ QUnit.test("should map collection", function() {
     QUnit.same(result, [-1, -2, -3, -4]);
 });
 
+QUnit.test("should reduce", function() {
+    var result = utils.reduce(1, [1,2,3,4], function(x, e) { return e*x; });
+    QUnit.equals(result, 2*3*4);
+});
+
+
 QUnit.test("should map collection", function() {
     QUnit.expect(4);
     var context = {};
@@ -91,6 +97,12 @@ QUnit.test("should map collection", function() {
         QUnit.equals(this, context);
     }, context);
 });
+
+QUnit.test("should map by field name", function() {
+    var result = utils.map([{a: 1}, {a: 2}, {a: 3}], 'a');
+    QUnit.same(result, [1, 2, 3]);
+});
+
 
 QUnit.test("should extend objects", function() {
     var e = utils.extend({a: 1}, {b: 2}, {c: 3, d: undefined});

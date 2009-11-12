@@ -85,15 +85,23 @@ var utils = uki.core.utils = {
     },
     
     map: function( elems, callback, context ) {
-        var ret = [];
+        var ret = [],
+            mapper = utils.isFunction(callback) ? callback : function(e) { return e[callback] };
 
         for ( var i = 0, length = elems.length; i < length; i++ ) {
-            var value = callback.call( context || elems[ i ], elems[ i ], i );
+            var value = mapper.call( context || elems[ i ], elems[ i ], i );
 
             if ( value != null ) { ret[ ret.length ] = value; }
         }
 
-        return ret.concat.apply( [], ret );
+        return ret;
+    },
+    
+    reduce: function( initial, elems, callback, context ) {
+        for ( var i = 0, length = elems.length; i < length; i++ ) {
+            initial = callback.call( context || elems[ i ], initial, elems[ i ], i );
+        }
+        return initial;
     },
 
     extend: function() {

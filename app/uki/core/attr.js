@@ -2,7 +2,7 @@ include('../core.js');
 include('../core/utils.js');
 include('../geometry.js');
 
-uki.core.attr = function(comp, attr, value) {
+uki.attr = uki.core.attr = function(comp, attr, value) {
     if (arguments.length > 2) {
         if (uki.isFunction(comp[attr])) {
             comp[attr](value);
