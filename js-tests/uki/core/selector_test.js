@@ -48,6 +48,16 @@ QUnit.test("should filter * name", function() {
     QUnit.equals(uki.attr(elements[3], 'name'), 'sub base');
 });
 
+QUnit.test("should filter * * name", function() {
+    var elements = Selector.find('*', tree);
+    QUnit.equals(elements.length, 4);
+    QUnit.equals(uki.attr(elements[0], 'name'), 'base');
+    QUnit.equals(uki.attr(elements[1], 'name'), 'label1');
+    QUnit.equals(uki.attr(elements[2], 'name'), 'label2');
+    QUnit.equals(uki.attr(elements[3], 'name'), 'sub base');
+});
+
+
 QUnit.test("should filter by full typeName", function() {
     var elements = Selector.find('uki.component.Label', tree);
     QUnit.equals(elements.length, 2);
