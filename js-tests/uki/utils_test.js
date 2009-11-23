@@ -1,7 +1,7 @@
-require('../../test_helper.js');
-include('uki/core/utils.js');
+require('../test_helper.js');
+include('uki/utils.js');
 
-var utils = uki.core.utils;
+var utils = uki.utils;
 
 QUnit.test("should test is function", function() {
     var f1 = function() {};

@@ -6,7 +6,7 @@ function buildPanel (top) {
         Label = uki.component.Label;
 
     var panel = uki.build({
-        view: new Base(),
+        view: 'Base',
         rect: new uki.geometry.Rect(0, top, d.rect().size.width, 79),
         anchors: 'left top right', autosize: 'width',
         children: [
@@ -72,14 +72,13 @@ function buildPanel (top) {
             {
                 view: new uki.component.Input(),
                 rect: '-215 9 60 20',
-                anchors: 'top rigth'
+                anchors: 'top right'
             }
         ]
-    });
+    })[0];
     
     panel.domStyle().backgroundColor = '#EEE';
     panel.domStyle().borderBottom = '1px solid #999';
-    panel.children()[0].domStyle().lineHeight = '15px'
     
     // var panel = new uki.component.Base(new uki.geometry.Rect(0, top, d.rect().size.width, 79));
     // panel.autosize('width');
@@ -145,15 +144,22 @@ function buildPanel (top) {
     return panel;
 }
 
+var tmp;
 var b = $('body');
 var w = $(window);
 var N = 100;
 var d = new uki.component.Base(new uki.geometry.Rect(0, 0, w.width(), 80*N));
 d.domStyle().backgroundColor = 'white';
-$('body').append(d.dom());
 for (var i=0; i < N; i++) {
     d.addChild(buildPanel(i*80));
 };
+
+uki.find('Label[name=phrase]', d).bind('click', function() {
+    (tmp = this.parent().domStyle()).backgroundColor = (tmp.backgroundColor == '' ? '#EEE' : '');
+});
+
+
+$('body').append(d.dom());
 $(window).bind('resize', function(){  
     var t = (new Date()).getTime();
     d.rect( new uki.geometry.Rect(0,0,w.width(),80*N)) 

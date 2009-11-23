@@ -4,6 +4,7 @@ include('uki/geometry.js');
 var Rect = uki.geometry.Rect;
 var Size = uki.geometry.Size;
 var Point = uki.geometry.Point;
+var Inset = uki.geometry.Inset;
 
 
 QUnit.module('Point');
@@ -89,3 +90,26 @@ QUnit.test("should serialize to coords string", function() {
     var r = new Rect(10, 11, 21, 22);
     QUnit.equals(r.toCoordsString(), '10 11 31 33');
 });
+
+QUnit.test("should create inset", function() {
+    var i = new Inset(0, 1, 2, 3);
+    QUnit.equals(i + '', '0 1 2 3');
+});
+
+QUnit.test("should create inset from 2 vars", function() {
+    var i = new Inset(0, 1);
+    QUnit.equals(i + '', '0 1 0 1');
+});
+
+QUnit.test("should create inset from zerro vars", function() {
+    var i = new Inset(1, 1, 0, 0);
+    QUnit.equals(i + '', '1 1 0 0');
+});
+
+QUnit.test("should create inset from string", function() {
+    var i = Inset.fromString('1 2 3 4');
+    QUnit.equals(i.top, 1);
+    QUnit.equals(i + '', '1 2 3 4');
+});
+
+

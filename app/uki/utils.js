@@ -1,11 +1,11 @@
-include('../core.js');
+include('../uki.js');
 
 /* Reap off JQuery */
 (function() {
 
 var toString = Object.prototype.toString;
 	
-var utils = uki.core.utils = {
+var utils = uki.utils = {
     
 	isFunction: function( obj ) {
 		return toString.call(obj) === "[object Function]";
@@ -86,7 +86,8 @@ var utils = uki.core.utils = {
     
     map: function( elems, callback, context ) {
         var ret = [],
-            mapper = utils.isFunction(callback) ? callback : function(e) { return e[callback] };
+            mapper = utils.isFunction(callback) ? callback : 
+                     function(e) { return utils.isFunction(e[callback]) ? e[callback]() : e[callback] };
 
         for ( var i = 0, length = elems.length; i < length; i++ ) {
             var value = mapper.call( context || elems[ i ], elems[ i ], i );
@@ -128,6 +129,16 @@ var utils = uki.core.utils = {
 
         // Return the modified object
         return target;      
+    },
+    
+    newClass: function(/* base1, base2 */ methods) {
+        var klass = function() {
+            this.init.apply(this, arguments);
+        };
+        uki.each(arguments, function() {
+            uki.extend(klass.prototype, this);
+        })
+        return klass;
     }
 };
 

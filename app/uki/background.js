@@ -1,3 +1,3 @@
 include('../uki.js');
 
-uki.core = {};
+uki.background = {};

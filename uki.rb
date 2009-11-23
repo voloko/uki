@@ -27,6 +27,12 @@ class Uki < Sinatra::Base
     haml request.path.sub(%r{^/}, '').to_sym
   end
   
+  get %r{^/app/.*} do
+    path = request.path
+    response.header['Content-type'] = 'image/png' if path.match(/\.png$/)
+    File.read File.join(File.dirname(__FILE__), path)
+  end
+  
   get '/' do
     haml :index
   end

@@ -1,9 +1,9 @@
-require('../../test_helper.js');
-include('uki/core/builder.js');
+require('../test_helper.js');
+include('uki/builder.js');
 include('uki/component/base.js');
 include('uki/layout.js');
 
-var builder = uki.core.builder;
+var builder = uki;
 
 QUnit.test("should create single component", function() {
     var c = builder.build([{
@@ -73,7 +73,7 @@ QUnit.test("should layout with pixel values component", function() {
 QUnit.test("should create single component", function() {
     var c = builder.build({
         view: new uki.component.Base()
-    });
+    })[0];
     
     QUnit.ok(c instanceof uki.component.Base, 'instance of');
 });

@@ -38,6 +38,8 @@ var panel = uki.build(
 ]
 );
 
+panel.attachToContainer()
+
 uki.find('Panel project.custom.Tree Button[label=OK]').bind('click', function() {
     
 });

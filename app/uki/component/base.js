@@ -1,8 +1,10 @@
 include('../component.js');
 include('../geometry.js');
 include('../layout.js');
-include('../core/utils.js');
-include('../core/builder.js');
+include('../utils.js');
+include('../builder.js');
+include('../dom.js');
+include('../dom/observable.js');
 
 (function() {
 
@@ -15,12 +17,9 @@ var ANCHOR_TOP      = 1,
     AUTOSIZE_HEIGHT = 2;
     
 var layout = uki.layout,
-    utils = uki.core.utils,
-    self = uki.component.Base = function() {
-        this.init.apply(this, arguments);
-    };
+    utils = uki.utils;
 
-self.prototype = new function() {
+uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
     var proto = this;
     
     proto.defaultCss = 'position:absolute;overflow:hidden;top:0;left:0;z-index:100;';
@@ -46,7 +45,7 @@ self.prototype = new function() {
     
     proto.children = function(val) {
         if (arguments.length == 0) return this._children;
-        uki.each(this._children, function(child) {
+        uki.each(this._children, function(i, child) {
             this.removeChild(child);
         }, this);
         uki.build(val, this);
@@ -59,6 +58,7 @@ self.prototype = new function() {
     
     proto.addChild = function(child) {
         child.parent(this);
+        this._dom.appendChild(child.dom());
         this._children.push(child);
     };
     
@@ -67,7 +67,6 @@ self.prototype = new function() {
         
         if (this._parent) this._parent.removeChild(this);
         this._parent = parent;
-        parent._dom.appendChild(this._dom);
     };
     
     proto.rect = function(rect) {
@@ -81,6 +80,8 @@ self.prototype = new function() {
         if (rect.eq(this._rect)) return;
         
         this._domResize(rect);
+        this.trigger('layout:resize', {oldRect: this._rect, newRect: rect, source: this});
+        
         if (this._rect) {
             var oldSize = this._rect.size.clone();
             this._rect = rect;
@@ -125,14 +126,11 @@ self.prototype = new function() {
     };
     
     proto._domCreate = function() {
-        this._dom = document.createElement('div');
+        this._dom = uki.createElement('div', this.defaultCss);
         this._domStyle = this._dom.style;
-        this._domStyle.cssText = this.defaultCss;
     };
     
     proto.resizeWithOldSize = function(oldSize) {
-        if (!this._anchors && !this._autosize) return;
-
         var rect = this._parent.rect(),
             newRect = this._rect.clone(),
             dX = (rect.size.width - oldSize.width) /
@@ -156,10 +154,10 @@ self.prototype = new function() {
     proto.anchors = function(anchors) {
         if (arguments.length == 0) {
             var result = [];
-            if (this._anchors | ANCHOR_LEFT  ) result.push('left');
-            if (this._anchors | ANCHOR_TOP   ) result.push('top');
-            if (this._anchors | ANCHOR_RIGHT ) result.push('right');
-            if (this._anchors | ANCHOR_BOTTOM) result.push('bottom');
+            if (this._anchors & ANCHOR_LEFT  ) result.push('left');
+            if (this._anchors & ANCHOR_TOP   ) result.push('top');
+            if (this._anchors & ANCHOR_RIGHT ) result.push('right');
+            if (this._anchors & ANCHOR_BOTTOM) result.push('bottom');
             return result.join(' ');
         } else {
             this._anchors = 0;
@@ -190,5 +188,5 @@ self.prototype = new function() {
         };
     });
     
-};
+});
 })();

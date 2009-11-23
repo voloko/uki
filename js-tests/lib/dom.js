@@ -4,6 +4,8 @@ var GenericNode = function() {
     this.children = [];
     this.style = {};
     this.nextSibling = null;
+    this.listeners = {};
+    this.parentNode = null;
 }
 GenericNode.prototype = {
     appendChild: function(node) {
@@ -23,18 +25,32 @@ GenericNode.prototype = {
     getElementsByTagName: function() { 
         return  this.children; 
     },
-    addEventListener: function() {}
+    addEventListener: function(type, handler) {
+        this.listeners[type] = this.listeners[type] || [];
+        this.listeners[type].push(handler);
+    },
+    _fireEvent: function(type, e) {
+        e = e || {};
+        e.type = type;
+        e.target = e.target || this;
+        for (var i=0, listeners = this.listeners[type] || [], l = listeners.length; i < l; i++) {
+            listeners[i].call(this, e);
+        };
+        if (this != global.document) (this.parentNode || global.document)._fireEvent(type, e);
+    }
 };
 
 
-global.document = {
-    documentElement: {compareDocumentPosition: ''},
-    createElement: function() {return new GenericNode(); },
-    createComment: function() {return new GenericNode(); },
-    getElementsByTagName: function() {},
-    documentElement: new GenericNode(),
-    getElementById: function() { return new GenericNode(); }
+global.document = new GenericNode();
+global.document.documentElement = {compareDocumentPosition: ''};
+global.document.createElement = function(tagName) {
+    var e = new GenericNode(); e.tagName = tagName.toUpperCase(); return e; 
 };
+global.document.createComment = function() {return new GenericNode(); };
+global.document.getElementsByTagName = function() {};
+global.document.documentElement = new GenericNode();
+global.document.getElementById = function() { return new GenericNode(); };
+
 global.navigator = {
     userAgent: '',
     toString: function() { return ''; }

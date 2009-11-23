@@ -206,6 +206,33 @@ include('../uki.js');
     };
     
     
+    var Inset = geometry.Inset = function(top, right, bottom, left) {
+        this.top = top;
+        this.right = right;
+        this.bottom = arguments.length <3 ? top : bottom;
+        this.left = arguments.length <4 ? right : left;
+    };
+    
+    Inset.prototype = {
+        toString: function() {
+            return [this.top, this.right, this.bottom, this.left].join(' ');
+        }
+    };
+    
+    Inset.fromString = function(string, relative) {
+        var parts = string.split(/\s+/);
+        if (parts.length < 3) parts[2] = parts[0];
+        if (parts.length < 4) parts[3] = parts[1];
+        
+        return new Inset(
+            unitsToPx(parts[0], relative),
+            unitsToPx(parts[1], relative),
+            unitsToPx(parts[2], relative),
+            unitsToPx(parts[3], relative)
+        );
+    };
+    
+    
     function unitsToPx (units, relative) {
         var m = (units + '').match(/([-0-9\.]+)(\S*)/),
             v = parseFloat(m[1], 10),
