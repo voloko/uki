@@ -23,17 +23,18 @@ tools.imageCutter.getText = function(img, inset) {
     var parts = [],
         result = [],
         names = ['tl', 't', 'tr', 'l', 'm', 'r', 'bl', 'b', 'br'];
-    parts[parts.length] = this.getDataUrl(img, 0, 0, inset.left, inset.top);
-    parts[parts.length] = this.getDataUrl(img, inset.left, 0, img.width - inset.right - inset.left, inset.top);
-    parts[parts.length] = this.getDataUrl(img, img.width - inset.right, 0, inset.right, inset.top);
-    parts[parts.length] = this.getDataUrl(img, 0, inset.top, inset.left, img.height - inset.bottom - inset.top);
+    parts[parts.length] = inset.left && inset.top && this.getDataUrl(img, 0, 0, inset.left, inset.top);
+    parts[parts.length] = inset.top && this.getDataUrl(img, inset.left, 0, img.width - inset.right - inset.left, inset.top);
+    parts[parts.length] = inset.top && inset.right && this.getDataUrl(img, img.width - inset.right, 0, inset.right, inset.top);
+    parts[parts.length] = inset.left&& this.getDataUrl(img, 0, inset.top, inset.left, img.height - inset.bottom - inset.top);
     parts[parts.length] = this.getDataUrl(img, inset.left, inset.top, img.width - inset.left - inset.right, img.height - inset.top - inset.bottom);
-    parts[parts.length] = this.getDataUrl(img, img.width - inset.right, inset.top, inset.right, img.height - inset.bottom - inset.top);
-    parts[parts.length] = this.getDataUrl(img, 0, img.height - inset.bottom, inset.left, inset.bottom);
-    parts[parts.length] = this.getDataUrl(img, inset.left, img.height - inset.bottom, img.width - inset.right - inset.left, inset.bottom);
-    parts[parts.length] = this.getDataUrl(img, img.width - inset.right, img.height - inset.bottom, inset.right, inset.bottom);
+    parts[parts.length] = inset.right && this.getDataUrl(img, img.width - inset.right, inset.top, inset.right, img.height - inset.bottom - inset.top);
+    parts[parts.length] = inset.bottom && inset.left && this.getDataUrl(img, 0, img.height - inset.bottom, inset.left, inset.bottom);
+    parts[parts.length] = inset.bottom && this.getDataUrl(img, inset.left, img.height - inset.bottom, img.width - inset.right - inset.left, inset.bottom);
+    parts[parts.length] = inset.bottom && inset.right && this.getDataUrl(img, img.width - inset.right, img.height - inset.bottom, inset.right, inset.bottom);
     
     uki.each(parts, function(i, dataurl) {
+        if (!dataurl) return true;
         var str = '';
         var url = img.src.replace(/.*\//, '');
         str += '    ' + names[i] + ': uki.image("' + url.replace(/(\.\w+)/, '-' + names[i] + '$1' ) + '", "'+ dataurl +'"),'
@@ -87,7 +88,7 @@ tools.imageCutter.build = function() {
                 coords: '70 10 -20 32', 
                 anchors: 'top left right',
                 autosize: 'width',
-                value: uki.defaultTheme.imagePath + '/button-normal.png',
+                value: uki.defaultTheme.imagePath + 'panel/panel.png',
                 name: 'url'
             },
             {

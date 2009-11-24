@@ -11,7 +11,9 @@ include('uki/background/sliced9.js');
 include('uki/theme.js');
 
 include('uki/component/base.js');
+include('uki/component/button.js');
+include('uki/component/panel.js');
+
 include('uki/component/textarea.js');
 include('uki/component/input.js');
-include('uki/component/button.js');
 include('uki/component/label.js');

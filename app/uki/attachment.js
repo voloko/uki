@@ -12,6 +12,8 @@ include('layout.js');
             this._dom = dom;
             this._view = view;
             dom.appendChild(view.dom());
+            var computedStyle = dom.runtimeStyle || dom.ownerDocument.defaultView.getComputedStyle(dom, null);
+            if (!computedStyle.position || computedStyle.position == 'static') dom.style.position = 'relative';
             self.register(this);
             this.resize();
             uki.layout.perform();
