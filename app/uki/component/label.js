@@ -15,7 +15,6 @@ self.prototype = uki.extend({}, Base, {
     _domCreate: function() {
         this._selectable = true;
         this._dom = uki.createElement('div');
-        this._dom.style = this._dom.style;
         this._dom.style.cssText = Base.defaultCss + 
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;text-shadow:0 1px 0px rgba(255,255,255,0.8);font-size:12px;line-height:15px;";
     },

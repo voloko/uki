@@ -3,7 +3,7 @@
   %script{:src => '/app/main.cjs'}
   %script{:src => '/app/airport.cjs'}
   %script{:src => '/app/tools/imageCutter.cjs'}
-%body
-  #test{:style => 'width: 100%; height: 400px'}
+%body{:style => 'padding: 0; margin: 0'}
+  #test{:style => 'width: 100%; height: 400px; margin-top: 40px'}
   %script
-    tools.imageCutter.build().attachTo(document.getElementById('test'));
+    tools.imageCutter.build().attachTo(document.getElementById('test', '400 400'));

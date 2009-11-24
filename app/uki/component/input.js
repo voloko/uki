@@ -10,7 +10,6 @@ var Base = uki.component.Base.prototype,
 self.prototype = uki.extend({}, Base, {
    _domCreate: function() {
        this._dom = document.createElement('input');
-       this._dom.style = this._dom.style;
        this._dom.style.cssText = Base.defaultCss + "-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box";
    },
    

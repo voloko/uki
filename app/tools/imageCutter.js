@@ -77,72 +77,79 @@ tools.imageCutter.build = function() {
         rect: '0 0 400 400',
         children: [
             {
-                view: 'Label',
-                rect: '10 10 50 22',
-                anchors: 'left top',
-                align: 'right',
-                text: 'URL:'
-            },
-            {
-                view: 'Input',
-                coords: '70 10 -20 32', 
-                anchors: 'top left right',
+                view: 'Panel',
+                rect: '0 0 100% 80', anchors: 'top left right',
                 autosize: 'width',
-                value: uki.defaultTheme.imagePath + 'panel/panel.png',
-                name: 'url'
-            },
-            {
-                view: 'Label',
-                coords: '70 80 -20 -20',
-                anchors: 'top left right bottom',
-                autosize: 'width height',
-                name: 'result'
-            },
-            {
-                view: 'Base',
-                coords: '60 42 -10 64',
-                anchors: 'left',
                 children: [
                     {
-                        view: 'Input',
-                        rect: '10 0 50 22',
-                        anchors: 'top left',
-                        name: 'top',
-                        placeholder: 'top',
-                        value: '3'
+                        view: 'Label',
+                        rect: '10 10 50 22',
+                        anchors: 'left top',
+                        align: 'right',
+                        text: 'URL:'
                     },
                     {
                         view: 'Input',
-                        rect: '70 0 50 22',
-                        anchors: 'top left',
-                        name: 'right',
-                        placeholder: 'right',
-                        value: '3'
+                        coords: '70 10 -20 32', 
+                        anchors: 'top left right',
+                        autosize: 'width',
+                        value: uki.defaultTheme.imagePath + 'panel/panel.png',
+                        name: 'url'
                     },
                     {
-                        view: 'Input',
-                        rect: '130 0 50 22',
-                        anchors: 'top left',
-                        name: 'bottom',
-                        placeholder: 'bottom',
-                        value: '3'
+                        view: 'Base',
+                        coords: '60 42 -10 64',
+                        anchors: 'left',
+                        children: [
+                            {
+                                view: 'Input',
+                                rect: '10 0 50 22',
+                                anchors: 'top left',
+                                name: 'top',
+                                placeholder: 'top',
+                                value: '3'
+                            },
+                            {
+                                view: 'Input',
+                                rect: '70 0 50 22',
+                                anchors: 'top left',
+                                name: 'right',
+                                placeholder: 'right',
+                                value: '3'
+                            },
+                            {
+                                view: 'Input',
+                                rect: '130 0 50 22',
+                                anchors: 'top left',
+                                name: 'bottom',
+                                placeholder: 'bottom',
+                                value: '3'
+                            },
+                            {
+                                view: 'Input',
+                                rect: '190 0 50 22',
+                                anchors: 'top left',
+                                name: 'left',
+                                placeholder: 'left',
+                                value: '3'
+                            }
+                        ]
                     },
                     {
-                        view: 'Input',
-                        rect: '190 0 50 22',
-                        anchors: 'top left',
-                        name: 'left',
-                        placeholder: 'left',
-                        value: '3'
-                    }
+                        view: 'Button',
+                        rect: '-120 42 100 22',
+                        anchors: 'top right',
+                        text: 'Cut',
+                        name: 'cut'
+                    }                
                 ]
             },
             {
-                view: 'Button',
-                rect: '-120 42 100 22',
-                anchors: 'top right',
-                text: 'Cut',
-                name: 'cut'
+                view: 'Label',
+                coords: '20 90 -20 -20',
+                anchors: 'top left right bottom',
+                autosize: 'width height',
+                name: 'result'
             }
         ]
     })
