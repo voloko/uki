@@ -29,7 +29,7 @@ self = uki.component.Button = uki.newClass(Base, {
         });
         
         this.bind('mouseover', function(e) {
-            _this._backgroundByName(e.button == 0 && this._down ? 'down' : 'hover');
+            _this._backgroundByName((e.which == 1 && this._down) ? 'down' : 'hover');
         });
         
         this.bind('mouseout', function() {

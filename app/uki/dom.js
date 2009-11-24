@@ -51,8 +51,8 @@ var self = uki.dom = {
     
     handler: function( e ) {
         e = self.fix( e || root.event );
-        if (e.target == doc) e.target = targets[e.type];
-        if (!e.target || !e.target[expando]) return;
+        // if (e.target == doc) e.target = targets[e.type];
+        // if (!e.target || !e.target[expando]) return;
         
         var type = e.type,
             handlers = self.bound[type],
