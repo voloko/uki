@@ -9,7 +9,7 @@ var b = uki({
     }]
 }).attachTo( document.getElementById('test') );
 
-uki('Base > Button[text^=uki]').bind('click', function() {
+uki('Panel > Button[text^=uki]').bind('click', function() {
     alert('Hello world!');
 });
 

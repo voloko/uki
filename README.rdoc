@@ -8,9 +8,16 @@
             rect: '400px 40px 200px 24px', anchors: "top",
             text: 'uki is awesome!'
         
-        }]G
+        }]
     }).attachTo( document.getElementById('test') );
 
-    uki('Base > Button[text^=uki]').bind('click', function() {
+    uki('Panel > Button[text^=uki]').bind('click', function() {
         alert('Hello world!');
     });
+    
+    
+== Programmable layout
+
+== Selector
+
+== Builder
