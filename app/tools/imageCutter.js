@@ -1,71 +1,174 @@
 include('../tools.js');
 
+(function() {
+    
 tools.imageCutter = {};
-
 
 function supportsCanvas () {
     return document.createElement('canvas').getContext;
 }
 
+tools.imageCutter.getDataUrl = function(image, sx, sy, sw, sh) {
+    var canvas = uki.createElement('canvas', 'width:' + sw + 'px;height:' + sh + 'px; background-color: transparent;'),
+        i, url, ctx;
+        
+    canvas.setAttribute('width', sw);
+    canvas.setAttribute('height', sh);
+    ctx = canvas.getContext('2d');
+    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, sw, sh);
+    return canvas.toDataURL('image/png');
+};
 
-if (supportSVG()) {
-    uki.image.cropped = function(image, sx, sy, sw, sh) {
-        var svg = document.createElementNS(svgns, 'svg');
-        svg.setAttribute('width', sw + 'px');
-        svg.setAttribute('height', sh + 'px');
-		var img = document.createElementNS(svgns, "image");
-        img.setAttribute("x", -sx);
-        img.setAttribute("y", -sy);
-        // img.style.cssText = 'left:' + -sx + 'px;top:' + -sh + 'px';
-		img.setAttribute("width",  '100%');
-		img.setAttribute("height", '100%');
-		img.setAttributeNS(xlinkns, "href", image.src);
-        img.setAttribute('preserveAspectRatio', 'xMinYMin slice')
-		svg.appendChild(img);
-		return svg;
-    };
-} else if (supportsCanvas()) {
-    uki.image.cropped = function(image, sx, sy, sw, sh) {
-        var canvas = uki.createElement('canvas', 'width:' + sw + 'px;height:' + sh + 'px; background-color: transparent;'),
-            i, url, ctx;
+tools.imageCutter.getText = function(img, inset) {
+    var parts = [],
+        result = [],
+        names = ['tl', 't', 'tr', 'l', 'm', 'r', 'bl', 'b', 'br'];
+    parts[parts.length] = this.getDataUrl(img, 0, 0, inset.left, inset.top);
+    parts[parts.length] = this.getDataUrl(img, inset.left, 0, img.width - inset.right - inset.left, inset.top);
+    parts[parts.length] = this.getDataUrl(img, img.width - inset.right, 0, inset.right, inset.top);
+    parts[parts.length] = this.getDataUrl(img, 0, inset.top, inset.left, img.height - inset.bottom - inset.top);
+    parts[parts.length] = this.getDataUrl(img, inset.left, inset.top, img.width - inset.left - inset.right, img.height - inset.top - inset.bottom);
+    parts[parts.length] = this.getDataUrl(img, img.width - inset.right, inset.top, inset.right, img.height - inset.bottom - inset.top);
+    parts[parts.length] = this.getDataUrl(img, 0, img.height - inset.bottom, inset.left, inset.bottom);
+    parts[parts.length] = this.getDataUrl(img, inset.left, img.height - inset.bottom, img.width - inset.right - inset.left, inset.bottom);
+    parts[parts.length] = this.getDataUrl(img, img.width - inset.right, img.height - inset.bottom, inset.right, inset.bottom);
+    
+    uki.each(parts, function(i, dataurl) {
+        var str = '';
+        var url = img.src.replace(/.*\//, '');
+        str += '    ' + names[i] + ': uki.image("' + url.replace(/(\.\w+)/, '-' + names[i] + '$1' ) + '", "'+ dataurl +'"),'
+        result.push(str);
+    });
+    return '{<br/>' + result.join('<br />').replace(/,$/, '') + '<br />}';
+    
+};
+
+tools.imageCutter._loadImage = function (url, callback) {
+    var img = new Image(),
+        _this = this,
+        handler = function() {
+            img.onload = img.onerror = img.onabort = null; // prevent mem leaks
+            callback(img);
+        };
+	img.onload  = handler;
+	img.onerror = handler;
+	img.onabort = handler;
+	img.src = url;
+};
+
+tools.imageCutter.sendForm = function (text) {
+    var f = uki.createElement('form', 'position: absolute; left: -999em'),
+        v = uki.createElement('input');
+    f.action = '/imageCutter';
+    f.method = 'POST';
+    v.type = 'hidden';
+    v.value = text.replace(/uki\.image\(/g, '[').replace(/\)/g, ']').replace(/(\w+):\s/g, '"$1":').replace(/<br\s?\/>/g, '');
+    v.name = 'json';
+    f.appendChild(v);
+    document.body.appendChild(f);
+    f.submit();
+};
+
+
+tools.imageCutter.build = function() {
+    var p = uki.build({
+        view: 'Base',
+        rect: '0 0 400 400',
+        children: [
+            {
+                view: 'Label',
+                rect: '10 10 50 22',
+                anchors: 'left top',
+                align: 'right',
+                text: 'URL:'
+            },
+            {
+                view: 'Input',
+                coords: '70 10 -20 32', 
+                anchors: 'top left right',
+                autosize: 'width',
+                value: uki.defaultTheme.imagePath + '/button-normal.png',
+                name: 'url'
+            },
+            {
+                view: 'Label',
+                coords: '70 80 -20 -20',
+                anchors: 'top left right bottom',
+                autosize: 'width height',
+                name: 'result'
+            },
+            {
+                view: 'Base',
+                coords: '60 42 -10 64',
+                anchors: 'left',
+                children: [
+                    {
+                        view: 'Input',
+                        rect: '10 0 50 22',
+                        anchors: 'top left',
+                        name: 'top',
+                        placeholder: 'top',
+                        value: '3'
+                    },
+                    {
+                        view: 'Input',
+                        rect: '70 0 50 22',
+                        anchors: 'top left',
+                        name: 'right',
+                        placeholder: 'right',
+                        value: '3'
+                    },
+                    {
+                        view: 'Input',
+                        rect: '130 0 50 22',
+                        anchors: 'top left',
+                        name: 'bottom',
+                        placeholder: 'bottom',
+                        value: '3'
+                    },
+                    {
+                        view: 'Input',
+                        rect: '190 0 50 22',
+                        anchors: 'top left',
+                        name: 'left',
+                        placeholder: 'left',
+                        value: '3'
+                    }
+                ]
+            },
+            {
+                view: 'Button',
+                rect: '-120 42 100 22',
+                anchors: 'top right',
+                text: 'Cut',
+                name: 'cut'
+            }
+        ]
+    })
+    p.find('[name=cut]').bind('click', function() {
+        tools.imageCutter._loadImage(p.find('[name=url]').attr('value'), function(image) {
+            var coords = uki.map(['top', 'right', 'bottom', 'left'], function() {
+                return p.find('[name=' + this + ']').attr('value');
+            });
+            var inset = uki.geometry.Inset.fromString(coords.join(' '));
+            var text = tools.imageCutter.getText(image, inset);
             
-        canvas.setAttribute('width', sw);
-        canvas.setAttribute('height', sh);
-        ctx = canvas.getContext('2d');
-        ctx.drawImage(image, sx, sy, sw, sh, 0, 0, sw, sh);
-        try {
-            url = canvas.toDataURL('image/png');
-            i = uki.createElement('img', 'width:' + sw + 'px;height:' + sh + 'px');
-            i.src = url;
-            return i;
-        } catch (e) {
-        }
-        return canvas;
-    };
-} else if (/MSIE/.test(navigator.userAgent) && !window.opera) {
-    uki.image.cropped = function (image, sx, sy, sw, sh) {
-        // get the original size
-        var w = image.width,
-            h = image.height,
-            vmlStr = [],
-            cont = container(),
-            i;
+            p.find('[name=result]').attr('html', '<div style="white-space:pre">' + text + '</div>');
+            tools.imageCutter.sendForm(text);
+        })
+    });
+    p[0].dom().style.backgroundColor = '#EFEFEF';
+    p.find('Label:eq(0)').each(function() {
+        this.dom().style.lineHeight = this.rect().size.height + 'px';
+    })
+    p.find('[name=result]').each(function() {
+        this.dom().style.overflow = 'auto';
+        this.dom().style.background = 'white';
+        this.dom().style.border = '1px solid #CCC'
+    })
+    return p;
+};
 
-        vmlStr.push(
-            '<v:image src="', image.src, '"',
-            ' style="behavior:url(#default#VML);overflow:hidden;width:', sw, 'px;',
-            ' height:', sh, 'px;"',
-            ' cropleft="', sx / w, '"',
-            ' croptop="', sy / h, '"',
-            ' cropright="', (w - sx - sw) / w, '"',
-            ' cropbottom="', (h - sy - sh) / h, '"',
-            ' />'
-        );
 
-        cont.innerHTML = vmlStr.join('');
-        i = cont.firstChild;
-        i.parentNode.removeChild(i);
+})();
 
-        return i;
-    };
-}

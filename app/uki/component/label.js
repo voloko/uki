@@ -15,8 +15,8 @@ self.prototype = uki.extend({}, Base, {
     _domCreate: function() {
         this._selectable = true;
         this._dom = uki.createElement('div');
-        this._domStyle = this._dom.style;
-        this._domStyle.cssText = Base.defaultCss + 
+        this._dom.style = this._dom.style;
+        this._dom.style.cssText = Base.defaultCss + 
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;text-shadow:0 1px 0px rgba(255,255,255,0.8);font-size:12px;line-height:15px;";
     },
     
@@ -34,9 +34,9 @@ self.prototype = uki.extend({}, Base, {
     
     align: function(align) {
         if (arguments.length == 0) {
-            return this.domStyle().textAlign;
+            return this.dom().style.textAlign;
         } else {
-            this.domStyle().textAlign = align;
+            this.dom().style.textAlign = align;
         }
     },
     
@@ -44,10 +44,10 @@ self.prototype = uki.extend({}, Base, {
         if (arguments.length == 0) {
             return this._selectable;
         } else {
-            this._domStyle.MozUserSelect = state ? '' : 'none';
-            this._domStyle.WebkitUserSelect = state ? '' : 'none';
-            this._domStyle.userSelect = state ? '' : 'none';
-            this._domStyle.cursor = state ? 'text' : 'default';
+            this._dom.style.MozUserSelect = state ? '' : 'none';
+            this._dom.style.WebkitUserSelect = state ? '' : 'none';
+            this._dom.style.userSelect = state ? '' : 'none';
+            this._dom.style.cursor = state ? 'text' : 'default';
         }
     }
 });

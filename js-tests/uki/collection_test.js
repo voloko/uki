@@ -10,6 +10,7 @@ function getTree (n) {
     var r = [];
     for (var i=0; i < n; i++) {
         r[i] = new Base();
+        r[i].knownEvents = function() { return ['artificial'] };
         r[i].rect('0 0 1000 1000');
         r[i].name = 'base_' + i;
     };

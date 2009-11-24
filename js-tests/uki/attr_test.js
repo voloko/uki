@@ -17,20 +17,20 @@ QUnit.test("should write rect attr with px string", function() {
     attr(c, 'rect', '10px 11px 500px 501px');
 
     uki.layout.perform();
-    QUnit.equals(c.domStyle().left, '10px');
-    QUnit.equals(c.domStyle().top, '11px');
-    QUnit.equals(c.domStyle().width, '500px');
-    QUnit.equals(c.domStyle().height, '501px');
+    QUnit.equals(c.dom().style.left, '10px');
+    QUnit.equals(c.dom().style.top, '11px');
+    QUnit.equals(c.dom().style.width, '500px');
+    QUnit.equals(c.dom().style.height, '501px');
 });
 
 QUnit.test("should write rect attr with Rect instance", function() {
     var c = new Base();
     attr(c, 'rect', new uki.geometry.Rect(10, 11, 500, 501));
     uki.layout.perform();
-    QUnit.equals(c.domStyle().left, '10px');
-    QUnit.equals(c.domStyle().top, '11px');
-    QUnit.equals(c.domStyle().width, '500px');
-    QUnit.equals(c.domStyle().height, '501px');
+    QUnit.equals(c.dom().style.left, '10px');
+    QUnit.equals(c.dom().style.top, '11px');
+    QUnit.equals(c.dom().style.width, '500px');
+    QUnit.equals(c.dom().style.height, '501px');
 });
 
 QUnit.module('Default writers');

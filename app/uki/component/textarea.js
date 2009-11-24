@@ -10,8 +10,8 @@ var base = uki.component.Base.prototype,
 self.prototype = uki.extend({}, base, {
    _domCreate: function() {
        this._dom = this._dom = document.createElement('textarea');
-       this._domStyle = this._dom.style;
-       this._domStyle.cssText = base.defaultCss;
+       this._dom.style = this._dom.style;
+       this._dom.style.cssText = base.defaultCss;
    } 
 });
     

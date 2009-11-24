@@ -22,7 +22,7 @@ var layout = uki.layout,
 uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
     var proto = this;
     
-    proto.defaultCss = 'position:absolute;overflow:hidden;top:0;left:0;z-index:100;';
+    proto.defaultCss = 'position:absolute;overflow:hidden;top:0;left:0;z-index:100;font-family:Arial,Helvetica,sans-serif;';
     
     proto.init = function(rect) {
         this._anchors = 0;
@@ -41,6 +41,10 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
     
     proto.typeName = function() {
         return 'uki.component.Base';
+    };
+    
+    proto.knownEvents = function() {
+        return ['resize'];
     };
     
     proto.children = function(val) {
@@ -80,7 +84,7 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         if (rect.eq(this._rect)) return;
         
         this._domResize(rect);
-        this.trigger('layout:resize', {oldRect: this._rect, newRect: rect, source: this});
+        this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
         
         if (this._rect) {
             var oldSize = this._rect.size.clone();
@@ -90,7 +94,12 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
             };
         } else {
             this._rect = rect;
+            this._afterInit();
         }
+    };
+    
+    proto._afterInit = function() {
+        
     };
     
     proto.coords = function(coords) {
@@ -106,28 +115,23 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         return this._dom;
     };
     
-    proto.domStyle = function() {
-        return this._domStyle;
-    };
-    
     proto._domResize = function(rect) {
         var props = {};
 
-        layout.schedule(this._domStyle, {
+        layout.schedule(this._dom.style, {
             left: rect.origin.x, 
             top: rect.origin.y, 
             width: rect.size.width, 
             height: rect.size.height
         });
-        // this._domStyle.left   = rect.origin.x + 'px';
-        // this._domStyle.top    = rect.origin.y + 'px';
-        // this._domStyle.width  = rect.size.width + 'px';
-        // this._domStyle.height = rect.size.height + 'px';
+        // this._dom.style.left   = rect.origin.x + 'px';
+        // this._dom.style.top    = rect.origin.y + 'px';
+        // this._dom.style.width  = rect.size.width + 'px';
+        // this._dom.style.height = rect.size.height + 'px';
     };
     
     proto._domCreate = function() {
         this._dom = uki.createElement('div', this.defaultCss);
-        this._domStyle = this._dom.style;
     };
     
     proto.resizeWithOldSize = function(oldSize) {

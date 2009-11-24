@@ -111,10 +111,10 @@ QUnit.test("should calculate rect with %", function() {
     parent.addChild(c);
     c.rect('10% 11% 50% 51%');
     uki.layout.perform();
-    QUnit.equals(c.domStyle().left, '100px');
-    QUnit.equals(c.domStyle().top, '110px');
-    QUnit.equals(c.domStyle().width, '500px');
-    QUnit.equals(c.domStyle().height, '510px');
+    QUnit.equals(c.dom().style.left, '100px');
+    QUnit.equals(c.dom().style.top, '110px');
+    QUnit.equals(c.dom().style.width, '500px');
+    QUnit.equals(c.dom().style.height, '510px');
 });
 
 QUnit.test("should calculate negative values", function() {
@@ -125,10 +125,10 @@ QUnit.test("should calculate negative values", function() {
     c.rect('-700 -50% 50% 20%');
     
     uki.layout.perform();
-    QUnit.equals(c.domStyle().left, '300px');
-    QUnit.equals(c.domStyle().top, '500px');
-    QUnit.equals(c.domStyle().width, '500px');
-    QUnit.equals(c.domStyle().height, '200px');
+    QUnit.equals(c.dom().style.left, '300px');
+    QUnit.equals(c.dom().style.top, '500px');
+    QUnit.equals(c.dom().style.width, '500px');
+    QUnit.equals(c.dom().style.height, '200px');
 });
 
 
@@ -140,10 +140,10 @@ QUnit.test("should set rect from coords", function() {
     c.coords('10px -20% -20% -10%');
     
     uki.layout.perform();
-    QUnit.equals(c.domStyle().left, '10px');
-    QUnit.equals(c.domStyle().top, '800px');
-    QUnit.equals(c.domStyle().width, '790px'); // 1000 -20% -10 = 790
-    QUnit.equals(c.domStyle().height, '100px');
+    QUnit.equals(c.dom().style.left, '10px');
+    QUnit.equals(c.dom().style.top, '800px');
+    QUnit.equals(c.dom().style.width, '790px'); // 1000 -20% -10 = 790
+    QUnit.equals(c.dom().style.height, '100px');
 });
 
 
@@ -162,8 +162,8 @@ QUnit.test("should create children from ukiml", function() {
     ]);
     uki.layout.perform();
     QUnit.equals(c.children().length, 2);
-    QUnit.equals(c.children()[0].domStyle().left, '100px');
-    QUnit.equals(c.children()[0].domStyle().top, '110px');
-    QUnit.equals(c.children()[0].domStyle().width, '120px');
-    QUnit.equals(c.children()[0].domStyle().height, '130px');
+    QUnit.equals(c.children()[0].dom().style.left, '100px');
+    QUnit.equals(c.children()[0].dom().style.top, '110px');
+    QUnit.equals(c.children()[0].dom().style.width, '120px');
+    QUnit.equals(c.children()[0].dom().style.height, '130px');
 });

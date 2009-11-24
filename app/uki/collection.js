@@ -12,7 +12,8 @@ include('attachment.js');
     var self = uki.Collection.prototype = {};
     
     self.each = function( callback ) {
-        return uki.each( this, callback );
+        uki.each( this, callback );
+        return this;
     };
     
     self.attr = function( name, value ) {

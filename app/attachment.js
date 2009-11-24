@@ -3,8 +3,8 @@ var b = uki.build({
     rect: '0 0 1000px 1000px',
     children: [{
         view: 'Button',
-        rect: '400px 100px 200px 22px', anchors: "top",
-        text: 'uki is awesome!',
+        rect: '400px 100px 200px 24px', anchors: "top",
+        text: 'uki is awesome!'
         
     }]
 }).attachTo( document.getElementById('test') );
@@ -12,3 +12,4 @@ var b = uki.build({
 uki.find('Base > Button[text^=uki]').bind('click', function() {
     alert('Hello world!');
 });
+

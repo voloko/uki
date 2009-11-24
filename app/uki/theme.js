@@ -1,3 +1,11 @@
 include('../uki.js');
 
-uki.theme = {};
+uki.theme = {
+    defaultTheme: {
+        imagePath: ''
+    },
+    
+    register: function(theme) {
+        uki.defaultTheme = theme;
+    }
+};

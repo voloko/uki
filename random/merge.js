@@ -1211,9 +1211,9 @@ self.prototype = uki.extend({}, Base, {
     
     align: function(align) {
         if (arguments.length == 0) {
-            return this.domStyle().textAlign;
+            return this.dom().style.textAlign;
         } else {
-            this.domStyle().textAlign = align;
+            this.dom().style.textAlign = align;
         }
     },
     

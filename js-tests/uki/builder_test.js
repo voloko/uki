@@ -49,10 +49,10 @@ QUnit.test("should layout with pixel values component", function() {
     }])[0];
     
     uki.layout.perform();
-    QUnit.equals(c.domStyle().left, '10px');
-    QUnit.equals(c.domStyle().top, '11px');
-    QUnit.equals(c.domStyle().width, '500px');
-    QUnit.equals(c.domStyle().height, '501px');
+    QUnit.equals(c.dom().style.left, '10px');
+    QUnit.equals(c.dom().style.top, '11px');
+    QUnit.equals(c.dom().style.width, '500px');
+    QUnit.equals(c.dom().style.height, '501px');
 });
 
 
@@ -63,10 +63,10 @@ QUnit.test("should layout with pixel values component", function() {
     }])[0];
     
     uki.layout.perform();
-    QUnit.equals(c.domStyle().left, '10px');
-    QUnit.equals(c.domStyle().top, '11px');
-    QUnit.equals(c.domStyle().width, '500px');
-    QUnit.equals(c.domStyle().height, '501px');
+    QUnit.equals(c.dom().style.left, '10px');
+    QUnit.equals(c.dom().style.top, '11px');
+    QUnit.equals(c.dom().style.width, '500px');
+    QUnit.equals(c.dom().style.height, '501px');
 });
 
 

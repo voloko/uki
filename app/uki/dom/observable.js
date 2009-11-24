@@ -8,25 +8,32 @@ uki.dom.Observable = {
         return null; // should implement
     },
     
+    knownEvents: function() {
+        return []; // should implement
+    },
+    
     bind: function(name, callback) {
-        var _this = this;
+        var _this = this,
+            wrapper;
         uki.each(name.split(' '), function(i, name) {
-            if (uki.inArray( name, uki.dom.events ) == -1) {
-                this._observersFor(name).push(callback);
+            if (uki.inArray( name, this.knownEvents() ) == -1) {
+                wrapper = wrapper || function() { callback.apply(_this, arguments); };
+                uki.dom.bind( this.dom(), name, wrapper );
+                callback.huid = wrapper.huid;
             } else {
-                uki.dom.bind( this.dom(), name, function() { callback.apply(_this, arguments) } );
+                this._observersFor(name).push(callback);
             }
         }, this);
     },
     
     unbind: function(name, callback) {
         uki.each(name.split(' '), function(i, name) {
-            if (uki.inArray( name, uki.dom.events ) == -1) {
+            if (uki.inArray( name, this.knownEvents() ) == -1) {
+                uki.dom.unbind( this.dom(), name, callback );
+            } else {
                 this._observers[name] = uki.grep(this._observersFor(name), function(c) {
                     return c !== callback;
                 });
-            } else {
-                uki.dom.unbind( this.dom(), name, callback );
             }
         }, this);
     },

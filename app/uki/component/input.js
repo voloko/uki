@@ -10,9 +10,19 @@ var Base = uki.component.Base.prototype,
 self.prototype = uki.extend({}, Base, {
    _domCreate: function() {
        this._dom = document.createElement('input');
-       this._domStyle = this._dom.style;
-       this._domStyle.cssText = Base.defaultCss + "-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box";
-   } 
+       this._dom.style = this._dom.style;
+       this._dom.style.cssText = Base.defaultCss + "-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box";
+   },
+   
+   value: function(text) {
+       if (arguments.length == 0) return this._dom.value;
+       this._dom.value = text;
+   },
+   
+   placeholder: function(text) {
+       if (arguments.length == 0) return this._dom.getAttribute('placeholder');
+       this._dom.setAttribute('placeholder', text);
+   }
 });
     
 })();

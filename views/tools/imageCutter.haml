@@ -1,0 +1,9 @@
+!!!1.1
+%head
+  %script{:src => '/app/main.cjs'}
+  %script{:src => '/app/airport.cjs'}
+  %script{:src => '/app/tools/imageCutter.cjs'}
+%body
+  #test{:style => 'width: 100%; height: 400px'}
+  %script
+    tools.imageCutter.build().attachTo(document.getElementById('test'));

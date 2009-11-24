@@ -31,6 +31,8 @@ var self = uki.dom = {
     bind: function(el, type, handler) {
         var id = el[expando] = el[expando] || guid++,
             target = targets[type] || doc;
+        handler.huid = handler.huid || guid++;
+        
         if (!self.bound[type]) {
             target.addEventListener ? target.addEventListener(type, self.handler, false) : target.attachEvent('on' + type, self.handler);
             self.bound[type] = {};
@@ -41,13 +43,15 @@ var self = uki.dom = {
     
     unbind: function(el, type, handler) {
         if (!el[expando] || !self.bound[type]) return;
-        var id = el[expando];
-        self.bound[type][id] = uki.grep(self.bound[type][id], function(h) { return h !== handler; });
+        var id = el[expando],
+            huid = handler.huid;
+        if (!huid) return;
+        self.bound[type][id] = uki.grep(self.bound[type][id], function(h) { return h.huid !== huid; });
     },
     
     handler: function( e ) {
         e = self.fix( e || root.event );
-        if (e.target == doc) e.target = root;
+        if (e.target == doc) e.target = targets[e.type];
         if (!e.target || !e.target[expando]) return;
         
         var type = e.type,
@@ -62,8 +66,14 @@ var self = uki.dom = {
                     elHandlers[i].apply(target, arguments);
                 };
             }
-            target = target.parentNode;
-        } while (n-- && target && target != doc && target != root);
+            if (target.nodeType == doc) {
+                target == root;
+            } else if (target.nodeType == 1 && !target.parentNode) {
+                target = doc;
+            } else {
+                target = target.parentNode;
+            }
+        } while (n-- && target);
     },
     
     /**
@@ -103,7 +113,12 @@ var self = uki.dom = {
 			event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));    
 			
 		return event;    
+    },
+    
+    _preventSelectionHandler: function(e) { 
+		e.preventDefault ? e.preventDefault() : e.returnValue = true;
     }
+    
 };
 
 if (root.attachEvent) {

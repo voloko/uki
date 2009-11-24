@@ -77,19 +77,19 @@ function buildPanel (top) {
         ]
     })[0];
     
-    panel.domStyle().backgroundColor = '#EEE';
-    panel.domStyle().borderBottom = '1px solid #999';
+    panel.dom().style.backgroundColor = '#EEE';
+    panel.dom().style.borderBottom = '1px solid #999';
     
     // var panel = new uki.component.Base(new uki.geometry.Rect(0, top, d.rect().size.width, 79));
     // panel.autosize('width');
     // panel.anchors('left top right');
-    // panel.domStyle().backgroundColor = '#EEE';
-    // panel.domStyle().borderBottom = '1px solid #999';
+    // panel.dom().style.backgroundColor = '#EEE';
+    // panel.dom().style.borderBottom = '1px solid #999';
     // var phrase = new uki.component.Label(new uki.geometry.Rect(10, 10, d.rect().size.width - 510, 60));
     // phrase.text('обмен валюты -крон -лиговский -лучший -продавать -заработать -санкт -спб -электронный -мир -выгодный -петербург -продажа -москва -льготный -центр -наличный -сбербанк -заработок -оптовый -табло -курс -банк -круглосуточный -доллар -фунт -пункт');
     // phrase.autosize('width');
     // phrase.anchors('left top right');
-    // phrase.domStyle().lineHeight = '15px'
+    // phrase.dom().style.lineHeight = '15px'
     // panel.addChild(phrase);
     // 
     // var l = new uki.component.Label(new uki.geometry.Rect(d.rect().size.width - 500, 10, 200, 20));
@@ -149,13 +149,13 @@ var b = $('body');
 var w = $(window);
 var N = 100;
 var d = new uki.component.Base(new uki.geometry.Rect(0, 0, w.width(), 80*N));
-d.domStyle().backgroundColor = 'white';
+d.dom().style.backgroundColor = 'white';
 for (var i=0; i < N; i++) {
     d.addChild(buildPanel(i*80));
 };
 
 uki.find('Label[name=phrase]', d).bind('click', function() {
-    (tmp = this.parent().domStyle()).backgroundColor = (tmp.backgroundColor == '' ? '#EEE' : '');
+    (tmp = this.parent().dom().style).backgroundColor = (tmp.backgroundColor == '' ? '#EEE' : '');
 });
 
 

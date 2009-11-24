@@ -8,6 +8,7 @@ include('uki/attachment.js');
 include('uki/image.js');
 include('uki/background.js');
 include('uki/background/sliced9.js');
+include('uki/theme.js');
 
 include('uki/component/base.js');
 include('uki/component/textarea.js');
