@@ -99,7 +99,8 @@ tools.imageCutter.build = function() {
                     {
                         view: 'Base',
                         coords: '60 42 -10 64',
-                        anchors: 'left',
+                        anchors: 'left rigth top',
+                        autosize: 'width',
                         children: [
                             {
                                 view: 'Input',
@@ -132,6 +133,20 @@ tools.imageCutter.build = function() {
                                 name: 'left',
                                 placeholder: 'left',
                                 value: '3'
+                            },
+                            {
+                                view: 'Checkbox',
+                                rect: '260 0 22 22',
+                                anchors: 'top left',
+                                name: 'download'
+                            },
+                            {
+                                view: 'Label',
+                                rect: '285 0 100 22',
+                                anchors: 'top left',
+                                text: 'download',
+                                name: 'download-label',
+                                selectable: false
                             }
                         ]
                     },
@@ -149,10 +164,16 @@ tools.imageCutter.build = function() {
                 coords: '20 90 -20 -20',
                 anchors: 'top left right bottom',
                 autosize: 'width height',
-                name: 'result'
+                name: 'result',
+                multiline: true
             }
         ]
-    })
+    });
+    p.find('[name=download-label]').bind('click', function() {
+        var c = p.find('[name=download]');
+        c.attr('checked', !c.attr('checked'));
+    });
+    
     p.find('[name=cut]').bind('click', function() {
         tools.imageCutter._loadImage(p.find('[name=url]').attr('value'), function(image) {
             var coords = uki.map(['top', 'right', 'bottom', 'left'], function() {
@@ -162,7 +183,7 @@ tools.imageCutter.build = function() {
             var text = tools.imageCutter.getText(image, inset);
             
             p.find('[name=result]').attr('html', '<div style="white-space:pre">' + text + '</div>');
-            tools.imageCutter.sendForm(text);
+            // tools.imageCutter.sendForm(text);
         })
     });
     p[0].dom().style.backgroundColor = '#EFEFEF';

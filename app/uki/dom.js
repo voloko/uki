@@ -6,16 +6,11 @@ include('utils.js');
 var guid = 1,
     expando = 'uki' + (+new Date),
     root = this,
-    doc = root.document,
-    targets = {
-        'resize': root,
-        'scroll': root,
-        'load'  : root,
-        'unload': root
-    };
+    doc = root.document;
    
 var self = uki.dom = {
     bound: {},
+    handles: {},
     
     createElement: function(tagName, cssText) {
         var e = doc.createElement(tagName);
@@ -30,50 +25,42 @@ var self = uki.dom = {
 
     bind: function(el, type, handler) {
         var id = el[expando] = el[expando] || guid++,
-            target = targets[type] || doc;
+            handle = self.handles[id] = self.handles[id] || function() {
+                self.handler.apply(arguments.callee.elem, arguments);
+            };
+        handle.elem = el;
         handler.huid = handler.huid || guid++;
         
-        if (!self.bound[type]) {
-            target.addEventListener ? target.addEventListener(type, self.handler, false) : target.attachEvent('on' + type, self.handler);
-            self.bound[type] = {};
+        if (!self.bound[id]) self.bound[id] = {};
+        
+        if (!self.bound[id][type]) {
+            el.addEventListener ? el.addEventListener(type, handle, false) : el.attachEvent('on' + type, handle);
+            self.bound[id][type] = [];
         }
-        if (!self.bound[type][id]) self.bound[type][id] = [];
-        self.bound[type][id].push(handler);
+        self.bound[id][type].push(handler);
+        el = null;
     },
     
     unbind: function(el, type, handler) {
-        if (!el[expando] || !self.bound[type]) return;
         var id = el[expando],
             huid = handler.huid;
-        if (!huid) return;
-        self.bound[type][id] = uki.grep(self.bound[type][id], function(h) { return h.huid !== huid; });
+        if (!huid || !id || !self.bound[id] || !self.bound[type]) return;
+        self.bound[id][type] = uki.grep(self.bound[id][type], function(h) { return h.huid !== huid; });
     },
     
     handler: function( e ) {
         e = self.fix( e || root.event );
-        // if (e.target == doc) e.target = targets[e.type];
-        // if (!e.target || !e.target[expando]) return;
-        
+
         var type = e.type,
-            handlers = self.bound[type],
-            target = e.target,
-            elHandlers,
-            id, i, n = 100;
-        do {
-            id = target[expando];
-            if (handlers[id] && handlers[id].length) {
-                for (i=0, elHandlers = handlers[id]; i < elHandlers.length; i++) {
-                    elHandlers[i].apply(target, arguments);
-                };
-            }
-            if (target.nodeType == doc) {
-                target == root;
-            } else if (target.nodeType == 1 && !target.parentNode) {
-                target = doc;
-            } else {
-                target = target.parentNode;
-            }
-        } while (n-- && target);
+            id = this[expando],
+            handlers = self.bound[id],
+            i;
+            
+        if (!id || !handlers || !handlers[type]) return;
+        
+        for (i=0, handlers = handlers[type]; i < handlers.length; i++) {
+            handlers[i].apply(this, arguments);
+        };
     },
     
     /**
@@ -123,13 +110,17 @@ var self = uki.dom = {
 
 if (root.attachEvent) {
     root.attachEvent('onunload', function() {
-       uki.each(self.bound, function(type) {
-           (targets[type] || doc).detachEvent('on' + type, self.handler);
-       });
+        uki.each(self.bound, function(id, types) {
+            uki.each(types, function(type, handlers) {
+                try {
+                    self.handles[id].elem.detachEvent('on' + type, self.handles[id]);
+                } catch (e) {};
+            });
+        });
     });
 };
 
-uki.each(['createElement', 'bind', 'unbind'], function(i, name) {
+uki.each(['createElement'], function(i, name) {
     uki[name] = self[name];
 });
 

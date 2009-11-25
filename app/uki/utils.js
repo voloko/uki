@@ -35,7 +35,7 @@ var utils = uki.utils = {
 
         if ( length === undefined ) {
             for ( name in object ) {
-                if ( !name || !object[ name ] || !object.hasOwnProperty(name) ) continue;
+                if ( !name || object[ name ] === undefined || !object.hasOwnProperty(name) ) continue;
                 if ( callback.call( context || object[ name ], name, object[ name ] ) === false ) { break; }
             }
         } else {

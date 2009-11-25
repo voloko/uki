@@ -4,7 +4,7 @@ include('base.js');
 
 var Base = uki.component.Base.prototype,
 self = uki.component.Button = uki.newClass(Base, {
-
+    
     _afterInit: function() {
         var backgrounds = uki.defaultTheme.backgrounds,
             _this = this;
@@ -18,24 +18,23 @@ self = uki.component.Button = uki.newClass(Base, {
         
         this._down = false;
         
-        uki.bind(document, 'mouseup', function() {
+        uki.dom.bind(document, 'mouseup', function() {
             _this._backgroundByName('normal');
             _this._down = false;
         });
         
-        this.bind('mousedown', function() {
+        uki.dom.bind(this._dom, 'mousedown', function() {
             _this._backgroundByName('down');
             _this._down = true;
         });
         
-        this.bind('mouseover', function(e) {
-            _this._backgroundByName((e.which == 1 && this._down) ? 'down' : 'hover');
+        uki.dom.bind(this._dom, 'mouseover', function(e) {
+            _this._backgroundByName((_this._down) ? 'down' : 'hover');
         });
         
-        this.bind('mouseout', function() {
+        uki.dom.bind(this._dom, 'mouseout', function() {
             _this._backgroundByName('normal');
         });
-        
     },
     
     _backgroundByName: function(name) {
@@ -55,9 +54,10 @@ self = uki.component.Button = uki.newClass(Base, {
     
     _domResize: function(rect) {
         Base._domResize.apply(this, arguments);
-        uki.layout.schedule(this._label.style, {
-            top: (rect.size.height - this._label.offsetHeight)/2
-        });
+        this._label.style.lineHeight = rect.size.height + 'px';
+        // uki.layout.schedule(this._label.style, {
+        //     top: (rect.size.height - this._label.offsetHeight)/2
+        // });
     },
 
     typeName: function() {

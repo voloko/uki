@@ -25,19 +25,13 @@ QUnit.test("should bind events through document", function() {
     QUnit.ok(called);
 });
 
-QUnit.test("should not call native event handling for observable", function() {
-    var e = dom.createElement('input'),
-        called = [],
-        o = new Observable(e);
-    e.addEventListener = function(ev) { called.push(type) };
-    o.bind('artificial', function() {});
-    o.trigger('artificial');
-    
-    QUnit.equals(called.length, 0);
-});
-
-QUnit.test("should copy commmon functions to uki", function() {
-    QUnit.ok(uki.createElement);
-    QUnit.ok(uki.bind);
-    QUnit.ok(uki.unbind);
-});
+// QUnit.test("should not call native event handling for observable", function() {
+//     var e = dom.createElement('input'),
+//         called = [],
+//         o = new Observable(e);
+//     e.addEventListener = function(ev) { called.push(type) };
+//     o.bind('artificial', function() {});
+//     o.trigger('artificial');
+//     
+//     QUnit.equals(called.length, 0);
+// });

@@ -14,9 +14,13 @@ self.prototype = uki.extend({}, Base, {
     
     _domCreate: function() {
         this._selectable = true;
-        this._dom = uki.createElement('div');
-        this._dom.style.cssText = Base.defaultCss + 
-            "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;text-shadow:0 1px 0px rgba(255,255,255,0.8);font-size:12px;line-height:15px;";
+        this._dom = uki.createElement('div', Base.defaultCss + 
+            "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;text-shadow:0 1px 0px rgba(255,255,255,0.8);font-size:12px;line-height:15px;white-space:nowrap;");
+    },
+    
+    _domResize: function(rect) {
+        Base._domResize.apply(this, arguments);
+        if (!this.multiline()) this._dom.style.lineHeight = rect.size.height + 'px';
     },
     
     text: function(text) {
@@ -48,6 +52,12 @@ self.prototype = uki.extend({}, Base, {
             this._dom.style.userSelect = state ? '' : 'none';
             this._dom.style.cursor = state ? 'text' : 'default';
         }
+    },
+    
+    multiline: function(state) {
+        if (arguments.length == 0) return this._dom.style.whiteSpace != 'nowrap';
+        this._dom.style.whiteSpace = state ? '' : 'nowrap';
+        if (this._rect) this._dom.style.lineHeight = state ? '' : this._rect.size.height + 'px';
     }
 });
     

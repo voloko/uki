@@ -567,7 +567,7 @@ uki.layout = new function() {
     
     self.register = function(a) {
         if (self.instances.length == 0) {
-            uki.bind(root, 'resize', function() {
+            uki.dom.bind(root, 'resize', function() {
                 uki.each(self.instances, function() { this.resize() });
                 uki.layout.perform();
             })

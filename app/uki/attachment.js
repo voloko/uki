@@ -8,9 +8,15 @@ include('layout.js');
     var root = this;
 
     var self = uki.Attachment = uki.newClass({
-        init: function( dom, view ) {
+        init: function( dom, view, minSize ) {
             this._dom = dom;
             this._view = view;
+            if (minSize) {
+                this._minSize = typeof minSize == 'string' ? uki.geometry.Size.fromString(minSize) : minSize;
+            } else {
+                this._minSize = new uki.geometry.Size(0, 0);
+            }
+            
             dom.appendChild(view.dom());
             var computedStyle = dom.runtimeStyle || dom.ownerDocument.defaultView.getComputedStyle(dom, null);
             if (!computedStyle.position || computedStyle.position == 'static') dom.style.position = 'relative';
@@ -20,7 +26,11 @@ include('layout.js');
         },
         
         resize: function() {
-            this._view.rect(new uki.geometry.Rect(0, 0, this._dom.offsetWidth, this._dom.offsetHeight))
+            this._view.rect(new uki.geometry.Rect(
+                0, 0, 
+                Math.max(this._minSize.width, this._dom.offsetWidth), 
+                Math.max(this._minSize.height, this._dom.offsetHeight)
+            ));
         },
         
         view: function() {
@@ -32,7 +42,7 @@ include('layout.js');
     
     self.register = function(a) {
         if (self.instances.length == 0) {
-            uki.bind(root, 'resize', function() {
+            uki.dom.bind(root, 'resize', function() {
                 uki.each(self.instances, function() { this.resize() });
                 uki.layout.perform();
             })
