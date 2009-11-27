@@ -45,15 +45,15 @@ self = uki.component.Button = uki.newClass(Base, {
     },
 
     _domCreate: function() {
-        var style = Base.defaultCss + "font-weight:bold;color:#333;text-shadow:0 1px 0px rgba(255,255,255,0.8);font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;";
+        var style = Base.defaultCss + "font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom = uki.createElement('div', style);
-        this._label = uki.createElement('div',style + 'width:100%;background:url(' + uki.defaultTheme.imagePath + '/x.gif' + ');');
+        this._label = uki.createElement('div',style + 'width:100%;background:url(' + uki.defaultTheme.imagePath + 'x.gif' + ');');
         this._dom.appendChild(this._label);
         this._label.onselectstart = this._dom.onselectstart = uki.F;
     },
     
-    _domResize: function(rect) {
-        Base._domResize.apply(this, arguments);
+    _domLayout: function(rect) {
+        Base._domLayout.apply(this, arguments);
         this._label.style.lineHeight = rect.size.height + 'px';
         // uki.layout.schedule(this._label.style, {
         //     top: (rect.size.height - this._label.offsetHeight)/2

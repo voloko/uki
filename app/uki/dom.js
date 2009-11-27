@@ -13,7 +13,7 @@ var self = uki.dom = {
     handles: {},
     
     createElement: function(tagName, cssText) {
-        var e = doc.createElement(tagName);
+        var e = doc.createElement(tagName);            
         if (cssText) e.style.cssText = cssText;
         e[expando] = guid++;
         return e;
@@ -23,21 +23,27 @@ var self = uki.dom = {
     	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +
     	"change,select,submit,keydown,keypress,keyup,error").split(","),
 
-    bind: function(el, type, handler) {
+    bind: function(el, types, handler) {
         var id = el[expando] = el[expando] || guid++,
             handle = self.handles[id] = self.handles[id] || function() {
                 self.handler.apply(arguments.callee.elem, arguments);
-            };
+            },
+            i, type;
+            
         handle.elem = el;
         handler.huid = handler.huid || guid++;
         
         if (!self.bound[id]) self.bound[id] = {};
         
-        if (!self.bound[id][type]) {
-            el.addEventListener ? el.addEventListener(type, handle, false) : el.attachEvent('on' + type, handle);
-            self.bound[id][type] = [];
-        }
-        self.bound[id][type].push(handler);
+        types = types.split(' ');
+        for (i=0; i < types.length; i++) {
+            type = types[i];
+            if (!self.bound[id][type]) {
+                el.addEventListener ? el.addEventListener(type, handle, false) : el.attachEvent('on' + type, handle);
+                self.bound[id][type] = [];
+            }
+            self.bound[id][type].push(handler);
+        };
         el = null;
     },
     
@@ -100,6 +106,14 @@ var self = uki.dom = {
 			event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));    
 			
 		return event;    
+    },
+    
+    computedStyle: function(el) {
+        if (doc && doc.defaultView && doc.defaultView.getComputedStyle) {
+            return doc.defaultView.getComputedStyle( el, null )
+        } else if (el.currentStyle) {
+            return el.currentStyle;
+        }
     },
     
     _preventSelectionHandler: function(e) { 

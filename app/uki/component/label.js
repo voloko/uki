@@ -15,11 +15,11 @@ self.prototype = uki.extend({}, Base, {
     _domCreate: function() {
         this._selectable = true;
         this._dom = uki.createElement('div', Base.defaultCss + 
-            "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;text-shadow:0 1px 0px rgba(255,255,255,0.8);font-size:12px;line-height:15px;white-space:nowrap;");
+            "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:15px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     },
     
-    _domResize: function(rect) {
-        Base._domResize.apply(this, arguments);
+    _domLayout: function(rect) {
+        Base._domLayout.apply(this, arguments);
         if (!this.multiline()) this._dom.style.lineHeight = rect.size.height + 'px';
     },
     
@@ -42,7 +42,7 @@ self.prototype = uki.extend({}, Base, {
             this.dom().style.textAlign = align;
         }
     },
-    
+
     selectable: function(state) {
         if (arguments.length == 0) {
             return this._selectable;

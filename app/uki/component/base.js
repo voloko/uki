@@ -22,7 +22,7 @@ var layout = uki.layout,
 uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
     var proto = this;
     
-    proto.defaultCss = 'position:absolute;overflow:hidden;top:0;left:0;z-index:100;font-family:Arial,Helvetica,sans-serif;';
+    proto.defaultCss = 'position:absolute;top:0;left:0;z-index:100;font-family:Arial,Helvetica,sans-serif;overflow:hidden;';
     
     proto.init = function(rect) {
         this._anchors = 0;
@@ -83,7 +83,11 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
 
         if (rect.eq(this._rect)) return;
         
-        this._domResize(rect);
+        this._resize(rect);
+    };
+    
+    proto._resize = function(rect) {
+        this._domLayout(rect);
         this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
         
         if (this._rect) {
@@ -115,9 +119,7 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         return this._dom;
     };
     
-    proto._domResize = function(rect) {
-        var props = {};
-
+    proto._domLayout = function(rect) {
         layout.schedule(this._dom.style, {
             left: rect.origin.x, 
             top: rect.origin.y, 

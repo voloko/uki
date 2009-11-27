@@ -37,7 +37,7 @@ tools.imageCutter.getText = function(img, inset) {
         if (!dataurl) return true;
         var str = '';
         var url = img.src.replace(/.*\//, '');
-        str += '    ' + names[i] + ': uki.image("' + url.replace(/(\.\w+)/, '-' + names[i] + '$1' ) + '", "'+ dataurl +'"),'
+        str += '    ' + names[i] + ': ["' + url.replace(/(\.\w+)/, '-' + names[i] + '$1' ) + '", "'+ dataurl +'"],'
         result.push(str);
     });
     return '{<br/>' + result.join('<br />').replace(/,$/, '') + '<br />}';
@@ -63,7 +63,7 @@ tools.imageCutter.sendForm = function (text) {
     f.action = '/imageCutter';
     f.method = 'POST';
     v.type = 'hidden';
-    v.value = text.replace(/uki\.image\(/g, '[').replace(/\)/g, ']').replace(/(\w+):\s/g, '"$1":').replace(/<br\s?\/>/g, '');
+    v.value = text.replace(/(\w+):\s/g, '"$1":').replace(/<br\s?\/>/g, '');
     v.name = 'json';
     f.appendChild(v);
     document.body.appendChild(f);
@@ -98,7 +98,7 @@ tools.imageCutter.build = function() {
                     },
                     {
                         view: 'Base',
-                        coords: '60 42 -10 64',
+                        coords: '60 42 -10 68',
                         anchors: 'left rigth top',
                         autosize: 'width',
                         children: [
@@ -183,7 +183,7 @@ tools.imageCutter.build = function() {
             var text = tools.imageCutter.getText(image, inset);
             
             p.find('[name=result]').attr('html', '<div style="white-space:pre">' + text + '</div>');
-            // tools.imageCutter.sendForm(text);
+            if (p.find('[name=download]').attr('checked')) tools.imageCutter.sendForm(text);
         })
     });
     p[0].dom().style.backgroundColor = '#EFEFEF';

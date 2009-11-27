@@ -38,6 +38,17 @@ include('attachment.js');
         return this;
     };
     
+    self.addChildren = function( nodes ) {
+        if (!this[0]) return this;
+        nodes = nodes.length !== undefined ? nodes : [nodes];
+        for (var i=0; i < nodes.length; i++) {
+            this[0].addChild(nodes[i]);
+        };
+        return this;
+    };
+    
+    self.addChild = self.addChildren;
+    
     uki.each(['bind', 'unbind', 'trigger'], function(i, name) {
         self[name] = function() {
             for (var i=0; i < this.length; i++) {

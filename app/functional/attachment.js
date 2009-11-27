@@ -11,4 +11,3 @@ uki({
 uki('Panel > Button[text^=uki]').bind('click', function() {
     alert('Hello world!');
 });
-

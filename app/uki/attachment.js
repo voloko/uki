@@ -33,6 +33,10 @@ include('layout.js');
             ));
         },
         
+        dom: function() {
+            return this._dom;
+        },
+        
         view: function() {
             return this._view;
         }

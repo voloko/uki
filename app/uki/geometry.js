@@ -21,6 +21,12 @@ include('../uki.js');
             return this.x == point.x && this.y == point.y;
         },
         
+        offset: function(x, y) {
+            this.x += x;
+            this.y += y;
+            return this;
+        },
+        
         constructor: Point
     };
     
@@ -216,6 +222,10 @@ include('../uki.js');
     Inset.prototype = {
         toString: function() {
             return [this.top, this.right, this.bottom, this.left].join(' ');
+        },
+        
+        clone: function() {
+            return new Inset(this.top, this.right, this.bottom, this.left);
         }
     };
     
