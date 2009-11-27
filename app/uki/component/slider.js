@@ -53,13 +53,12 @@ self = uki.component.Slider = uki.newClass(Base, {
         if (!this._over) this._bg.style.top = 0;
     },
     
-    _domLayout: function(rect) {
-        uki.layout.schedule(this._dom.style, {
-            left: rect.origin.x, 
-            top: (rect.size.height - 18 / 2) + rect.origin.y, 
-            width: rect.size.width
+    layout: function() {
+        uki.dom.layout(this._dom.style, {
+            left: this._rect.origin.x, 
+            top: (this._rect.size.height - 18 / 2) + this._rect.origin.y, 
+            width: this._rect.size.width
         });
-        rect.size.height = 18; // HACK
     },
 
     _afterInit: function() {

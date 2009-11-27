@@ -18,9 +18,9 @@ self.prototype = uki.extend({}, Base, {
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:15px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     },
     
-    _domLayout: function(rect) {
-        Base._domLayout.apply(this, arguments);
-        if (!this.multiline()) this._dom.style.lineHeight = rect.size.height + 'px';
+    layout: function() {
+        Base.layout.apply(this, arguments);
+        if (!this.multiline()) this._dom.style.lineHeight = this._rect.size.height + 'px';
     },
     
     text: function(text) {

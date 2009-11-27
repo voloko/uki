@@ -16,13 +16,13 @@ include('../dom.js');
     function bind() {
         uki.dom.bind(document, 'mousemove scroll', dragging);
         uki.dom.bind(document, 'mouseup', drop);
-        // uki.dom.bind(document.body, 'mousedown', preventSelectionHandler);
+        uki.dom.bind(document.body, 'mousedown', preventSelectionHandler);
     }
 
     function unbind() {
         uki.dom.unbind(document, 'mousemove scroll', dragging);
         uki.dom.unbind(document, 'mouseup', drop);
-        // uki.dom.unbind(document.body, 'mousedown', preventSelectionHandler);
+        uki.dom.unbind(document.body, 'mousedown', preventSelectionHandler);
     }
 
     function dragging(e) {

@@ -52,11 +52,11 @@ self = uki.component.Button = uki.newClass(Base, {
         this._label.onselectstart = this._dom.onselectstart = uki.F;
     },
     
-    _domLayout: function(rect) {
-        Base._domLayout.apply(this, arguments);
-        this._label.style.lineHeight = rect.size.height + 'px';
-        // uki.layout.schedule(this._label.style, {
-        //     top: (rect.size.height - this._label.offsetHeight)/2
+    layout: function() {
+        Base.layout.apply(this, arguments);
+        this._label.style.lineHeight = this._rect.size.height + 'px';
+        // uki.dom.layout(this._label.style, {
+        //     top: (this._rect.size.height - this._label.offsetHeight)/2
         // });
     },
 

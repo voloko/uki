@@ -19,6 +19,13 @@ var self = uki.dom = {
         return e;
     },
     
+    layout: function(style, properties) {
+        if (properties.left != undefined) style.left = properties.left + 'px';
+        if (properties.top != undefined) style.top = properties.top + 'px';
+        if (properties.width != undefined) style.width = properties.width + 'px';
+        if (properties.height != undefined) style.height = properties.height + 'px';
+    },
+    
     events: ("blur,focus,load,resize,scroll,unload,click,dblclick," +
     	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +
     	"change,select,submit,keydown,keypress,keyup,error").split(","),
@@ -110,7 +117,7 @@ var self = uki.dom = {
     
     computedStyle: function(el) {
         if (doc && doc.defaultView && doc.defaultView.getComputedStyle) {
-            return doc.defaultView.getComputedStyle( el, null )
+            return doc.defaultView.getComputedStyle( el, null );
         } else if (el.currentStyle) {
             return el.currentStyle;
         }

@@ -9,7 +9,7 @@ var Base = uki.component.Base.prototype,
     
 self.prototype = uki.extend({}, Base, {
     _domCreate: function() {
-        this._dom = uki.createElement('div', Base.defaultCss);
+        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text');
         this._input = uki.createElement('input', Base.defaultCss + "-moz-box-sizing:border-box;border:none;outline:none;background:transparent;padding:0;height:15px;padding-top:3px;line-height:11px;overflow:hidden;font-size:11px;left:2px;top:0;z-index:10;background: url(" + uki.defaultTheme.images.x().src + ")");
         if (window.opera) this._input.style.height = '13px';
         this._dom.appendChild(this._input);
@@ -19,11 +19,11 @@ self.prototype = uki.extend({}, Base, {
         uki.defaultTheme.backgrounds.input().attachTo(this);
     },
     
-    _domLayout: function(rect) {
-        Base._domLayout.apply(this, arguments);
-        uki.layout.schedule(this._input.style,{
-            width: rect.size.width - 4,
-            top: (rect.size.height - 20) / 2
+    layout: function() {
+        Base.layout.apply(this, arguments);
+        uki.dom.layout(this._input.style,{
+            width: this._rect.size.width - 4,
+            top: (this._rect.size.height - 20) / 2
         });
     },
 

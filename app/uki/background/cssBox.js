@@ -26,11 +26,10 @@ uki.background.CssBox = uki.newClass(new function() {
         };
         this._comp.bind('resize', this._resizeHandler);
         if (this._comp.rect()) this._resize(this._comp.rect().size);
-        uki.layout.perform();
     };
     
     this._resize = function(size) {
-        uki.layout.schedule(this._container.style, {
+        uki.dom.layout(this._container.style, {
             width: size.width - this._insetWidth,
             height: size.height - this._insetHeight
         });

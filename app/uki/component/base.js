@@ -17,6 +17,7 @@ var ANCHOR_TOP      = 1,
     AUTOSIZE_HEIGHT = 2;
     
 var layout = uki.layout,
+    dom = uki.dom,
     utils = uki.utils;
 
 uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
@@ -75,30 +76,38 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
     
     proto.rect = function(rect) {
         if (arguments.length == 0) return this._rect;
-
+        
         if (typeof rect === 'string') rect = uki.geometry.Rect.fromString(
             rect, 
             (this._parent ? this._parent.rect().size : undefined)
         );
-
-        if (rect.eq(this._rect)) return;
         
+        if (this._rect && rect.eq(this._rect)) return;
+        
+        var inited = this._rect;
         this._resize(rect);
+        
+        if (!inited) {
+            this._afterInit();
+        }
     };
     
     proto._resize = function(rect) {
-        this._domLayout(rect);
-        this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
+        uki.layout.schedule(this);
         
         if (this._rect) {
-            var oldSize = this._rect.size.clone();
+            var oldRect = this._rect.clone();
             this._rect = rect;
-            for (var i=0; i < this._children.length; i++) {
-                this._children[i].resizeWithOldSize(oldSize);
-            };
+            
+            if (this._children.length) {
+                for (var i=0; i < this._children.length; i++) {
+                    this._children[i].resizeWithOldSize(oldRect.size, rect.size);
+                };
+            }
+            this.trigger('resize', {oldRect: oldRect, newRect: rect, source: this});
+            
         } else {
             this._rect = rect;
-            this._afterInit();
         }
     };
     
@@ -119,8 +128,9 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         return this._dom;
     };
     
-    proto._domLayout = function(rect) {
-        layout.schedule(this._dom.style, {
+    proto.layout = function() {
+        var rect = this._rect;
+        dom.layout(this._dom.style, {
             left: rect.origin.x, 
             top: rect.origin.y, 
             width: rect.size.width, 
@@ -136,14 +146,13 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         this._dom = uki.createElement('div', this.defaultCss);
     };
     
-    proto.resizeWithOldSize = function(oldSize) {
-        var rect = this._parent.rect(),
-            newRect = this._rect.clone(),
-            dX = (rect.size.width - oldSize.width) /
+    proto.resizeWithOldSize = function(oldSize, newSize) {
+        var newRect = this._rect.clone(),
+            dX = (newSize.width - oldSize.width) /
                 ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +   // flexible left
                 (this._autosize & AUTOSIZE_WIDTH? 1 : 0) +             
                 (this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT ? 1 : 0)),   // flexible right
-            dY = (rect.size.height - oldSize.height) /
+            dY = (newSize.height - oldSize.height) /
                 ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top
                 (this._autosize & AUTOSIZE_HEIGHT ? 1 : 0) + 
                 (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM ? 1 : 0)); // flexible right

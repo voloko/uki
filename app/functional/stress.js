@@ -8,15 +8,17 @@ function button (i) {
     });
 }
 
-// uki.layout.wait();
+uki.layout.wait();
 
 var c = uki({
     view: 'Base',
     rect: '0 0 1000px 1000px'
-}).attachTo( document.getElementById('test') );
+});
 
 for (var i=0; i < 100; i++) {
     c.addChild(button(i));
 };
 
-// uki.layout.stopWaiting();
+c.attachTo( document.getElementById('test') );
+
+uki.layout.stopWaiting();
