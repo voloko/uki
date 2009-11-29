@@ -3,8 +3,8 @@ include('input.js');
 
 (function() {
 
-var Base = uki.component.Input.prototype,
-    self = uki.component.Textarea = function() {
+var Base = uki.view.Input.prototype,
+    self = uki.view.Textarea = function() {
         this.init.apply(this, arguments);
     };
     

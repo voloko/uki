@@ -17,12 +17,12 @@ include('uki/background/css.js');
 include('uki/background/cssBox.js');
 include('uki/theme.js');
 
-include('uki/component/base.js');
-include('uki/component/button.js');
-include('uki/component/panel.js');
-include('uki/component/checkbox.js');
-include('uki/component/input.js');
-include('uki/component/label.js');
-include('uki/component/slider.js');
+include('uki/view/base.js');
+include('uki/view/button.js');
+include('uki/view/panel.js');
+include('uki/view/checkbox.js');
+include('uki/view/input.js');
+include('uki/view/label.js');
+include('uki/view/slider.js');
 
-// include('uki/component/textarea.js');
+// include('uki/view/textarea.js');

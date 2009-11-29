@@ -232,7 +232,7 @@ utils.extend(uki, utils);
         },
         
         clone: function() {
-            return new Rect(this.origin.clone(), this.size.clone());
+            return new Rect(this.origin.clone(), this.clone());
         },
         
         minX: function(val) {
@@ -241,11 +241,11 @@ utils.extend(uki, utils);
         },
         
         maxX: function() {
-            return this.origin.x + this.size.width;
+            return this.origin.x + this.width;
         },
         
         midX: function() {
-            return this.origin.x + this.size.width / 2.0;
+            return this.origin.x + this.width / 2.0;
         },
         
         minY: function(val) {
@@ -254,36 +254,36 @@ utils.extend(uki, utils);
         },
         
         midY: function() {
-            return this.origin.y + this.size.height / 2.0;
+            return this.origin.y + this.height / 2.0;
         },
         
         maxY: function() {
-            return this.origin.y + this.size.height;
+            return this.origin.y + this.height;
         },
         
         width: function(val) {
-            if (arguments.length > 0) this.size.width = val;
-            return this.size.width;
+            if (arguments.length > 0) this.width = val;
+            return this.width;
         },
         
         height: function(val) {
-            if (arguments.length > 0) this.size.height = val;
-            return this.size.height;
+            if (arguments.length > 0) this.height = val;
+            return this.height;
         },
         
         isEmpty: function() {
-            return this.size.width <= 0.0 || this.size.height <= 0.0;
+            return this.width <= 0.0 || this.height <= 0.0;
         },
         
         eq: function(rect) {
-            return rect && this.size.eq(rect.size) && this.origin.eq(rect.origin);
+            return rect && this.eq(rect.size) && this.origin.eq(rect.origin);
         },
         
         inset: function(dx, dy) {
             this.origin.x += dx;
             this.origin.y += dy;
-            this.size.width -= dx*2.0;
-            this.size.height -= dy*2.0;
+            this.width -= dx*2.0;
+            this.height -= dy*2.0;
         },
         
         intersection: function(rect) {
@@ -1003,9 +1003,9 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
 
         if (rect.eq(this._rect)) return;
         
-        this._domResize(rect);
+        this._domLayout(rect);
         if (this._rect) {
-            var oldSize = this._rect.size.clone();
+            var oldSize = this._rect.clone();
             this._rect = rect;
             for (var i=0; i < this._children.length; i++) {
                 this._children[i].resizeWithOldSize(oldSize);
@@ -1032,19 +1032,19 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         return this._domStyle;
     };
     
-    proto._domResize = function(rect) {
+    proto._domLayout = function(rect) {
         var props = {};
 
         layout.schedule(this._domStyle, {
             left: rect.origin.x, 
             top: rect.origin.y, 
-            width: rect.size.width, 
-            height: rect.size.height
+            width: rect.width, 
+            height: rect.height
         });
         // this._domStyle.left   = rect.origin.x + 'px';
         // this._domStyle.top    = rect.origin.y + 'px';
-        // this._domStyle.width  = rect.size.width + 'px';
-        // this._domStyle.height = rect.size.height + 'px';
+        // this._domStyle.width  = rect.width + 'px';
+        // this._domStyle.height = rect.height + 'px';
     };
     
     proto._domCreate = function() {
@@ -1055,20 +1055,20 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
     proto.resizeWithOldSize = function(oldSize) {
         var rect = this._parent.rect(),
             newRect = this._rect.clone(),
-            dX = (rect.size.width - oldSize.width) /
+            dX = (rect.width - oldSize.width) /
                 ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +   // flexible left
                 (this._autosize & AUTOSIZE_WIDTH? 1 : 0) +             
                 (this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT ? 1 : 0)),   // flexible right
-            dY = (rect.size.height - oldSize.height) /
+            dY = (rect.height - oldSize.height) /
                 ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top
                 (this._autosize & AUTOSIZE_HEIGHT ? 1 : 0) + 
                 (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM ? 1 : 0)); // flexible right
                 
         if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) newRect.origin.x += dX;
-        if (this._autosize & AUTOSIZE_WIDTH) newRect.size.width += dX;
+        if (this._autosize & AUTOSIZE_WIDTH) newRect.width += dX;
 
         if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) newRect.origin.y += dY;
-        if (this._autosize & AUTOSIZE_HEIGHT) newRect.size.height += dY;
+        if (this._autosize & AUTOSIZE_HEIGHT) newRect.height += dY;
 
         this.rect(newRect);
     };

@@ -188,7 +188,7 @@ tools.imageCutter.build = function() {
     });
     p[0].dom().style.backgroundColor = '#EFEFEF';
     p.find('Label:eq(0)').each(function() {
-        this.dom().style.lineHeight = this.rect().size.height + 'px';
+        this.dom().style.lineHeight = this.rect().height + 'px';
     })
     p.find('[name=result]').each(function() {
         this.dom().style.overflow = 'auto';

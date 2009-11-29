@@ -2,11 +2,12 @@ include('base.js');
 
 (function() {
 
-var Base = uki.component.Base.prototype,
-self = uki.component.Checkbox = uki.newClass(Base, {
+var Base = uki.view.Base.prototype,
+self = uki.view.Checkbox = uki.newClass(Base, {
     
     init: function() {
         this._checked = false;
+        this._image = uki.defaultTheme.images.checkbox();
         Base.init.apply(this, arguments);
     },
     
@@ -14,7 +15,20 @@ self = uki.component.Checkbox = uki.newClass(Base, {
         return Base.knownEvents.apply(this, []).concat(['change']);
     },
     
-    _afterInit: function() {
+    checked: function() {
+        if (arguments.length == 0) return this._checked;
+        this._checked = !!arguments[0];
+        this._image.style.top = this._checked ? '0' : '-18px';
+    },
+
+    _domCreate: function() {
+        this._dom = uki.createElement('div', Base.defaultCss);
+        this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-9px;margin-top:-9px;width:18px;height:18px;');
+        this._image.style.position = 'absolute';
+        this._image.style.top = '-18px';
+        this._dom.appendChild(this._box);
+        this._box.appendChild(this._image);
+
         var _this = this;
         uki.dom.bind(this._box, 'click', function() {
             _this.checked(!_this._checked)
@@ -28,24 +42,8 @@ self = uki.component.Checkbox = uki.newClass(Base, {
         });
     },
     
-    checked: function() {
-        if (arguments.length == 0) return this._checked;
-        this._checked = !!arguments[0];
-        this._image.style.top = this._checked ? '0' : '-18px';
-    },
-
-    _domCreate: function() {
-        this._dom = uki.createElement('div', Base.defaultCss);
-        this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-9px;margin-top:-9px;width:18px;height:18px;');
-        this._image = uki.defaultTheme.images.checkbox();
-        this._image.style.position = 'absolute';
-        this._image.style.top = '-18px';
-        this._dom.appendChild(this._box);
-        this._box.appendChild(this._image);
-    },
-    
     typeName: function() {
-        return 'uki.component.Checkbox';
+        return 'uki.view.Checkbox';
     }
 });
 

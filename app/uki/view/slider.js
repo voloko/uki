@@ -1,11 +1,11 @@
-include('../component.js');
+include('../view.js');
 
 include('base.js');
 
 (function() {
 
-var Base = uki.component.Base.prototype,
-self = uki.component.Slider = uki.newClass(Base, {
+var Base = uki.view.Base.prototype,
+self = uki.view.Slider = uki.newClass(Base, {
     
     _domCreate: function() {
         this._dom = uki.createElement('div', Base.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');
@@ -16,6 +16,8 @@ self = uki.component.Slider = uki.newClass(Base, {
         
         var _this = this;
         uki.image.load([this._bg], function() { _this._afterHandleLoad(); });
+        
+        uki.defaultTheme.backgrounds['slider-bar']().attachTo(this);
     },
     
     _afterHandleLoad: function() {
@@ -44,7 +46,7 @@ self = uki.component.Slider = uki.newClass(Base, {
     },
     
     drag: function(e, offset) {
-        this._handle.style.left = Math.max(0, Math.min(this._rect.size.width, this._initialPosition.x - offset.x)) + 'px';
+        this._handle.style.left = Math.max(0, Math.min(this._rect.width, this._initialPosition.x - offset.x)) + 'px';
     },
     
     drop: function(e, offset) {
@@ -53,20 +55,16 @@ self = uki.component.Slider = uki.newClass(Base, {
         if (!this._over) this._bg.style.top = 0;
     },
     
-    layout: function() {
+    _domLayout: function() {
         uki.dom.layout(this._dom.style, {
-            left: this._rect.origin.x, 
-            top: (this._rect.size.height - 18 / 2) + this._rect.origin.y, 
-            width: this._rect.size.width
+            left: this._rect.x, 
+            top: (this._rect.height - 18 / 2) + this._rect.y, 
+            width: this._rect.width
         });
     },
 
-    _afterInit: function() {
-        uki.defaultTheme.backgrounds['slider-bar']().attachTo(this);
-    },
-    
     typeName: function() {
-        return 'uki.component.Slider';
+        return 'uki.view.Slider';
     }
 });
 

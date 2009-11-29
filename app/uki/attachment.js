@@ -17,12 +17,17 @@ include('layout.js');
                 this._minSize = new uki.geometry.Size(0, 0);
             }
             
-            dom.appendChild(view.dom());
+            view.parent(this);
+            
             var computedStyle = dom.runtimeStyle || dom.ownerDocument.defaultView.getComputedStyle(dom, null);
             if (!computedStyle.position || computedStyle.position == 'static') dom.style.position = 'relative';
             self.register(this);
             this.resize();
             uki.layout.perform();
+        },
+        
+        domForChild: function() {
+            return this._dom;
         },
         
         resize: function() {

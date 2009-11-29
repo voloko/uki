@@ -22,19 +22,19 @@ uki.background.Sliced9 = uki.newClass(new function() {
         
         var _this = this;
 
-        this._resizeHandler = function(e) {
-            if (_this._size && _this._size.eq(e.newRect.size)) return;
-            _this._size = e.newRect.size;
+        this._layoutHandler = function(e) {
+            if (_this._size && _this._size.eq(e.rect)) return;
+            _this._size = e.rect;
             uki.layout.schedule(_this);
         };
-        this._comp.bind('resize', this._resizeHandler);
+        this._comp.bind('layout', this._layoutHandler);
         _this._attachContainer();
     };
     
     this.detach = function() {
         if (this._comp) {
             if ( this._container ) this._comp.dom().removeChild(this._container);
-            this._comp.unbind('resize', this._resizeHandler);
+            this._comp.unbind('layout', this._layoutHandler);
             this._size = this._comp = null;
         }
     };
@@ -43,7 +43,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (this._comp && this._container) {
             this._comp.dom().appendChild(this._container);
             if (this._comp.rect()) {
-                this._size = this._comp.rect().size;
+                this._size = this._comp.rect();
                 this.layout();
             }
         }
@@ -88,8 +88,8 @@ uki.background.Sliced9 = uki.newClass(new function() {
     
     this.layout = function() {
         if (!this._inset) return;
-        
-        var size = this._size,
+
+        var size = this._comp.rect(),
             parts = this._parts,
             inset = this._inset,
             fixedSize = this._fixedSize,

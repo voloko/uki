@@ -78,8 +78,8 @@ uki.theme.airport = {
         x: function() {
             return uki.image("x-m.gif", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="); 
         },
-        'split-view-horizontal': function() {
-            return uki.image("split-view/horizontal.gif", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAICAYAAAA870V8AAAAIElEQVQIHWNgYGDYDMQgsJkJQkNIijkM////9waZBaIBtioIA2DTJqsAAAAASUVORK5CYII=");
+        'splitPane-horizontal': function() {
+            return uki.image("splitPane/horizontal.gif", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAICAYAAAA870V8AAAAIElEQVQIHWNgYGDYDMQgsJkJQkNIijkM////9waZBaIBtioIA2DTJqsAAAAASUVORK5CYII=");
         }
     }
 };

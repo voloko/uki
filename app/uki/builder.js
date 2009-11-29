@@ -31,7 +31,7 @@ function createSingle (mlRow, parent) {
         var parts = c.split('.'),
             obj   = root;
         if (parts.length == 1 && !root[parts[0]]) {
-            parts = ['uki', 'component', parts[0]]; // try with default prefix
+            parts = ['uki', 'view', parts[0]]; // try with default prefix
         }
         for (var i=0; i < parts.length; i++) {
             obj = obj[parts[i]];

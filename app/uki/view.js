@@ -1,2 +1,2 @@
 include('../uki.js');
-uki.component = {};
+uki.view = {};

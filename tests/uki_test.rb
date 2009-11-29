@@ -10,7 +10,7 @@ class UkiTest < Test::Unit::TestCase
   end
   
   def test_should_merge_included_files
-    get '/app/uki/component/base.cjs'
+    get '/app/uki/view/base.cjs'
   end
   
 end

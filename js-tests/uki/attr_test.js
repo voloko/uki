@@ -1,12 +1,12 @@
 require('../test_helper.js');
 include('uki/attr.js');
-include('uki/component/base.js');
+include('uki/view/base.js');
 include('uki/layout.js');
 include('uki/geometry.js');
 
 
 var attr = uki.attr,
-    Base = uki.component.Base,
+    Base = uki.view.Base,
     Rect = uki.geometry.Rect;
     
     

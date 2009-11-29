@@ -1,12 +1,12 @@
 require('../test_helper.js');
 include('uki/builder.js');
 include('uki/selector.js');
-include('uki/component/Base.js');
-include('uki/component/Label.js');
+include('uki/view/Base.js');
+include('uki/view/Label.js');
 
 var Selector = uki.Selector,
-    Base     = uki.component.Base,
-    Label    = uki.component.Label;
+    Base     = uki.view.Base,
+    Label    = uki.view.Label;
 
 var tree = uki.build([{
     view: new Base(),
@@ -40,8 +40,8 @@ var tree = uki.build([{
 }]);
 
 QUnit.test("should tokenize expression", function() {
-    var tokens = Selector.tokenize('label > * > project.components.CustomView Label[name^="wow"]')[0];
-    QUnit.same(tokens, ['label', '>', '*', '>', 'project.components.CustomView', 'Label[name^="wow"]']);
+    var tokens = Selector.tokenize('label > * > project.views.CustomView Label[name^="wow"]')[0];
+    QUnit.same(tokens, ['label', '>', '*', '>', 'project.views.CustomView', 'Label[name^="wow"]']);
 });
 
 QUnit.test("should filter * name", function() {
@@ -63,7 +63,7 @@ QUnit.test("should filter * * name", function() {
 
 
 QUnit.test("should filter by full typeName", function() {
-    var elements = Selector.find('uki.component.Label', tree);
+    var elements = Selector.find('uki.view.Label', tree);
     QUnit.equals(elements.length, 2);
     QUnit.equals(uki.attr(elements[0], 'name'), 'label1');
     QUnit.equals(uki.attr(elements[1], 'name'), 'label2');

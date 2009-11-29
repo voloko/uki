@@ -2,10 +2,21 @@ include('base.js');
 
 (function() {
 
-var Base = uki.component.Base.prototype,
-self = uki.component.Button = uki.newClass(Base, {
+var Base = uki.view.Base.prototype,
+self = uki.view.Button = uki.newClass(Base, {
     
-    _afterInit: function() {
+    init: function() {
+        Base.init.apply(this, arguments);
+        this.defaultStyle = Base.defaultCss + "font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this._label = uki.createElement('div', this.defaultStyle + 'width:100%;background:url(' + uki.defaultTheme.imagePath + 'x.gif' + ');');
+    },
+    
+    _domCreate: function() {
+        // dom
+        this._dom = uki.createElement('div', this.defaultStyle);
+        this._dom.appendChild(this._label);
+        this._label.onselectstart = this._dom.onselectstart = uki.F;
+        
         var backgrounds = uki.defaultTheme.backgrounds,
             _this = this;
         this._backgrounds = {
@@ -16,6 +27,7 @@ self = uki.component.Button = uki.newClass(Base, {
         
         this._backgroundByName('normal');
         
+        // events
         this._down = false;
         
         uki.dom.bind(document, 'mouseup', function() {
@@ -44,24 +56,13 @@ self = uki.component.Button = uki.newClass(Base, {
         this._background = this._backgrounds[name];
     },
 
-    _domCreate: function() {
-        var style = Base.defaultCss + "font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
-        this._dom = uki.createElement('div', style);
-        this._label = uki.createElement('div',style + 'width:100%;background:url(' + uki.defaultTheme.imagePath + 'x.gif' + ');');
-        this._dom.appendChild(this._label);
-        this._label.onselectstart = this._dom.onselectstart = uki.F;
-    },
-    
-    layout: function() {
-        Base.layout.apply(this, arguments);
-        this._label.style.lineHeight = this._rect.size.height + 'px';
-        // uki.dom.layout(this._label.style, {
-        //     top: (this._rect.size.height - this._label.offsetHeight)/2
-        // });
+    _domLayout: function() {
+        Base._domLayout.apply(this, arguments);
+        this._label.style.lineHeight = this._rect.height + 'px';
     },
 
     typeName: function() {
-        return 'uki.component.Button';
+        return 'uki.view.Button';
     },
 
     text: function() {

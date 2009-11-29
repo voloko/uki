@@ -1,9 +1,9 @@
 require('../../test_helper.js');
-include('uki/component/base.js');
+include('uki/view/base.js');
 include('uki/geometry.js');
 include('uki/layout.js');
 
-var Base = uki.component.Base,
+var Base = uki.view.Base,
     Rect = uki.geometry.Rect;
 
 QUnit.test("should create dom node on init with frame size", function() {
@@ -37,69 +37,69 @@ QUnit.test("should call children's resizeWithOldSize", function() {
     parent.rect(new Rect(0, 0, 500, 500));
 });
 
-QUnit.test("should not move anchored top left component", function() {
+QUnit.test("should not move anchored top left view", function() {
     var parent = new Base(new Rect(0, 0, 1000, 1000));
     var child = new Base(new Rect(100, 100, 100, 100));
     child.anchors('left top');
     child.autosize('');
     parent.addChild(child);
     parent.rect(new Rect(0, 0, 500, 500));
-    QUnit.equals(child.rect().origin.x, 100, 'x');
-    QUnit.equals(child.rect().origin.y, 100, 'y');
-    QUnit.equals(child.rect().size.width,  100, 'w');
-    QUnit.equals(child.rect().size.height, 100, 'h');
+    QUnit.equals(child.rect().x, 100, 'x');
+    QUnit.equals(child.rect().y, 100, 'y');
+    QUnit.equals(child.rect().width,  100, 'w');
+    QUnit.equals(child.rect().height, 100, 'h');
 });
 
-QUnit.test("should move anchored top right component", function() {
+QUnit.test("should move anchored top right view", function() {
     var parent = new Base(new Rect(0, 0, 1000, 1000));
     var child = new Base(new Rect(100, 100, 100, 100));
     child.anchors('top right');
     child.autosize('');
     parent.addChild(child);
     parent.rect(new Rect(0, 0, 900, 900));
-    QUnit.equals(child.rect().origin.x, 0);
-    QUnit.equals(child.rect().origin.y, 100);
-    QUnit.equals(child.rect().size.width,  100);
-    QUnit.equals(child.rect().size.height, 100);
+    QUnit.equals(child.rect().x, 0);
+    QUnit.equals(child.rect().y, 100);
+    QUnit.equals(child.rect().width,  100);
+    QUnit.equals(child.rect().height, 100);
 });
 
-QUnit.test("should resize autowidth components", function() {
+QUnit.test("should resize autowidth views", function() {
     var parent = new Base(new Rect(0, 0, 1000, 1000));
     var child = new Base(new Rect(100, 100, 100, 100));
     child.anchors('left top right bottom');
     child.autosize('width height');
     parent.addChild(child);
     parent.rect(new Rect(0, 0, 950, 950));
-    QUnit.equals(child.rect().origin.x, 100);
-    QUnit.equals(child.rect().origin.y, 100);
-    QUnit.equals(child.rect().size.width,  50);
-    QUnit.equals(child.rect().size.height, 50);
+    QUnit.equals(child.rect().x, 100);
+    QUnit.equals(child.rect().y, 100);
+    QUnit.equals(child.rect().width,  50);
+    QUnit.equals(child.rect().height, 50);
 });
 
-QUnit.test("should resize autowidth 1 anchor components", function() {
+QUnit.test("should resize autowidth 1 anchor views", function() {
     var parent = new Base(new Rect(0, 0, 1000, 1000));
     var child = new Base(new Rect(100, 100, 100, 100));
     child.anchors('top right bottom');
     child.autosize('width height');
     parent.addChild(child);
     parent.rect(new Rect(0, 0, 950, 950));
-    QUnit.equals(child.rect().origin.x, 75);
-    QUnit.equals(child.rect().origin.y, 100);
-    QUnit.equals(child.rect().size.width,  75);
-    QUnit.equals(child.rect().size.height, 50);
+    QUnit.equals(child.rect().x, 75);
+    QUnit.equals(child.rect().y, 100);
+    QUnit.equals(child.rect().width,  75);
+    QUnit.equals(child.rect().height, 50);
 });
 
-QUnit.test("should resize autoheight 1 anchor components", function() {
+QUnit.test("should resize autoheight 1 anchor views", function() {
     var parent = new Base(new Rect(0, 0, 1000, 1000));
     var child  = new Base(new Rect(100, 100, 100, 100));
     child.anchors('right bottom');
     child.autosize('width height');
     parent.addChild(child);
     parent.rect(new Rect(0, 0, 950, 950));
-    QUnit.equals(child.rect().origin.x, 75);
-    QUnit.equals(child.rect().origin.y, 75);
-    QUnit.equals(child.rect().size.width,  75);
-    QUnit.equals(child.rect().size.height, 75);
+    QUnit.equals(child.rect().x, 75);
+    QUnit.equals(child.rect().y, 75);
+    QUnit.equals(child.rect().width,  75);
+    QUnit.equals(child.rect().height, 75);
 });
 
 QUnit.module('parent');

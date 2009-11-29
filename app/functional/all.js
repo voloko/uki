@@ -36,6 +36,12 @@ function elements() {
         anchors: 'left top'
     },
     {
+        view: 'Input',
+        rect: '720 10 100 44',
+        anchors: 'left top',
+        value: 'test'
+    },
+    {
         view: 'Button',
         rect: '510px 10px 200px 24px',
         anchors: 'left top',

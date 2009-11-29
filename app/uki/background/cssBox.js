@@ -21,14 +21,14 @@ uki.background.CssBox = uki.newClass(new function() {
         this._comp = comp;
         comp.dom().appendChild(this._container);
         
-        this._resizeHandler = function(e) {
-            _this._resize(e.newRect.size);
+        this._layoutHandler = function(e) {
+            _this._layout(e.rect);
         };
-        this._comp.bind('resize', this._resizeHandler);
-        if (this._comp.rect()) this._resize(this._comp.rect().size);
+        this._comp.bind('layout', this._layoutHandler);
+        if (this._comp.rect()) this._layout(this._comp.rect());
     };
     
-    this._resize = function(size) {
+    this._layout = function(size) {
         uki.dom.layout(this._container.style, {
             width: size.width - this._insetWidth,
             height: size.height - this._insetHeight
@@ -38,7 +38,7 @@ uki.background.CssBox = uki.newClass(new function() {
     this.detach = function() {
         if (this._comp) {
             this._comp.removeChild(this._container);
-            this._comp.unbind('resize', this._resizeHandler);
+            this._comp.unbind('layout', this._layoutHandler);
         }
     };
 });

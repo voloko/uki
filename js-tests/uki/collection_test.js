@@ -1,10 +1,10 @@
 require('../test_helper.js');
 include('uki/builder.js');
-include('uki/component/base.js');
+include('uki/view/base.js');
 include('uki/selector.js');
 include('uki/collection.js');
 
-var Base = uki.component.Base;
+var Base = uki.view.Base;
 
 function getTree (n) {
     var r = [];

@@ -2,25 +2,29 @@ include('base.js');
 
 (function() {
 
-var Base = uki.component.Base.prototype,
-    self = uki.component.Label = function() {
+var Base = uki.view.Base.prototype,
+    self = uki.view.Label = function() {
         this.init.apply(this, arguments);
     };
     
 self.prototype = uki.extend({}, Base, {
-    typeName: function() {
-        return 'uki.component.Label';
-    },
-    
-    _domCreate: function() {
-        this._selectable = true;
+    init: function() {
+        Base.init.apply(this, arguments);
         this._dom = uki.createElement('div', Base.defaultCss + 
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:15px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     },
     
-    layout: function() {
-        Base.layout.apply(this, arguments);
-        if (!this.multiline()) this._dom.style.lineHeight = this._rect.size.height + 'px';
+    typeName: function() {
+        return 'uki.view.Label';
+    },
+    
+    _domCreate: function() {
+        this._selectable = true;
+    },
+    
+    _domLayout: function() {
+        Base._domLayout.apply(this, arguments);
+        if (!this.multiline()) this._dom.style.lineHeight = this._rect.height + 'px';
     },
     
     text: function(text) {
@@ -57,7 +61,7 @@ self.prototype = uki.extend({}, Base, {
     multiline: function(state) {
         if (arguments.length == 0) return this._dom.style.whiteSpace != 'nowrap';
         this._dom.style.whiteSpace = state ? '' : 'nowrap';
-        if (this._rect) this._dom.style.lineHeight = state ? '' : this._rect.size.height + 'px';
+        if (this._rect) this._dom.style.lineHeight = state ? '' : this._rect.height + 'px';
     }
 });
     

@@ -71,82 +71,76 @@ include('../uki.js');
 
     var Rect = geometry.Rect = function(origin, size) {
         if (arguments.length > 2) {
-            this.origin = new Point(arguments[0], arguments[1]);
-            this.size   = new Size(arguments[2], arguments[3]);
+            this.x      = arguments[0];
+            this.y      = arguments[1];
+            this.width  = arguments[2];
+            this.height = arguments[3];
         } else {
-            this.origin = origin || new Point();
-            this.size   = size   || new Size();
+            this.x      = origin ? origin.x    : 0;
+            this.y      = origin ? origin.y    : 0;
+            this.width  = size   ? size.width  : 0;
+            this.height = size   ? size.height : 0;
         }
     };
     
     Rect.prototype = {
         toString: function() {
-            return this.origin + ' ' + this.size;
+            return [this.x, this.y, this.width, this.height].join(' ');
         },
         
         toCoordsString: function() {
-            return this.origin + ' ' + (new Point(this.maxX(), this.maxY()));
+            return [this.x, this.y, this.maxX(), this.maxY()].join(' ');
         },
         
         clone: function() {
-            return new Rect(this.origin.clone(), this.size.clone());
+            return new Rect(this.x, this.y, this.width, this.height);
         },
         
         minX: function(val) {
-            if (typeof val != 'undefined') this.origin.x = val;
-            return this.origin.x;
+            if (typeof val != 'undefined') this.x = val;
+            return this.x;
         },
         
         maxX: function() {
-            return this.origin.x + this.size.width;
+            return this.x + this.width;
         },
         
         midX: function() {
-            return this.origin.x + this.size.width / 2.0;
+            return this.x + this.width / 2.0;
         },
         
         minY: function(val) {
-            if (typeof val != 'undefined') this.origin.y = val;
-            return this.origin.y;
+            if (typeof val != 'undefined') this.y = val;
+            return this.y;
         },
         
         midY: function() {
-            return this.origin.y + this.size.height / 2.0;
+            return this.y + this.height / 2.0;
         },
         
         maxY: function() {
-            return this.origin.y + this.size.height;
-        },
-        
-        width: function(val) {
-            if (arguments.length > 0) this.size.width = val;
-            return this.size.width;
-        },
-        
-        height: function(val) {
-            if (arguments.length > 0) this.size.height = val;
-            return this.size.height;
+            return this.y + this.height;
         },
         
         isEmpty: function() {
-            return this.size.width <= 0.0 || this.size.height <= 0.0;
+            return this.width <= 0.0 || this.height <= 0.0;
         },
         
         eq: function(rect) {
-            return rect && this.size.eq(rect.size) && this.origin.eq(rect.origin);
+            return rect && this.x == rect.x && this.y == rect.y && this.height == rect.height && this.width == rect.width;
         },
         
         inset: function(dx, dy) {
-            this.origin.x += dx;
-            this.origin.y += dy;
-            this.size.width -= dx*2.0;
-            this.size.height -= dy*2.0;
+            this.x += dx;
+            this.y += dy;
+            this.width -= dx*2.0;
+            this.height -= dy*2.0;
         },
         
         intersection: function(rect) {
             var origin = new Point(
-                    Math.max(this.origin.x, rect.origin.x),
-                    Math.max(this.origin.y, rect.origin.y)
+                    Math.max(this.x, rect.x),
+                    Math.max(this.y, rect.y)
                 ),
                 size = new Size(
                     Math.min(this.maxX(), rect.maxX()) - origin.x,
@@ -157,19 +151,18 @@ include('../uki.js');
         
         union: function(rect) {
             return Rect.fromCoords(
-                Math.min(this.origin.x, rect.origin.x),
-                Math.min(this.origin.y, rect.origin.y),
-                Math.max(this.origin.maxX(), rect.origin.maxX()),
-                Math.max(this.origin.maxY(), rect.origin.maxY())
+                Math.min(this.x, rect.x),
+                Math.min(this.y, rect.y),
+                Math.max(this.maxX(), rect.maxX()),
+                Math.max(this.maxY(), rect.maxY())
             );
         },
         
         containsPoint: function(point) {
-            return 
-                point.x >= this.minX() &&
-                point.x <= this.maxX() &&
-                point.y >= this.minY() &&
-                point.y <= this.maxY();    
+            return point.x >= this.minX() &&
+                   point.x <= this.maxX() &&
+                   point.y >= this.minY() &&
+                   point.y <= this.maxY();    
         },
         
         containsRect: function(rect) {
@@ -185,29 +178,33 @@ include('../uki.js');
     Rect.fromCoords = function(minX, minY, maxX, maxY) {
         if (arguments.length == 2) {
             return new Rect(
-                new Point(arguments[0].x, arguments[0].y), 
-                new Size(arguments[1].x - arguments[0].x, arguments[1].y - arguments[0].y)
+                arguments[0].x, 
+                arguments[0].y, 
+                arguments[1].x - arguments[0].x, 
+                arguments[1].y - arguments[0].y
             );
         }
-        return new Rect(new Point(minX, minY), new Size(maxX - minX, maxY - minY));
+        return new Rect(minX, minY, maxX - minX, maxY - minY);
     };
     
     Rect.fromCoordsString = function(string, relative) {
-        var rawParts = string.split(/\s+/),
-            parts = [[rawParts[0], rawParts[1]].join(' '), [rawParts[2], rawParts[3]].join(' ')];
+        var parts = string.split(/\s+/);
         return Rect.fromCoords( 
-            Point.fromString( parts[0], relative ), 
-            Point.fromString( parts[1], relative ) 
+            unitsToPx(parts[0], relative && relative.width),
+            unitsToPx(parts[1], relative && relative.height),
+            unitsToPx(parts[2], relative && relative.width),
+            unitsToPx(parts[3], relative && relative.height)
         ) ;
     };
     
     Rect.fromString = function(string, relative) {
-        var rawParts = string.split(/\s+/),
-            parts = [[rawParts[0], rawParts[1]].join(' '), [rawParts[2], rawParts[3]].join(' ')];
+        var parts = string.split(/\s+/);
             
         return new Rect( 
-            Point.fromString( parts[0], relative ), 
-            Size.fromString( parts[1], relative ) 
+            unitsToPx(parts[0], relative && relative.width),
+            unitsToPx(parts[1], relative && relative.height),
+            unitsToPx(parts[2], relative && relative.width),
+            unitsToPx(parts[3], relative && relative.height)
         ) ;
     };
     
