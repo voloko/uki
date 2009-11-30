@@ -3,7 +3,7 @@ include('base.js');
 (function() {
 
 var Base = uki.view.Base.prototype,
-self = uki.view.Panel = uki.newClass(Base, {
+self = uki.view.Panel = uki.newClass(uki.view.Base, {
     
     init: function() {
         Base.init.apply(this, arguments);

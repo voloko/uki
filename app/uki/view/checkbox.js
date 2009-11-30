@@ -3,7 +3,7 @@ include('base.js');
 (function() {
 
 var Base = uki.view.Base.prototype,
-self = uki.view.Checkbox = uki.newClass(Base, {
+self = uki.view.Checkbox = uki.newClass(uki.view.Base, {
     
     _bindToDom: function(name) {
         if (' change'.indexOf(name) > -1) return;

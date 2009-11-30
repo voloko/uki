@@ -5,7 +5,7 @@ include('base.js');
 (function() {
 
 var Base = uki.view.Base.prototype,
-self = uki.view.Slider = uki.newClass(Base, {
+self = uki.view.Slider = uki.newClass(uki.view.Base, {
     
     _domCreate: function() {
         this._dom = uki.createElement('div', Base.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');

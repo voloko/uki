@@ -2,13 +2,14 @@ include('base.js');
 
 (function() {
 
-var Base = uki.view.Base.prototype,
+var Base = uki.view.Base,
+    baseProto = Base.prototype,
 self = uki.view.Button = uki.newClass(Base, {
     
     init: function() {
-        Base.init.apply(this, arguments);
+        baseProto.init.apply(this, arguments);
         this._selectable = false;
-        this.defaultStyle = Base.defaultCss + "font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this.defaultStyle = this.defaultCss + "font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._label = uki.createElement('div', this.defaultStyle + 'width:100%;background:url(' + uki.theme.image('x').src + ');');
     },
     
@@ -16,7 +17,7 @@ self = uki.view.Button = uki.newClass(Base, {
         if (arguments.length) {
             this._label.unselectable = state ? '' : 'on';
         }
-        return Base.selectable.apply(this, arguments);
+        return baseProto.selectable.apply(this, arguments);
     },
     
     normalBg: function(bg) {
@@ -75,7 +76,7 @@ self = uki.view.Button = uki.newClass(Base, {
     },
 
     _domLayout: function() {
-        Base._domLayout.apply(this, arguments);
+        baseProto._domLayout.apply(this, arguments);
         this._label.style.lineHeight = this._rect.height + 'px';
     },
 

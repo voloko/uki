@@ -6,7 +6,7 @@ Core
 - focusable
     - create dummy input/use existing input after _domCreate()
     - attach focusable to all controls
-- use real prototype inheritance in uki.newClass()
+✓ use real prototype inheritance in uki.newClass()
 - offsets
 
 Views

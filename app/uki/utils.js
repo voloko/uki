@@ -130,13 +130,23 @@ var utils = uki.utils = {
         return target;      
     },
     
-    newClass: function(/* base1, base2 */ methods) {
+    newClass: function(/* [[superClass], mixin1, mixin2, ..] */ methods) {
         var klass = function() {
-            this.init.apply(this, arguments);
+                this.init.apply(this, arguments);
+            }, 
+            inheritance, i, startFrom = 0;
+            
+        if (arguments.length > 1) {
+            if (arguments[0].prototype) { // real inheritance
+                inheritance = function() {};
+                inheritance.prototype = arguments[0].prototype;
+                klass.prototype = new inheritance();
+                startFrom = 1;
+            }
+        }
+        for (i=startFrom; i < arguments.length; i++) {
+            uki.extend(klass.prototype, arguments[i]);
         };
-        uki.each(arguments, function() {
-            uki.extend(klass.prototype, this);
-        })
         return klass;
     }
 };
