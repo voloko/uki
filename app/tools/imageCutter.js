@@ -75,6 +75,9 @@ tools.imageCutter.build = function() {
     var p = uki.build({
         view: 'Base',
         rect: '0 0 400 400',
+        anchors: 'top left right',
+        autosize: 'width',
+        background: new uki.background.CssBox('background:#EFEFEF'),
         childViews: [
             {
                 view: 'Panel',
@@ -145,8 +148,7 @@ tools.imageCutter.build = function() {
                                 rect: '285 0 100 22',
                                 anchors: 'top left',
                                 text: 'download',
-                                name: 'download-label',
-                                selectable: false
+                                name: 'download-label'
                             }
                         ]
                     },
@@ -165,10 +167,19 @@ tools.imageCutter.build = function() {
                 anchors: 'top left right bottom',
                 autosize: 'width height',
                 name: 'result',
-                multiline: true
+                scrollable: true,
+                selectable: true,
+                multiline: true,
+                background: new uki.background.CssBox('background:white;border:1px solid #CCC'),
+                inset: '1 1 0 1'
             }
         ]
     });
+    
+    // theme(button-hover)
+    // CssBox('background:white;border:1px solid #CCC', '')
+    // Sliced9(????)
+    
     p.find('[name=download-label]').bind('click', function() {
         var c = p.find('[name=download]');
         c.attr('checked', !c.attr('checked'));
@@ -186,15 +197,6 @@ tools.imageCutter.build = function() {
             if (p.find('[name=download]').attr('checked')) tools.imageCutter.sendForm(text);
         })
     });
-    p[0].dom().style.backgroundColor = '#EFEFEF';
-    p.find('Label:eq(0)').each(function() {
-        this.dom().style.lineHeight = this.rect().height + 'px';
-    })
-    p.find('[name=result]').each(function() {
-        this.dom().style.overflow = 'auto';
-        this.dom().style.background = 'white';
-        this.dom().style.border = '1px solid #CCC'
-    })
     return p;
 };
 

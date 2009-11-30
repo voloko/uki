@@ -10,7 +10,9 @@ var Base = uki.view.Base.prototype,
 self.prototype = uki.extend({}, Base, {
     init: function() {
         Base.init.apply(this, arguments);
-        this._selectable = true;
+        this._scrollable = false;
+        this._selectable = false;
+        this._inset = new uki.geometry.Inset(0, 0, 0, 0);
         this._label = uki.createElement('div', Base.defaultCss + 
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:15px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     },
@@ -19,13 +21,30 @@ self.prototype = uki.extend({}, Base, {
         return 'uki.view.Label';
     },
     
+    selectable: function(state) {
+        if (arguments.length) {
+            this._label.unselectable = state ? '' : 'on';
+        }
+        return Base.selectable.apply(this, arguments);
+    },
+    
     _domCreate: function() {
-        this._dom = this._label;
+        this._dom = uki.createElement('div', Base.defaultCss);
+        this._dom.appendChild(this._label);
+        this.selectable(this.selectable());
     },
     
     _domLayout: function() {
         Base._domLayout.apply(this, arguments);
-        if (!this.multiline()) this._dom.style.lineHeight = this._rect.height + 'px';
+        var inset = this._inset;
+        if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
+        
+        uki.dom.layout(this._label.style, {
+            left: inset.left, 
+            top: inset.top, 
+            width: this._rect.width - inset.left - inset.bottom,
+            height: this._rect.height - inset.top - inset.bottom
+        });
     },
     
     text: function(text) {
@@ -34,7 +53,7 @@ self.prototype = uki.extend({}, Base, {
     
     html: function(html) {
         if (arguments.length == 0) {
-            return this._dom.innerHTML;
+            return this._label.innerHTML;
         } else {
             this._label.innerHTML = html;
         }
@@ -42,20 +61,26 @@ self.prototype = uki.extend({}, Base, {
     
     align: function(align) {
         if (arguments.length == 0) {
-            return this.dom().style.textAlign;
+            return this._label.style.textAlign;
         } else {
-            this.dom().style.textAlign = align;
+            this._label.style.textAlign = align;
+        }
+    },
+    
+    inset: function(inset) {
+        if (arguments.length == 0) {
+            return this._inset;
+        } else {
+            this._inset = uki.geometry.Inset.create(inset);
         }
     },
 
-    selectable: function(state) {
+    scrollable: function(state) {
         if (arguments.length == 0) {
-            return this._selectable;
+            return this._scrollable;
         } else {
-            this._label.style.MozUserSelect = state ? '' : 'none';
-            this._label.style.WebkitUserSelect = state ? '' : 'none';
-            this._label.style.userSelect = state ? '' : 'none';
-            this._label.style.cursor = state ? 'text' : 'default';
+            this._scrollable = state;
+            this._label.style.overflow = state ? 'auto' : 'hidden';
         }
     },
     

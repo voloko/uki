@@ -3,9 +3,9 @@ include('../image.js');
 
 uki.background.CssBox = uki.newClass(new function() {
     
-    this.init = function(inset, options) {
+    this.init = function(options, inset) {
         this._options = options;
-        this._inset = inset = (typeof inset == 'string') ? uki.geometry.Inset.fromString(inset) : inset;
+        this._inset = inset = uki.geometry.Inset.create(inset) || new uki.geometry.Inset(0, 0, 0, 0);
         this._container = uki.createElement('div', options + ';position:absolute;overflow:hidden;z-index:-1;left:-999em;top:' + inset.top + 'px');
         this._container.style.width = '10px';
         this._container.style.height = '10px';
@@ -19,16 +19,18 @@ uki.background.CssBox = uki.newClass(new function() {
     this.attachTo = function(comp) {
         var _this = this;
         this._comp = comp;
-        comp.dom().appendChild(this._container);
         
         this._layoutHandler = function(e) {
-            _this._layout(e.rect);
+            _this.layout(e.rect);
         };
         this._comp.bind('layout', this._layoutHandler);
-        if (this._comp.rect()) this._layout(this._comp.rect());
+        if (this._comp.rect()) this.layout(this._comp.rect());
     };
     
-    this._layout = function(size) {
+    this.layout = function(size) {
+        if (!this._comp.dom()) return;
+        if (!this._container.parentNode) this._comp.dom().appendChild(this._container);
+        
         uki.dom.layout(this._container.style, {
             width: size.width - this._insetWidth,
             height: size.height - this._insetHeight
@@ -37,7 +39,7 @@ uki.background.CssBox = uki.newClass(new function() {
     
     this.detach = function() {
         if (this._comp) {
-            this._comp.removeChild(this._container);
+            if (this._comp.dom()) this._comp.dom().removeChild(this._container);
             this._comp.unbind('layout', this._layoutHandler);
         }
     };

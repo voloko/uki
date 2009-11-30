@@ -21,7 +21,8 @@ var dom = uki.dom,
 uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     var proto = this;
     
-    proto.defaultCss = 'position:absolute;top:0;left:0;z-index:100;font-family:Arial,Helvetica,sans-serif;overflow:hidden;';
+    proto.defaultCss = 'position:absolute;top:0;left:0;z-index:100;'
+                     + 'font-family:Arial,Helvetica,sans-serif;overflow:hidden;';
     
     proto.init = function(rect) {
         this._anchors = 0;
@@ -31,6 +32,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._childViews = [];
         this._visible = true;
         this._needsLayout = false;
+        this._selectable = false;
         
         if (rect) this.rect(rect);
     };
@@ -43,6 +45,32 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.typeName = function() {
         return 'uki.view.Base';
     };
+    
+    /* ------------------------------- Settings --------------------------------*/
+    proto.background = function(bg) {
+        if (arguments[0].length == 0) return this._background;
+        
+        if (this._background) this._background.detach(this);
+        this._background = bg;
+        this._background.attachTo(this);
+    };
+    
+    proto.selectable = function(state) {
+        if (arguments.length == 0) {
+            return this._selectable;
+        } else {
+            this._selectable = state;
+            if (this._dom) {
+                this._dom.style.userSelect = state ? 'text' : 'none';
+                this._dom.style.MozUserSelect = state ? 'text' : '-moz-none';
+                this._dom.style.WebkitUserSelect = state ? 'text' : 'none';
+                this._dom.style.cursor = state ? 'text' : 'default';
+                this._dom.unselectable = state ? '' : 'on';
+            }
+        }
+    };
+    
+    
     
     /* ----------------------------- Container api ------------------------------*/
     /**
@@ -108,14 +136,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto._domCreate = function() {
         this._dom = uki.createElement('div', this.defaultCss);
-        this._parent.domForChild(this).appendChild(this._dom);
     };
     
     /**
      * Called through a second layout pass when _dom is allready created
      */
-    proto._domLayout = function() {
-        var rect = this._rect;
+    proto._domLayout = function(rect) {
         dom.layout(this._dom.style, {
             left: rect.x, 
             top: rect.y, 
@@ -133,7 +159,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             this._parent.domForChild(this).appendChild(this._dom);
             this._bindPendingEventsToDom();
         }
-        this._domLayout();
+        this._domLayout(this._rect);
         this._layoutChildViews();
         this.trigger('layout', {rect: this._rect, source: this});
     };

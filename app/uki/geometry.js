@@ -245,6 +245,13 @@ include('../uki.js');
         );
     };
     
+    Inset.create = function() {
+        if (typeof arguments[0] == 'undefined') return null;
+        if (/\S+\s+\S+/.test(arguments[0] + '')) return Inset.fromString(arguments[0], arguments[1]);
+        if (arguments.length == 2) return new Inset(arguments[0], arguments[1]);
+        return new Inset(arguments[0], arguments[1], arguments[2], arguments[3]);
+    };
+    
     
     function unitsToPx (units, relative) {
         var m = (units + '').match(/([-0-9\.]+)(\S*)/),

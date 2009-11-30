@@ -54,9 +54,8 @@ uki.theme.airport = {
         },
         'input': function() {
             return new uki.background.CssBox(
-               // '0 2 3 0',
-               '0 0 1 0',
-               'background:white;border: 1px solid #787878;border-top-color:#555;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;-moz-box-shadow:0 1px 0 rgba(255, 255, 255, 0.4);-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.4);box-shadow:0 1px 0 rgba(255, 255, 255, 0.4)'
+               'background:white;border: 1px solid #787878;border-top-color:#555;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;-moz-box-shadow:0 1px 0 rgba(255, 255, 255, 0.4);-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.4);box-shadow:0 1px 0 rgba(255, 255, 255, 0.4)',
+               '0 0 1 0'
            );
         },
         'slider-bar': function() {

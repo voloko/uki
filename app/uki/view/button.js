@@ -7,8 +7,16 @@ self = uki.view.Button = uki.newClass(Base, {
     
     init: function() {
         Base.init.apply(this, arguments);
+        this._selectable = false;
         this.defaultStyle = Base.defaultCss + "font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._label = uki.createElement('div', this.defaultStyle + 'width:100%;background:url(' + uki.defaultTheme.imagePath + 'x.gif' + ');');
+    },
+    
+    selectable: function(state) {
+        if (arguments.length) {
+            this._label.unselectable = state ? '' : 'on';
+        }
+        return Base.selectable.apply(this, arguments);
     },
     
     _domCreate: function() {
@@ -47,6 +55,7 @@ self = uki.view.Button = uki.newClass(Base, {
         uki.dom.bind(this._dom, 'mouseout', function() {
             _this._backgroundByName('normal');
         });
+        this.selectable(this.selectable());
     },
     
     _backgroundByName: function(name) {
