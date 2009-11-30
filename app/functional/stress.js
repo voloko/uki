@@ -16,7 +16,7 @@ var c = uki({
 });
 
 for (var i=0; i < 100; i++) {
-    c.addChild(button(i));
+    c.append(button(i));
 };
 
 c.attachTo( document.getElementById('test') );

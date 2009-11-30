@@ -8,7 +8,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
     
     this.init = function(settings, fixedSize) {
         this._settings = uki.extend({}, settings);
-        this._fixedSize = fixedSize || new uki.geometry.Size(0, 0);
+        this._fixedSize = uki.geometry.Size.create(fixedSize) || new uki.geometry.Size(0, 0);
         this._inset = null;
         this._container = null;
         this._size = null;
@@ -50,33 +50,6 @@ uki.background.Sliced9 = uki.newClass(new function() {
             _this.layout();
         });
     };
-    
-    // this._loadComplete = function() {
-    //     var parts = this._parts,
-    //         container = this._container,
-    //         inset = this._inset = new uki.geometry.Inset(
-    //         parts.t ? parts.t.height : 0, 
-    //         parts.r ? parts.r.width : 0, 
-    //         parts.b ? parts.b.height : 0,
-    //         parts.l ? parts.l.width : 0
-    //     );
-    //     if (parts.tl) dom.layout(parts.tl.style, { top:  0, left: 0 });
-    //     if (parts.t)  dom.layout(parts.t.style,  { left: inset.left, top: 0, right: inset.right, height: inset.top });
-    //     if (parts.tr) dom.layout(parts.tr.style, { top:  0, right: inset.right });
-    //     if (parts.l)  dom.layout(parts.l.style,  { left: 0, top: inset.top, bottom: inset.bottom, width: inset.left });
-    //     dom.layout(parts.m.style,                { top: inset.top, left: inset.left, right: inset.right, bottom: inset.bottom });
-    //     if (parts.r) dom.layout(parts.r.style,   { right: 0, top: inset.top, bottom: inset.bottom, width: inset.right });
-    //     if (parts.bl) dom.layout(parts.bl.style, { left: 0, bottom: 0 });
-    //     if (parts.b) dom.layout(parts.b.style,   { left: inset.left, bottom: 0, right: inset.right, height: inset.bottom });
-    //     if (parts.br) dom.layout(parts.bl.style, { right: 0, bottom: 0});
-    //     
-    //     uki.each(parts, function(name) { 
-    //         this.style.position = 'absolute';
-    //         this.className = name;
-    //         container.appendChild(this); 
-    //     });
-    //     
-    // };
     
     this.layout = function() {
         if (!this._inset || !this._comp) return;

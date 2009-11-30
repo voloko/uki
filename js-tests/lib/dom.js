@@ -1,7 +1,7 @@
 // Load jquery
 // Minimal broswer api to make it work
 var GenericNode = function() {
-    this.children = [];
+    this.childViews = [];
     this.style = {};
     this.nextSibling = null;
     this.listeners = {};
@@ -9,12 +9,12 @@ var GenericNode = function() {
 }
 GenericNode.prototype = {
     appendChild: function(node) {
-        this.children.push(node);
+        this.childViews.push(node);
         node.parentNode = this;
         node.nextSibling = null;
     },
     insertBefore: function(node, before) {
-        this.children.push(node);
+        this.childViews.push(node);
         node.parentNode = this;
         node.nextSibling = before;
     },
@@ -23,7 +23,7 @@ GenericNode.prototype = {
         node.nextSibling = null;
     },
     getElementsByTagName: function() { 
-        return  this.children; 
+        return  this.childViews; 
     },
     addEventListener: function(type, handler) {
         this.listeners[type] = this.listeners[type] || [];

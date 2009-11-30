@@ -87,7 +87,7 @@ QUnit.test("should read attr", function() {
 QUnit.test("find should return a collection", function() {
     var p = new Base();
     p.rect('100 100 1000 1000');
-    p.children(getTree(10))
+    p.childViews(getTree(10))
     var c = uki.find('*', p);
     QUnit.ok(c.attr);
     QUnit.equals(c.length, 10);

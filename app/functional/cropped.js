@@ -1,7 +1,7 @@
 var b = uki.build({
     view: 'Base',
     rect: '0 0 1000px 1000px',
-    children: [{
+    childViews: [{
         view: 'Label',
         rect: '300px 100px 400px 28px', anchors: "top",
         autosize: 'width',

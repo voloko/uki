@@ -5,7 +5,7 @@ var panel = uki([
         background: '#EEE',
         autoresize: 'width',
         anchors: 'top left right',
-        childrend: [
+        childViews: [
             {
                 view: 'Label',
                 rect: '10 10 -510 60',

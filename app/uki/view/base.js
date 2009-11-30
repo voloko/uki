@@ -28,7 +28,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._autosize = 0;
         this._parent = null;
         this._rect = null;
-        this._children = [];
+        this._childViews = [];
         this._visible = true;
         this._needsLayout = false;
         
@@ -51,9 +51,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      *
      * Note: if setting on view with child views, all child view will be removed
      */
-    proto.children = function(val) {
-        if (arguments.length == 0) return this._children;
-        uki.each(this._children, function(i, child) {
+    proto.childViews = function(val) {
+        if (arguments.length == 0) return this._childViews;
+        uki.each(this._childViews, function(i, child) {
             this.removeChild(child);
         }, this);
         uki.build(val, this);
@@ -74,16 +74,16 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Also removes from _dom if available
      */
     proto.removeChild = function(child) {
-        this._children = uki.grep(this._children, function(elem) { return elem == child });
+        this._childViews = uki.grep(this._childViews, function(elem) { return elem == child });
         child.parent(null);
     };
     
     /**
      * Adds a child
      */
-    proto.addChild = function(child) {
+    proto.appendChild = function(child) {
         child.parent(this);
-        this._children.push(child);
+        this._childViews.push(child);
     };
     
     /**
@@ -134,14 +134,14 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             this._bindPendingEventsToDom();
         }
         this._domLayout();
-        this._layoutChildren();
+        this._layoutChildViews();
         this.trigger('layout', {rect: this._rect, source: this});
     };
     
-    proto._layoutChildren = function() {
-        for (var i=0, children = this._children; i < children.length; i++) {
-            if (children[i]._needsLayout && children[i].visible()) {
-                children[i].layout();
+    proto._layoutChildViews = function() {
+        for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
+            if (childViews[i]._needsLayout && childViews[i].visible()) {
+                childViews[i].layout();
             }
         };
     };
@@ -163,7 +163,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (this._rect && rect.eq(this._rect)) return;
         
         if (this._rect) {
-            this._resizeChildren(rect);
+            this._resizeChildViews(rect);
         } else {
             this._initWithRect(rect);
         }
@@ -200,15 +200,13 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     };
     
     /**
-     * Called to notify all intersted parties: children and observers
+     * Called to notify all intersted parties: childViews and observers
      */
-    proto._resizeChildren = function(rect) {
+    proto._resizeChildViews = function(rect) {
         
-        if (this._children.length) {
-            for (var i=0; i < this._children.length; i++) {
-                this._children[i].resizeWithOldSize(this._rect, rect);
-            };
-        }
+        for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
+            childViews[i].resizeWithOldSize(this._rect, rect);
+        };
         this._rect = rect;
         
         this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});

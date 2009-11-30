@@ -1,0 +1,13 @@
+Views
+- slider
+    - separate functional test
+    - @param min, max
+    - @event change
+    - @param step
+    - move bar on resize
+    - labels
+- split pane
+    - use view.Base for panes (childViews)
+
+Tests
+- fix failing tests, when api stabilize

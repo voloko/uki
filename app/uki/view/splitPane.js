@@ -65,9 +65,9 @@ self.prototype = uki.extend({}, Base, {
         var oldRect = this._rect.clone();
         this._rect = rect;
         
-        if (this._children.length) {
-            for (var i=0; i < this._children.length; i++) {
-                this._children[i].resizeWithOldSize(oldRect, rect);
+        if (this._childViews.length) {
+            for (var i=0; i < this._childViews.length; i++) {
+                this._childViews[i].resizeWithOldSize(oldRect, rect);
             };
         }
         this.trigger('resize', {oldRect: oldRect, newRect: rect, source: this});

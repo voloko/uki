@@ -12,17 +12,17 @@ var tree = uki.build([{
     view: new Base(),
     rect: '0 0 1000 1000',
     name: 'top',
-    children: [{
+    childViews: [{
         view: new Base(),
         rect: '0 0 1000 1000',
         name: 'base',
-        children: [
+        childViews: [
             {
                 view: new Label(),
                 rect: '10 10 100 100',
                 name: 'label1',
             
-                children: [
+                childViews: [
                     {
                         view: new Base(),
                         rect: '10 10 100 100',
@@ -116,14 +116,14 @@ QUnit.test("should filter by ~= attribute", function() {
 });
 
 QUnit.test("should filter by > ", function() {
-    var elements = Selector.find('>', [tree[0].children()[0]]);
+    var elements = Selector.find('>', [tree[0].childViews()[0]]);
     QUnit.equals(elements.length, 2);
     QUnit.equals(uki.attr(elements[0], 'name'), 'label1');
     QUnit.equals(uki.attr(elements[1], 'name'), 'label2');
 });
 
 QUnit.test("should filter by > *", function() {
-    var elements = Selector.find('> *', [tree[0].children()[0]]);
+    var elements = Selector.find('> *', [tree[0].childViews()[0]]);
     QUnit.equals(elements.length, 2);
     QUnit.equals(uki.attr(elements[0], 'name'), 'label1');
     QUnit.equals(uki.attr(elements[1], 'name'), 'label2');

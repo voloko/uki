@@ -18,7 +18,7 @@ function createMulti (ml, parent) {
 
 function createSingle (mlRow, parent) {
     if (uki.isFunction(mlRow.typeName)) {
-        if (parent) parent.addChild(mlRow);
+        if (parent) parent.appendChild(mlRow);
         return mlRow;
     }
     
@@ -46,7 +46,7 @@ function createSingle (mlRow, parent) {
 
 function copyAttrs(comp, mlRow, parent) {
     var orderedAttrs = uki.isFunction(comp.builderAttrs) ? comp.builderAttrs() : [];
-    if (parent) parent.addChild(comp);
+    if (parent) parent.appendChild(comp);
     uki.each(orderedAttrs, function(i, name) {
         if (mlRow[name]) attr(comp, name, mlRow[name]);
         mlRow[name] = undefined;

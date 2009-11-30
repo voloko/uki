@@ -64,7 +64,7 @@ uki.theme.airport = {
                 l: ["slider/slider-l.png", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAASCAYAAACeomSBAAAARUlEQVQIHWNgoBlgBJlcXl7+H0Qzghi8vPwMSspqDCwgEStrewYODg4GJhDn1s2rIIqB8f///2kVFRUzwRwQARIA0RQDANoaEYLb6jseAAAAAElFTkSuQmCC", true],
                 m: ["slider/slider-m.png", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAASCAYAAAB4gjqpAAAAoUlEQVR4Ae3QwQ2AIBBFQTEUghXoxZZsgZ48aYXYgwl7gNkC9ufNsjgCBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQGFwg1Vrb4I3yCBAIEMj7cQbMmCBAYHSBXMo2eqM+AgQCBNaADRMECEwgkN/nniBTIgECvQVSa+3qPeI/AQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIDAT4EPHoMI2ACr+GgAAAAASUVORK5CYII=", true],
                 r: ["slider/slider-r.png", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAASCAYAAACeomSBAAAATElEQVQIHWNgoB0oLy//D8IgGxiXLV/z/97dWwyfP39kYFJQUGSwsrYHW80EIm/dvArmMIuICDZ8+PCeoaOjI53h////aSAMlqKUAADcsR0fYYxvcwAAAABJRU5ErkJggg==", true]
-            }, new uki.geometry.Size(0, 18));
+            }, '0 18px');
         }
     },
     

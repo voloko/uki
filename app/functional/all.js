@@ -59,18 +59,18 @@ uki({
     view: 'Base',
     rect: '0 0 1000px 800px',
     anchors: 'top left right',
-    children: [
+    childViews: [
     {
         view: 'Panel',
         rect: '0 0 1000px 100px',
         anchors: 'top left rigth', autosize: 'width',
-        children: elements()
+        childViews: elements()
     },
     {
         view: 'Base',
         rect: '0 150px 1000px 100px',
         anchors: 'top left rigth', autosize: 'width',
-        children: elements()
+        childViews: elements()
     }
     
     ]

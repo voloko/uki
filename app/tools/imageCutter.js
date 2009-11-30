@@ -75,12 +75,12 @@ tools.imageCutter.build = function() {
     var p = uki.build({
         view: 'Base',
         rect: '0 0 400 400',
-        children: [
+        childViews: [
             {
                 view: 'Panel',
                 rect: '0 0 100% 80', anchors: 'top left right',
                 autosize: 'width',
-                children: [
+                childViews: [
                     {
                         view: 'Label',
                         rect: '10 10 50 22',
@@ -101,7 +101,7 @@ tools.imageCutter.build = function() {
                         coords: '60 42 -10 68',
                         anchors: 'left rigth top',
                         autosize: 'width',
-                        children: [
+                        childViews: [
                             {
                                 view: 'Input',
                                 rect: '10 0 50 22',

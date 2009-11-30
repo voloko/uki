@@ -1,6 +1,5 @@
 include('../uki.js');
 
-/* Reap off JQuery */
 (function() {
 
 var toString = Object.prototype.toString;

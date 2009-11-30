@@ -61,7 +61,7 @@ include('geometry.js');
         self.instances.push(a);
     }
     
-    self.children = function() {
+    self.childViews = function() {
         return uki.map(self.instances, 'view');
     };
     

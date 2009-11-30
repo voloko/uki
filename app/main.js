@@ -1,3 +1,13 @@
+/*!
+ * uki JavaScript Library v0.0.1
+ * Licensed under the MIT license
+ *
+ * Copyright (c) 2009 Vladimir Kolesnikov
+ *
+ * Parts of code derived from jQuery JavaScript Library v1.3.2
+ * Copyright (c) 2009 John Resig
+ */
+ 
 include('uki/utils.js');
 include('uki/geometry.js');
 include('uki/attr.js');
@@ -5,7 +15,7 @@ include('uki/builder.js');
 include('uki/selector.js');
 
 include('uki/dom.js');
-include('uki/dom/offset.js');
+// incxlude('uki/dom/offset.js');
 include('uki/dom/drag.js');
 
 include('uki/attachment.js');
@@ -25,4 +35,4 @@ include('uki/view/input.js');
 include('uki/view/label.js');
 include('uki/view/slider.js');
 
-// include('uki/view/textarea.js');
+// inxclude('uki/view/textarea.js');

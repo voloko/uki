@@ -77,11 +77,11 @@ include('collection.js');
     		},
     		
     		">": function(context){
-    		    return flatten(uki.map(context, 'children'));
+    		    return flatten(uki.map(context, 'childViews'));
     		},
     		
     		"": function(context) {
-    		    return recChildren(flatten(uki.map(context, 'children')));
+    		    return recChildren(flatten(uki.map(context, 'childViews')));
     		},
     		
     		"~": function(context){
@@ -90,7 +90,7 @@ include('collection.js');
 	
 	function recChildren (comps) {
 	    return flatten(uki.map(comps, function(comp) {
-	        return [comp].concat( recChildren(attr(comp, 'children')) );
+	        return [comp].concat( recChildren(attr(comp, 'childViews')) );
 	    }));
 	}
 	    
