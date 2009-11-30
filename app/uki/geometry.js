@@ -67,6 +67,12 @@ include('../uki.js');
         return new Size( unitsToPx(parts[0], relative && relative.width), unitsToPx(parts[1], relative && relative.height) );
     };
     
+    Size.create = function() {
+        if (typeof arguments[0] == 'undefined') return null;
+        if (/\S+\s+\S+/.test(arguments[0] + '')) return Size.fromString(arguments[0], arguments[1]);
+        return new Size(arguments[0], arguments[1]);
+    };
+    
     
 
     var Rect = geometry.Rect = function(origin, size) {

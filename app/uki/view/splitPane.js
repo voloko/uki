@@ -62,8 +62,6 @@ self.prototype = uki.extend({}, Base, {
     },
 
     _resize: function(rect) {
-        uki.layout.schedule(this);
-        
         var oldRect = this._rect.clone();
         this._rect = rect;
         

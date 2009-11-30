@@ -57,7 +57,8 @@ function elements() {
 
 uki({
     view: 'Base',
-    rect: '0 0 1000px 200px',
+    rect: '0 0 1000px 800px',
+    anchors: 'top left right',
     children: [
     {
         view: 'Panel',
@@ -73,4 +74,4 @@ uki({
     }
     
     ]
-}).attachTo( document.getElementById('test') );
+}).attachTo( document.getElementById('test'), '1000 800' );

@@ -25,7 +25,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         this._layoutHandler = function(e) {
             if (_this._size && _this._size.eq(e.rect)) return;
             _this._size = e.rect;
-            uki.layout.schedule(_this);
+            _this.layout();
         };
         this._comp.bind('layout', this._layoutHandler);
         _this._attachContainer();

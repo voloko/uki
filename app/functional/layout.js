@@ -163,9 +163,7 @@ $('body').append(d.dom());
 $(window).bind('resize', function(){  
     var t = (new Date()).getTime();
     d.rect( new uki.geometry.Rect(0,0,w.width(),80*N)) 
-    uki.layout.perform();
     var dt = ((new Date()).getTime() - t)
     if (dt) document.title = 't: ' + dt + ' ms'; 
 });
-uki.layout.perform();
 $(window).resize();

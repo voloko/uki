@@ -8,8 +8,6 @@ function button (i) {
     });
 }
 
-uki.layout.wait();
-
 var c = uki({
     view: 'Base',
     rect: '0 0 1000px 1000px'
@@ -20,5 +18,3 @@ for (var i=0; i < 100; i++) {
 };
 
 c.attachTo( document.getElementById('test') );
-
-uki.layout.stopWaiting();

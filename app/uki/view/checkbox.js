@@ -25,7 +25,7 @@ self = uki.view.Checkbox = uki.newClass(Base, {
         this._dom = uki.createElement('div', Base.defaultCss);
         this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-9px;margin-top:-9px;width:18px;height:18px;');
         this._image.style.position = 'absolute';
-        this._image.style.top = '-18px';
+        this._image.style.top = this._checked ? '0' : '-18px';
         this._dom.appendChild(this._box);
         this._box.appendChild(this._image);
 

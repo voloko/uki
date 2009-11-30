@@ -1,6 +1,5 @@
 include('../view.js');
 include('../geometry.js');
-include('../layout.js');
 include('../utils.js');
 include('../builder.js');
 include('../dom.js');
@@ -16,8 +15,7 @@ var ANCHOR_TOP      = 1,
     AUTOSIZE_WIDTH  = 1,
     AUTOSIZE_HEIGHT = 2;
     
-var layout = uki.layout,
-    dom = uki.dom,
+var dom = uki.dom,
     utils = uki.utils;
 
 uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
@@ -33,7 +31,6 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
         this._children = [];
         this._visible = true;
         this._needsLayout = false;
-        this._inited = false;
         
         if (rect) this.rect(rect);
     };
@@ -76,7 +73,7 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
     proto.parent = function(parent) {
         if (arguments.length == 0) return this._parent;
         
-        if (this._inited) this._dom.parentNode.removeChild(this._dom);
+        if (this._dom) this._dom.parentNode.removeChild(this._dom);
         this._parent = parent;
     };
     
@@ -106,7 +103,7 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
     };
     
     
-    /* -------------------------------- Dom -------------------------------------*/
+    /* ------------------------- Layot 2-nd pass + Dom --------------------------*/
     /**
      * Get views container dom node.
      */
@@ -136,6 +133,27 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
         });
     };
     
+    /**
+     * Called on second layot pass when view becomes visible/changes it's size
+     */
+    proto.layout = function() {
+        if (!this._dom) {
+            this._domCreate();
+            this._parent.domForChild(this).appendChild(this._dom);
+        }
+        this._domLayout();
+        this._layoutChildren();
+        this.trigger('layout', {rect: this._rect, source: this});
+    };
+    
+    proto._layoutChildren = function() {
+        for (var i=0, children = this._children; i < children.length; i++) {
+            if (children[i]._needsLayout && children[i].visible()) {
+                children[i].layout();
+            }
+        };
+    };
+    
     
     /* ---------------------------- Layout 1-st pass ----------------------------*/
     /**
@@ -158,21 +176,7 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
             this._initWithRect(rect);
         }
         
-        uki.layout.schedule(this);
         this._needsLayout = true;
-    };
-    
-    /**
-     * Sets or gets visible rect of this view.
-     * Should also determine children visible rects
-     */
-    proto.visibleRect = function(rect) {
-        if (arguments.length == 0) return this._visibleRect;
-        
-        this._visibleRect = rect;
-        for (var i=0; i < this._children.length; i++) {
-            this._children[i]
-        };
     };
     
     /**
@@ -208,30 +212,15 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
      */
     proto._resizeChildren = function(rect) {
         
-        var oldRect = this._rect.clone();
-        this._rect = rect;
-        
         if (this._children.length) {
             for (var i=0; i < this._children.length; i++) {
-                this._children[i].resizeWithOldSize(oldRect, rect);
+                this._children[i].resizeWithOldSize(this._rect, rect);
             };
         }
-        this.trigger('resize', {oldRect: oldRect, newRect: rect, source: this});
+        this._rect = rect;
         
-    };
-    
-    /* ---------------------------- Layout 2-nd pass ----------------------------*/
-    /**
-     * Called on second layot pass when view becomes visible/changes it's size
-     */
-    proto.layout = function() {
-        if (!this._inited) {
-            this._inited = true;
-            this._domCreate();
-            this._parent.domForChild(this).appendChild(this._dom);
-        }
-        this._domLayout();
-        this.trigger('layout', {rect: this._rect, source: this});
+        this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
+        
     };
     
 

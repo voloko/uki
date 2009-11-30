@@ -10,7 +10,8 @@ var Base = uki.view.Base.prototype,
 self.prototype = uki.extend({}, Base, {
     init: function() {
         Base.init.apply(this, arguments);
-        this._dom = uki.createElement('div', Base.defaultCss + 
+        this._selectable = true;
+        this._label = uki.createElement('div', Base.defaultCss + 
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:15px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     },
     
@@ -19,7 +20,7 @@ self.prototype = uki.extend({}, Base, {
     },
     
     _domCreate: function() {
-        this._selectable = true;
+        this._dom = this._label;
     },
     
     _domLayout: function() {
@@ -35,7 +36,7 @@ self.prototype = uki.extend({}, Base, {
         if (arguments.length == 0) {
             return this._dom.innerHTML;
         } else {
-            this._dom.innerHTML = html;
+            this._label.innerHTML = html;
         }
     },
     
@@ -51,17 +52,17 @@ self.prototype = uki.extend({}, Base, {
         if (arguments.length == 0) {
             return this._selectable;
         } else {
-            this._dom.style.MozUserSelect = state ? '' : 'none';
-            this._dom.style.WebkitUserSelect = state ? '' : 'none';
-            this._dom.style.userSelect = state ? '' : 'none';
-            this._dom.style.cursor = state ? 'text' : 'default';
+            this._label.style.MozUserSelect = state ? '' : 'none';
+            this._label.style.WebkitUserSelect = state ? '' : 'none';
+            this._label.style.userSelect = state ? '' : 'none';
+            this._label.style.cursor = state ? 'text' : 'default';
         }
     },
     
     multiline: function(state) {
-        if (arguments.length == 0) return this._dom.style.whiteSpace != 'nowrap';
-        this._dom.style.whiteSpace = state ? '' : 'nowrap';
-        if (this._rect) this._dom.style.lineHeight = state ? '' : this._rect.height + 'px';
+        if (arguments.length == 0) return this._label.style.whiteSpace != 'nowrap';
+        this._label.style.whiteSpace = state ? '' : 'nowrap';
+        if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
     }
 });
     

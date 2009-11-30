@@ -1,7 +1,6 @@
 require('../test_helper.js');
 include('uki/attr.js');
 include('uki/view/base.js');
-include('uki/layout.js');
 include('uki/geometry.js');
 
 
@@ -16,7 +15,6 @@ QUnit.test("should write rect attr with px string", function() {
     var c = new Base();
     attr(c, 'rect', '10px 11px 500px 501px');
 
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '10px');
     QUnit.equals(c.dom().style.top, '11px');
     QUnit.equals(c.dom().style.width, '500px');
@@ -26,7 +24,6 @@ QUnit.test("should write rect attr with px string", function() {
 QUnit.test("should write rect attr with Rect instance", function() {
     var c = new Base();
     attr(c, 'rect', new uki.geometry.Rect(10, 11, 500, 501));
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '10px');
     QUnit.equals(c.dom().style.top, '11px');
     QUnit.equals(c.dom().style.width, '500px');

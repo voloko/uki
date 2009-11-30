@@ -17,4 +17,3 @@ uki.defaultTheme.backgrounds['button-normal']().attachTo(button);
 uki.find('Base > [text^=uki]').bind('click', function() {
     alert('Hello world!');
 });
-uki.layout.perform();

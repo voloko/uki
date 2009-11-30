@@ -1,7 +1,6 @@
 require('../test_helper.js');
 include('uki/builder.js');
 include('uki/view/base.js');
-include('uki/layout.js');
 
 var builder = uki;
 
@@ -48,7 +47,6 @@ QUnit.test("should layout with pixel values view", function() {
         rect: '10px 11 500 501px'
     }])[0];
     
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '10px');
     QUnit.equals(c.dom().style.top, '11px');
     QUnit.equals(c.dom().style.width, '500px');
@@ -62,7 +60,6 @@ QUnit.test("should layout with pixel values view", function() {
         coords: '10px 11 510 512px'
     }])[0];
     
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '10px');
     QUnit.equals(c.dom().style.top, '11px');
     QUnit.equals(c.dom().style.width, '500px');

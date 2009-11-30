@@ -1,7 +1,6 @@
 require('../../test_helper.js');
 include('uki/view/base.js');
 include('uki/geometry.js');
-include('uki/layout.js');
 
 var Base = uki.view.Base,
     Rect = uki.geometry.Rect;
@@ -9,7 +8,6 @@ var Base = uki.view.Base,
 QUnit.test("should create dom node on init with frame size", function() {
     var c = new Base(new Rect(10, 20, 100, 101));
     QUnit.ok(c.dom());
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '10px');
     QUnit.equals(c.dom().style.top,  '20px');
     QUnit.equals(c.dom().style.width, '100px');
@@ -110,7 +108,6 @@ QUnit.test("should calculate rect with %", function() {
         
     parent.addChild(c);
     c.rect('10% 11% 50% 51%');
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '100px');
     QUnit.equals(c.dom().style.top, '110px');
     QUnit.equals(c.dom().style.width, '500px');
@@ -124,7 +121,6 @@ QUnit.test("should calculate negative values", function() {
     parent.addChild(c);
     c.rect('-700 -50% 50% 20%');
     
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '300px');
     QUnit.equals(c.dom().style.top, '500px');
     QUnit.equals(c.dom().style.width, '500px');
@@ -139,7 +135,6 @@ QUnit.test("should set rect from coords", function() {
     parent.addChild(c);
     c.coords('10px -20% -20% -10%');
     
-    uki.layout.perform();
     QUnit.equals(c.dom().style.left, '10px');
     QUnit.equals(c.dom().style.top, '800px');
     QUnit.equals(c.dom().style.width, '790px'); // 1000 -20% -10 = 790
@@ -160,7 +155,6 @@ QUnit.test("should create children from ukiml", function() {
             rect: '20% 10% 10% 10%', autosize: 'width height'
         }
     ]);
-    uki.layout.perform();
     QUnit.equals(c.children().length, 2);
     QUnit.equals(c.children()[0].dom().style.left, '100px');
     QUnit.equals(c.children()[0].dom().style.top, '110px');
