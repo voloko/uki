@@ -112,12 +112,13 @@ uki.background.Sliced9 = uki.newClass(new function() {
     }
     
     function buildContainer (parts) {
-        var container = uki.createElement('div', 'position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;z-index:-1'),
+        var container = uki.createElement('div', 'position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;z-index:-1;'),
             inset = buildInset(parts);
         
         
         uki.each(parts, function(name) { 
             this.style.position = 'absolute';
+            this.style.WebkitUserDrag = 'none';
             this.className = name;
             dom.layout(this.style, {width: this.width, height: this.height});
             container.appendChild(this); 

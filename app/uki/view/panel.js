@@ -14,8 +14,8 @@ self = uki.view.Panel = uki.newClass(Base, {
     
     _domCreate: function() {
         this._dom = uki.createElement('div', this.defaultCss);
-        uki.defaultTheme.backgrounds.panel().attachTo(this);
         this.selectable(this.selectable());
+        uki.defaultTheme.backgrounds.panel().attachTo(this);
     },
     
     typeName: function() {

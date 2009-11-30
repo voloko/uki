@@ -12,6 +12,7 @@ self = uki.view.Checkbox = uki.newClass(Base, {
     
     init: function() {
         this._checked = false;
+        this._selectable = false;
         this._image = uki.defaultTheme.images.checkbox();
         Base.init.apply(this, arguments);
     },
@@ -24,9 +25,10 @@ self = uki.view.Checkbox = uki.newClass(Base, {
 
     _domCreate: function() {
         this._dom = uki.createElement('div', Base.defaultCss);
-        this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-9px;margin-top:-9px;width:18px;height:18px;');
+        this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-9px;margin-top:-9px;width:18px;height:18px');
         this._image.style.position = 'absolute';
         this._image.style.top = this._checked ? '0' : '-18px';
+        this._image.style.WebkitUserDrag = 'none';
         this._dom.appendChild(this._box);
         this._box.appendChild(this._image);
 
@@ -41,6 +43,7 @@ self = uki.view.Checkbox = uki.newClass(Base, {
         uki.dom.bind(this._box, 'mouseout', function() {
             _this.checked(_this._checked);
         });
+        this.selectable(this.selectable());
     },
     
     typeName: function() {
