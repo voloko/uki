@@ -10,7 +10,9 @@ function button (i) {
 
 var c = uki({
     view: 'Base',
-    rect: '0 0 1000px 1000px'
+    rect: '0 0 800px 1000px',
+    anchors: 'top bottom right left',
+    autosize: 'width height'
 });
 
 for (var i=0; i < 100; i++) {

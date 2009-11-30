@@ -22,6 +22,8 @@ var self = uki.dom = {
     layout: function(style, properties) {
         if (properties.left != undefined) style.left = properties.left + 'px';
         if (properties.top != undefined) style.top = properties.top + 'px';
+        if (properties.right != undefined) style.right = properties.right + 'px';
+        if (properties.bottom != undefined) style.bottom = properties.bottom + 'px';
         if (properties.width != undefined) style.width = properties.width + 'px';
         if (properties.height != undefined) style.height = properties.height + 'px';
     },
@@ -57,7 +59,7 @@ var self = uki.dom = {
     unbind: function(el, type, handler) {
         var id = el[expando],
             huid = handler.huid;
-        if (!huid || !id || !self.bound[id] || !self.bound[type]) return;
+        if (!huid || !id || !self.bound[id] || !self.bound[id][type]) return;
         self.bound[id][type] = uki.grep(self.bound[id][type], function(h) { return h.huid !== huid; });
     },
     
