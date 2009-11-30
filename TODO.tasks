@@ -1,8 +1,8 @@
 Core
-- themes
-    - merge registered themes
-    - do not used defaultTheme in code directly
-    - access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
+✓ themes
+    ✓ merge registered themes
+    ✓ do not used defaultTheme in code directly
+    ✓ access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
 - focusable
     - create dummy input/use existing input after _domCreate()
     - attach focusable to all controls

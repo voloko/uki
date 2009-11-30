@@ -9,15 +9,15 @@ self = uki.view.Slider = uki.newClass(Base, {
     
     _domCreate: function() {
         this._dom = uki.createElement('div', Base.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');
-        this._handle = uki.createElement('div', Base.defaultCss + 'cursor:default;background:url(' + uki.defaultTheme.images.x().src + ')');
-        this._bg = uki.defaultTheme.images['slider-handle']();
+        this._handle = uki.createElement('div', Base.defaultCss + 'cursor:default;background:url(' + uki.theme.image('x').src + ')');
+        this._bg = uki.theme.image('slider-handle');
         this._bg.style.cssText = Base.defaultCss + 'top:0;left:0;z-index:-1;'; 
         this._handle.appendChild(this._bg);
         
         var _this = this;
         uki.image.load([this._bg], function() { _this._afterHandleLoad(); });
         
-        uki.defaultTheme.backgrounds['slider-bar']().attachTo(this);
+        uki.theme.background('slider-bar').attachTo(this);
     },
     
     _afterHandleLoad: function() {

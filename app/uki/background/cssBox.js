@@ -14,6 +14,7 @@ uki.background.CssBox = uki.newClass(new function() {
         this._insetHeight = this._container.offsetHeight - 10 + inset.top + inset.bottom;
         document.body.removeChild(this._container);
         this._container.style.left = inset.left + 'px';
+        this._attached = false;
     };
     
     this.attachTo = function(comp) {
@@ -29,7 +30,10 @@ uki.background.CssBox = uki.newClass(new function() {
     
     this.layout = function(size) {
         if (!this._comp.dom()) return;
-        if (!this._container.parentNode) this._comp.dom().appendChild(this._container);
+        if (!this._attached) {
+            this._attached = true;
+            this._comp.dom().appendChild(this._container);
+        }
         
         uki.dom.layout(this._container.style, {
             width: size.width - this._insetWidth,
@@ -39,8 +43,9 @@ uki.background.CssBox = uki.newClass(new function() {
     
     this.detach = function() {
         if (this._comp) {
-            if (this._comp.dom()) this._comp.dom().removeChild(this._container);
+            if (this._attached) this._comp.dom().removeChild(this._container);
             this._comp.unbind('layout', this._layoutHandler);
+            this._attached = false;
         }
     };
 });

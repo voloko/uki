@@ -19,7 +19,7 @@ self.prototype = uki.extend({}, Base, {
     _domCreate: function() {
         this._dom = uki.createElement('div', Base.defaultCss);
         this._containers = [uki.createElement('div', Base.defaultCss + 'height:100%;'), uki.createElement('div', Base.defaultCss + 'height:100%;')];
-        this._handle = uki.createElement('div', Base.defaultCss + 'height:100%;width:5px;border: 0 1px solid #CCC;background:url(' + uki.defaultTheme.images['splitPane-horizontal']().src + ') 50% 50% no-repeat');
+        this._handle = uki.createElement('div', Base.defaultCss + 'height:100%;width:5px;border: 0 1px solid #CCC;background:url(' + uki.theme.image('splitPane-horizontal').src + ') 50% 50% no-repeat');
         this._dom.appendChild(this._containers[0]);
         this._dom.appendChild(this._containers[1]);
         this._dom.appendChild(this._handle);

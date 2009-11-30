@@ -96,7 +96,7 @@ tools.imageCutter.build = function() {
                         coords: '70 10 -20 32', 
                         anchors: 'top left right',
                         autosize: 'width',
-                        value: uki.defaultTheme.imagePath + 'panel/panel.png',
+                        value: '/app/theme/airport/i/panel/panel.png',
                         name: 'url'
                     },
                     {

@@ -13,7 +13,7 @@ var b = uki.build({
 var button = uki.find('Base > [text^=uki]')[0];
 button.dom().style.lineHeight = '27px'
 
-uki.defaultTheme.backgrounds['button-normal']().attachTo(button);
+uki.theme.background('button-normal').attachTo(button);
 uki.find('Base > [text^=uki]').bind('click', function() {
     alert('Hello world!');
 });

@@ -9,7 +9,7 @@ self = uki.view.Button = uki.newClass(Base, {
         Base.init.apply(this, arguments);
         this._selectable = false;
         this.defaultStyle = Base.defaultCss + "font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
-        this._label = uki.createElement('div', this.defaultStyle + 'width:100%;background:url(' + uki.defaultTheme.imagePath + 'x.gif' + ');');
+        this._label = uki.createElement('div', this.defaultStyle + 'width:100%;background:url(' + uki.theme.image('x').src + ');');
     },
     
     selectable: function(state) {
@@ -19,25 +19,33 @@ self = uki.view.Button = uki.newClass(Base, {
         return Base.selectable.apply(this, arguments);
     },
     
+    normalBg: function(bg) {
+        if (bg) this._normalBg = bg;
+        return this._normalBg = this._normalBg || uki.theme.background('button-normal');
+    },
+    
+    hoverBg: function(bg) {
+        if (bg) this._hoverBg = bg;
+        return this._hoverBg = this._hoverBg || uki.theme.background('button-hover');
+    },
+    
+    downBg: function(bg) {
+        if (bg) this._downBg = bg;
+        return this._downBg = this._downBg || uki.theme.background('button-down');
+    },
+    
     _domCreate: function() {
         // dom
         this._dom = uki.createElement('div', this.defaultStyle);
         this._dom.appendChild(this._label);
         this._label.onselectstart = this._dom.onselectstart = uki.F;
         
-        var backgrounds = uki.defaultTheme.backgrounds,
-            _this = this;
-        this._backgrounds = {
-            normal: backgrounds['button-normal'](),
-            hover: backgrounds['button-hover'](),
-            down: backgrounds['button-down']()
-        };
-        
         this._backgroundByName('normal');
         
         // events
         this._down = false;
         
+        var _this = this;
         uki.dom.bind(document, 'mouseup', function() {
             _this._backgroundByName('normal');
             _this._down = false;
@@ -59,10 +67,11 @@ self = uki.view.Button = uki.newClass(Base, {
     },
     
     _backgroundByName: function(name) {
-        if (this._background == this._backgrounds[name]) return;
+        var bg = this[name + 'Bg']();
+        if (this._background == bg) return;
         if (this._background) this._background.detach();
-        this._backgrounds[name].attachTo(this);
-        this._background = this._backgrounds[name];
+        bg.attachTo(this);
+        this._background = bg;
     },
 
     _domLayout: function() {

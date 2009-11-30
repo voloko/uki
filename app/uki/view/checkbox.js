@@ -13,7 +13,7 @@ self = uki.view.Checkbox = uki.newClass(Base, {
     init: function() {
         this._checked = false;
         this._selectable = false;
-        this._image = uki.defaultTheme.images.checkbox();
+        this._image = uki.theme.image('checkbox');
         Base.init.apply(this, arguments);
     },
     

@@ -8,9 +8,9 @@ include('dom.js');
         if (uki.image.dataUrlSupported && dataUrl) {
             result.src = dataUrl;
         } else {
-            result.src = absolutizeUrl(url);
+            result.src = url;
             if (alpha && uki.image.needAlphaFix) {
-                var dummy = uki.createElement('div', 'width:0;height:0;overflow:hidden;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + absolutizeUrl(url) + '",sizingMethod="scale")');
+                var dummy = uki.createElement('div', 'width:0;height:0;overflow:hidden;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + url + '",sizingMethod="scale")');
                 uki.image.load([result], function() {
                     dummy.style.width = result.width + 'px';
                     dummy.style.height = result.height + 'px';
@@ -46,9 +46,4 @@ include('dom.js');
     uki.image.dataUrlSupported = document.createElement('canvas').toDataURL || /MSIE (7|8)/.test(navigator.userAgent);
     uki.image.needAlphaFix = /MSIE 6/.test(navigator.userAgent);
     if(uki.image.needAlphaFix) document.execCommand("BackgroundImageCache", false, true);
-    
-    function absolutizeUrl (url) {
-        if (url.indexOf('://') > 0 || url.charAt(0) == '/') return url;
-        return (uki.defaultTheme.imagePath || '') + url;
-    }
 })();

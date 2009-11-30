@@ -26,10 +26,10 @@ self.prototype = uki.extend({}, Base, {
     
     _domCreate: function() {
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text');
-        this._input.style.cssText = Base.defaultCss + "margin:0;border:none;outline:none;padding:0;overflow:hidden;font-size:11px;left:2px;top:0;z-index:100;background: url(" + uki.defaultTheme.images.x().src + ")";
+        this._input.style.cssText = Base.defaultCss + "margin:0;border:none;outline:none;padding:0;overflow:hidden;font-size:11px;left:2px;top:0;z-index:100;background: url(" + uki.theme.image('x').src + ")";
         this._dom.appendChild(this._input);
         
-        uki.defaultTheme.backgrounds.input().attachTo(this);
+        uki.theme.background('input').attachTo(this);
     },
 
     _domLayout: function() {
