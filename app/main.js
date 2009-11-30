@@ -5,7 +5,6 @@ include('uki/builder.js');
 include('uki/selector.js');
 
 include('uki/dom.js');
-include('uki/dom/observable.js');
 include('uki/dom/offset.js');
 include('uki/dom/drag.js');
 
@@ -17,6 +16,7 @@ include('uki/background/css.js');
 include('uki/background/cssBox.js');
 include('uki/theme.js');
 
+include('uki/view/observable.js');
 include('uki/view/base.js');
 include('uki/view/button.js');
 include('uki/view/panel.js');

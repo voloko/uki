@@ -5,14 +5,15 @@ include('base.js');
 var Base = uki.view.Base.prototype,
 self = uki.view.Checkbox = uki.newClass(Base, {
     
+    _bindToDom: function(name) {
+        if (' change'.indexOf(name) > -1) return;
+        Base._bindToDom.apply(this, arguments);
+    },
+    
     init: function() {
         this._checked = false;
         this._image = uki.defaultTheme.images.checkbox();
         Base.init.apply(this, arguments);
-    },
-    
-    knownEvents: function() {
-        return Base.knownEvents.apply(this, []).concat(['change']);
     },
     
     checked: function() {

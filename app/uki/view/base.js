@@ -3,7 +3,7 @@ include('../geometry.js');
 include('../utils.js');
 include('../builder.js');
 include('../dom.js');
-include('../dom/observable.js');
+include('observable.js');
 
 (function() {
 
@@ -18,7 +18,7 @@ var ANCHOR_TOP      = 1,
 var dom = uki.dom,
     utils = uki.utils;
 
-uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
+uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     var proto = this;
     
     proto.defaultCss = 'position:absolute;top:0;left:0;z-index:100;font-family:Arial,Helvetica,sans-serif;overflow:hidden;';
@@ -43,14 +43,6 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
     proto.typeName = function() {
         return 'uki.view.Base';
     };
-    
-    /**
-     * Tell Observable which events should be bound to view itself and not to it's underlying dom node
-     */
-    proto.knownEvents = function() {
-        return ['resize', 'layout'];
-    };
-    
     
     /* ----------------------------- Container api ------------------------------*/
     /**
@@ -117,7 +109,6 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
     proto._domCreate = function() {
         this._dom = uki.createElement('div', this.defaultCss);
         this._parent.domForChild(this).appendChild(this._dom);
-        this._domLayout();
     };
     
     /**
@@ -140,6 +131,7 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
         if (!this._dom) {
             this._domCreate();
             this._parent.domForChild(this).appendChild(this._dom);
+            this._bindPendingEventsToDom();
         }
         this._domLayout();
         this._layoutChildren();
@@ -301,6 +293,12 @@ uki.view.Base = uki.newClass(uki.dom.Observable, new function() {
             return rect[attr].apply(rect, arguments);
         };
     });
+    
+    /* ---------------------------------- Events --------------------------------*/
+    proto._bindToDom = function(name) {
+        if (' resize layout'.indexOf(name) > -1) return;
+        uki.view.Observable._bindToDom.apply(this, arguments);
+    }
     
 });
 })();
