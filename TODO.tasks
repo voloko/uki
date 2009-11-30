@@ -1,3 +1,14 @@
+Core
+- themes
+    - merge registered themes
+    - do not used defaultTheme in code directly
+    - access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
+- focusable
+    - create dummy input/use existing input after _domCreate()
+    - attach focusable to all controls
+- use real prototype inheritance in uki.newClass()
+- offsets
+
 Views
 - slider
     - separate functional test
@@ -7,7 +18,33 @@ Views
     - move bar on resize
     - labels
 - split pane
+    - separate functional test
     - use view.Base for panes (childViews)
+    - d&d
+    - thin divider
+- button
+    - separate functional test
+    - @param bgHover, bgNormal, bgPressed
+- segmented view
+    - separate functional test
+    - layout child buttons
+    - click events with target button
+    - events
+- tab view
+    - separate functional test
+    - switch event
+- scroll view
+    - separate functional test
+- table view
+    - separate functional test
+    - progressive rendering
+    - d&d?
+- grid view
+    - separate functional test
+    - d&d?
+- windows
+- context menus
+- combo box
 
 Tests
 - fix failing tests, when api stabilize

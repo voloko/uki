@@ -4,7 +4,6 @@ include('../image.js');
 uki.background.Sliced9 = uki.newClass(new function() {
     var nativeCss = ['MozBorderImage', 'WebkitBorderImage', 'borderImage'],
         dom = uki.dom;
-        // needManualResize = /MSIE 6/.test(navigator.userAgent);
     
     this.init = function(settings, fixedSize) {
         this._settings = uki.extend({}, settings);
