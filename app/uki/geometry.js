@@ -67,25 +67,25 @@ include('../uki.js');
         return new Size( unitsToPx(parts[0], relative && relative.width), unitsToPx(parts[1], relative && relative.height) );
     };
     
-    Size.create = function() {
-        if (typeof arguments[0] == 'undefined') return null;
-        if (/\S+\s+\S+/.test(arguments[0] + '')) return Size.fromString(arguments[0], arguments[1]);
-        return new Size(arguments[0], arguments[1]);
+    Size.create = function(a1, a2) {
+        if (a1 === undefined) return null;
+        if (/\S+\s+\S+/.test(a1 + '')) return Size.fromString(a1, a2);
+        return new Size(a1, a2);
     };
     
     
 
-    var Rect = geometry.Rect = function(origin, size) {
-        if (arguments.length > 2) {
-            this.x      = arguments[0];
-            this.y      = arguments[1];
-            this.width  = arguments[2];
-            this.height = arguments[3];
+    var Rect = geometry.Rect = function(a1, a2, a3, a4) {
+        if (a3 !== undefined) {
+            this.x      = a1;
+            this.y      = a2;
+            this.width  = a3;
+            this.height = a4;
         } else {
-            this.x      = origin ? origin.x    : 0;
-            this.y      = origin ? origin.y    : 0;
-            this.width  = size   ? size.width  : 0;
-            this.height = size   ? size.height : 0;
+            this.x      = a1 ? a1.x      : 0;
+            this.y      = a1 ? a1.y      : 0;
+            this.width  = a2 ? a2.width  : 0;
+            this.height = a2 ? a2.height : 0;
         }
     };
     
@@ -182,12 +182,12 @@ include('../uki.js');
     Rect.prototype.top  = Rect.prototype.minY;
     
     Rect.fromCoords = function(minX, minY, maxX, maxY) {
-        if (arguments.length == 2) {
+        if (maxX === undefined) {
             return new Rect(
-                arguments[0].x, 
-                arguments[0].y, 
-                arguments[1].x - arguments[0].x, 
-                arguments[1].y - arguments[0].y
+                minX.x, 
+                minX.y, 
+                minY.x - minX.x, 
+                minY.y - minX.y
             );
         }
         return new Rect(minX, minY, maxX - minX, maxY - minY);
@@ -216,10 +216,10 @@ include('../uki.js');
     
     
     var Inset = geometry.Inset = function(top, right, bottom, left) {
-        this.top = top;
-        this.right = right;
-        this.bottom = arguments.length <3 ? top : bottom;
-        this.left = arguments.length <4 ? right : left;
+        this.top    = top   || 0;
+        this.right  = right || 0;
+        this.bottom = bottom === undefined ? this.top : bottom;
+        this.left   = left === undefined ? this.right : left;
     };
     
     Inset.prototype = {
@@ -229,6 +229,10 @@ include('../uki.js');
         
         clone: function() {
             return new Inset(this.top, this.right, this.bottom, this.left);
+        },
+        
+        negative: function() {
+            return this.top < 0 || this.left < 0 || this.right < 0 || this.bottom < 0;
         }
     };
     
@@ -245,11 +249,11 @@ include('../uki.js');
         );
     };
     
-    Inset.create = function() {
-        if (typeof arguments[0] == 'undefined') return null;
-        if (/\S+\s+\S+/.test(arguments[0] + '')) return Inset.fromString(arguments[0], arguments[1]);
-        if (arguments.length == 2) return new Inset(arguments[0], arguments[1]);
-        return new Inset(arguments[0], arguments[1], arguments[2], arguments[3]);
+    Inset.create = function(a1, a2, a3, a4) {
+        if (a1 === undefined) return null;
+        if (/\S+\s+\S+/.test(a1 + '')) return Inset.fromString(a1, a2);
+        if (a3 === undefined) return new Inset(a1, a2);
+        return new Inset(a1, a2, a3, a4);
     };
     
     

@@ -17,7 +17,7 @@ include('attachment.js');
     };
     
     self.attr = function( name, value ) {
-        if (arguments.length > 1) {
+        if (value !== undefined) {
             this.each(function() {
                 uki.attr( this, name, value );
             });

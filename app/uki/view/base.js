@@ -48,7 +48,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     /* ------------------------------- Settings --------------------------------*/
     proto.background = function(bg) {
-        if (arguments[0].length == 0) return this._background;
+        if (bg === undefined) return this._background;
         
         if (this._background) this._background.detach(this);
         this._background = bg;
@@ -56,7 +56,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     };
     
     proto.selectable = function(state) {
-        if (arguments.length == 0) {
+        if (state === undefined) {
             return this._selectable;
         } else {
             this._selectable = state;
@@ -80,7 +80,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Note: if setting on view with child views, all child view will be removed
      */
     proto.childViews = function(val) {
-        if (arguments.length == 0) return this._childViews;
+        if (val === undefined) return this._childViews;
         uki.each(this._childViews, function(i, child) {
             this.removeChild(child);
         }, this);
@@ -91,7 +91,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Sets or retrieves parent view
      */
     proto.parent = function(parent) {
-        if (arguments.length == 0) return this._parent;
+        if (parent === undefined) return this._parent;
         
         if (this._dom) this._dom.parentNode.removeChild(this._dom);
         this._parent = parent;
@@ -179,7 +179,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Rect defines the area this view should render in.
      */
     proto.rect = function(rect) {
-        if (arguments.length == 0) return this._rect;
+        if (rect === undefined) return this._rect;
         
         if (typeof rect === 'string') rect = uki.geometry.Rect.fromString(
             rect, 
@@ -201,7 +201,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Sets or gets whenever the view is visible
      */
     proto.visible = function(state) {
-        if (arguments.length == 0) return this._visible;
+        if (state === undefined) return this._visible;
         
         this._visible = state;
     };
@@ -210,7 +210,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Utility method to set rect through coords
      */
     proto.coords = function(coords) {
-        if (arguments.length == 0) return this.rect().toCoordsString();
+        if (coords === undefined) return this.rect().toCoordsString();
         
         this.rect(uki.geometry.Rect.fromCoordsString(
             coords, 
@@ -276,7 +276,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * @example ""
      */
     proto.anchors = function(anchors) {
-        if (arguments.length == 0) {
+        if (anchors === undefined) {
             var result = [];
             if (this._anchors & ANCHOR_LEFT  ) result.push('left');
             if (this._anchors & ANCHOR_TOP   ) result.push('top');
@@ -299,7 +299,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * @param String autosize
      */
     proto.autosize = function(autosize) {
-        if (arguments.length == 0) {
+        if (autosize === undefined) {
             if (this._autosize | AUTOSIZE_WIDTH && this._autosize | AUTOSIZE_HEIGHT) return 'width height';
             if (this._autosize | AUTOSIZE_WIDTH) return 'width';
             if (this._autosize | AUTOSIZE_HEIGHT) return 'height';

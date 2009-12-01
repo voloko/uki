@@ -1,16 +1,13 @@
 include('../view.js');
 
-/**
- * Легковесная поддержка событий без баблинга
- */
 uki.view.Observable = {
-    dom: function() {
-        return null; // should implement
-    },
+    // dom: function() {
+    //     return null; // should implement
+    // },
     
     bind: function(name, callback) {
         uki.each(name.split(' '), function(i, name) {
-            if (!this._bound(name) && this.dom()) {
+            if (!this._bound(name) && this._boundToDom) {
                 this._bindToDom(name);
             }
             this._observersFor(name).push(callback);
@@ -33,7 +30,7 @@ uki.view.Observable = {
     _bindToDom: function(name) {
         var _this = this;
         uki.dom.bind(this.dom(), name, function(e) {
-            _this.trigger(name, e);
+            _this.trigger(name, {domEvent: e, source: this});
         });
     },
     
@@ -42,7 +39,8 @@ uki.view.Observable = {
     },
     
     _bindPendingEventsToDom: function() {
-        if (!this._observers) return;
+        if (!this._observers || this._boundToDom) return;
+        this._boundToDom = true;
         uki.each(this._observers, function(name) {
             this._bindToDom(name);
         }, this);

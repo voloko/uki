@@ -3,7 +3,7 @@ include('utils.js');
 include('geometry.js');
 
 uki.attr = function(comp, attr, value) {
-    if (arguments.length > 2) {
+    if (value !== undefined) {
         if (uki.isFunction(comp[attr])) {
             comp[attr](value);
         } else {

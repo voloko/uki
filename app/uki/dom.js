@@ -74,7 +74,7 @@ var self = uki.dom = {
         if (!id || !handlers || !handlers[type]) return;
         
         for (i=0, handlers = handlers[type]; i < handlers.length; i++) {
-            handlers[i].apply(this, arguments);
+            handlers[i].call(this, e);
         };
     },
     

@@ -22,10 +22,10 @@ self.prototype = uki.extend({}, Base, {
     },
     
     selectable: function(state) {
-        if (arguments.length) {
+        if (state !== undefined) {
             this._label.unselectable = state ? '' : 'on';
         }
-        return Base.selectable.apply(this, arguments);
+        return Base.selectable.call(this, state);
     },
     
     _domCreate: function() {
@@ -48,11 +48,11 @@ self.prototype = uki.extend({}, Base, {
     },
     
     text: function(text) {
-        return arguments.length == 0 ? this.html() : this.html(uki.escapeHTML(text));
+        return text === undefined ? this.html() : this.html(uki.escapeHTML(text));
     },
     
     html: function(html) {
-        if (arguments.length == 0) {
+        if (html === undefined) {
             return this._label.innerHTML;
         } else {
             this._label.innerHTML = html;
@@ -60,7 +60,7 @@ self.prototype = uki.extend({}, Base, {
     },
     
     align: function(align) {
-        if (arguments.length == 0) {
+        if (align === undefined) {
             return this._label.style.textAlign;
         } else {
             this._label.style.textAlign = align;
@@ -68,7 +68,7 @@ self.prototype = uki.extend({}, Base, {
     },
     
     inset: function(inset) {
-        if (arguments.length == 0) {
+        if (inset === undefined) {
             return this._inset;
         } else {
             this._inset = uki.geometry.Inset.create(inset);
@@ -76,7 +76,7 @@ self.prototype = uki.extend({}, Base, {
     },
 
     scrollable: function(state) {
-        if (arguments.length == 0) {
+        if (state === undefined) {
             return this._scrollable;
         } else {
             this._scrollable = state;
@@ -85,7 +85,7 @@ self.prototype = uki.extend({}, Base, {
     },
     
     multiline: function(state) {
-        if (arguments.length == 0) return this._label.style.whiteSpace != 'nowrap';
+        if (state === undefined) return this._label.style.whiteSpace != 'nowrap';
         this._label.style.whiteSpace = state ? '' : 'nowrap';
         if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
     }

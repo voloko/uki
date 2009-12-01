@@ -101,13 +101,13 @@ tools.imageCutter.build = function() {
                     },
                     {
                         view: 'Base',
-                        coords: '60 42 -10 68',
+                        coords: '60 32 -10 78',
                         anchors: 'left rigth top',
                         autosize: 'width',
                         childViews: [
                             {
                                 view: 'Input',
-                                rect: '10 0 50 22',
+                                rect: '10 10 50 22',
                                 anchors: 'top left',
                                 name: 'top',
                                 placeholder: 'top',
@@ -115,7 +115,7 @@ tools.imageCutter.build = function() {
                             },
                             {
                                 view: 'Input',
-                                rect: '70 0 50 22',
+                                rect: '70 10 50 22',
                                 anchors: 'top left',
                                 name: 'right',
                                 placeholder: 'right',
@@ -123,7 +123,7 @@ tools.imageCutter.build = function() {
                             },
                             {
                                 view: 'Input',
-                                rect: '130 0 50 22',
+                                rect: '130 10 50 22',
                                 anchors: 'top left',
                                 name: 'bottom',
                                 placeholder: 'bottom',
@@ -131,7 +131,7 @@ tools.imageCutter.build = function() {
                             },
                             {
                                 view: 'Input',
-                                rect: '190 0 50 22',
+                                rect: '190 10 50 22',
                                 anchors: 'top left',
                                 name: 'left',
                                 placeholder: 'left',
@@ -139,13 +139,13 @@ tools.imageCutter.build = function() {
                             },
                             {
                                 view: 'Checkbox',
-                                rect: '260 0 22 22',
+                                rect: '260 10 22 22',
                                 anchors: 'top left',
                                 name: 'download'
                             },
                             {
                                 view: 'Label',
-                                rect: '285 0 100 22',
+                                rect: '285 10 100 22',
                                 anchors: 'top left',
                                 text: 'download',
                                 name: 'download-label'

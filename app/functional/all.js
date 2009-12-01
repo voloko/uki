@@ -14,7 +14,7 @@ function elements() {
         view: 'Label',
         rect: '275px 10px 100px 24px',
         anchors: 'left top',
-        text: 'Checkbox 1',
+        html: 'Checkbox 1',
         selectable: false
     },
     {
@@ -36,16 +36,16 @@ function elements() {
         anchors: 'left top'
     },
     {
-        view: 'Input',
-        rect: '720 10 100 44',
-        anchors: 'left top',
-        value: 'test'
-    },
-    {
         view: 'Button',
         rect: '510px 10px 200px 24px',
         anchors: 'left top',
         text: 'uki is awesome!'
+    },
+    {
+        view: 'Input',
+        rect: '720 10 100 44',
+        anchors: 'left top',
+        value: 'test'
     },
     {
         view: 'Slider',

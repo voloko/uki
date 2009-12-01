@@ -26,11 +26,11 @@ include('../dom.js');
     }
 
     function dragging(e) {
-        if (controller.draggable) controller.draggable.drag(e, offset(e));
+        if (controller.draggable) controller.draggable._drag(e, offset(e));
     }
 
     function drop(e) {
-        if (controller.draggable) controller.draggable.drop(e, offset(e));
+        if (controller.draggable) controller.draggable._drop(e, offset(e));
         controller.draggable = null;
         unbind();
     }

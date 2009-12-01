@@ -1,11 +1,9 @@
 include('base.js');
+include('focusable.js');
 
 (function() {
 
 var Base = uki.view.Base.prototype,
-    self = uki.view.Input = function() {
-        this.init.apply(this, arguments);
-    },
     emptyInputHeight;
     
 function getEmptyInputHeight (argument) {
@@ -18,18 +16,18 @@ function getEmptyInputHeight (argument) {
     return emptyInputHeight;
 }
     
-self.prototype = uki.extend({}, Base, {
+uki.view.Input = uki.newClass(uki.view.Base, uki.view.Focusable, {
     init: function() {
-        this._input = uki.createElement('input');
+        this._input = uki.createElement('input', Base.defaultCss + "margin:0;border:none;outline:none;padding:0;overflow:hidden;font-size:11px;left:2px;top:0;z-index:100;background: url(" + uki.theme.image('x').src + ")");
         Base.init.apply(this, arguments);
     },
     
     _domCreate: function() {
-        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text');
-        this._input.style.cssText = Base.defaultCss + "margin:0;border:none;outline:none;padding:0;overflow:hidden;font-size:11px;left:2px;top:0;z-index:100;background: url(" + uki.theme.image('x').src + ")";
+        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
         this._dom.appendChild(this._input);
         
         uki.theme.background('input').attachTo(this);
+        this._initFocusable(this._input);
     },
 
     _domLayout: function() {
@@ -41,13 +39,22 @@ self.prototype = uki.extend({}, Base, {
         this._input.style.margin =  Math.floor(o) + 'px 0 ' + Math.ceil(o) + 'px 0';
     },
 
+    _focus: function() {
+        this._focusBackground = this._focusBackground || uki.theme.background('input-focus');
+        this._focusBackground.attachTo(this);
+    },
+    
+    _blur: function() {
+        this._focusBackground.detach();
+    },
+
     value: function(text) {
-        if (arguments.length == 0) return this._input.value;
+        if (text === undefined) return this._input.value;
         this._input.value = text;
     },
 
     placeholder: function(text) {
-        if (arguments.length == 0) return this._input.getAttribute('placeholder');
+        if (text === undefined) return this._input.getAttribute('placeholder');
         this._input.setAttribute('placeholder', text);
     }
 });

@@ -1,9 +1,10 @@
 include('base.js');
+include('focusable.js');
 
 (function() {
 
 var Base = uki.view.Base.prototype,
-self = uki.view.Checkbox = uki.newClass(uki.view.Base, {
+self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
     _bindToDom: function(name) {
         if (' change'.indexOf(name) > -1) return;
@@ -17,9 +18,9 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, {
         Base.init.apply(this, arguments);
     },
     
-    checked: function() {
-        if (arguments.length == 0) return this._checked;
-        this._checked = !!arguments[0];
+    checked: function(state) {
+        if (state === undefined) return this._checked;
+        this._checked = !!state;
         this._image.style.top = this._checked ? '0' : '-18px';
     },
 
@@ -29,6 +30,9 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, {
         this._image.style.position = 'absolute';
         this._image.style.top = this._checked ? '0' : '-18px';
         this._image.style.WebkitUserDrag = 'none';
+        this._focusImage = uki.theme.image('checkbox-focus');
+        this._focusImage.style.cssText += 'display:block;-webkit-user-drag:none;position:absolute;left:50%;top:50%;margin-left:-12px;margin-top:-12px;z-index:-1;width:23px;height:23px';
+        
         this._dom.appendChild(this._box);
         this._box.appendChild(this._image);
 
@@ -44,6 +48,17 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, {
             _this.checked(_this._checked);
         });
         this.selectable(this.selectable());
+        
+        this._initFocusable();
+        // uki.dom.bind(this._focusableInput)
+    },
+    
+    _focus: function() {
+        this._dom.appendChild(this._focusImage);
+    },
+    
+    _blur: function() {
+        this._dom.removeChild(this._focusImage);
     },
     
     typeName: function() {
