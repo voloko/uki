@@ -50,7 +50,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
     _drag: function(e, offset) {
         this._handle.style.left = Math.max(0, Math.min(this._rect.width, this._initialPosition.x - offset.x)) + 'px';
-        if (this.hasFocus()) this._focusBg.style.left = this._handle.style.left;
+        this._focusBg.style.left = this._handle.style.left;
     },
     
     _drop: function(e, offset) {
