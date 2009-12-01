@@ -13,7 +13,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._handle = uki.createElement('div', Base.defaultCss + 'cursor:default;background:url(' + uki.theme.image('x').src + ')');
         this._bg = uki.theme.image('slider-handle');
         this._focusBg = uki.theme.image('slider-focus');
-        this._focusBg.style.cssText = this._bg.style.cssText = Base.defaultCss + 'top:0;left:0;z-index:-1;'; 
+        this._focusBg.style.cssText += this._bg.style.cssText += Base.defaultCss + 'top:0;left:0;z-index:-1;position:absolute;'; 
         this._handle.appendChild(this._bg);
         
         var _this = this;
@@ -23,7 +23,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     },
     
     _afterHandleLoad: function() {
-        this._focusBg.style.cssText += ';z-index:10;margin-left:-' + (this._focusBg.width) / 2 + 'px;margin-top:-' + (this._focusBg.height-(this._bg.height/2)+1)/2 + 'px;';
+        this._focusBg.style.cssText += ';z-index:10;height:25px;width:18px;margin-left:-' + (this._focusBg.width) / 2 + 'px;margin-top:-' + (this._focusBg.height-(this._bg.height/2)+1)/2 + 'px;';
         this._handle.style.cssText += ';margin-left:-' + (this._bg.width / 2) + 'px;width:' +this._bg.width + 'px;height:' + (this._bg.height / 2) + 'px;'
         this._dom.appendChild(this._handle);
         var _this = this;
