@@ -190,9 +190,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         if (this._rect) {
             this._resizeChildViews(rect);
-        } else {
-            this._initWithRect(rect);
         }
+        this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
+        this._updateRect(rect);
         
         this._needsLayout = true;
     };
@@ -221,7 +221,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /**
      * Called when rect is set for the first time
      */
-    proto._initWithRect = function(rect) {
+    proto._updateRect = function(rect) {
         this._rect = rect;
     };
     
@@ -229,14 +229,11 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Called to notify all intersted parties: childViews and observers
      */
     proto._resizeChildViews = function(rect) {
-        
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             childViews[i].resizeWithOldSize(this._rect, rect);
         };
-        this._rect = rect;
         
         this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
-        
     };
     
 

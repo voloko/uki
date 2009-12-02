@@ -4,12 +4,15 @@ include('attr.js');
 include('geometry.js');
 
 (function() {
-    var root = this;
+    var root = this,
+        doc = document,
+        isWebit = navigator.userAgent.indexOf('AppleWebKit/'),
+        isOldOpera = window.opera && parseFloat(window.opera.version()) < 9.5;
 
     var self = uki.Attachment = uki.newClass({
         init: function( dom, view, size, options ) {
             options = options || {};
-            this._dom     = dom;
+            this._dom     = dom = dom || root;
             this._view    = view;
             this._size    = uki.geometry.Size.create(size) || new uki.geometry.Size(1000, 1000);
             this._maxSize = uki.geometry.Size.create(options.maxSize) || new uki.geometry.Size(50000, 50000);
@@ -17,22 +20,26 @@ include('geometry.js');
             
             view.parent(this);
             
-            var computedStyle = dom.runtimeStyle || dom.ownerDocument.defaultView.getComputedStyle(dom, null);
-            if (!computedStyle.position || computedStyle.position == 'static') dom.style.position = 'relative';
+            if (dom != root) {
+                var computedStyle = dom.runtimeStyle || dom.ownerDocument.defaultView.getComputedStyle(dom, null);
+                if (!computedStyle.position || computedStyle.position == 'static') dom.style.position = 'relative';
+            }
             self.register(this);
             
             this.resize();
         },
         
         domForChild: function() {
-            return this._dom;
+            return this._dom === root ? doc.body : this._dom;
         },
         
         resize: function() {
-            var size = new uki.geometry.Size(
-                Math.min(this._maxSize.width, Math.max(this._minSize.width,  this._dom.offsetWidth)), 
-                Math.min(this._maxSize.height, Math.max(this._minSize.height, this._dom.offsetHeight))
-            );
+            var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
+                height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,
+                size = new uki.geometry.Size(
+                    Math.min(this._maxSize.width, Math.max(this._minSize.width,  width)), 
+                    Math.min(this._maxSize.height, Math.max(this._minSize.height, height))
+                );
             if (size.eq(this._size)) return;
             
             this._view.resizeWithOldSize(this._size, size);
@@ -49,6 +56,12 @@ include('geometry.js');
             return this._view;
         }
     });
+    
+    function getRootElement() {
+      if (isWebit && !doc.evaluate) return doc;
+      if (isOldOpera) return doc.body;
+      return doc.documentElement;
+    }
     
     self.instances = [];
     

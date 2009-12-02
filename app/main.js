@@ -34,5 +34,6 @@ include('uki/view/checkbox.js');
 include('uki/view/input.js');
 include('uki/view/label.js');
 include('uki/view/slider.js');
+include('uki/view/splitPane.js');
 
 // inxclude('uki/view/textarea.js');

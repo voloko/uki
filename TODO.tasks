@@ -3,6 +3,7 @@ Core
     ✓ merge registered themes
     ✓ do not used defaultTheme in code directly
     ✓ access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
+- default css based theme
 - focusable
     ✓ create dummy input/use existing input after _domCreate()
     ✓ attach focusable to
@@ -20,19 +21,21 @@ Core
 ✓ offsets (dom is used)
 ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
 - try creating 9sliced through innerHTML
+- try border-image again
+- try attaching elements to right/bottom instead of left top (+ inverseRect)
 
 Views
 - slider
-    - separate functional test
-    - @param min, max
+    ✓ separate functional test
+    ✓ @param min, max
     - @event change
     - @param step
-    - move bar on resize
-    - labels
+    ✓ move bar on resize
+    - labels under the bar
 - split pane
-    - separate functional test
+    ✓ separate functional test
     - use view.Base for panes (childViews)
-    - d&d
+    ✓ d&d
     - thin divider
 - button
     - separate functional test
