@@ -49,10 +49,9 @@ uki.background.Sliced9 = uki.newClass(new function() {
         var _this = this;
         getContainer( 
             this._settings,
-            this._bgInset.negative(),
-            this._zIndex,
             function( result ) {
                 _this._container = result.container;
+                _this._container.style.cssText += ';left:' + _this._bgInset.left + 'px;top:' + _this._bgInset.top + 'px';
                 _this._parts = result.parts;
                 _this._inset = result.inset;
                 _this.layout();
@@ -68,10 +67,10 @@ uki.background.Sliced9 = uki.newClass(new function() {
             inset = this._inset,
             bgInset = this._bgInset,
             fixedSize = this._fixedSize,
-            width = Math.floor(fixedSize.width || size.width),
-            height = Math.floor(fixedSize.height || size.height),
-            insetWidth = inset.left + inset.right + bgInset.left + bgInset.right,
-            insetHeight = inset.top + inset.bottom + bgInset.top + bgInset.bottom;
+            width = Math.floor(fixedSize.width || size.width - bgInset.left - bgInset.right),
+            height = Math.floor(fixedSize.height || size.height - bgInset.top - bgInset.bottom),
+            insetWidth = inset.left + inset.right,
+            insetHeight = inset.top + inset.bottom;
             
         if (!this._inited) { 
             this._inited = true;
@@ -98,7 +97,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
     
     var cache = {};
     
-    function getContainer ( settings, negativeInset, zIndex, callback ) {
+    function getContainer ( settings, callback ) {
         var key = getKey(settings);
         
         if (!cache[key]) {
@@ -115,7 +114,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
             });
             uki.image.load(images, function() { 
                 var listeners = cache[key].listeners, i,
-                    result = cache[key] = buildContainer(parts, negativeInset, zIndex);
+                    result = cache[key] = buildContainer(parts);
                 listeners[0]( result );
                 for (i=1; i < listeners.length; i++) {
                     listeners[i]( cloneContainer(cache[key]) );
@@ -128,11 +127,11 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
     }
     
-    function buildContainer (parts, negativeInset, zIndex) {
+    function buildContainer (parts) {
         var container = uki.createElement(
                 'div', 
                 'position:absolute;left:0;top:0;width:100%;height:100%;zoom:1;' +
-                'z-index:' + zIndex + ';' + (negativeInset ? '' : 'overflow:hidden')
+                'z-index:-1;overflow:hidden'
             ),
             inset = buildInset(parts);
         
@@ -151,15 +150,15 @@ uki.background.Sliced9 = uki.newClass(new function() {
     }
     
     function initParts (parts, inset, bgInset) {
-        if (parts.tl) dom.layout(parts.tl.style, { top: bgInset.top,              left:  bgInset.left,               width: inset.left,   height: inset.top    });
-        if (parts.t)  dom.layout(parts.t.style,  { top: bgInset.top,              left:  bgInset.left + inset.left,                       height: inset.top    });
-        if (parts.tr) dom.layout(parts.tr.style, { top: bgInset.top,              right: bgInset.right,              width: inset.right,  height: inset.top    });
-        if (parts.l)  dom.layout(parts.l.style,  { top: bgInset.top + inset.top,  left:  bgInset.left,               width: inset.left                         });
-        if (parts.r)  dom.layout(parts.r.style,  { top: bgInset.top + inset.top,  right: bgInset.right,              width: inset.right                        });
-        if (parts.bl) dom.layout(parts.bl.style, { bottom: bgInset.bottom,        left:  bgInset.left,               width: inset.left,   height: inset.bottom });
-        if (parts.b)  dom.layout(parts.b.style,  { bottom: bgInset.bottom,        left:  bgInset.left + inset.left,                       height: inset.bottom });
-        if (parts.br) dom.layout(parts.br.style, { bottom: bgInset.bottom,        right: bgInset.right,              width: inset.right,  height: inset.bottom });
-        if (parts.m)  dom.layout(parts.m.style,  { top: bgInset.top + inset.top,  left:  bgInset.left + inset.left});
+        if (parts.tl) dom.layout(parts.tl.style, { top: 0,          left:  0,           width: inset.left,   height: inset.top    });
+        if (parts.t)  dom.layout(parts.t.style,  { top: 0,          left:  inset.left,                       height: inset.top    });
+        if (parts.tr) dom.layout(parts.tr.style, { top: 0,          right: 0,           width: inset.right,  height: inset.top    });
+        if (parts.l)  dom.layout(parts.l.style,  { top: inset.top,  left:  0,           width: inset.left                         });
+        if (parts.r)  dom.layout(parts.r.style,  { top: inset.top,  right: 0,           width: inset.right                        });
+        if (parts.bl) dom.layout(parts.bl.style, { bottom: 0,       left:  0,           width: inset.left,   height: inset.bottom });
+        if (parts.b)  dom.layout(parts.b.style,  { bottom: 0,       left:  inset.left,                       height: inset.bottom });
+        if (parts.br) dom.layout(parts.br.style, { bottom: 0,       right: 0,           width: inset.right,  height: inset.bottom });
+        if (parts.m)  dom.layout(parts.m.style,  { top: inset.top,  left:  inset.left});
     }
     
     function cloneContainer ( row ) {

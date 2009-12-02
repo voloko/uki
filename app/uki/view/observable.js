@@ -30,7 +30,7 @@ uki.view.Observable = {
     _bindToDom: function(name) {
         var _this = this;
         uki.dom.bind(this.dom(), name, function(e) {
-            _this.trigger(name, {domEvent: e, source: this});
+            _this.trigger(name, {domEvent: e, source: _this});
         });
     },
     

@@ -22,6 +22,10 @@ uki.view.Input = uki.newClass(uki.view.Base, uki.view.Focusable, {
         Base.init.apply(this, arguments);
     },
     
+    typeName: function() {
+        return 'uki.component.Input';
+    },
+    
     _domCreate: function() {
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
         this._dom.appendChild(this._input);

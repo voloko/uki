@@ -148,6 +148,13 @@ var utils = uki.utils = {
             uki.extend(klass.prototype, arguments[i]);
         };
         return klass;
+    },
+    
+    newProperty: function(field) {
+        return function(value) {
+            if (value === undefined) return this[field];
+            this[field] = value;
+        }
     }
 };
 

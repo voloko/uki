@@ -46,31 +46,53 @@ self = uki.view.Button = uki.newClass(Base, uki.view.Focusable, new function() {
         this._down = false;
         
         var _this = this;
-        uki.dom.bind(document, 'mouseup', function() {
+        
+        this._mouseup = function(e) {
             _this._backgroundByName('normal');
             _this._down = false;
-        });
+        };
         
-        uki.dom.bind(this._dom, 'mousedown', function() {
+        this._mousedown = function(e) {
             _this._backgroundByName('down');
             _this._down = true;
-        });
+        };
         
-        uki.dom.bind(this._dom, 'mouseover', function(e) {
+        this._mouseover = function(e) {
             _this._backgroundByName((_this._down) ? 'down' : 'hover');
             _this._over = true;
-        });
+        };
         
-        uki.dom.bind(this._dom, 'mouseout', function() {
+        this._mouseout = function() {
             _this._backgroundByName('normal');
             _this._over = false;
-        });
+        };
+        
+        uki.dom.bind(document, 'mouseup', this._mouseup);
+        uki.dom.bind(this._dom, 'mousedown', this._mousedown);
+        uki.dom.bind(this._dom, 'mouseover', this._mouseover);
+        uki.dom.bind(this._dom, 'mouseout', this._mouseout);
+        
         this.selectable(this.selectable());
         this._initFocusable();
     }
     
     proto._focus = function() {
         this['focus-background']().attachTo(this);
+        if (this._firstFocus) {
+            var _this = this;
+            uki.dom.bind(this._focusableInput, 'keydown', function(e) {
+                if ((e.which == 32 || e.which == 13) && !_this._down) _this._mousedown();
+            });
+            uki.dom.bind(this._focusableInput, 'keyup', function(e) {
+                if ((e.which == 32 || e.which == 13) && _this._down) {
+                    _this._mouseup();
+                    _this.trigger('click', {domEvent: e, source: _this});
+                }
+                if (e.which == 27 && _this._down) {
+                    _this._mouseup();
+                }
+            });
+        }
     }
     
     proto._blur = function() {

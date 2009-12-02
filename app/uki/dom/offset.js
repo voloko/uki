@@ -1,13 +1,5 @@
 include('../dom.js');
 
-/*!
- * Based on jQuery JavaScript Library v1.3.2
- * http://jquery.com/
- *
- * Copyright (c) 2009 John Resig
- * Dual licensed under the MIT and GPL licenses.
- * http://docs.jquery.com/License
- */
 if ( document.documentElement["getBoundingClientRect"] ) {
 	uki.dom.offset = function( elem ) {
 		if ( !elem ) return { top: 0, left: 0 };
@@ -20,7 +12,7 @@ if ( document.documentElement["getBoundingClientRect"] ) {
 			clientLeft = docElem.clientLeft || body.clientLeft || 0,
 			top  = box.top  + (self.pageYOffset || uki.dom.offset.boxModel && docElem.scrollTop  || body.scrollTop ) - clientTop,
 			left = box.left + (self.pageXOffset || uki.dom.offset.boxModel && docElem.scrollLeft || body.scrollLeft) - clientLeft;
-		return { top: top, left: left };
+		return { y: top, x: left };
 	};
 } else {
 	uki.dom.offset = function( elem ) {
@@ -72,7 +64,7 @@ if ( document.documentElement["getBoundingClientRect"] ) {
 			left += Math.max(docElem.scrollLeft, body.scrollLeft);
 		}
 
-		return { top: top, left: left };
+		return { y: top, x: left };
 	};
 }
 
@@ -123,6 +115,6 @@ uki.extend(uki.dom.offset, {
 			top  += parseInt( uki.dom.elem.currentStyle(body).marginTop, 10 ) || 0;
 			left += parseInt( uki.dom.elem.currentStyle(body).marginLeft, 10 ) || 0;
 		}
-		return { top: top, left: left };
+		return { y: top, x: left };
 	}
 });

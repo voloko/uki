@@ -37,10 +37,12 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._box.appendChild(this._image);
 
         var _this = this;
-        uki.dom.bind(this._box, 'click', function() {
+        this._click = function() {
             _this.checked(!_this._checked)
             _this.trigger('change', {checked: _this._checked, source: _this});
-        });
+        };
+        
+        uki.dom.bind(this._box, 'click', this._click);
         uki.dom.bind(this._box, 'mouseover', function() {
             _this._image.style.top = _this._checked ? '-54px' : '-36px';
         });
@@ -50,11 +52,19 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this.selectable(this.selectable());
         
         this._initFocusable();
-        // uki.dom.bind(this._focusableInput)
     },
     
     _focus: function() {
         this._dom.appendChild(this._focusImage);
+        if (this._firstFocus) {
+            var _this = this;
+            uki.dom.bind(this._focusableInput, 'keyup', function(e) {
+                if (e.which == 32 || e.which == 13) {
+                    _this._click();
+                    _this.trigger('click', {domEvent: e, source: _this});
+                }
+            });
+        }
     },
     
     _blur: function() {

@@ -321,7 +321,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /* ---------------------------------- Events --------------------------------*/
     proto._bindToDom = function(name) {
         if (' resize layout'.indexOf(name) > -1) return;
-        uki.view.Observable._bindToDom.apply(this, arguments);
+        uki.view.Observable._bindToDom.call(this, name);
     }
     
 });
