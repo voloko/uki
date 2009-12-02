@@ -7,16 +7,18 @@ include('geometry.js');
     var root = this,
         doc = document,
         isWebit = navigator.userAgent.indexOf('AppleWebKit/'),
-        isOldOpera = window.opera && parseFloat(window.opera.version()) < 9.5;
+        isOldOpera = window.opera && parseFloat(window.opera.version()) < 9.5,
+        Rect = uki.geometry.Rect,
+        Size = uki.geometry.Size;
 
     var self = uki.Attachment = uki.newClass({
-        init: function( dom, view, size, options ) {
+        init: function( dom, view, rect, options ) {
             options = options || {};
             this._dom     = dom = dom || root;
             this._view    = view;
-            this._size    = uki.geometry.Size.create(size) || new uki.geometry.Size(1000, 1000);
-            this._maxSize = uki.geometry.Size.create(options.maxSize) || new uki.geometry.Size(50000, 50000);
-            this._minSize = uki.geometry.Size.create(options.minSize) || new uki.geometry.Size(0, 0);
+            this._rect    = Rect.create(rect)            || new Rect(1000, 1000);
+            this._maxSize = Size.create(options.maxSize) || new Size(50000, 50000);
+            this._minSize = Size.create(options.minSize) || new Size(0, 0);
             
             view.parent(this);
             
@@ -33,19 +35,24 @@ include('geometry.js');
             return this._dom === root ? doc.body : this._dom;
         },
         
+        rect: function() {
+            return this._rect;
+        },
+        
         resize: function() {
             var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
                 height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,
-                size = new uki.geometry.Size(
+                rect = new Rect(
                     Math.min(this._maxSize.width, Math.max(this._minSize.width,  width)), 
                     Math.min(this._maxSize.height, Math.max(this._minSize.height, height))
-                );
-            if (size.eq(this._size)) return;
+                ),
+                oldRect = this._rect;
+            if (rect.eq(this._rect)) return;
             
-            this._view.resizeWithOldSize(this._size, size);
-            this._size = size;
+            this._rect = rect;
+            this._view.resizeWithOldSize(oldRect, rect);
             
-            this._view.layout();
+            if (this._view._needsLayout) this._view.layout();
         },
         
         dom: function() {

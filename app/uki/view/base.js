@@ -16,12 +16,13 @@ var ANCHOR_TOP      = 1,
     AUTOSIZE_HEIGHT = 2;
     
 var dom = uki.dom,
-    utils = uki.utils;
+    utils = uki.utils,
+    Rect = uki.geometry.Rect;
 
 uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     var proto = this;
     
-    proto.defaultCss = 'position:absolute;top:0;left:0;z-index:100;'
+    proto.defaultCss = 'position:absolute;z-index:100;'
                      + 'font-family:Arial,Helvetica,sans-serif;overflow:hidden;';
     
     proto.init = function(rect) {
@@ -33,6 +34,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._visible = true;
         this._needsLayout = false;
         this._selectable = false;
+        this._styleH = 'left';
+        this._styleV = 'top';
         
         if (rect) this.rect(rect);
     };
@@ -84,7 +87,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         uki.each(this._childViews, function(i, child) {
             this.removeChild(child);
         }, this);
-        uki.build(val, this);
+        uki.each(uki.build(val), function(tmp, child) {
+            this.appendChild(child);
+        }, this);
     };
     
     /**
@@ -142,12 +147,13 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Called through a second layout pass when _dom is allready created
      */
     proto._domLayout = function(rect) {
-        dom.layout(this._dom.style, {
-            left: rect.x, 
-            top: rect.y, 
+        var l = {
             width: rect.width, 
             height: rect.height
-        });
+        };
+        l[this._styleH] = this._styleRect.x;
+        l[this._styleV] = this._styleRect.y;
+        dom.layout(this._dom.style, l);
     };
     
     /**
@@ -160,6 +166,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             this._bindPendingEventsToDom();
         }
         this._domLayout(this._rect);
+        this._needsLayout = false;
         this._layoutChildViews();
         this.trigger('layout', {rect: this._rect, source: this});
     };
@@ -180,21 +187,43 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto.rect = function(rect) {
         if (rect === undefined) return this._rect;
+        rect = Rect.create(rect);
         
-        if (typeof rect === 'string') rect = uki.geometry.Rect.fromString(
-            rect, 
-            (this._parent ? this._parent.rect() : undefined)
-        );
-        
-        if (this._rect && rect.eq(this._rect)) return;
-        
-        if (this._rect) {
-            this._resizeChildViews(rect);
-        }
-        this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
-        this._updateRect(rect);
-        
+        var oldRect = this._rect;
+        if (!this._updateRect(rect)) return;
         this._needsLayout = true;
+        
+        if (oldRect) {
+            this._resizeChildViews(oldRect);
+            this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
+        }
+    };
+    
+    /**
+     * Called when rect is set for the first time
+     */
+    proto._updateRect = function(rect) {
+        if (this._styleRect && this._rect && rect.eq(this._rect)) return false;
+        this._rect = rect;
+        if (this._parent) {
+            var styleRect = new Rect(
+                this._styleH == 'left' ? rect.x : this.parent().rect().width - rect.x - rect.width,
+                this._styleV == 'top'  ? rect.y : this.parent().rect().height - rect.y - rect.height,
+                rect.width, rect.height
+            );
+            if (styleRect.eq(this._styleRect)) return false;
+            this._styleRect = styleRect;
+        }
+        return true;
+    };
+    
+    /**
+     * Called to notify all intersted parties: childViews and observers
+     */
+    proto._resizeChildViews = function(oldRect) {
+        for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
+            childViews[i].resizeWithOldSize(oldRect, this._rect);
+        };
     };
     
     /**
@@ -218,25 +247,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         ));
     };
     
-    /**
-     * Called when rect is set for the first time
-     */
-    proto._updateRect = function(rect) {
-        this._rect = rect;
-    };
-    
-    /**
-     * Called to notify all intersted parties: childViews and observers
-     */
-    proto._resizeChildViews = function(rect) {
-        for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-            childViews[i].resizeWithOldSize(this._rect, rect);
-        };
-        
-        this.trigger('resize', {oldRect: this._rect, newRect: rect, source: this});
-    };
-    
-
     /* -------------------------------- Autolayout ------------------------------*/
     /**
      * Resizes view when parent changes size acording to anchors and autosize
@@ -251,13 +261,13 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
                 ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top
                 (this._autosize & AUTOSIZE_HEIGHT ? 1 : 0) + 
                 (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM ? 1 : 0)); // flexible right
-                
+
         if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) newRect.x += dX;
         if (this._autosize & AUTOSIZE_WIDTH) newRect.width += dX;
 
         if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) newRect.y += dY;
         if (this._autosize & AUTOSIZE_HEIGHT) newRect.height += dY;
-
+        
         this.rect(newRect);
     };
     
@@ -282,10 +292,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             return result.join(' ');
         } else {
             this._anchors = 0;
-            if (anchors.indexOf('top'    ) > -1) this._anchors = this._anchors | ANCHOR_TOP;
-            if (anchors.indexOf('right'  ) > -1) this._anchors = this._anchors | ANCHOR_RIGHT;
-            if (anchors.indexOf('bottom' ) > -1) this._anchors = this._anchors | ANCHOR_BOTTOM;
-            if (anchors.indexOf('left'   ) > -1) this._anchors = this._anchors | ANCHOR_LEFT;
+            this._styleH = 'left';
+            this._styleV = 'top';
+            if (anchors.indexOf('right'  ) > -1) {this._anchors = this._anchors | ANCHOR_RIGHT;  this._styleH = 'right';  }
+            if (anchors.indexOf('bottom' ) > -1) {this._anchors = this._anchors | ANCHOR_BOTTOM; this._styleV = 'bottom'; }
+            if (anchors.indexOf('top'    ) > -1) {this._anchors = this._anchors | ANCHOR_TOP;    this._styleV = 'top';    }
+            if (anchors.indexOf('left'   ) > -1) {this._anchors = this._anchors | ANCHOR_LEFT;   this._styleH = 'left';   }
         }
     };
     

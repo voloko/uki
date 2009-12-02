@@ -7,16 +7,16 @@ include('collection.js');
 var root = this,
     attr = uki.attr;
 
-uki.build = function(ml, parent) {
+uki.build = function(ml) {
     if (!uki.isArray(ml)) ml = [ml];
-    return new uki.Collection(createMulti(ml, parent));
+    return new uki.Collection(createMulti(ml));
 };
 
-function createMulti (ml, parent) {
-    return uki.map(ml, function(mlRow) { return createSingle(mlRow, parent) });
+function createMulti (ml) {
+    return uki.map(ml, function(mlRow) { return createSingle(mlRow) });
 }
 
-function createSingle (mlRow, parent) {
+function createSingle (mlRow) {
     if (uki.isFunction(mlRow.typeName)) {
         if (parent) parent.appendChild(mlRow);
         return mlRow;
@@ -41,16 +41,10 @@ function createSingle (mlRow, parent) {
         result = c;
     }
     
-    return copyAttrs(result, mlRow, parent);
+    return copyAttrs(result, mlRow);
 }
 
-function copyAttrs(comp, mlRow, parent) {
-    var orderedAttrs = uki.isFunction(comp.builderAttrs) ? comp.builderAttrs() : [];
-    if (parent) parent.appendChild(comp);
-    uki.each(orderedAttrs, function(i, name) {
-        if (mlRow[name]) attr(comp, name, mlRow[name]);
-        mlRow[name] = undefined;
-    });
+function copyAttrs(comp, mlRow) {
     uki.each(mlRow, function(name, value) {
         attr(comp, name, value);
     });

@@ -85,7 +85,6 @@ QUnit.test("should call setters in specified order", function() {
     var order = [];
     var mock = function() { this.init.apply(this, arguments) };
     mock.prototype = uki.extend({}, uki.view.Base.prototype, {
-        builderAttrs: function() { return ['rect', 'something', 'text', 'childViews']},
         rect: function() { order.push('rect') },
         text: function() { order.push('text') },
         childViews: function() { order.push('childViews') }

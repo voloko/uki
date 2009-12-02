@@ -81,6 +81,11 @@ include('../uki.js');
             this.y      = a2;
             this.width  = a3;
             this.height = a4;
+        } else if (a1.x === undefined) {
+            this.x      = 0;
+            this.y      = 0;
+            this.width  = a1;
+            this.height = a2;
         } else {
             this.x      = a1 ? a1.x      : 0;
             this.y      = a1 ? a1.y      : 0;
@@ -205,13 +210,25 @@ include('../uki.js');
     
     Rect.fromString = function(string, relative) {
         var parts = string.split(/\s+/);
-            
-        return new Rect( 
+        
+        if (parts.length > 2) return new Rect( 
             unitsToPx(parts[0], relative && relative.width),
             unitsToPx(parts[1], relative && relative.height),
             unitsToPx(parts[2], relative && relative.width),
             unitsToPx(parts[3], relative && relative.height)
+        );
+        return new Rect( 
+            unitsToPx(parts[0], relative && relative.width),
+            unitsToPx(parts[1], relative && relative.height)
         ) ;
+    };
+    
+    Rect.create = function(a1, a2, a3, a4) {
+        if (a1 === undefined) return null;
+        if (a1.x !== undefined) return a1;
+        if (/\S+\s+\S+/.test(a1 + '')) return Rect.fromString(a1, a2);
+        if (a3 === undefined) return new Rect(a1, a2);
+        return new Rect(a1, a2, a3, a4);
     };
     
     
