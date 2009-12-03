@@ -118,13 +118,20 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._dom.removeChild(this._focusBg);
     },
     
-    _domLayout: function() {
-        uki.dom.layout(this._dom.style, {
-            left: this._rect.x, 
-            top: (this._rect.height - 18) / 2 + this._rect.y, 
-            width: this._rect.width
-        });
+    _domLayout: function(rect, relativeRect) {
+        var l = {
+            width: rect.width, 
+            height: 18
+        };
+        l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
+        l[this._styleV] = (this._rect.height - 18) / 2 + (this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height);
+        
+        if (this._eqLayout(l, this._lastLayout)) return false;
+        
+        this._lastLayout = l;
+        uki.dom.layout(this._dom.style, l);
         this.value(this.value());
+        return true;
     },
 
     typeName: function() {

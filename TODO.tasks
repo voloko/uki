@@ -22,7 +22,7 @@ Core
 ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
 - try creating 9sliced through innerHTML
 - try border-image again
-- try attaching elements to right/bottom instead of left top (+ inverseRect)
+✓ try attaching elements to right/bottom instead of left top (+ inverseRect)
 
 Views
 - slider

@@ -168,13 +168,15 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         };
         l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
         l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
-        if (
-            this._lastLayout && this._lastLayout.height == l.width && this._lastLayout.height == l.height && 
-            this._lastLayout[this._styleH] == l[this._styleH] && this._lastLayout[this._styleV] == l[this._styleV]
-        ) return false;
+        if (this._eqLayout(l, this._lastLayout)) return false;
         this._lastLayout = l;
         dom.layout(this._dom.style, l);
         return true;
+    };
+    
+    proto._eqLayout = function(l1, l2) {
+        return l1 && l2 && l1.width == l2.width && l1.height == l2.height && 
+            l1[this._styleH] == l2[this._styleH] && l1[this._styleV] == l2[this._styleV];
     };
     
     proto._layoutChildViews = function() {
