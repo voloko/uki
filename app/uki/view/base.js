@@ -50,7 +50,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /* ------------------------------- Settings --------------------------------*/
     proto.background = function(bg) {
         if (bg === undefined) return this._background;
-    
+        bg = uki.background(bg);
         if (this._dom) {
             if (this._background) this._background.detach(this);
             bg.attachTo(this);

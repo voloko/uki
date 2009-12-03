@@ -31,9 +31,9 @@ include('attachment.js');
         return uki.find( selector, this );
     };
     
-    self.attachTo = function( node, minSize ) {
+    self.attachTo = function( node, minSize, options ) {
         this.each(function() {
-            new uki.Attachment( node, this, minSize );
+            new uki.Attachment( node, this, minSize, options );
         });
         return this;
     };

@@ -92,8 +92,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         this._dom.appendChild(this._handle = this._createHandle());
         
         for (var i=0, paneML; i < 2; i++) {
-            this._panes[i] = new uki.view.Base();
-            this._panes[i].childViews(this._paneML[i]);
+            this._paneML[i].view = this._paneML[i].view || new uki.view.Base();
+            this._panes[i] = uki(this._paneML[i])[0];
             this.appendChild(this._panes[i]);
         };
         this._paneML = [];
@@ -137,8 +137,23 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         this._paneAt(1, pane);
     };
     
+    proto.topChildViews = proto.leftChildViews = function(views) {
+        this._childViewsAt(0, views);
+    };
+    
+    proto.bottomChildViews = proto.rightChildViews = function(views) {
+        this._childViewsAt(1, views);
+    };
+    
+    proto._childViewsAt = function(i, views) {
+        if (views === undefined) return this._paneML[i] ? this._paneML[i].childViews : [];
+        this._paneML[i] = {
+            childViews: views
+        };
+    };
+    
     proto._paneAt = function(i, pane) {
-        if (pane === undefined) return this._pane[i];
+        if (pane === undefined) return this._paneML[i] || this._panes[i];
         this._paneML[i] = pane;
     };
     

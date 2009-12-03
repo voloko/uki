@@ -3,15 +3,16 @@ Core
     ✓ merge registered themes
     ✓ do not used defaultTheme in code directly
     ✓ access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
-- default css based theme
-- focusable
+    - redefine components in themes
+    - move component library to airport theme
+✓ focusable
     ✓ create dummy input/use existing input after _domCreate()
     ✓ attach focusable to
         ✓ checkbox
         ✓ button
         ✓ slider
         ✓ input
-    - keyboard input
+    ✓ keyboard input
         ✓ checkbox
         ✓ button
         ✓ slider
@@ -19,18 +20,18 @@ Core
 ✓ use real prototype inheritance in uki.newClass()
 ✓ remove arguments.length
 ✓ offsets (dom is used)
-✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
-- try creating 9sliced through innerHTML
-- try border-image again
 ✓ try attaching elements to right/bottom instead of left top (+ inverseRect)
 - goog export
-- background parser for simple backgrounds
-- redefine components in themes
-- move component library to airport theme
+
+Backgrounds
+    ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
+    - try creating 9sliced through innerHTML
+    - try border-image again
+    - background parser for simple/theme backgrounds
 
 Visual
 - gif images for ie6 (better imageCutter with auto transparency remover)
-- less prominent toolbar shadow
+- less prominent panel shadow, panel coloring
 
 Views
 - slider

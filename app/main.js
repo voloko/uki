@@ -30,7 +30,6 @@ include('uki/theme.js');
 include('uki/view/observable.js');
 include('uki/view/base.js');
 include('uki/view/button.js');
-include('uki/view/panel.js');
 include('uki/view/checkbox.js');
 include('uki/view/input.js');
 include('uki/view/label.js');

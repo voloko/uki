@@ -1,6 +1,6 @@
 (function() {
     function u(url) {
-        return uki.theme.airport + url;
+        return uki.theme.airport.imagePath + url;
     }
     
     uki.theme.airport = {

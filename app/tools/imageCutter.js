@@ -75,13 +75,14 @@ tools.imageCutter.build = function() {
     var p = uki.build({
         view: 'Base',
         rect: '0 0 400 400',
-        anchors: 'top left right',
-        autosize: 'width',
-        background: new uki.background.Css('#EFEFEF'),
+        anchors: 'top left right bottom',
+        autosize: 'width height',
+        background: '#EFEFEF',
         childViews: [
             {
-                view: 'Panel',
+                view: 'Base',
                 rect: '0 0 400 80', anchors: 'top left right',
+                background: 'theme(panel)',
                 autosize: 'width',
                 childViews: [
                     {
@@ -170,7 +171,7 @@ tools.imageCutter.build = function() {
                 scrollable: true,
                 selectable: true,
                 multiline: true,
-                background: new uki.background.CssBox('background:white;border:1px solid #CCC'),
+                background: 'cssBox(background:white;border:1px solid #CCC)',
                 inset: '1 1 0 1'
             }
         ]
@@ -178,7 +179,7 @@ tools.imageCutter.build = function() {
     
     // theme(button-hover)
     // CssBox('background:white;border:1px solid #CCC', '')
-    // Sliced9(????)
+    // #CCC
     
     p.find('[name=download-label]').bind('click', function() {
         var c = p.find('[name=download]');
