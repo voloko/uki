@@ -110,7 +110,6 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
                 } else if (e.which == 37) {
                     _this.value(_this.value() - _this._keyStep * (_this._max - _this._min));
                 }
-                // console.log(e.which) ; 39/37
             });
         }
     },

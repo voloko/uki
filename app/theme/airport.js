@@ -113,6 +113,9 @@
             },
             'splitPane-horizontal': function() {
                 return uki.image(u("splitPane/horizontal.gif"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAICAYAAAA870V8AAAAIElEQVQIHWNgYGDYDMQgsJkJQkNIijkM////9waZBaIBtioIA2DTJqsAAAAASUVORK5CYII=");
+            },
+            'splitPane-vertical': function() {
+                return uki.image(u("splitPane/vertical.gif"))
             }
         }
     };

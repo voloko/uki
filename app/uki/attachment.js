@@ -52,7 +52,7 @@ include('geometry.js');
             this._rect = rect;
             this._view.resizeWithOldSize(oldRect, rect);
             
-            if (this._view._needsLayout) this._view.layout();
+            if (this._view._needsLayout) this._view.layout(rect);
         },
         
         dom: function() {

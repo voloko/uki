@@ -137,6 +137,21 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     };
     
     /**
+     * Called on second layot pass when view becomes visible/changes it's size
+     */
+    proto.layout = function(relativeRect) {
+        if (!this._dom) {
+            this._domCreate(this._rect, relativeRect);
+            this._parent.domForChild(this).appendChild(this._dom);
+            this._bindPendingEventsToDom();
+        }
+        this._domLayout(this._rect, relativeRect);
+        this._needsLayout = false;
+        this._layoutChildViews();
+        this.trigger('layout', {rect: this._rect, source: this});
+    };
+    
+    /**
      * Called through a second layout pass when _dom should be created
      */
     proto._domCreate = function() {
@@ -146,35 +161,26 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /**
      * Called through a second layout pass when _dom is allready created
      */
-    proto._domLayout = function(rect) {
+    proto._domLayout = function(rect, relativeRect) {
         var l = {
             width: rect.width, 
             height: rect.height
         };
-        l[this._styleH] = this._styleRect.x;
-        l[this._styleV] = this._styleRect.y;
+        l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
+        l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
+        if (
+            this._lastLayout && this._lastLayout.height == l.width && this._lastLayout.height == l.height && 
+            this._lastLayout[this._styleH] == l[this._styleH] && this._lastLayout[this._styleV] == l[this._styleV]
+        ) return false;
+        this._lastLayout = l;
         dom.layout(this._dom.style, l);
-    };
-    
-    /**
-     * Called on second layot pass when view becomes visible/changes it's size
-     */
-    proto.layout = function() {
-        if (!this._dom) {
-            this._domCreate();
-            this._parent.domForChild(this).appendChild(this._dom);
-            this._bindPendingEventsToDom();
-        }
-        this._domLayout(this._rect);
-        this._needsLayout = false;
-        this._layoutChildViews();
-        this.trigger('layout', {rect: this._rect, source: this});
+        return true;
     };
     
     proto._layoutChildViews = function() {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             if (childViews[i]._needsLayout && childViews[i].visible()) {
-                childViews[i].layout();
+                childViews[i].layout(this._rect);
             }
         };
     };
@@ -185,35 +191,23 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Sets or retrieves rect relative to parents view.
      * Rect defines the area this view should render in.
      */
-    proto.rect = function(rect) {
-        if (rect === undefined) return this._rect;
-        rect = Rect.create(rect);
+    proto.rect = function(newRect) {
+        if (newRect === undefined) return this._rect;
+        newRect = Rect.create(newRect);
         
         var oldRect = this._rect;
-        if (!this._updateRect(rect)) return;
+        if (!this._updateRect(newRect)) return;
         this._needsLayout = true;
         
         if (oldRect) {
-            this._resizeChildViews(oldRect);
+            if (oldRect.width != newRect.width || oldRect.height != newRect.height) this._resizeChildViews(oldRect);
             this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
         }
     };
     
-    /**
-     * Called when rect is set for the first time
-     */
-    proto._updateRect = function(rect) {
-        if (this._styleRect && this._rect && rect.eq(this._rect)) return false;
-        this._rect = rect;
-        if (this._parent) {
-            var styleRect = new Rect(
-                this._styleH == 'left' ? rect.x : this.parent().rect().width - rect.x - rect.width,
-                this._styleV == 'top'  ? rect.y : this.parent().rect().height - rect.y - rect.height,
-                rect.width, rect.height
-            );
-            if (styleRect.eq(this._styleRect)) return false;
-            this._styleRect = styleRect;
-        }
+    proto._updateRect = function(newRect) {
+        if (this._rect && newRect.eq(this._rect)) return false;
+        this._rect = newRect;
         return true;
     };
     
@@ -222,7 +216,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto._resizeChildViews = function(oldRect) {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-            childViews[i].resizeWithOldSize(oldRect, this._rect);
+            childViews[i].resizeWithOldSize(oldRect, this._rect, this._rect);
         };
     };
     
@@ -241,10 +235,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.coords = function(coords) {
         if (coords === undefined) return this.rect().toCoordsString();
         
-        this.rect(uki.geometry.Rect.fromCoordsString(
-            coords, 
-            (this._parent ? this._parent.rect() : undefined)
-        ));
+        this.rect(Rect.fromCoordsString(coords));
     };
     
     /* -------------------------------- Autolayout ------------------------------*/

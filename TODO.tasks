@@ -34,8 +34,10 @@ Views
     - labels under the bar
 - split pane
     ✓ separate functional test
-    - use view.Base for panes (childViews)
+    ✓ use view.Base for panes (childViews)
     ✓ d&d
+    - max size
+    - which panes should grow
     - thin divider
 - button
     - separate functional test
