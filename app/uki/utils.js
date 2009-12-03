@@ -4,7 +4,7 @@ include('../uki.js');
 
 var toString = Object.prototype.toString;
 	
-var utils = uki.utils = {
+var utils = {
     
 	isFunction: function( obj ) {
 		return toString.call(obj) === "[object Function]";
@@ -158,6 +158,7 @@ var utils = uki.utils = {
     }
 };
 
+uki.utils = utils;
 utils.extend(uki, utils);
 
 })();

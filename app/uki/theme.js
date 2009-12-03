@@ -4,20 +4,20 @@ uki.theme = {
     themes: [],
     
     register: function(theme) {
-        this.themes.push(theme);
+        uki.theme.themes.push(theme);
     },
     
     background: function(name) {
-        return this._namedResource(name, 'background');
+        return uki.theme._namedResource(name, 'background');
     },
     
     image: function(name) {
-        return this._namedResource(name, 'image');
+        return uki.theme._namedResource(name, 'image');
     },
     
     _namedResource: function(name, type) {
-        for (var i = this.themes.length - 1; i >= 0; i--){
-            var result = this.themes[i][type](name);
+        for (var i = uki.theme.themes.length - 1; i >= 0; i--){
+            var result = uki.theme.themes[i][type](name);
             if (result) return result;
         };
         return null;

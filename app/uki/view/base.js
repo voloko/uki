@@ -5,21 +5,19 @@ include('../builder.js');
 include('../dom.js');
 include('observable.js');
 
-(function() {
-
-var ANCHOR_TOP      = 1,
-    ANCHOR_RIGHT    = 2,
-    ANCHOR_BOTTOM   = 4,
-    ANCHOR_LEFT     = 8,
-
-    AUTOSIZE_WIDTH  = 1,
-    AUTOSIZE_HEIGHT = 2;
-    
-var dom = uki.dom,
-    utils = uki.utils,
-    Rect = uki.geometry.Rect;
-
 uki.view.Base = uki.newClass(uki.view.Observable, new function() {
+    var ANCHOR_TOP      = 1,
+        ANCHOR_RIGHT    = 2,
+        ANCHOR_BOTTOM   = 4,
+        ANCHOR_LEFT     = 8,
+
+        AUTOSIZE_WIDTH  = 1,
+        AUTOSIZE_HEIGHT = 2;
+
+    var dom = uki.dom,
+        utils = uki.utils,
+        Rect = uki.geometry.Rect;
+
     var proto = this;
     
     proto.defaultCss = 'position:absolute;z-index:100;'
@@ -156,6 +154,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto._domCreate = function() {
         this._dom = uki.createElement('div', this.defaultCss);
+        this.selectable(this.selectable());
     };
     
     /**
@@ -327,4 +326,3 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     }
     
 });
-})();

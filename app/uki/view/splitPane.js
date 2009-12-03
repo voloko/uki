@@ -1,13 +1,11 @@
 include('base.js');
 
-(function() {
-
-var Base = uki.view.Base.prototype,
-    marker = 'SplitPane__marker',
-    Rect = uki.geometry.Rect;
-    
 uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
+    var Base = uki.view.Base.prototype,
+        Rect = uki.geometry.Rect;
+
     var proto = this;
+    
     proto.init = function() {
         Base.init.call(this);
         this._thin = false;
@@ -16,6 +14,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         this._autogrowLeft = false;
         this._autogrowRight = true;
         this._handleWidth = 7;
+        this._leftMin = 100;
+        this._rightMin = 100;
         
         this._panes = [];
         this._paneML = [];
@@ -24,7 +24,13 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
     proto.handlePosition = function(val) {
         if (val === undefined) return this._handlePosition;
         if (this._rect) {
-            this._handlePosition = Math.max(0, Math.min(this._rect ? this._rect[this._vertical ? 'height' : 'width'] : 1000, val * 1));
+            var prop = this._vertical ? 'height' : 'width';
+            this._handlePosition = Math.max(
+                    this._leftMin,
+                    Math.min(
+                        this._rect[prop] - this._rightMin - this._handleWidth,
+                        Math.max(0, Math.min(this._rect ? this._rect[prop] : 1000, val * 1))
+                    ));
         } else {
             this._handlePosition = val;
         }
@@ -36,6 +42,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
     };
     
     proto.vertical = uki.newProperty('_vertical');
+    proto.leftMin = proto.topMin = uki.newProperty('_leftMin');
+    proto.rightMin = proto.topMin = uki.newProperty('_rightMin');
     proto.autogrowTop = proto.autogrowLeft = uki.newProperty('_autogrowLeft');
     proto.autogrowBottom = proto.autogrowRight = uki.newProperty('_autogrowRight');
     
@@ -49,7 +57,6 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
                 'border: 1px solid #CCC;border-width: 1px 0;cursor:row-resize;cursor:ns-resize;z-index:200;' +
                 'background: url(' + uki.theme.image('splitPane-vertical').src + ') 50% 50% no-repeat;'
             );
-            
         } else {
             this._handle = uki.createElement(
                 'div', 
@@ -58,6 +65,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
                 'background: url(' + uki.theme.image('splitPane-horizontal').src + ') 50% 50% no-repeat;'
             );
         }
+        if (!this._handle.style.cursor || window.opera) this._handle.style.cursor = this._vertical ? 'n-resize' : 'e-resize';
+        
         this._dom.appendChild(this._handle);
         
         for (var i=0, paneML; i < 2; i++) {
@@ -138,5 +147,3 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';
     }
 });
-    
-})();

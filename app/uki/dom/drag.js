@@ -11,18 +11,19 @@ include('../dom.js');
             bind();
         }
     }
+    var doc = document;
     
 
     function bind() {
-        uki.dom.bind(document, 'mousemove scroll', dragging);
-        uki.dom.bind(document, 'mouseup', drop);
-        uki.dom.bind(document.body, 'mousedown', preventSelectionHandler);
+        uki.dom.bind(doc, 'mousemove scroll', dragging);
+        uki.dom.bind(doc, 'mouseup', drop);
+        uki.dom.bind(doc.body, 'selectstart mousedown', preventSelectionHandler);
     }
 
     function unbind() {
-        uki.dom.unbind(document, 'mousemove scroll', dragging);
-        uki.dom.unbind(document, 'mouseup', drop);
-        uki.dom.unbind(document.body, 'mousedown', preventSelectionHandler);
+        uki.dom.unbind(doc, 'mousemove scroll', dragging);
+        uki.dom.unbind(doc, 'mouseup', drop);
+        uki.dom.unbind(doc.body, 'selectstart mousedown', preventSelectionHandler);
     }
 
     function dragging(e) {

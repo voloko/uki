@@ -23,6 +23,7 @@ Core
 - try creating 9sliced through innerHTML
 - try border-image again
 ✓ try attaching elements to right/bottom instead of left top (+ inverseRect)
+- goog export
 
 Views
 - slider
@@ -37,8 +38,10 @@ Views
     ✓ use view.Base for panes (childViews)
     ✓ d&d
     - max size
-    - which panes should grow
+    ✓ which panes should grow
     - thin divider
+- scroll view    
+    - separate functional test
 - button
     - separate functional test
     - @param bgHover, bgNormal, bgPressed
@@ -59,6 +62,7 @@ Views
 - grid view
     - separate functional test
     - d&d?
+- Native buttons
 - windows
 - context menus
 - combo box

@@ -2,12 +2,9 @@ include('base.js');
 
 (function() {
 
-var Base = uki.view.Base.prototype,
-    self = uki.view.Label = function() {
-        this.init.apply(this, arguments);
-    };
-    
-self.prototype = uki.extend({}, Base, {
+var Base = uki.view.Base.prototype;
+
+uki.view.Label = uki.newClass(uki.view.Base, {
     init: function() {
         Base.init.apply(this, arguments);
         this._scrollable = false;
