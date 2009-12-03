@@ -26,9 +26,8 @@ uki.view.Label = uki.newClass(uki.view.Base, {
     },
     
     _domCreate: function() {
-        this._dom = uki.createElement('div', Base.defaultCss);
+        Base._domCreate.call(this);
         this._dom.appendChild(this._label);
-        this.selectable(this.selectable());
     },
     
     _domLayout: function() {

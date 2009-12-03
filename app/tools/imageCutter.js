@@ -77,11 +77,11 @@ tools.imageCutter.build = function() {
         rect: '0 0 400 400',
         anchors: 'top left right',
         autosize: 'width',
-        background: new uki.background.CssBox('background:#EFEFEF'),
+        background: new uki.background.Css('#EFEFEF'),
         childViews: [
             {
                 view: 'Panel',
-                rect: '0 0 100% 80', anchors: 'top left right',
+                rect: '0 0 400 80', anchors: 'top left right',
                 autosize: 'width',
                 childViews: [
                     {
@@ -93,7 +93,7 @@ tools.imageCutter.build = function() {
                     },
                     {
                         view: 'Input',
-                        coords: '70 10 -20 32', 
+                        coords: '70 10 380 32', 
                         anchors: 'top left right',
                         autosize: 'width',
                         value: '/app/theme/airport/i/panel/panel.png',
@@ -101,7 +101,7 @@ tools.imageCutter.build = function() {
                     },
                     {
                         view: 'Base',
-                        coords: '60 32 -10 78',
+                        coords: '60 32 390 78',
                         anchors: 'left rigth top',
                         autosize: 'width',
                         childViews: [
@@ -154,7 +154,7 @@ tools.imageCutter.build = function() {
                     },
                     {
                         view: 'Button',
-                        rect: '-120 42 100 22',
+                        rect: '280 42 100 22',
                         anchors: 'top right',
                         text: 'Cut',
                         name: 'cut'
@@ -163,7 +163,7 @@ tools.imageCutter.build = function() {
             },
             {
                 view: 'Label',
-                coords: '20 90 -20 -20',
+                coords: '20 90 380 380',
                 anchors: 'top left right bottom',
                 autosize: 'width height',
                 name: 'result',

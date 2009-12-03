@@ -12,9 +12,10 @@ var self = uki.dom = {
     bound: {},
     handles: {},
     
-    createElement: function(tagName, cssText) {
+    createElement: function(tagName, cssText, innerHTML) {
         var e = doc.createElement(tagName);            
         if (cssText) e.style.cssText = cssText;
+        if (innerHTML) e.innerHTML = innerHTML;
         e[expando] = guid++;
         return e;
     },

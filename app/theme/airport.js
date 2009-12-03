@@ -1,9 +1,11 @@
 (function() {
     function u(url) {
-        return '/app/theme/airport/i/' + url;
+        return uki.theme.airport + url;
     }
     
     uki.theme.airport = {
+        imagePath: '/app/theme/airport/i/',
+        
         background: function(name) {
             return this.backgrounds[name] && this.backgrounds[name]();
         },
@@ -75,7 +77,7 @@
             'panel': function() {
                 var prefix = 'panel/panel-';
                 return new uki.background.Sliced9({
-                    t: [u(prefix + "t.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAADCAYAAACqPZ51AAAAIElEQVQIHWNcvnzFfwYiAOP379+JUsjy/v0HIsxjYAAACIoJrr/y//YAAAAASUVORK5CYII="],
+                    // t: [u(prefix + "t.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAADCAYAAACqPZ51AAAAIElEQVQIHWNcvnzFfwYiAOP379+JUsjy/v0HIsxjYAAACIoJrr/y//YAAAAASUVORK5CYII="],
                     m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAABnCAYAAAA5WNM5AAAAkklEQVRYCe2XSwqAMAxEq3j/G9ajtIKYXQhvMVLEcVNoh3xehoBb7+ds4NuB5pZg4TEnytxwRCzUp9ZHXNiMU5dm189aH3HhCHEzFpY24yMcY5SR4lEPnNdIlz2vkXa9skZ9144Ybs5O7h5zzPjFnTkGifT8Jx6+SOlq1nPkNXoBpNZ+LvFkMHALK94v/OR+AfgFT2rKGho++KkAAAAASUVORK5CYII="],
                     b: [u(prefix + "b.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAADCAYAAACqPZ51AAAAGElEQVQIHWPk5ua+wEAEYASqcSBCHfFKAIURATRo4K6PAAAAAElFTkSuQmCC", true]
                 });

@@ -50,10 +50,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /* ------------------------------- Settings --------------------------------*/
     proto.background = function(bg) {
         if (bg === undefined) return this._background;
-        
-        if (this._background) this._background.detach(this);
+    
+        if (this._dom) {
+            if (this._background) this._background.detach(this);
+            bg.attachTo(this);
+        }
         this._background = bg;
-        this._background.attachTo(this);
     };
     
     proto.selectable = function(state) {
@@ -155,6 +157,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto._domCreate = function() {
         this._dom = uki.createElement('div', this.defaultCss);
         this.selectable(this.selectable());
+        if (this._background) this._background.attachTo(this);
     };
     
     /**

@@ -4,11 +4,16 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
     var Base = uki.view.Base.prototype,
         Rect = uki.geometry.Rect;
 
-    var proto = this;
+    var proto = this,
+        commonVerticalStyle = 'cursor:row-resize;cursor:ns-resize;z-index:200;overflow:hidden;',
+        commonHorizontalStyle = 'cursor:col-resize;cursor:ew-resize;z-index:200;overflow:hidden;';
+        
+    proto.typeName = function() {
+        return 'uki.view.SplitPane';
+    };
     
     proto.init = function() {
         Base.init.call(this);
-        this._thin = false;
         this._vertical = false;
         this._handlePosition = 200;
         this._autogrowLeft = false;
@@ -46,28 +51,45 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
     proto.rightMin = proto.topMin = uki.newProperty('_rightMin');
     proto.autogrowTop = proto.autogrowLeft = uki.newProperty('_autogrowLeft');
     proto.autogrowBottom = proto.autogrowRight = uki.newProperty('_autogrowRight');
+    proto.handleWidth = uki.newProperty('_handleWidth');
+    
+    proto._createHandle = function() {
+        var handle;
+        if (this._vertical) {
+            handle = this._handleWidth == 1 ?
+                uki.createElement('div', 
+                    Base.defaultCss + 'width:100%;height:5px;margin-top:-2px;top:' + this._handlePosition + 'px' + 
+                    commonVerticalStyle + 'background: url(' + uki.theme.image('x').src + ')',
+                    '<div style="' + 
+                    Base.defaultCss + 'background:#999;width:100%;height:1px;left:0px;top:2px;overflow:hidden;' + 
+                    '"></div>') :
+                uki.createElement('div', 
+                    Base.defaultCss + 'width:100%;height:' + (this._handleWidth - 2) + 'px;top:' + this._handlePosition + 'px;' +
+                    'border: 1px solid #CCC;border-width: 1px 0;' + commonVerticalStyle +
+                    'background: url(' + uki.theme.image('splitPane-vertical').src + ') 50% 50% no-repeat;');
+        } else {
+            handle = this._handleWidth == 1 ?
+                uki.createElement('div', 
+                    Base.defaultCss + 'height:100%;width:5px;margin-left:-2px;top:' + this._handlePosition + 'px' + 
+                    commonHorizontalStyle + 'background: url(' + uki.theme.image('x').src + ')',
+                    '<div style="' + 
+                    Base.defaultCss + 'background:#999;height:100%;width:1px;top:0px;left:2px;overflow:hidden;' + 
+                    '"></div>') :
+                uki.createElement('div', 
+                    Base.defaultCss + 'height:100%;width:' + (this._handleWidth - 2) + 'px;left:' + this._handlePosition + 'px;' +
+                    'border: 1px solid #CCC;border-width: 0 1px;' + commonHorizontalStyle + 
+                    'background: url(' + uki.theme.image('splitPane-horizontal').src + ') 50% 50% no-repeat;');
+        }
+        if (!handle.style.cursor || window.opera) handle.style.cursor = this._vertical ? 'n-resize' : 'e-resize';
+        return handle;
+    };
     
     proto._domCreate = function() {
         this.handlePosition(this.handlePosition()); // force handle position within rect limits
         this._dom = uki.createElement('div', Base.defaultCss);
-        if (this._vertical) {
-            this._handle = uki.createElement(
-                'div', 
-                Base.defaultCss + 'width:100%;height:5px;top:' + this._handlePosition + 'px;' +
-                'border: 1px solid #CCC;border-width: 1px 0;cursor:row-resize;cursor:ns-resize;z-index:200;' +
-                'background: url(' + uki.theme.image('splitPane-vertical').src + ') 50% 50% no-repeat;'
-            );
-        } else {
-            this._handle = uki.createElement(
-                'div', 
-                Base.defaultCss + 'height:100%;width:5px;left:' + this._handlePosition + 'px;' +
-                'border: 1px solid #CCC;border-width: 0 1px;cursor:col-resize;cursor:ew-resize;z-index:200;' +
-                'background: url(' + uki.theme.image('splitPane-horizontal').src + ') 50% 50% no-repeat;'
-            );
-        }
-        if (!this._handle.style.cursor || window.opera) this._handle.style.cursor = this._vertical ? 'n-resize' : 'e-resize';
-        
-        this._dom.appendChild(this._handle);
+        if (this._handleWidth <= 3) this._handleWidth = 1;
+
+        this._dom.appendChild(this._handle = this._createHandle());
         
         for (var i=0, paneML; i < 2; i++) {
             this._panes[i] = new uki.view.Base();

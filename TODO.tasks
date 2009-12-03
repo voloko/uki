@@ -24,6 +24,13 @@ Core
 - try border-image again
 ✓ try attaching elements to right/bottom instead of left top (+ inverseRect)
 - goog export
+- background parser for simple backgrounds
+- redefine components in themes
+- move component library to airport theme
+
+Visual
+- gif images for ie6 (better imageCutter with auto transparency remover)
+- less prominent toolbar shadow
 
 Views
 - slider
@@ -37,14 +44,16 @@ Views
     ✓ separate functional test
     ✓ use view.Base for panes (childViews)
     ✓ d&d
-    - max size
+    ✓ min size
     ✓ which panes should grow
-    - thin divider
+    ✓ thin divider
 - scroll view    
-    - separate functional test
+    ✓ separate functional test
+    - switch on resize
+    - switch in layout
 - button
     - separate functional test
-    - @param bgHover, bgNormal, bgPressed
+    ✓ @param bgHover, bgNormal, bgPressed
 - segmented view
     - separate functional test
     - layout child buttons
@@ -58,11 +67,23 @@ Views
 - table view
     - separate functional test
     - progressive rendering
+    - stress tests
     - d&d?
 - grid view
     - separate functional test
     - d&d?
-- Native buttons
+- Checkbox
+    - Label support
+- Radio button
+    - Named group
+- Toolbar
+    - Button layout
+    - Overflow
+- Native input
+- Native button
+- Native radio
+- Native checkbox
+- Native select
 - windows
 - context menus
 - combo box

@@ -4,7 +4,7 @@ include('../image.js');
 uki.background.Css = uki.newClass(new function() {
     
     this.init = function(options) {
-        this._options = options;
+        this._options = typeof options == 'string' ? {background: options} : options;
     };
     
     this.attachTo = function(comp) {
