@@ -12,7 +12,7 @@ self = uki.view.Button = uki.newClass(Base, uki.view.Focusable, new function() {
         baseProto.init.apply(this, arguments);
         this._selectable = false;
         this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
-        this._label = uki.createElement('div', this.defaultStyle + 'width:100%;background:url(' + uki.theme.image('x').src + ');');
+        this._label = uki.createElement('div', this.defaultStyle + 'left:0;top:0;width:100%;background:url(' + uki.theme.image('x').src + ');');
     }
     
     proto.selectable = function(state) {

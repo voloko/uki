@@ -6,7 +6,7 @@ include('geometry.js');
 (function() {
     var root = this,
         doc = document,
-        isWebit = navigator.userAgent.indexOf('AppleWebKit/'),
+        isWebit = navigator.userAgent.indexOf('AppleWebKit/') > -1,
         isOldOpera = window.opera && parseFloat(window.opera.version()) < 9.5,
         Rect = uki.geometry.Rect,
         Size = uki.geometry.Size;
@@ -51,7 +51,6 @@ include('geometry.js');
             
             this._rect = rect;
             this._view.resizeWithOldSize(oldRect, rect);
-            
             if (this._view._needsLayout) this._view.layout(rect);
         },
         

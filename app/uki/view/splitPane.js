@@ -19,7 +19,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         
         this._panes = [];
         this._paneML = [];
-    },
+    };
     
     proto.handlePosition = function(val) {
         if (val === undefined) return this._handlePosition;
@@ -46,7 +46,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
             this._handle = uki.createElement(
                 'div', 
                 Base.defaultCss + 'width:100%;height:5px;top:' + this._handlePosition + 'px;' +
-                'border: 1px solid #CCC;border-width: 1px 0;cursor:ns-resize;z-index:200;' +
+                'border: 1px solid #CCC;border-width: 1px 0;cursor:row-resize;cursor:ns-resize;z-index:200;' +
                 'background: url(' + uki.theme.image('splitPane-vertical').src + ') 50% 50% no-repeat;'
             );
             
@@ -54,7 +54,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
             this._handle = uki.createElement(
                 'div', 
                 Base.defaultCss + 'height:100%;width:5px;left:' + this._handlePosition + 'px;' +
-                'border: 1px solid #CCC;border-width: 0 1px;cursor:ew-resize;z-index:200;' +
+                'border: 1px solid #CCC;border-width: 0 1px;cursor:col-resize;cursor:ew-resize;z-index:200;' +
                 'background: url(' + uki.theme.image('splitPane-horizontal').src + ') 50% 50% no-repeat;'
             );
         }
@@ -134,7 +134,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
     };
     
     proto._domLayout = function(rect, relativeRect) {
-        if (!Base._domLayout.call(this, rect, relativeRect)) return;
+        Base._domLayout.call(this, rect, relativeRect);
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';
     }
 });
