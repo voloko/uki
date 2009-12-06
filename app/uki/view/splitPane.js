@@ -42,7 +42,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         this._originalHandlePosition = this._originalHandlePosition || this._handlePosition;
         if (this._dom) {
             this._resizeChildViews(this._rect);
-            this.layout();
+            this.layout(this._rect);
         }
     };
     
@@ -93,6 +93,10 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         
         for (var i=0, paneML; i < 2; i++) {
             this._paneML[i].view = this._paneML[i].view || new uki.view.Base();
+            this._paneML[i].anchors = i == 1         ? 'left top bottom right' :
+                                      this._vertical ? 'left top right' :
+                                                       'left top bottom';
+            this._paneML[i].autosize = 'width height';
             this._panes[i] = uki(this._paneML[i])[0];
             this.appendChild(this._panes[i]);
         };

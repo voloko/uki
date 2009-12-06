@@ -1,8 +1,11 @@
 Core
+- microoptimize
+    - do not call autolayoutSupport
+    - reduce rect clones
 - optimize
-    - dom assign layout (_domLayout callculates, assign stores/writes difference to style)
+    ✓ dom assign layout (_domLayout callculates, assign stores/writes difference to style)
     ✓ try single cssText instead of left = , right =, ... (worse)
-    - do not recalculate width if possible
+    ✓ do not recalculate width if possible
     - goog export
     - Backgrounds
         ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)

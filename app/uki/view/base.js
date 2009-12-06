@@ -170,13 +170,22 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Called through a second layout pass when _dom is allready created
      */
     proto._domLayout = function(rect, relativeRect) {
-        var l = {
-            width: rect.width, 
-            height: rect.height
-        };
-        l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
-        l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
+        var l = {}, s = uki.supportAutoLayout();
+        if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
+            l.left = rect.x;
+            l.right = relativeRect.width - rect.x - rect.width;
+        } else {
+            l.width = rect.width;
+            l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
+        }
         
+        if (s && this._anchors & ANCHOR_TOP && this._anchors & ANCHOR_BOTTOM && this._autosize & AUTOSIZE_HEIGHT) {
+            l.top = rect.y;
+            l.bottom = relativeRect.height - rect.y - rect.height;
+        } else {
+            l.height = rect.height;
+            l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
+        }
         this._lastLayout = uki.dom.layout(this._dom.style, l, this._lastLayout);
         return true;
     };
