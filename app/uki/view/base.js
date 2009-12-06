@@ -14,9 +14,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         AUTOSIZE_WIDTH  = 1,
         AUTOSIZE_HEIGHT = 2;
 
-    var dom = uki.dom,
-        utils = uki.utils,
-        Rect = uki.geometry.Rect;
+    var Rect = uki.geometry.Rect;
 
     var proto = this;
     
@@ -71,6 +69,13 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
                 this._dom.unselectable = state ? '' : 'on';
             }
         }
+    };
+    
+    proto.className = function(name) {
+        if (name === undefined) return this._className;
+        
+        this._className = name;
+        if (this._dom) this._dom.className = name;
     };
     
     
@@ -157,6 +162,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto._domCreate = function() {
         this._dom = uki.createElement('div', this.defaultCss);
         this.selectable(this.selectable());
+        this.className(this.className())
         if (this._background) this._background.attachTo(this);
     };
     
@@ -170,9 +176,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         };
         l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
         l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
-        if (this._eqLayout(l, this._lastLayout)) return false;
-        this._lastLayout = l;
-        dom.layout(this._dom.style, l);
+        
+        this._lastLayout = uki.dom.layout(this._dom.style, l, this._lastLayout);
         return true;
     };
     
@@ -220,7 +225,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto._resizeChildViews = function(oldRect) {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-            childViews[i].resizeWithOldSize(oldRect, this._rect, this._rect);
+            childViews[i].parentResized(oldRect, this._rect);
         };
     };
     
@@ -246,7 +251,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /**
      * Resizes view when parent changes size acording to anchors and autosize
      */
-    proto.resizeWithOldSize = function(oldSize, newSize) {
+    proto.parentResized = function(oldSize, newSize) {
         var newRect = this._rect.clone(),
             dX = (newSize.width - oldSize.width) /
                 ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +   // flexible left
@@ -324,7 +329,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     /* ---------------------------------- Events --------------------------------*/
     proto._bindToDom = function(name) {
-        if (' resize layout'.indexOf(name) > -1) return;
+        if ('resize layout'.indexOf(name) > -1) return;
         uki.view.Observable._bindToDom.call(this, name);
     }
     

@@ -24,6 +24,15 @@ include('dom.js');
         return result;
     };
     
+    uki.imageHTML = function(url, dataUrl, alpha, html) {
+        if (uki.image.needAlphaFix && alpha) {
+            url = alpha;
+        } else if (uki.image.dataUrlSupported) {
+            url = dataUrl;
+        }
+        return '<img' + (html || '') + ' src="' + url + '" />';
+    };
+    
     uki.image.load = function(images, callback) {
         var imagesToLoad = images.length;
         
@@ -43,7 +52,7 @@ include('dom.js');
         });
     };
     
-    uki.image.dataUrlSupported = document.createElement('canvas').toDataURL || /MSIE (7|8)/.test(navigator.userAgent);
+    uki.image.dataUrlSupported = document.createElement('canvas').toDataURL || /MSIE (8)/.test(navigator.userAgent);
     uki.image.needAlphaFix = /MSIE 6/.test(navigator.userAgent);
     if(uki.image.needAlphaFix) document.execCommand("BackgroundImageCache", false, true);
 })();

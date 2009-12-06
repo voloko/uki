@@ -24,12 +24,12 @@ QUnit.test("should add dom to parents dom", function() {
 });
 
 
-QUnit.test("should call childViews's resizeWithOldSize", function() {
+QUnit.test("should call childViews's parentResized", function() {
     QUnit.expect(1);
     var parent = new Base(new Rect(0, 0, 1000, 1000));
     var child = new Base(new Rect(100, 100, 100, 100));
     parent.appendChild(child);
-    child.resizeWithOldSize = function(oldSize) {
+    child.parentResized = function(oldSize) {
         QUnit.same(oldSize, new uki.geometry.Size(1000, 1000));
     };
     parent.rect(new Rect(0, 0, 500, 500));

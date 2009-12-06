@@ -90,7 +90,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Base, new function() {
     
     proto._resizeChildViews = function(oldRect) {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-            childViews[i].resizeWithOldSize(oldRect, this._innerRect, this._innerRect);
+            childViews[i].resizeWithOldSize(oldRect, this._innerRect);
         };
     };
     

@@ -18,7 +18,6 @@ uki.view.Focusable = {
         this._focusableInput = input;
         this._hasFocus = false;
         this._firstFocus = true;
-        
         var _this = this;
             
         uki.dom.bind(input, 'focus', function(e) {
@@ -36,11 +35,11 @@ uki.view.Focusable = {
             _this.trigger('blur', {domEvent: e, source: this});
         });
         
-        this.bind('mousedown', function(e) {
+        if (!preCreatedInput) this.bind('mousedown', function(e) {
             if (!_this.hasFocus(e)) {
                 _this._focusableInput.focus();
             }
-            if (!preCreatedInput) e.domEvent.preventDefault ? e.domEvent.preventDefault() : e.domEvent.returnValue = false;
+            e.domEvent.preventDefault ? e.domEvent.preventDefault() : e.domEvent.returnValue = false;
         });
     },
     

@@ -29,9 +29,10 @@ include('uki/theme.js');
 
 include('uki/view/observable.js');
 include('uki/view/base.js');
+include('uki/view/box.js');
 include('uki/view/button.js');
 include('uki/view/checkbox.js');
-include('uki/view/input.js');
+include('uki/view/textField.js');
 include('uki/view/label.js');
 include('uki/view/slider.js');
 include('uki/view/splitPane.js');

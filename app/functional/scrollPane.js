@@ -1,6 +1,6 @@
 uki([
     { view: 'Base', rect: '0 0 1000 31', autosize: 'width', anchors: 'left top right', background: 'theme(panel)',
-        childViews: { view: 'Input', rect: '800 5 190 20', anchors: 'right', placeholder: 'Search' }
+        childViews: { view: 'TextField', rect: '800 5 190 20', anchors: 'right', placeholder: 'Search' }
     },
     { view: 'SplitPane', rect: '0 30 1000 600', autosize: 'width height', anchors: 'left top right bottom', 
         handlePosition: 300, autogrowLeft: false, autogrowRight: true, autogrowLeft: false, handleWidth: 1, rightMin: 400, leftMin: 150,

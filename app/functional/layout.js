@@ -70,7 +70,7 @@ function buildPanel (top) {
                 text: '1,73', align: 'rigth'
             },
             {
-                view: new uki.view.Input(),
+                view: new uki.view.TextField(),
                 rect: '-215 9 60 20',
                 anchors: 'top right'
             }
@@ -138,7 +138,7 @@ function buildPanel (top) {
     // l.align('right');
     // panel.appendChild(l);
     // 
-    // var i = new uki.view.Input(new uki.geometry.Rect(d.rect().width - 215, 9, 60, 20))
+    // var i = new uki.view.TextField(new uki.geometry.Rect(d.rect().width - 215, 9, 60, 20))
     // i.anchors('top right');
     // panel.appendChild(i);
     return panel;

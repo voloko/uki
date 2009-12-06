@@ -250,6 +250,10 @@ include('../uki.js');
         
         negative: function() {
             return this.top < 0 || this.left < 0 || this.right < 0 || this.bottom < 0;
+        },
+        
+        empty: function() {
+            return !this.top && !this.left && !this.right && !this.bottom;
         }
     };
     

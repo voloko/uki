@@ -84,7 +84,7 @@ var panel = uki([
             
             // price
             {
-                view: 'Input',
+                view: 'TextField',
                 rect: '-215 10 60 22',
                 anchors: 'top right',
                 validate: 'number'
@@ -102,8 +102,8 @@ var panel = uki([
     }
 ]);
 
-panel.find('Panel[name=price] Input[value=OK]').bind()
+panel.find('Panel[name=price] TextField[value=OK]').bind()
 
-panel.find('Input').bind('change', function() {
+panel.find('TextField').bind('change', function() {
    panel.find('#rub_price').attr('text', this.getValue() * 30);
 });

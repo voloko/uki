@@ -6,8 +6,6 @@ include('geometry.js');
 (function() {
     var root = this,
         doc = document,
-        isWebit = navigator.userAgent.indexOf('AppleWebKit/') > -1,
-        isOldOpera = window.opera && parseFloat(window.opera.version()) < 9.5,
         Rect = uki.geometry.Rect,
         Size = uki.geometry.Size;
 
@@ -27,7 +25,7 @@ include('geometry.js');
                 if (!computedStyle.position || computedStyle.position == 'static') dom.style.position = 'relative';
             }
             self.register(this);
-            
+
             this.resize();
         },
         
@@ -47,10 +45,11 @@ include('geometry.js');
                     Math.min(this._maxSize.height, Math.max(this._minSize.height, height))
                 ),
                 oldRect = this._rect;
-            if (rect.eq(this._rect)) return;
-            
+                
+            // if (rect.eq(this._rect)) return;
+
             this._rect = rect;
-            this._view.resizeWithOldSize(oldRect, rect);
+            this._view.parentResized(oldRect, rect);
             if (this._view._needsLayout) this._view.layout(rect);
         },
         
@@ -64,9 +63,7 @@ include('geometry.js');
     });
     
     function getRootElement() {
-      if (isWebit && !doc.evaluate) return doc;
-      if (isOldOpera) return doc.body;
-      return doc.documentElement;
+        return doc.compatMode == "CSS1Compat" && doc.documentElement || doc.body;
     }
     
     self.instances = [];

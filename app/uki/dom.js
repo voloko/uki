@@ -6,9 +6,10 @@ include('utils.js');
 var guid = 1,
     expando = 'uki' + (+new Date),
     root = this,
-    doc = root.document;
+    doc = root.document,
+    supportAutoLayout;
    
-var self = uki.dom = {
+uki.dom = {
     bound: {},
     handles: {},
     
@@ -20,13 +21,37 @@ var self = uki.dom = {
         return e;
     },
     
-    layout: function(style, properties) {
-        if (properties.left != undefined) style.left = properties.left + 'px';
-        if (properties.top != undefined) style.top = properties.top + 'px';
-        if (properties.right != undefined) style.right = properties.right + 'px';
-        if (properties.bottom != undefined) style.bottom = properties.bottom + 'px';
-        if (properties.width != undefined) style.width = properties.width + 'px';
-        if (properties.height != undefined) style.height = properties.height + 'px';
+    probe: function(div, callback) {
+        doc.body.appendChild(div);
+        callback(div);
+        doc.body.removeChild(div);
+    },
+    
+    supportAutoLayout: function() {
+        if (supportAutoLayout === undefined) {
+            this.probe(
+                this.createElement(
+                    'div', 
+                    'position:absolute;width:100px;height:100px;left:-999em;', 
+                    '<div style="position:absolute;left:0;right:0"></div>'
+                ),
+                function(div) {
+                    supportAutoLayout = div.childNodes[0].offsetWidth == 100;
+                }
+            )
+        }
+        return supportAutoLayout;
+    },
+    
+    layout: function(style, layout, prevLayout) {
+        prevLayout = prevLayout || {};
+        if (prevLayout.left   != layout.left)   style.left   = layout.left + 'px';
+        if (prevLayout.top    != layout.top)    style.top    = layout.top + 'px';
+        if (prevLayout.right  != layout.right)  style.right  = layout.right + 'px';
+        if (prevLayout.bottom != layout.bottom) style.bottom = layout.bottom + 'px';
+        if (prevLayout.width  != layout.width)  style.width  = layout.width + 'px';
+        if (prevLayout.height != layout.height) style.height = layout.height + 'px';
+        return layout;
     },
     
     events: ("blur,focus,load,resize,scroll,unload,click,dblclick," +
@@ -34,42 +59,46 @@ var self = uki.dom = {
     	"change,select,submit,keydown,keypress,keyup,error").split(","),
 
     bind: function(el, types, handler) {
+		if ( el.setInterval && el != window )
+			el = window;
+			
+        handler.huid = handler.huid || guid++;
+        
         var id = el[expando] = el[expando] || guid++,
-            handle = self.handles[id] = self.handles[id] || function() {
-                self.handler.apply(arguments.callee.elem, arguments);
+            handle = uki.dom.handles[id] = uki.dom.handles[id] || function() {
+                uki.dom.handler.apply(arguments.callee.elem, arguments);
             },
             i, type;
             
         handle.elem = el;
-        handler.huid = handler.huid || guid++;
         
-        if (!self.bound[id]) self.bound[id] = {};
+        if (!uki.dom.bound[id]) uki.dom.bound[id] = {};
         
         types = types.split(' ');
         for (i=0; i < types.length; i++) {
             type = types[i];
-            if (!self.bound[id][type]) {
+            if (!uki.dom.bound[id][type]) {
                 el.addEventListener ? el.addEventListener(type, handle, false) : el.attachEvent('on' + type, handle);
-                self.bound[id][type] = [];
+                uki.dom.bound[id][type] = [];
             }
-            self.bound[id][type].push(handler);
+            uki.dom.bound[id][type].push(handler);
         };
-        el = null;
+        handler = handle = el = null;
     },
     
     unbind: function(el, type, handler) {
         var id = el[expando],
             huid = handler.huid;
-        if (!huid || !id || !self.bound[id] || !self.bound[id][type]) return;
-        self.bound[id][type] = uki.grep(self.bound[id][type], function(h) { return h.huid !== huid; });
+        if (!huid || !id || !uki.dom.bound[id] || !uki.dom.bound[id][type]) return;
+        uki.dom.bound[id][type] = uki.grep(uki.dom.bound[id][type], function(h) { return h.huid !== huid; });
     },
     
     handler: function( e ) {
-        e = self.fix( e || root.event );
+        e = uki.dom.fix( e || root.event );
 
         var type = e.type,
             id = this[expando],
-            handlers = self.bound[id],
+            handlers = uki.dom.bound[id],
             i;
             
         if (!id || !handlers || !handlers[type]) return;
@@ -108,7 +137,7 @@ var self = uki.dom = {
 
 		// Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
 		if ( !event.metaKey && event.ctrlKey )
-			event.metaKey = event.ctrlKey;
+			try { event.metaKey = event.ctrlKey } catch(e){};
 
 		// Add which for click: 1 == left; 2 == middle; 3 == right
 		// Note: button is not normalized, so don't use it
@@ -134,18 +163,18 @@ var self = uki.dom = {
 
 if (root.attachEvent) {
     root.attachEvent('onunload', function() {
-        uki.each(self.bound, function(id, types) {
+        uki.each(uki.dom.bound, function(id, types) {
             uki.each(types, function(type, handlers) {
                 try {
-                    self.handles[id].elem.detachEvent('on' + type, self.handles[id]);
+                    uki.dom.handles[id].elem.detachEvent('on' + type, uki.dom.handles[id]);
                 } catch (e) {};
             });
         });
     });
 };
 
-uki.each(['createElement'], function(i, name) {
-    uki[name] = self[name];
+uki.each(['createElement', 'supportAutoLayout', 'probe'], function(i, name) {
+    uki[name] = uki.dom[name];
 });
 
 })();

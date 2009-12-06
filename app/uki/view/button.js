@@ -1,25 +1,16 @@
 include('base.js');
+include('label.js');
 include('focusable.js');
 
 (function() {
 
-var Base = uki.view.Base,
-    baseProto = Base.prototype,
-self = uki.view.Button = uki.newClass(Base, uki.view.Focusable, new function() {
+var baseProto = uki.view.Label.prototype,
+self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function() {
     var proto = this;
     
     proto.init = function() {
         baseProto.init.apply(this, arguments);
-        this._selectable = false;
         this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
-        this._label = uki.createElement('div', this.defaultStyle + 'left:0;top:0;width:100%;background:url(' + uki.theme.image('x').src + ');');
-    }
-    
-    proto.selectable = function(state) {
-        if (state !== undefined) {
-            this._label.unselectable = state ? '' : 'on';
-        }
-        return baseProto.selectable.call(this, state);
     }
     
     uki.each(['normal', 'hover', 'down', 'focus'], function(i, name) {
@@ -34,7 +25,6 @@ self = uki.view.Button = uki.newClass(Base, uki.view.Focusable, new function() {
         // dom
         this._dom = uki.createElement('div', this.defaultStyle);
         this._dom.appendChild(this._label);
-        this._label.onselectstart = this._dom.onselectstart = uki.F;
         
         // load bgs
         this['hover-background']();
@@ -96,7 +86,7 @@ self = uki.view.Button = uki.newClass(Base, uki.view.Focusable, new function() {
     }
     
     proto._blur = function() {
-        this['focus-background']().detach();
+       this['focus-background']().detach();
     }
     
     proto._backgroundByName = function(name) {
@@ -108,18 +98,8 @@ self = uki.view.Button = uki.newClass(Base, uki.view.Focusable, new function() {
         this._backgroundName = name;
     }
 
-    proto._domLayout = function() {
-        baseProto._domLayout.apply(this, arguments);
-        this._label.style.lineHeight = this._rect.height + 'px';
-    }
-
     proto.typeName = function() {
         return 'uki.view.Button';
-    }
-
-    proto.text = function(text) {
-        if (text === undefined) return this._label.innerHTML;
-        this._label.innerHTML = text;
     }
 });
 

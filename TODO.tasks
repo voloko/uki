@@ -1,10 +1,24 @@
 Core
+- optimize
+    - dom assign layout (_domLayout callculates, assign stores/writes difference to style)
+    ✓ try single cssText instead of left = , right =, ... (worse)
+    - do not recalculate width if possible
+    - goog export
+    - Backgrounds
+        ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
+        ✓ try creating 9sliced through innerHTML
+        ✓ 9sliced bg with 4 images instead of 9
+        - try border-image again
+        ✓ better imageCutter with 
+            ✓ auto transparency remover (make gifs)
+            ✓ use server side pngcrush to reduce image size
+        ✓ gif images for ie6
+- Disabled
 ✓ themes
     ✓ merge registered themes
     ✓ do not used defaultTheme in code directly
     ✓ access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
-    - redefine components in themes
-    - move component library to airport theme
+- split uki into uki-core and uki-viewlib
 ✓ focusable
     ✓ create dummy input/use existing input after _domCreate()
     ✓ attach focusable to
@@ -21,16 +35,8 @@ Core
 ✓ remove arguments.length
 ✓ offsets (dom is used)
 ✓ try attaching elements to right/bottom instead of left top (+ inverseRect)
-- goog export
-
-Backgrounds
-    ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
-    - try creating 9sliced through innerHTML
-    - try border-image again
-    - background parser for simple/theme backgrounds
-
-Visual
-- gif images for ie6 (better imageCutter with auto transparency remover)
+✓ resizeWithOldRect -> parentResized
+✓ background parser for simple/theme backgrounds
 - less prominent panel shadow, panel coloring
 
 Views
@@ -48,13 +54,14 @@ Views
     ✓ min size
     ✓ which panes should grow
     ✓ thin divider
-- scroll view    
+✓ scroll view    
     ✓ separate functional test
-    - switch on resize
-    - switch in layout
+    ✓ switch on resize
+    ✓ switch in layout
 - button
-    - separate functional test
+    ✓ separate functional test (attachment)
     ✓ @param bgHover, bgNormal, bgPressed
+    - bgPrefix
 - segmented view
     - separate functional test
     - layout child buttons

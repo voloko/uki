@@ -1,25 +1,46 @@
 include('../background.js');
-include('../image.js');
+include('../geometry.js');
 
 uki.background.CssBox = uki.newClass(new function() {
     
-    this.init = function(options, inset) {
+    var cache = {};
+    
+    function getInsets(options) {
+        if (!cache[options]) {
+            var _this = this;
+            uki.probe(
+                uki.createElement('div', options + ';position:absolute;overflow:hidden;left:-999em;width:10px;height:10px;'), 
+                function(c) {
+                    cache[options] = new uki.geometry.Inset(
+                        c.offsetWidth - 10,
+                        c.offsetHeight - 10
+                    );
+                }
+            );
+        }
+        return cache[options];
+    }
+    
+    this.init = function(options, ext) {
         this._options = options;
-        this._inset = inset = uki.geometry.Inset.create(inset) || new uki.geometry.Inset(0, 0, 0, 0);
-        this._container = uki.createElement('div', options + ';position:absolute;overflow:hidden;z-index:-1;left:-999em;top:' + inset.top + 'px');
-        this._container.style.width = '10px';
-        this._container.style.height = '10px';
-        document.body.appendChild(this._container);
-        this._insetWidth = this._container.offsetWidth - 10 + inset.left + inset.right;
-        this._insetHeight = this._container.offsetHeight - 10 + inset.top + inset.bottom;
-        document.body.removeChild(this._container);
-        this._container.style.left = inset.left + 'px';
+        ext = ext || {};
+        this._inset = inset = uki.geometry.Inset.create(ext.inset) || new uki.geometry.Inset(0, 0, 0, 0);
+        this._insetWidth  = getInsets(options).left + inset.left + inset.right;
+        this._insetHeight = getInsets(options).top + inset.top + inset.bottom;
+        this._container = uki.createElement(
+            'div', 
+            options + ';position:absolute;overflow:hidden;z-index:' + (ext.zIndex || '-1') + ';' + 
+            'left:' + inset.left + ';top:' + inset.top + 'px;right:' + inset.right + 'px;bottom:' + inset.bottom + 'px'
+        );
         this._attached = false;
     };
     
     this.attachTo = function(comp) {
         var _this = this;
         this._comp = comp;
+        this._comp.dom().appendChild(this._container);
+        
+        if (uki.supportAutoLayout()) return;
         
         this._layoutHandler = function(e) {
             _this.layout(e.rect);
@@ -29,12 +50,6 @@ uki.background.CssBox = uki.newClass(new function() {
     };
     
     this.layout = function(size) {
-        if (!this._comp.dom()) return;
-        if (!this._attached) {
-            this._attached = true;
-            this._comp.dom().appendChild(this._container);
-        }
-        
         uki.dom.layout(this._container.style, {
             width: size.width - this._insetWidth,
             height: size.height - this._insetHeight
@@ -43,8 +58,8 @@ uki.background.CssBox = uki.newClass(new function() {
     
     this.detach = function() {
         if (this._comp) {
-            if (this._attached) this._comp.dom().removeChild(this._container);
-            this._comp.unbind('layout', this._layoutHandler);
+            this._comp.dom().removeChild(this._container);
+            if (!uki.supportAutoLayout()) this._comp.unbind('layout', this._layoutHandler);
             this._attached = false;
         }
     };

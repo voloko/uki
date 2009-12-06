@@ -9,7 +9,7 @@ include('attachment.js');
     	Array.prototype.push.apply( this, elems );
     };
 
-    var self = uki.Collection.prototype = {};
+    var self = uki.fn = uki.Collection.prototype = {};
     
     self.each = function( callback ) {
         uki.each( this, callback );
@@ -26,6 +26,10 @@ include('attachment.js');
             return uki.attr( this[0], name );
         }
     };
+    
+    uki.each(['html', 'text', 'background', 'value', 'rect', 'checked'], function(i, name) {
+        self[name] = function( value ) { return this.attr( name, value ) };
+    })
     
     self.find = function( selector ) {
         return uki.find( selector, this );

@@ -1,21 +1,61 @@
-= UiKit made simple
+= UiKit for web apps
+Uki is a javascript user interface toolkit for desktop-like web applications.
+It comes with rich view-component library ranging from Slider to Grids and SplitPanes.
 
     uki({
-        view: 'Panel',
-        rect: '0 0 1000px 100px',
-        childViews: [{
-            view: 'Button',
-            rect: '400px 40px 200px 24px',
-            text: 'uki is awesome!'
-        }]
-    }).attachTo( document.getElementById('test') );
+        view: 'Button',
+        rect: '400px 40px 200px 24px',
+        text: 'uki is awesome!'
+    }).attachTo( document.getElementById('test'), '1000px 100px' );
 
-    uki('Panel > Button[text^=uki]').bind('click', function() {
+    uki('Button[text^=uki]').bind('click', function() {
         alert('Hello world!');
     });
+    
+== Simple
+Web should be simple. Adding a new library to your app should not require using specific build process or learning a new language.
+It should be as simple as adding a <script> tag to your HTML. That's exactly the way uki works. No frameworks to install,
+no dependencies to manage, no css to include. Simple.
+
+== Cross browser
+I can imagine leaving in a fairy-tail world where any browser support HTML 5 and there's no such a thing as IE6 :)
+Unfortunately reality is different. I have to support all the browser spices available. Even the dinosaurs.
+Thats why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, Chrome. And it looks exactly the same on any of them.
+
+== Fast
+One of the reasons uki appeared is that I had to create a 4000 rows, complex, client side searchable table. 
+Just rendering the table made any IE busy for half a minute. TODO: Uki uses progressive rendering and can do it mostly instantly.
+
+== Small
+With all the images packed into (not supported in IE6 and IE7) gziped uki build is under 30kb. And it's a single HTTP request.
+
+== Extensible 
+Creating a new component requires only one function to redeclare.
+
+== Embedable
+It's great when you start building your whole app with uki. But sometimes you have to add desktop-like experience to a working site.
+Say adding a widget, or a table to existing design. While uki can occupy the whole browser window it feels perfectly OK in small <div> in 
+your sidebar. Just use attachTo( myDiv ) for any widget you want to add.
+
+== You already know it
+Uki is written in plain JavaScript. It leverages known DOM and JS idioms such as css selectors, events or attributes. If you ever used
+jQuery learning uki won't take long.
+
+== Specific
+Uki doesn't want to be a Jack-of-all-trades. It only does layout but it does it well. You won't find any Model layer code here. 
     
 == Programmable layout
 
 == Selector
 
 == Builder
+    uki({ view: 'SplitPane', rect: '1000 600', autosize: 'width height', anchors: 'left top right bottom', 
+        handlePosition: 300, autogrowLeft: false, leftMin: 300, rightMin: 300,
+        leftChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left right', text: 'left pane', autosize: 'width' },
+        rightChildViews: [
+            { view: 'SplitPane', rect: '693 600', autosize: 'width height', anchors: 'left top right bottom', vertical: true,
+                topChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left', text: 'top pane' },
+                bottomChildViews: { view: 'Slider', rect: '10 10 673 24', anchors: 'top right left', autosize: 'width' }
+            }
+        ]
+    }).attachTo( window, '1000 600' );
