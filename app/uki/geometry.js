@@ -55,7 +55,7 @@ include('../uki.js');
             return this.width == rect.width && this.height == rect.height;
         },
         
-        isEmpty: function() {
+        empty: function() {
             return this.width <= 0 || this.height <= 0;
         },
         
@@ -133,7 +133,7 @@ include('../uki.js');
             return this.y + this.height;
         },
         
-        isEmpty: function() {
+        empty: function() {
             return this.width <= 0.0 || this.height <= 0.0;
         },
         

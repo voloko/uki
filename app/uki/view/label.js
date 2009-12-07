@@ -35,12 +35,21 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         var inset = this._inset;
         if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
         
-        uki.dom.layout(this._label.style, {
-            left: inset.left, 
-            top: inset.top, 
-            width: this._rect.width - inset.left - inset.bottom,
-            height: this._rect.height - inset.top - inset.bottom
-        });
+        if (uki.supportAutoLayout) {
+            this._lastLabelLayout = uki.dom.layout(this._label.style, {
+                left: inset.left, 
+                top: inset.top, 
+                right: inset.right,
+                bottom: inset.bottom
+            }, this._lastLabelLayout);
+        } else {
+            this._lastLabelLayout = uki.dom.layout(this._label.style, {
+                left: inset.left, 
+                top: inset.top, 
+                width: this._rect.width - inset.left - inset.right,
+                height: this._rect.height - inset.top - inset.bottom
+            }, this._lastLabelLayout);
+        }
     },
     
     text: function(text) {

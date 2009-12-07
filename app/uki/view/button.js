@@ -63,6 +63,7 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
         uki.dom.bind(this._dom, 'mouseout', this._mouseout);
         
         this.selectable(this.selectable());
+        this.className(this.className())
         this._initFocusable();
     }
     

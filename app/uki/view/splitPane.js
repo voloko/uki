@@ -1,7 +1,7 @@
-include('base.js');
+include('container.js');
 
-uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
-    var Base = uki.view.Base.prototype,
+uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
+    var Base = uki.view.Container.prototype,
         Rect = uki.geometry.Rect;
 
     var proto = this,
@@ -92,7 +92,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
         this._dom.appendChild(this._handle = this._createHandle());
         
         for (var i=0, paneML; i < 2; i++) {
-            this._paneML[i].view = this._paneML[i].view || new uki.view.Base();
+            this._paneML[i].view = this._paneML[i].view || new uki.view.Container();
             this._paneML[i].anchors = i == 1         ? 'left top bottom right' :
                                       this._vertical ? 'left top right' :
                                                        'left top bottom';
@@ -111,13 +111,15 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
             _this._initialPosition = _this._handlePosition;
             uki.dom.drag.start(_this, e);
         });
+        
+        this.className(this.className());
     };
     
-    proto._updateRect = function(newRect) {
+    proto._resizeSelf = function(newRect) {
         this._originalRect = this._originalRect || newRect;
         var oldRect = this._rect,
             dx, prop = this._vertical ? 'height' : 'width';
-        if (!Base._updateRect.call(this, newRect)) return false;
+        if (!Base._resizeSelf.call(this, newRect)) return false;
         if (this._autogrowLeft) {
             dx = newRect[prop] - oldRect[prop];
             this._handlePosition += this._autogrowRight ? dx / 2 : dx;
@@ -186,5 +188,5 @@ uki.view.SplitPane = uki.newClass(uki.view.Base, new function() {
     proto._domLayout = function(rect, relativeRect) {
         Base._domLayout.call(this, rect, relativeRect);
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';
-    }
+    };
 });

@@ -1,7 +1,7 @@
-include('base.js');
+include('container.js');
 
-uki.view.ScrollPane = uki.newClass(uki.view.Base, new function() {
-    var Base = uki.view.Base.prototype,
+uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
+    var Base = uki.view.Container.prototype,
         Rect = uki.geometry.Rect,
         proto = this,
         doc = document,
@@ -9,11 +9,12 @@ uki.view.ScrollPane = uki.newClass(uki.view.Base, new function() {
         
     function getScrollWidth () {
         if (!scrollWidth) {
-            var probe = doc.createElement('div');
-            probe.style.cssText = 'position:absolute;left:-99em;width:100px;height:100px;overflow:scroll;';
-            doc.body.appendChild(probe);
-            scrollWidth = probe.offsetWidth - probe.clientWidth;
-            doc.body.removeChild(probe);
+            uki.dom.probe(
+                doc.createElement('div', 'position:absolute;left:-99em;width:100px;height:100px;overflow:scroll;'),
+                function( probe ) {
+                    scrollWidth = probe.offsetWidth - probe.clientWidth;
+                }
+            );
         }
         return scrollWidth;
     }
@@ -28,11 +29,26 @@ uki.view.ScrollPane = uki.newClass(uki.view.Base, new function() {
         this._scrollableH = false;
         this._scrollV = false;
         this._scrollH = false;
-        this._recMarker = false;
     };
     
     this.scrollableV = uki.newProperty('_scrollableV');
     this.scrollableH = uki.newProperty('_scrollableH');
+    
+    this.scrollTop = function(val) {
+        if (val === undefined) return this._dom && this._dom.scrollTop || 0;
+        
+        this._dom.scrollTop = val;
+    };
+    
+    this.scrollLeft = function(val) {
+        if (val === undefined) this._dom && this._dom.scrollLeft || 0;
+        
+        this._dom.scrollLeft = val;
+    };
+    
+    this.visibleRect = function() {
+        return new Rect(this.scrollLeft(), this.scrollTop(), this.innerRect().width, this.innerRect().height);
+    };
     
     function maxProp (c, prop) {
         var val = 0, i, l;
@@ -41,6 +57,8 @@ uki.view.ScrollPane = uki.newClass(uki.view.Base, new function() {
         };
         return val;
     }
+    
+    proto.getScrollWidth = getScrollWidth;
     
     proto.innerRect = function(newRect) {
         if (newRect === undefined) return this._innerRect;
@@ -71,7 +89,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Base, new function() {
                 if (dx || dy) {
                     this._innerRect.width += dx;
                     this._innerRect.height += dy;
-                    this._resizeChildViews(oldRect)
+                    this._resizeChildViews(oldRect);
                 }
             }
         }
@@ -84,7 +102,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Base, new function() {
         newRect = Rect.create(newRect);
         
         var oldRect = this._rect;
-        if (!this._updateRect(newRect)) return;
+        if (!this._resizeSelf(newRect)) return;
         this.innerRect( new Rect(0, 0, newRect.width - (this._scrollV ? getScrollWidth() : 0), newRect.height - (this._scrollH ? getScrollWidth() : 0) ) );
     };
     

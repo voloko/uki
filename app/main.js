@@ -14,6 +14,7 @@ include('uki/geometry.js');
 include('uki/attr.js');
 include('uki/builder.js');
 include('uki/selector.js');
+include('uki/autoLayout.js');
 
 include('uki/dom.js');
 include('uki/dom/offset.js');
@@ -29,6 +30,7 @@ include('uki/theme.js');
 
 include('uki/view/observable.js');
 include('uki/view/base.js');
+include('uki/view/container.js');
 include('uki/view/box.js');
 include('uki/view/button.js');
 include('uki/view/checkbox.js');

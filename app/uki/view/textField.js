@@ -6,12 +6,14 @@ include('focusable.js');
 var Base = uki.view.Base.prototype,
     emptyInputHeight;
     
-function getEmptyInputHeight (argument) {
+function getEmptyInputHeight () {
     if (!emptyInputHeight) {
-        var probe = uki.createElement('input', Base.defaultCss + "border:none;padding:0;overflow:hidden;font-size:11px;left:-999em;top:0");
-        document.body.appendChild(probe);
-        emptyInputHeight = probe.offsetHeight;
-        document.body.removeChild(probe);
+        uki.dom.probe(
+            uki.createElement('input', Base.defaultCss + "border:none;padding:0;overflow:hidden;font-size:11px;left:-999em;top:0"),
+            function(probe) {
+                emptyInputHeight = probe.offsetHeight;
+            }
+        )
     }
     return emptyInputHeight;
 }
@@ -23,7 +25,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
     },
     
     typeName: function() {
-        return 'uki.component.Input';
+        return 'uki.component.TextField';
     },
     
     _domCreate: function() {
@@ -31,6 +33,9 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._dom.appendChild(this._input);
         
         uki.theme.background('input').attachTo(this);
+        
+        this.className(this.className())
+        
         this._initFocusable(this._input);
     },
 

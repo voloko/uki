@@ -9,7 +9,7 @@ function button (i) {
 }
 
 var c = uki({
-    view: 'Base',
+    view: 'Box',
     rect: '0 0 800px 1000px',
     anchors: 'top bottom right left',
     autosize: 'width height'

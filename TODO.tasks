@@ -1,16 +1,18 @@
 Core
-- microoptimize
+- micro-optimize JS + profile
     - do not call autolayoutSupport
     - reduce rect clones
+    - goog export
 - optimize
     ✓ dom assign layout (_domLayout callculates, assign stores/writes difference to style)
     ✓ try single cssText instead of left = , right =, ... (worse)
     ✓ do not recalculate width if possible
-    - goog export
+    ✓ smooth label/button layout
     - Backgrounds
         ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
         ✓ try creating 9sliced through innerHTML
         ✓ 9sliced bg with 4 images instead of 9
+        - fix IE6 alpha loader
         - try border-image again
         ✓ better imageCutter with 
             ✓ auto transparency remover (make gifs)

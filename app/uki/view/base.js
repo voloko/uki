@@ -21,19 +21,16 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.defaultCss = 'position:absolute;z-index:100;'
                      + 'font-family:Arial,Helvetica,sans-serif;overflow:hidden;';
     
-    proto.init = function(rect) {
+    proto.init = function() {
         this._anchors = 0;
         this._autosize = 0;
         this._parent = null;
         this._rect = null;
-        this._childViews = [];
         this._visible = true;
         this._needsLayout = false;
         this._selectable = false;
         this._styleH = 'left';
         this._styleV = 'top';
-        
-        if (rect) this.rect(rect);
     };
     
     /* ----------------------------- Description --------------------------------*/
@@ -81,21 +78,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     
     /* ----------------------------- Container api ------------------------------*/
-    /**
-     * Sets or retrievs view child view.
-     * @param anything uki.build can parse
-     *
-     * Note: if setting on view with child views, all child view will be removed
-     */
-    proto.childViews = function(val) {
-        if (val === undefined) return this._childViews;
-        uki.each(this._childViews, function(i, child) {
-            this.removeChild(child);
-        }, this);
-        uki.each(uki.build(val), function(tmp, child) {
-            this.appendChild(child);
-        }, this);
-    };
     
     /**
      * Sets or retrieves parent view
@@ -107,38 +89,16 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._parent = parent;
     };
     
-    /**
-     * Remove particular child
-     * Also removes from _dom if available
-     */
-    proto.removeChild = function(child) {
-        this._childViews = uki.grep(this._childViews, function(elem) { return elem == child });
-        child.parent(null);
-    };
-    
-    /**
-     * Adds a child
-     */
-    proto.appendChild = function(child) {
-        child.parent(this);
-        this._childViews.push(child);
-    };
-    
-    /**
-     * Should return a dom node for a child.
-     * Child should append itself to this dom node
-     */
-    proto.domForChild = function(child) {
-        return this._dom;
-    };
-    
-    
     /* ------------------------- Layot 2-nd pass + Dom --------------------------*/
     /**
      * Get views container dom node.
      */
     proto.dom = function() {
         return this._dom;
+    };
+    
+    proto.childViews = function() {
+        return [];
     };
     
     /**
@@ -152,7 +112,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         }
         this._domLayout(this._rect, relativeRect);
         this._needsLayout = false;
-        this._layoutChildViews();
         this.trigger('layout', {rect: this._rect, source: this});
     };
     
@@ -170,7 +129,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Called through a second layout pass when _dom is allready created
      */
     proto._domLayout = function(rect, relativeRect) {
-        var l = {}, s = uki.supportAutoLayout();
+        var l = {}, s = uki.supportAutoLayout;
         if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
             l.left = rect.x;
             l.right = relativeRect.width - rect.x - rect.width;
@@ -190,20 +149,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return true;
     };
     
-    proto._eqLayout = function(l1, l2) {
-        return l1 && l2 && l1.width == l2.width && l1.height == l2.height && 
-            l1[this._styleH] == l2[this._styleH] && l1[this._styleV] == l2[this._styleV];
-    };
-    
-    proto._layoutChildViews = function() {
-        for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-            if (childViews[i]._needsLayout && childViews[i].visible()) {
-                childViews[i].layout(this._rect);
-            }
-        };
-    };
-    
-    
     /* ---------------------------- Layout 1-st pass ----------------------------*/
     /**
      * Sets or retrieves rect relative to parents view.
@@ -211,31 +156,11 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto.rect = function(newRect) {
         if (newRect === undefined) return this._rect;
+        
         newRect = Rect.create(newRect);
-        
-        var oldRect = this._rect;
-        if (!this._updateRect(newRect)) return;
-        this._needsLayout = true;
-        
-        if (oldRect) {
-            if (oldRect.width != newRect.width || oldRect.height != newRect.height) this._resizeChildViews(oldRect);
-            this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
-        }
-    };
-    
-    proto._updateRect = function(newRect) {
         if (this._rect && newRect.eq(this._rect)) return false;
         this._rect = newRect;
-        return true;
-    };
-    
-    /**
-     * Called to notify all intersted parties: childViews and observers
-     */
-    proto._resizeChildViews = function(oldRect) {
-        for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-            childViews[i].parentResized(oldRect, this._rect);
-        };
+        this._needsLayout = true;
     };
     
     /**

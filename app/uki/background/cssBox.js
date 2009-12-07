@@ -8,7 +8,7 @@ uki.background.CssBox = uki.newClass(new function() {
     function getInsets(options) {
         if (!cache[options]) {
             var _this = this;
-            uki.probe(
+            uki.dom.probe(
                 uki.createElement('div', options + ';position:absolute;overflow:hidden;left:-999em;width:10px;height:10px;'), 
                 function(c) {
                     cache[options] = new uki.geometry.Inset(
@@ -40,7 +40,7 @@ uki.background.CssBox = uki.newClass(new function() {
         this._comp = comp;
         this._comp.dom().appendChild(this._container);
         
-        if (uki.supportAutoLayout()) return;
+        if (uki.supportAutoLayout) return;
         
         this._layoutHandler = function(e) {
             _this.layout(e.rect);
@@ -59,7 +59,7 @@ uki.background.CssBox = uki.newClass(new function() {
     this.detach = function() {
         if (this._comp) {
             this._comp.dom().removeChild(this._container);
-            if (!uki.supportAutoLayout()) this._comp.unbind('layout', this._layoutHandler);
+            if (!uki.supportAutoLayout) this._comp.unbind('layout', this._layoutHandler);
             this._attached = false;
         }
     };

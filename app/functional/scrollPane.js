@@ -1,5 +1,5 @@
 uki([
-    { view: 'Base', rect: '0 0 1000 31', autosize: 'width', anchors: 'left top right', background: 'theme(panel)',
+    { view: 'Box', rect: '0 0 1000 31', autosize: 'width', anchors: 'left top right', background: 'theme(panel)',
         childViews: { view: 'TextField', rect: '800 5 190 20', anchors: 'right', placeholder: 'Search' }
     },
     { view: 'SplitPane', rect: '0 30 1000 600', autosize: 'width height', anchors: 'left top right bottom', 

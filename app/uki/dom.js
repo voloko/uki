@@ -6,8 +6,7 @@ include('utils.js');
 var guid = 1,
     expando = 'uki' + (+new Date),
     root = this,
-    doc = root.document,
-    supportAutoLayout;
+    doc = root.document;
    
 uki.dom = {
     bound: {},
@@ -25,22 +24,6 @@ uki.dom = {
         doc.body.appendChild(div);
         callback(div);
         doc.body.removeChild(div);
-    },
-    
-    supportAutoLayout: function() {
-        if (supportAutoLayout === undefined) {
-            this.probe(
-                this.createElement(
-                    'div', 
-                    'position:absolute;width:100px;height:100px;left:-999em;', 
-                    '<div style="position:absolute;left:0;right:0"></div>'
-                ),
-                function(div) {
-                    supportAutoLayout = div.childNodes[0].offsetWidth == 100;
-                }
-            )
-        }
-        return supportAutoLayout;
     },
     
     layout: function(style, layout, prevLayout) {
@@ -173,7 +156,7 @@ if (root.attachEvent) {
     });
 };
 
-uki.each(['createElement', 'supportAutoLayout', 'probe'], function(i, name) {
+uki.each(['createElement'], function(i, name) {
     uki[name] = uki.dom[name];
 });
 
