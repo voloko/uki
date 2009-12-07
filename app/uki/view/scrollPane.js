@@ -59,6 +59,10 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     }
     
     proto.getScrollWidth = getScrollWidth;
+
+    // proto._calcMaxRect = function() {
+    //     this._maxRect = new Rect(0, 0, Math.max(this._innerRect.width, this._maxX || 0), Math.max(this._innerRect.height, this._maxY || 0));
+    // };
     
     proto.innerRect = function(newRect) {
         if (newRect === undefined) return this._innerRect;
@@ -74,13 +78,13 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
             
                 var max, scroll, dx = 0, dy = 0;
                 if (this._scrollableV) {
-                    this._maxX = max = maxProp(this, 'maxY');
+                    this._maxY = max = maxProp(this, 'maxY');
                     scroll = max > newRect.height;
                     if (scroll != this._scrollV) dx = (scroll ? -1 : 1) * getScrollWidth();
                     this._scrollV = scroll;
                 }
                 if (this._scrollableH) {
-                    this._maxY = max = maxProp(this, 'maxX');
+                    this._maxX = max = maxProp(this, 'maxX');
                     scroll = max > newRect.width;
                     if (scroll != this._scrollH) dy = (scroll ? -1 : 1) * getScrollWidth();
                     this._scrollH = scroll;
@@ -89,11 +93,13 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
                 if (dx || dy) {
                     this._innerRect.width += dx;
                     this._innerRect.height += dy;
+                    
                     this._resizeChildViews(oldRect);
                 }
             }
         }
         
+        // this._calcMaxRect();
         this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
     };
     
@@ -121,14 +127,16 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._domLayout = function(rect, relativeRect) {
-        Base._domLayout.call(this, rect, relativeRect);
+        Base._domLayout.call(this, this._innerRect, relativeRect);
         if (this._scrollableH && this._layoutScrollH !== this._scrollH) {
-            this._dom.style.overflowX = this._scrollH ? 'auto' : 'hidden';
+            this._dom.style.overflowX = this._scrollH ? 'scroll' : 'hidden';
             this._layoutScrollH = this._scrollH;
         }
         if (this._scrollableV && this._layoutScrollV !== this._scrollV) {
-            this._dom.style.overflowY = this._scrollV ? 'auto' : 'hidden';
+            this._dom.style.overflowY = this._scrollV ? 'scroll' : 'hidden';
             this._layoutScrollV = this._scrollV;
         }
+        
+        this._layoutChildViews(rect, relativeRect);
     };
 });

@@ -12,7 +12,7 @@ uki([
             background: '#D0D7E2',
             childViews: { view: 'ScrollPane', rect: '0 0 699 600', anchors: 'top left right bottom', autosize: 'width height',
                 scrollableH: true, scrollableV: true,
-                childViews: { view: 'Base', rect: '10 10 480 300', anchors: 'top left right', autosize: '', background: '#F00' }
+                childViews: { view: 'Box', rect: '10 10 480 300', anchors: 'top left right', autosize: '', background: '#F00' }
             }
         }
     }

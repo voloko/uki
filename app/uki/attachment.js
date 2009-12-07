@@ -29,6 +29,7 @@ include('geometry.js');
             self.register(this);
 
             this.resize();
+            this.resize(); // ff needs 2 of them o_O
         },
         
         domForChild: function() {

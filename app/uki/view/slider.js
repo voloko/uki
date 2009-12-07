@@ -84,6 +84,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     },
     
     _moveHandle: function() {
+        // this._focusBg.style.left = this._handle.style.left = 100.0*this._position/this._rect.width + '%';
         this._focusBg.style.left = this._handle.style.left = this._position + 'px';
     },
     

@@ -69,11 +69,16 @@ uki.dom = {
         handler = handle = el = null;
     },
     
-    unbind: function(el, type, handler) {
+    unbind: function(el, types, handler) {
         var id = el[expando],
-            huid = handler.huid;
-        if (!huid || !id || !uki.dom.bound[id] || !uki.dom.bound[id][type]) return;
-        uki.dom.bound[id][type] = uki.grep(uki.dom.bound[id][type], function(h) { return h.huid !== huid; });
+            huid = handler.huid,
+            types = types.split(' '),
+            i, type;
+        for (i=0; i < types.length; i++) {
+            type = types[i];
+            if (!huid || !id || !uki.dom.bound[id] || !uki.dom.bound[id][type]) continue;
+            uki.dom.bound[id][type] = uki.grep(uki.dom.bound[id][type], function(h) { return h.huid !== huid; });
+        }
     },
     
     handler: function( e ) {

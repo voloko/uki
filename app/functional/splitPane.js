@@ -1,6 +1,6 @@
 uki(
     { view: 'SplitPane', rect: '1000 600', autosize: 'width height', anchors: 'left top right bottom', 
-        handlePosition: 300, autogrowLeft: false, autogrowRight: true, autogrowLeft: true, leftMin: 300, rightMin: 300,
+        handlePosition: 300, autogrowRight: true, autogrowLeft: true, leftMin: 300, rightMin: 300,
         leftChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left right', text: 'left pane', autosize: 'width' },
         rightChildViews: [
             { view: 'SplitPane', rect: '693 600', autosize: 'width height', anchors: 'left top right bottom', vertical: true,
@@ -13,3 +13,5 @@ uki(
         ]
     }
 ).attachTo( window, '1000 600' );
+
+uki('Button[text~=left]').bind('click', function() { alert(this.text() )})

@@ -1,6 +1,6 @@
 Core
 - micro-optimize JS + profile
-    - do not call autolayoutSupport
+    ✓ do not call autolayoutSupport
     - reduce rect clones
     - goog export
 - optimize
