@@ -22,10 +22,13 @@ include('uki/dom/drag.js');
 
 include('uki/attachment.js');
 include('uki/image.js');
+
 include('uki/background.js');
 include('uki/background/sliced9.js');
 include('uki/background/css.js');
 include('uki/background/cssBox.js');
+include('uki/background/rows.js');
+
 include('uki/theme.js');
 
 include('uki/view/observable.js');
@@ -36,6 +39,7 @@ include('uki/view/button.js');
 include('uki/view/checkbox.js');
 include('uki/view/textField.js');
 include('uki/view/label.js');
+include('uki/view/list.js');
 include('uki/view/slider.js');
 include('uki/view/splitPane.js');
 include('uki/view/scrollPane.js');

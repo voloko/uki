@@ -35,15 +35,12 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
                     Math.min(
                         this._rect[prop] - this._rightMin - this._handleWidth,
                         Math.max(0, Math.min(this._rect ? this._rect[prop] : 1000, val * 1))
-                    ));
+                    )) || this._handlePosition;
         } else {
             this._handlePosition = val;
         }
         this._originalHandlePosition = this._originalHandlePosition || this._handlePosition;
-        if (this._dom) {
-            this._resizeChildViews(this._rect);
-            this.layout(this._relativeRect);
-        }
+        this._resizeChildViews(this._rect);
     };
     
     proto.vertical = uki.newProperty('_vertical');
@@ -58,7 +55,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         if (this._vertical) {
             handle = this._handleWidth == 1 ?
                 uki.createElement('div', 
-                    Base.defaultCss + 'width:100%;height:5px;margin-top:-2px;top:' + this._handlePosition + 'px' + 
+                    Base.defaultCss + 'width:100%;height:5px;margin-top:-2px;top:' + this._handlePosition + 'px;' + 
                     commonVerticalStyle + 'background: url(' + uki.theme.image('x').src + ')',
                     '<div style="' + 
                     Base.defaultCss + 'background:#999;width:100%;height:1px;left:0px;top:2px;overflow:hidden;' + 
@@ -70,7 +67,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         } else {
             handle = this._handleWidth == 1 ?
                 uki.createElement('div', 
-                    Base.defaultCss + 'height:100%;width:5px;margin-left:-2px;top:' + this._handlePosition + 'px' + 
+                    Base.defaultCss + 'height:100%;width:5px;margin-left:-2px;left:' + this._handlePosition + 'px;' + 
                     commonHorizontalStyle + 'background: url(' + uki.theme.image('x').src + ')',
                     '<div style="' + 
                     Base.defaultCss + 'background:#999;height:100%;width:1px;top:0px;left:2px;overflow:hidden;' + 
@@ -129,6 +126,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     
     proto._drag = function(e, offset) {
         this.handlePosition(this._initialPosition - offset[this._vertical ? 'y' : 'x']);
+        this.layout(this._relativeRect);
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
     };
     
     proto._drop = function(e, offset) {

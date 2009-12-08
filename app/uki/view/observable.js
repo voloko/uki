@@ -39,8 +39,9 @@ uki.view.Observable = {
     },
     
     _bindPendingEventsToDom: function() {
-        if (!this._observers || this._boundToDom) return;
+        if (this._boundToDom) return;
         this._boundToDom = true;
+        if (!this._observers) return;
         uki.each(this._observers, function(name) {
             this._bindToDom(name);
         }, this);

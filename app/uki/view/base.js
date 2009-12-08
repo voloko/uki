@@ -129,6 +129,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Called through a second layout pass when _dom is allready created
      */
     proto._domLayout = function(rect, relativeRect) {
+        // if (this.typeName() == 'uki.view.Box') console.log(rect + ', ' + relativeRect);
         var l = {}, s = uki.supportAutoLayout;
         if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
             l.left = rect.x;

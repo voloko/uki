@@ -155,6 +155,10 @@ var utils = {
             if (value === undefined) return this[field];
             this[field] = value;
         }
+    },
+    
+    newProperties: function(proto, fields) {
+        uki.each(fields, function() { proto[this] = uki.newProperty('_' + this) })
     }
 };
 

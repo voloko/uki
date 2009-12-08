@@ -81,11 +81,11 @@ include('../uki.js');
             this.y      = a2;
             this.width  = a3;
             this.height = a4;
-        } else if (a1.x === undefined) {
+        } else if (a1 === undefined || a1.x === undefined) {
             this.x      = 0;
             this.y      = 0;
-            this.width  = a1;
-            this.height = a2;
+            this.width  = a1 || 0;
+            this.height = a2 || 0;
         } else {
             this.x      = a1 ? a1.x      : 0;
             this.y      = a1 ? a1.y      : 0;
@@ -157,7 +157,7 @@ include('../uki.js');
                     Math.min(this.maxX(), rect.maxX()) - origin.x,
                     Math.min(this.maxY(), rect.maxY()) - origin.y
                 );
-            return size.isEmpty() ? new Rect() : new Rect(origin, size);
+            return size.empty() ? new Rect() : new Rect(origin, size);
         },
         
         union: function(rect) {
