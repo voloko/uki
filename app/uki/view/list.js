@@ -90,10 +90,10 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
             itemFrom  = Math.max(0, Math.floor(minHeight / this._rowHeight)),
             itemTo    = Math.min(this._data.length, Math.ceil(maxHeight / this._rowHeight)),
             i;
-        console.log(maxHeight);
+            
         for (i=itemFrom; i <= itemTo; i++) {
             if (!this._rows[i]) {
-                this._rows[i] = uki.createElement('div', 'width:100%;heigth:' + this._rowHeight + ';overflow:hidden');
+                this._rows[i] = uki.createElement('div', 'position:absolute;left:0;top:' + (i * this._rowHeight) + 'px;width:100%;height:' + this._rowHeight + 'px;overflow:hidden');
                 this._flyweightView.create(this._rows[i], this._data[i]);
                 this._dom.appendChild(this._rows[i]);
             } else {

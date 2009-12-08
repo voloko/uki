@@ -1,6 +1,6 @@
 var data = [];
-for (var i=0; i < 1000; i++) {
-    data[i] = 'item #' + i;
+for (var i=0; i < 4000; i++) {
+    data[i] = 'item #' + (i+1);
 };
 
 uki(
@@ -8,8 +8,8 @@ uki(
         leftMin: 200, rightMin: 400, handlePosition: 200,
         leftChildViews: [
             { view: 'ScrollPane', rect: '200 600', autosize: 'width height', anchors: 'top left right bottom', 
-                childViews: { view: 'Box', rect: '10 10 180 30000', autosize: 'width', anchors: 'top left right', background: '#CCC',
-                    childViews: { view: 'List', rect: '10 10 170 30000', autosize: 'width', anchors: 'top left right', data: data }
+                childViews: { view: 'Box', rect: '10 10 180 120010', autosize: 'width', anchors: 'top left right', background: '#CCC',
+                    childViews: { view: 'List', rect: '10 10 170 120000', autosize: 'width', anchors: 'top left right', data: data }
                 }
             }
         ],

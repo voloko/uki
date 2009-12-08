@@ -2,3 +2,4 @@
 *.pid
 tmp*
 .DS_Store
+*~
