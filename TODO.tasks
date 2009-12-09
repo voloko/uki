@@ -18,6 +18,10 @@ Core
             ✓ auto transparency remover (make gifs)
             ✓ use server side pngcrush to reduce image size
         ✓ gif images for ie6
+        
+- childResized
+    - resizeToContents!!!
+    
 - Disabled
 ✓ themes
     ✓ merge registered themes
@@ -43,6 +47,7 @@ Core
 ✓ resizeWithOldRect -> parentResized
 ✓ background parser for simple/theme backgrounds
 - less prominent panel shadow, panel coloring
+- hovered checkbox should pale, not brighten
 
 Views
 - slider
@@ -76,7 +81,12 @@ Views
     - separate functional test
     - switch event
 - scroll view
-    - separate functional test
+    ✓ separate functional test
+    - opera 9.2 support (no overflowX, overflowY)
+- list
+    ✓ separate functional test
+    - data manimupulation
+- tree
 - table view
     - separate functional test
     - progressive rendering

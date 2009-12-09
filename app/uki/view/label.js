@@ -4,6 +4,11 @@ include('base.js');
 
 var Base = uki.view.Base.prototype;
 
+var ANCHOR_TOP      = 1,
+    ANCHOR_RIGHT    = 2,
+    ANCHOR_BOTTOM   = 4,
+    ANCHOR_LEFT     = 8;
+
 uki.view.Label = uki.newClass(uki.view.Base, {
     init: function() {
         Base.init.apply(this, arguments);
@@ -25,6 +30,11 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         return Base.selectable.call(this, state);
     },
     
+    contentsSize: function() {
+        return this.rect();
+    },
+    
+    
     _domCreate: function() {
         Base._domCreate.call(this);
         this._dom.appendChild(this._label);
@@ -34,22 +44,24 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         Base._domLayout.apply(this, arguments);
         var inset = this._inset;
         if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
+        var l;
         
-        if (uki.supportAutoLayout) {
-            this._lastLabelLayout = uki.dom.layout(this._label.style, {
+        if (uki.supportNativeLayout) {
+            l = {
                 left: inset.left, 
                 top: inset.top, 
                 right: inset.right,
                 bottom: inset.bottom
-            }, this._lastLabelLayout);
+            };
         } else {
-            this._lastLabelLayout = uki.dom.layout(this._label.style, {
+            l = {
                 left: inset.left, 
                 top: inset.top, 
                 width: this._rect.width - inset.left - inset.right,
                 height: this._rect.height - inset.top - inset.bottom
-            }, this._lastLabelLayout);
+            };
         }
+        this._lastLabelLayout = uki.dom.layout(this._label.style, l, this._lastLabelLayout);
     },
     
     text: function(text) {

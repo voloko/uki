@@ -126,7 +126,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     
     proto._drag = function(e, offset) {
         this.handlePosition(this._initialPosition - offset[this._vertical ? 'y' : 'x']);
-        this.layout(this._relativeRect);
+        this.layout();
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
     };
     
@@ -184,9 +184,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         this._resizeChildViewsWithRect(this._rect, this._handlePosition);
     };
     
-    proto._domLayout = function(rect, relativeRect) {
-        this._relativeRect = relativeRect;
-        Base._domLayout.call(this, rect, relativeRect);
+    proto._domLayout = function(rect) {
+        Base._domLayout.call(this, rect);
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';
     };
 });

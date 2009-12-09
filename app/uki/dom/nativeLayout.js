@@ -1,7 +1,7 @@
-include('../uki.js');
+include('../../uki.js');
 
-uki.initAutoLayout = function() {
-    if (uki.supportAutoLayout === undefined) {
+uki.initNativeLayout = function() {
+    if (uki.supportNativeLayout === undefined) {
         uki.dom.probe(
             uki.createElement(
                 'div', 
@@ -9,10 +9,10 @@ uki.initAutoLayout = function() {
                 '<div style="position:absolute;left:0;right:0"></div>'
             ),
             function(div) {
-                uki.supportAutoLayout = div.childNodes[0].offsetWidth == 100;
+                uki.supportNativeLayout = div.childNodes[0].offsetWidth == 100;
             }
         )
     }
 };
 
-// uki.supportAutoLayout = false;
+// uki.supportNativeLayout = false;

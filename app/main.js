@@ -14,11 +14,11 @@ include('uki/geometry.js');
 include('uki/attr.js');
 include('uki/builder.js');
 include('uki/selector.js');
-include('uki/autoLayout.js');
 
 include('uki/dom.js');
 include('uki/dom/offset.js');
 include('uki/dom/drag.js');
+include('uki/dom/nativeLayout.js');
 
 include('uki/attachment.js');
 include('uki/image.js');

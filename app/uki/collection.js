@@ -23,13 +23,22 @@ include('attachment.js');
             });
             return this;
         } else {
-            return uki.attr( this[0], name );
+            return this[0] ? uki.attr( this[0], name ) : '';
         }
     };
     
     uki.each(['html', 'text', 'background', 'value', 'rect', 'checked'], function(i, name) {
         self[name] = function( value ) { return this.attr( name, value ) };
     })
+    
+    uki.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
+    	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +
+    	"change,select,submit,keydown,keypress,keyup,error").split(","), function(i, name){
+    	self[name] = function( handler ){
+    		this.bind(name, handler);
+    	};
+    });
+    	    
     
     self.find = function( selector ) {
         return uki.find( selector, this );

@@ -10,6 +10,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         ANCHOR_RIGHT    = 2,
         ANCHOR_BOTTOM   = 4,
         ANCHOR_LEFT     = 8,
+        ANCHOR_ALL      = 15,
 
         AUTOSIZE_WIDTH  = 1,
         AUTOSIZE_HEIGHT = 2;
@@ -31,7 +32,46 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._selectable = false;
         this._styleH = 'left';
         this._styleV = 'top';
+        // this._resizeToContents = false;
     };
+    
+    // proto.resizeToContents = uki.newProperty('_resizeToContents');
+    // 
+    // proto.childResized = function( child, oldRect, newRect ) {
+    //     // do nothing
+    //     console.log(['resized', oldRect, newRect]);
+    // };
+    // 
+    // proto.triggerResized = function() {
+    //     if (!this._dom) return; // not ready yet
+    //     if (this._anchors = 15) return; // nowhere to resize
+    //     
+    //     var newSize = this.contentsSize(),
+    //         oldRect = this.rect();
+    //     if (newSize.eq(oldRect)) return; // nothing changed
+    //     
+    //     // calculate where to resize
+    //     var newRect = new Rect(oldRect.x, oldRect.y, newSize.width, newSize.height),
+    //         dX = (newSize.width - oldRect.width) /
+    //             ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +    // flexible left
+    //             (this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT ? 1 : 0)),   // flexible right
+    //         dY = (newSize.height - oldSize.height) /
+    //             ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top
+    //             (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM ? 1 : 0)); // flexible right
+    // 
+    //     if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) newRect.x -= dX;
+    //     if (this._autosize & ANCHOR_RIGHT ^ ANCHOR_RIGHT) newRect.width += dX;
+    // 
+    //     if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) newRect.y -= dY;
+    //     if (this._autosize & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM) newRect.height += dY;
+    //     
+    //     this.rect(newRect); // resize self
+    //     this.parent().childResized(this, this.rect(), newRect); // notify parent
+    // };
+    // 
+    // proto.contentsSize = function() {
+    //     return this.rect();
+    // };
     
     /* ----------------------------- Description --------------------------------*/
     /**
@@ -104,13 +144,13 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /**
      * Called on second layot pass when view becomes visible/changes it's size
      */
-    proto.layout = function(relativeRect) {
+    proto.layout = function() {
         if (!this._dom) {
-            this._domCreate(this._rect, relativeRect);
+            this._domCreate(this._rect);
             this._parent.domForChild(this).appendChild(this._dom);
             this._bindPendingEventsToDom();
         }
-        this._domLayout(this._rect, relativeRect);
+        this._domLayout(this._rect);
         this._needsLayout = false;
         this.trigger('layout', {rect: this._rect, source: this});
     };
@@ -128,9 +168,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /**
      * Called through a second layout pass when _dom is allready created
      */
-    proto._domLayout = function(rect, relativeRect) {
-        // if (this.typeName() == 'uki.view.Box') console.log(rect + ', ' + relativeRect);
-        var l = {}, s = uki.supportAutoLayout;
+    proto._domLayout = function(rect) {
+        var l = {}, s = uki.supportNativeLayout, relativeRect = this.parent().innerRect();
         if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
             l.left = rect.x;
             l.right = relativeRect.width - rect.x - rect.width;
@@ -164,6 +203,10 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._needsLayout = true;
     };
     
+    proto.innerRect = function(rect) {
+        return this.rect(rect);
+    };
+    
     /**
      * Sets or gets whenever the view is visible
      */
@@ -190,7 +233,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         var newRect = this._rect.clone(),
             dX = (newSize.width - oldSize.width) /
                 ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +   // flexible left
-                (this._autosize & AUTOSIZE_WIDTH? 1 : 0) +             
+                (this._autosize & AUTOSIZE_WIDTH ? 1 : 0) +             
                 (this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT ? 1 : 0)),   // flexible right
             dY = (newSize.height - oldSize.height) /
                 ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top

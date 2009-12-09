@@ -11,7 +11,7 @@ include('geometry.js');
 
     var self = uki.Attachment = uki.newClass({
         init: function( dom, view, rect, options ) {
-            uki.initAutoLayout();
+            uki.initNativeLayout();
             
             options = options || {};
             this._dom     = dom = dom || root;
@@ -37,6 +37,10 @@ include('geometry.js');
         },
         
         rect: function() {
+            return this._rect;
+        },
+        
+        innerRect: function() {
             return this._rect;
         },
         

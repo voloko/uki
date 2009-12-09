@@ -58,9 +58,9 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     
     
     
-    proto._domLayout = function(rect, relativeRect) {
-        Base._domLayout.call(this, rect, relativeRect);
-        this._layoutChildViews(rect, relativeRect);
+    proto._domLayout = function(rect) {
+        Base._domLayout.call(this, rect);
+        this._layoutChildViews(rect);
     };
 
     proto._layoutChildViews = function() {
@@ -85,7 +85,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
             this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
         }
     };
-
+    
     proto._resizeSelf = function(newRect) {
         if (this._rect && newRect.eq(this._rect)) return false;
         this._rect = newRect;

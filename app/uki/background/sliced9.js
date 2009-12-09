@@ -130,7 +130,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         
         this._comp.dom().appendChild(this._container);
         
-        if (!uki.supportAutoLayout) {
+        if (!uki.supportNativeLayout) {
             var _this = this;
             this._layoutHandler = function(e) {
                 if (_this._size && _this._size.eq(e.rect)) return;
@@ -145,7 +145,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
     this.detach = function() {
         if (this._comp) {
             this._comp.dom().removeChild(this._container);
-            if (!uki.supportAutoLayout) this._comp.unbind('layout', this._layoutHandler);
+            if (!uki.supportNativeLayout) this._comp.unbind('layout', this._layoutHandler);
             this._size = this._comp = null;
             this._attached = this._inited = false;
         }

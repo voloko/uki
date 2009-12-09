@@ -75,14 +75,13 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
         
         var _this = this;
         this._scrollableParent.bind('scroll', function() {
-            _this._domLayout(_this._rect, _this._relativeRect);
+            _this._domLayout(_this._rect);
         })
     };
     
-    proto._domLayout = function(rect, relativeRect) {
+    proto._domLayout = function(rect) {
         this._visibleRect = getVisibleRect(this, this._scrollableParent);
-        this._relativeRect = relativeRect;
-        Base._domLayout.call(this, rect, relativeRect);
+        Base._domLayout.call(this, rect);
         
         var contentHeight = this._data.length * this._rowHeight,
             minHeight = this._visibleRect.y - visibleRectExt,

@@ -5,7 +5,13 @@ uki.view.Focusable = {
     //     return null; // should implement
     // },
     
+    _focusable: true, // default value
+    
+    focusable: uki.newProperty('_focusable'),
+    
     _initFocusable: function(preCreatedInput) {
+        if (!this._focusable) return;
+        
         var input = preCreatedInput;
         if (!input) {
             input = uki.createElement(

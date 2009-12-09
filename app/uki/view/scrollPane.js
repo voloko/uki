@@ -58,7 +58,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     
     proto._domCreate = function() {
         Base._domCreate.call(this);
-        this._pane = uki.createElement('div', 'position:absolute;left:0;top:0;' + (uki.supportAutoLayout ? 'right:0;bottom:0' : 'width:100%;height:100%'));
+        this._pane = uki.createElement('div', 'position:absolute;left:0;top:0;' + (uki.supportNativeLayout ? 'right:0;bottom:0' : 'width:100%;height:100%'));
         this._dom.appendChild(this._pane);
     };
     
@@ -143,23 +143,23 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     proto._layoutChildViews = function() {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             if (childViews[i]._needsLayout && childViews[i].visible()) {
-                childViews[i].layout(this._innerRect); // this._rect TODO
+                childViews[i].layout(); // this._rect TODO
             }
         };
     };
     
-    proto._domLayout = function(rect, relativeRect) {
+    proto._domLayout = function(rect) {
         if (this._scrollableH && this._layoutScrollH !== this._scrollH) {
             this._dom.style.overflowX = this._scrollH ? 'scroll' : 'hidden';
-            if (useOuterRect && uki.supportAutoLayout) this._pane.style.bottom = this._scrollH ? scrollWidth + 'px' : 0;
+            if (useOuterRect && uki.supportNativeLayout) this._pane.style.bottom = this._scrollH ? scrollWidth + 'px' : 0;
             this._layoutScrollH = this._scrollH;
         }
         if (this._scrollableV && this._layoutScrollV !== this._scrollV) {
             this._dom.style.overflowY = this._scrollV ? 'scroll' : 'hidden';
-            if (useOuterRect && uki.supportAutoLayout) this._pane.style.right = this._scrollV ? scrollWidth + 'px' : 0;
+            if (useOuterRect && uki.supportNativeLayout) this._pane.style.right = this._scrollV ? scrollWidth + 'px' : 0;
             this._layoutScrollV = this._scrollV;
         }
-        Base._domLayout.call(this, rect, relativeRect);
-        this._layoutChildViews(rect, relativeRect);
+        Base._domLayout.call(this, rect);
+        this._layoutChildViews(rect);
     };
 });

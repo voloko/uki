@@ -119,10 +119,10 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._dom.removeChild(this._focusBg);
     },
     
-    _domLayout: function(rect, relativeRect) {
+    _domLayout: function(rect) {
         var fixedRect = rect.clone();
         fixedRect.height = 18;
-        Base._domLayout.call(this, fixedRect, relativeRect);
+        Base._domLayout.call(this, fixedRect);
         this.value(this.value());
         return true;
     },
