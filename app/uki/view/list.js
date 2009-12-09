@@ -1,10 +1,12 @@
 include('base.js');
+include('flyweight.js');
 
 uki.view.List = uki.newClass(uki.view.Base, new function() {
     var Base = uki.view.Base.prototype,
         Rect = uki.geometry.Rect,
         proto = this,
         visibleRectExt = 500,
+        packSize = 20,
         doc = document;
         
     proto.typeName = function() {
@@ -14,14 +16,14 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
     proto.init = function() {
         Base.init.call(this);
         this._rowHeight = 30;
-        this._flyweightView = uki.view.flyweight.Dummy;
+        this._flyweightView = new uki.view.Flyweight();
         this._scrollableParent = null;
-        this._rows = [];
+        this._packs = [];
         this._data = null;
     };
     
     proto.background = function(bg) {
-        if (bg === undefined) return this._background = this._background || new uki.background.Rows(this._rowHeight, '#EDF3FE');
+        if (bg === undefined) return this._background = this._background || uki.theme.background('list', this._rowHeight);
         return Base.background.call(this, bg);
     };
     
@@ -56,7 +58,7 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
 
         for (i = queue.length - 1; i >= 0; i--){
             c = queue[i];
-            tmpRect = c.visibleRect ? c.visibleRect() : c.rect().clone();
+            tmpRect = c != from && c.visibleRect ? c.visibleRect() : c.rect().clone();
             rect = rect ? rect.intersection(tmpRect) : tmpRect;
             rect.x -= c.rect().x;
             rect.y -= c.rect().y;
@@ -75,8 +77,40 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
         
         var _this = this;
         this._scrollableParent.bind('scroll', function() {
-            _this._domLayout(_this._rect);
+            _this.layout();
         })
+    };
+    
+    proto._renderPack = function(itemFrom, itemTo) {
+        var html = [];
+        for (i=itemFrom; i <= itemTo; i++) {
+            html[html.length] = [
+                '<div style="position:absolute;left:0;top:', (i-itemFrom) * this._rowHeight, 
+                'px;width:100%;height:', this._rowHeight, 'px;overflow:hidden">', 
+                this._flyweightView.render(this._data[i]),
+                '</div>'
+            ].join('');
+        };
+        return html.join('');
+    };
+    
+    proto.layout = function() {
+        if (!this._dom) {
+            this._domCreate(this._rect);
+            this._parent.domForChild(this).appendChild(this._dom);
+            this._bindPendingEventsToDom();
+        }
+        this._domLayout(this._rect);
+        this._needsLayout = false;
+        this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
+    };
+    
+    proto.visibleRect = function() {
+        return this._visibleRect;
+    };
+    
+    proto._layoutPack = function(pack) {
+        
     };
     
     proto._domLayout = function(rect) {
@@ -84,36 +118,24 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
         Base._domLayout.call(this, rect);
         
         var contentHeight = this._data.length * this._rowHeight,
-            minHeight = this._visibleRect.y - visibleRectExt,
-            maxHeight = this._visibleRect.maxY() + visibleRectExt,
-            itemFrom  = Math.max(0, Math.floor(minHeight / this._rowHeight)),
-            itemTo    = Math.min(this._data.length, Math.ceil(maxHeight / this._rowHeight)),
-            i;
-            
-        for (i=itemFrom; i <= itemTo; i++) {
-            if (!this._rows[i]) {
-                this._rows[i] = uki.createElement('div', 'position:absolute;left:0;top:' + (i * this._rowHeight) + 'px;width:100%;height:' + this._rowHeight + 'px;overflow:hidden');
-                this._flyweightView.create(this._rows[i], this._data[i]);
-                this._dom.appendChild(this._rows[i]);
-            } else {
-                this._flyweightView.layout(rect, this._rows[i], this._data[i]);
+            packHeight    = packSize * this._rowHeight,
+            lastPack      = Math.floor(contentHeight / packSize),
+            minHeight     = this._visibleRect.y - visibleRectExt,
+            maxHeight     = this._visibleRect.maxY() + visibleRectExt,
+            packFrom      = Math.max(0, Math.floor(minHeight / packHeight)),
+            packTo        = Math.min(lastPack, Math.ceil(maxHeight / packHeight)),
+            i, html;
+        for (i=packFrom; i <= packTo; i++) {
+            if (!this._packs[i]) {
+                var itemFrom = i*packSize,
+                    itemTo   = Math.min(this._data.length, itemFrom + packSize),
+                    height   = (itemTo - itemFrom) * this._rowHeight;
+                    
+                html = this._renderPack(itemFrom, itemTo);
+                this._packs[i] = uki.createElement('div', 'position:absolute;left:0;top:' + (i * packHeight) + 'px;width:100%;height:' + height + 'px;overflow:hidden', html);
+                this._dom.appendChild(this._packs[i]);
             }
         };
     };
     
 });
-
-uki.view.flyweight = {};
-
-uki.view.flyweight.Dummy = {
-    layout: function(rect, container, data) {
-    },
-    
-    create: function(container, data) {
-        container.appendChild(uki.createElement('div', 'padding: 2px', data));
-    },
-    
-    remove: function(container, data) {
-        
-    }
-};

@@ -6,12 +6,12 @@
     uki.theme.airport = {
         imagePath: '/app/theme/airport/i/',
         
-        background: function(name) {
-            return this.backgrounds[name] && this.backgrounds[name]();
+        background: function(name, params) {
+            return this.backgrounds[name] && this.backgrounds[name](params);
         },
     
-        image: function(name) {
-            return this.images[name] && this.images[name]();
+        image: function(name, params) {
+            return this.images[name] && this.images[name](params);
         },
         
         backgrounds: {
@@ -75,6 +75,9 @@
                     v: [u(prefix + "v.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAASCAYAAAB4i6/FAAAASUlEQVQY02NgGHqgvLz8PzKGC7a0tP1ftnwNGIPYYEkQsW//0f/Hjp8FYxAbLjFjxiy4BIgNlvj//38auh0gMbA9IAYyHvDQAACE3VpNVzKSLwAAAABJRU5ErkJggg==", u(prefix + "v.gif")], 
                     m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAASCAYAAAB4gjqpAAAAUUlEQVQYGe3BwRFAMBAAwItJIVTAR0taSE9eVHiKOA9jdjcCAAAAAAAAgJ9rY4wMgKK+bnsAVPV5XgKgagqAF/T7OgOgqmXmEQAAAAAAAHzTAx6DCNiUJps4AAAAAElFTkSuQmCC", u(prefix + "m.gif")] 
                 }, "0 3 0 3", {fixedSize: '0 18'});            
+            },
+            list: function(rowHeight) {
+                return new uki.background.Rows(rowHeight, '#EDF3FE');
             }
         },
     
