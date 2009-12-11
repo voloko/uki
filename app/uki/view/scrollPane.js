@@ -3,6 +3,7 @@ include('container.js');
 uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     /**
      * Scroll pane. Pane with scrollbars with content overflowing the borders.
+     * Works consisently across all supported browsers.
      */
     
     // Opera >= 9.5 fails to produce scrollbars if inner absolutly position div is set as l:0,r:0,t:0,b:0
@@ -134,17 +135,14 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
                 }
             }
         }
+        this._clientRect = requirePaneResize ? new Rect(0, 0, this._scrollH ? this._maxX : this._innerRect.width, this._scrollV ? this._maxY : this._innerRect.height) : this._innerRect;
         
         // this._calcMaxRect();
         this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
     };
     
     proto.clientRect = function() {
-        if (requirePaneResize) {
-            return new Rect(0, 0, this._scrollH ? this._maxX : this._innerRect.width, this._scrollV ? this._maxY : this._innerRect.height);
-        } else {
-            return this._innerRect;
-        }
+        return this._clientRect;
     };
     
     proto.rect = function(newRect) {

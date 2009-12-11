@@ -40,7 +40,7 @@ include('geometry.js');
             return this._rect;
         },
         
-        innerRect: function() {
+        clientRect: function() {
             return this._rect;
         },
         

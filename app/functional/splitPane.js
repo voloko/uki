@@ -1,17 +1,26 @@
 uki(
     { view: 'SplitPane', rect: '1000 600', autosize: 'width height', anchors: 'left top right bottom', 
-        handlePosition: 300, autogrowRight: true, autogrowLeft: true, leftMin: 300, rightMin: 300,
-        leftChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left right', text: 'left pane', autosize: 'width' },
+        handlePosition: 300, autogrowRight: true, autogrowLeft: false, leftMin: 200, rightMin: 300, handleWidth: 1,
+        leftPane: {  background: '#D0D7E2', childViews: [
+                { view: 'Button', rect: '10 566 280 24', anchors: 'bottom left right', text: 'left pane', autosize: 'width', focusable: false }
+            ]},
         rightChildViews: [
-            { view: 'SplitPane', rect: '693 600', autosize: 'width height', anchors: 'left top right bottom', vertical: true,
+            { view: 'SplitPane', rect: '699 600', autosize: 'width height', anchors: 'left top right bottom', vertical: true,
                 topChildViews: [
                     { view: 'Button', rect: '10 10 280 24', anchors: 'top left', text: 'top pane' },
-                    { view: 'Button', rect: '340 160 280 24', anchors: 'bottom right', text: 'top pane' }
+                    { view: 'Button', rect: '409 160 280 24', anchors: 'bottom right', text: 'top pane' }
                 ],
-                bottomChildViews: { view: 'Slider', rect: '10 10 673 24', anchors: 'top right left', autosize: 'width' }
+                bottomPane: { background: '#FFF', childViews: [
+                    { view: 'Box', rect: '0 0 699 40', anchors: 'top right left', autosize: 'width', background: 'cssBox(background:#EDF3FE;border-bottom:1px solid #999)' },
+                    { view: 'Slider', rect: '10 50 673 24', anchors: 'top right left', autosize: 'width' },
+                    { view: 'Label', rect: '10 80 679 300', anchors: 'top left right bottom', autosize: 'width height', multiline: true, html: 'Text here' }
+                ]}
             }
         ]
     }
 ).attachTo( window, '1000 600' );
 
-uki('Button[text~=left]').bind('click', function() { alert(this.text() )})
+
+uki('Button').click(function() { alert(this.text() )})
+uki('Label').html('<p>Lorem ipsum dolor sit <b>amet</b>, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>');
+// uki('SplitPane:eq(0)').attr('handlePosition', 200)[0].layout();
