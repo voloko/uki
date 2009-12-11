@@ -9,7 +9,7 @@ include('collection.js');
         attr = uki.attr,
         chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
         regexps = [ // enforce order
-    		{ name: 'ID',   regexp: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/ },
+    		{ name: 'NAME', regexp: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/ },
     		{ name: 'ATTR', regexp: /\[\s*((?:[\w\u00c0-\uFFFF_-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/ },
     		{ name: 'TYPE', regexp: /^((?:[\w\u00c0-\uFFFF\*_\.-]|\\.)+)/ },
     		{ name: 'POS',  regexp: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/ }
@@ -65,6 +65,10 @@ include('collection.js');
                        type === "^="  ? value.indexOf(check) === 0 :
                        type === "$="  ? value.substr(value.length - check.length) === check :
                        false;
+    		},
+    		
+    		NAME: function(comp, match) {
+    		    return reducers.ATTR(comp, ['', 'name', '=', '', match[1]])
     		},
     		
     		POS: function(comp, match, i, array) {

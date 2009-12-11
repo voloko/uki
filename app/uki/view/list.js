@@ -16,8 +16,6 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
         this._rowHeight = 30;
         this._flyweightView = new uki.view.Flyweight();
         this._scrollableParent = null;
-        this._packs = [];
-        this._items = [];
         this._data = null;
         this._packSize = 20;
         this._visibleRectExt = 300;
@@ -85,16 +83,27 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
         pack.dom.style.top = itemFrom*this._rowHeight + 'px';
     };
     
+    proto._addToPack = function (pack, position, data) {
+        var row = this._createRow(data),
+            nextChild = pack.dom.childNodes(position - pack.itemFrom);
+        nextChild ? pack.dom.insertBefore(row, nextChild) : pack.appendChild(row);
+    }
     
     // data api
     proto.addRow = function(position, data) {
+        this._data.splice(position, 0, data);
+        if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
+            this._addToPack(this._packs[1], position, data);
+        } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
+            this._addToPack(this._packs[0], position, data);
+        }
     };
     
     proto.removeRow = function(position) {
     };
     
-    proto.createRow = function(data) {
-        return uki.createElement('div', 'width:100%;height:', this._rowHeight, 'px;overflow:hidden', this._flyweightView.render(data));
+    proto._createRow = function(data) {
+        return uki.createElement('div', ['width:100%;height:', this._rowHeight, 'px;overflow:hidden'].join(''), this._flyweightView.render(data));
     };
     
     proto.layout = function() {

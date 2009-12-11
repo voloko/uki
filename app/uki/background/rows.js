@@ -8,6 +8,7 @@ uki.background.Rows = uki.newClass(new function() {
     proto.init = function(height, colors) {
         this._height = height || 20;
         this._colors = uki.isArray(colors) ? colors : colors.split(' ');
+        this._packSize = Math.ceil(packSize/this._colors.length)*this._colors.length;
         this._renderedHeight = 0;
         this._visibleExt = 200;
         if (this._colors.length == 1) this._colors = this._colors.concat(['#FFF']);
