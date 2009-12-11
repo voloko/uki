@@ -29,3 +29,7 @@ var p = uki(
 uki('#add', p).click(function() { 
     p.find('#list')[0].addRow(p.find('#add-n').value() || 0, p.find('#add-text').value() || 'sample')
 })
+
+uki('#remove', p).click(function() {
+    p.find('#list')[0].removeRow(p.find('#remove-n').value());
+})

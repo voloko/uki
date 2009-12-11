@@ -13,8 +13,8 @@ uki.view.Flyweight = uki.newClass({
      * @return String html
      */
     render: function(data) {
-        return data + '';
-    },
+        return '<div style="line-height: 30px; text-align: center;">' + data + '</div>' + '';
+    }
     
     /**
      * Layouts a component with a given container
@@ -23,7 +23,7 @@ uki.view.Flyweight = uki.newClass({
      * @param uki.geometry.Rect rect
      * @param Node container
      */
-    layout: function(rect, container) {
-        
-    }
+    // layout: function(rect, container) {
+    //     
+    // }
 })

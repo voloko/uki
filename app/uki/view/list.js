@@ -85,21 +85,50 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
     
     proto._addToPack = function (pack, position, data) {
         var row = this._createRow(data),
-            nextChild = pack.dom.childNodes(position - pack.itemFrom);
+            nextChild = pack.dom.childNodes[position - pack.itemFrom];
         nextChild ? pack.dom.insertBefore(row, nextChild) : pack.appendChild(row);
+        pack.itemTo++;
     }
+    
+    proto._removeFromPack = function(pack, position) {
+        pack.dom.removeChild(pack.dom.childNodes[position - pack.itemFrom]);
+        pack.itemTo--;
+    };
+    
+    proto._movePack = function(pack, offset) {
+        pack.itemFrom += offset;
+        pack.dom.style.top = pack.itemFrom * this._rowHeight + 'px'
+    };
     
     // data api
     proto.addRow = function(position, data) {
         this._data.splice(position, 0, data);
-        if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
+        if (position < this._packs[0].itemFrom) {
+            this._movePack(this._packs[0], 1);
+            this._movePack(this._packs[1], 1);
+        } else if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
             this._addToPack(this._packs[1], position, data);
         } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
             this._addToPack(this._packs[0], position, data);
+            this._movePack(this._packs[1], 1);
+            this._packs[1].itemTo++;
         }
     };
     
     proto.removeRow = function(position) {
+        this._data.splice(position, 1);
+        if (position < this._packs[0].itemFrom) {
+            this._movePack(this._packs[0], -1);
+            this._movePack(this._packs[1], -1);
+        } else if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
+            this._removeFromPack(this._packs[1], position);
+            this._domLayout(this.rect());
+        } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
+            this._removeFromPack(this._packs[0], position);
+            this._movePack(this._packs[1], -1);
+            this._packs[1].itemTo--;
+            this._domLayout(this.rect());
+        }
     };
     
     proto._createRow = function(data) {
@@ -143,7 +172,7 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
             maxRenderedY = this._packs[1].itemTo * this._rowHeight,
             
             itemFrom, itemTo, startAt;
-        
+
         if (
             maxVisibleY <= minRenderedY || minVisibleY >= maxRenderedY || // both packs below/above visible area
             (maxVisibleY > maxRenderedY && this._packs[1].itemFrom * this._rowHeight > this._visibleRect.y) || // need to render below, and pack 2 is not enough to cover
