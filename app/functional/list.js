@@ -11,25 +11,33 @@ var p = uki(
                 childViews: { view: 'Box', rect: '10 10 180 120010', autosize: 'width', anchors: 'top left right', background: '#CCC',
                     childViews: [
                         { view: 'List', rect: '10 10 160 120000', autosize: 'width', anchors: 'top left right', 
-                            data: data, rowHeight: 30, name: 'list' }
+                            data: data, rowHeight: 30, id: 'list' }
                     ]
                 }
             }
         ],
         rightChildViews: [
-            { view: 'Button', rect: '10 10 100 24', anchors: 'left top', text: 'Add +', name: "add", focusable: false },
-            { view: 'TextField', rect: '125 10 50 24', anchors: 'left top', placeholder: 'where', value: '7', name: 'add-n' },
-            { view: 'TextField', rect: '180 10 200 24', anchors: 'left top', placeholder: 'what', value: 'some text', name: 'add-text' },
-            { view: 'Button', rect: '10 40 100 24', anchors: 'left top', text: 'Remove -', name: "remove", focusable: false },
-            { view: 'TextField', rect: '125 40 50 24', anchors: 'left top', placeholder: 'which', value: '7', name: 'remove-n' }
+            { view: 'Button', rect: '10 10 100 24', anchors: 'left top', text: 'Add +', id: "add", focusable: false },
+            { view: 'TextField', rect: '125 10 50 24', anchors: 'left top', placeholder: 'where', value: '7', id: 'add-n' },
+            { view: 'TextField', rect: '180 10 200 24', anchors: 'left top', placeholder: 'what', value: 'some text', id: 'add-text' },
+            
+            { view: 'Button', rect: '10 40 100 24', anchors: 'left top', text: 'Remove -', id: "remove", focusable: false },
+            { view: 'TextField', rect: '125 40 50 24', anchors: 'left top', placeholder: 'which', value: '7', id: 'remove-n' },
+            
+            { view: 'Button', rect: '10 70 100 24', anchors: 'left top', text: 'Selected Index', id: 'selectedIndex', focusable: false },
+            { view: 'TextField', rect: '125 70 50 24', anchors: 'left top', placeholder: 'index', value: '7', id: 'selectedIndex-value' }
         ]
     }
 ).attachTo( document.getElementById('test'), '1000 600' )
 
 uki('#add', p).click(function() { 
-    p.find('#list')[0].addRow(p.find('#add-n').value() || 0, p.find('#add-text').value() || 'sample')
+    uki('#list')[0].addRow(uki('#add-n').value() || 0, uki('#add-text').value() || 'sample')
 })
 
 uki('#remove', p).click(function() {
-    p.find('#list')[0].removeRow(p.find('#remove-n').value());
+    uki('#list')[0].removeRow(uki('#remove-n').value());
+});
+
+uki('#selectedIndex').click(function() {
+    uki('#list').selectedIndex(uki('#selectedIndex-value').value())
 })

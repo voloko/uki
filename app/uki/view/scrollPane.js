@@ -51,6 +51,11 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     this.scrollableV = uki.newProperty('_scrollableV');
     this.scrollableH = uki.newProperty('_scrollableH');
     
+    this.scroll = function(dx, dy) {
+        if (dx) this.scrollTop(this.scrollLeft() + dy);
+        if (dy) this.scrollTop(this.scrollTop() + dy);
+    };
+    
     this.scrollTop = function(val) {
         if (val === undefined) return this._dom && this._dom.scrollTop || 0;
         

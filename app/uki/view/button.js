@@ -10,7 +10,7 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
     
     proto.init = function() {
         baseProto.init.apply(this, arguments);
-        this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;" // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
     }
     
     uki.each(['normal', 'hover', 'down', 'focus'], function(i, name) {
@@ -101,6 +101,10 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
 
     proto.typeName = function() {
         return 'uki.view.Button';
+    }
+    
+    proto._bindToDom = function(name) {
+        return uki.view.Focusable._bindToDom.call(this, name) || uki.view.Label.prototype._bindToDom.call(this, name);
     }
 });
 

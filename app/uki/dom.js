@@ -96,6 +96,10 @@ uki.dom = {
         };
     },
     
+    stop: function(e) {
+        e.preventDefault ? e.preventDefault() : e.returnValue = false        
+    },
+    
     /**
      * Taken from jQuery
      */

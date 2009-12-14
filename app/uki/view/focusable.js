@@ -1,4 +1,5 @@
 include('../view.js');
+include('observable.js');
 
 uki.view.Focusable = {
     // dom: function() {
@@ -61,6 +62,13 @@ uki.view.Focusable = {
     
     hasFocus: function() {
         return this._hasFocus;
+    },
+    
+    _bindToDom: function(name) {
+        if (!this._focusableInput || 'keyup keydown keypress'.indexOf(name) == -1) return false;
+        
+        return uki.view.Observable._bindToDom.call(this, name, this._focusableInput);
     }
+    
 
 };

@@ -129,7 +129,12 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
 
     typeName: function() {
         return 'uki.view.Slider';
+    },
+    
+    _bindToDom: function(name) {
+        return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     }
+    
 });
 
 })();

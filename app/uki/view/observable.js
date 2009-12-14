@@ -16,7 +16,12 @@ uki.view.Observable = {
     
     unbind: function(name, callback) {
         uki.each(name.split(' '), function(i, name) {
-            uki.dom.unbind( this.dom(), name, callback );
+            this._observers[name] = uki.grep(this._observers[name], function(observer) {
+                return observer != callback;
+            });
+            if (this._observers[name].length == 0) {
+                this._unbindFromDom(name);
+            }
         }, this);
     },
     
@@ -27,11 +32,20 @@ uki.view.Observable = {
         }, this);
     },
     
-    _bindToDom: function(name) {
+    _unbindFromDom: function(name, target) {
+        if (!this._domHander || !this._eventTargets[name]) return;
+        uki.dom.unbind(this._eventTargets[name], name, this._domHander);
+    },
+    
+    _bindToDom: function(name, target) {
         var _this = this;
-        uki.dom.bind(this.dom(), name, function(e) {
-            _this.trigger(name, {domEvent: e, source: _this});
-        });
+        this._domHander = this._domHander || function(e) {
+            _this.trigger(e.type, {domEvent: e, source: _this});
+        };
+        this._eventTargets = this._eventTargets || {};
+        this._eventTargets[name] = target || this.dom();
+        uki.dom.bind(this._eventTargets[name], name, this._domHander);
+        return true;
     },
     
     _bound: function(name) {

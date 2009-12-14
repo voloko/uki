@@ -16,7 +16,7 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         this._selectable = false;
         this._inset = new uki.geometry.Inset(0, 0, 0, 0);
         this._label = uki.createElement('div', Base.defaultCss + 
-            "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:15px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+            "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     },
     
     typeName: function() {
@@ -43,7 +43,8 @@ uki.view.Label = uki.newClass(uki.view.Base, {
     _domLayout: function() {
         Base._domLayout.apply(this, arguments);
         var inset = this._inset;
-        if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
+        // if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
+        if (!this.multiline()) this._label.style.paddingTop = (this._rect.height/2 - 6) + 'px';
         var l;
         
         if (uki.supportNativeLayout) {
@@ -104,7 +105,7 @@ uki.view.Label = uki.newClass(uki.view.Base, {
     multiline: function(state) {
         if (state === undefined) return this._label.style.whiteSpace != 'nowrap';
         this._label.style.whiteSpace = state ? '' : 'nowrap';
-        if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
+        // if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
     }
 });
     

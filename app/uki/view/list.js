@@ -1,7 +1,8 @@
 include('base.js');
 include('flyweight.js');
+include('focusable.js');
 
-uki.view.List = uki.newClass(uki.view.Base, new function() {
+uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     var Base = uki.view.Base.prototype,
         Rect = uki.geometry.Rect,
         proto = this,
@@ -19,6 +20,7 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
         this._data = null;
         this._packSize = 20;
         this._visibleRectExt = 300;
+        this._selectedIndex = -1;
     };
     
     proto.background = function(bg) {
@@ -65,7 +67,69 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
         var _this = this;
         this._scrollableParent.bind('scroll', function() {
             _this.layout();
-        })
+        });
+        
+        this.bind('click', function(e) {
+            var o = uki.dom.offset(this._dom),
+                y = e.domEvent.pageY - o.y,
+                p = Math.floor(y / this._rowHeight);
+            this.selectedIndex(p);
+        });
+        
+        this._initFocusable();
+    };
+    
+    proto.selectedIndex = function(position) {
+        if (position === undefined) return this._selectedIndex;
+        var nextIndex = Math.max(0, Math.min(this._data.length - 1, position));
+        if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
+        this._setSelected(this._selectedIndex = nextIndex, true);
+    };
+    
+    proto._setSelected = function(position, state) {
+        if (!this._dom) return;
+        var item = this._itemAt(position),
+            maxY, minY;
+        if (!item) return;
+        this._flyweightView.setSelected(item, this._data[position], state, this.hasFocus());
+        maxY = (position+1)*this._rowHeight;
+        minY = position*this._rowHeight;
+        if (maxY >= this._visibleRect.maxY()) {
+            this._scrollableParent.scroll(0, maxY - this._visibleRect.maxY());
+        } else if (minY < this._visibleRect.y) {
+            this._scrollableParent.scroll(0, minY - this._visibleRect.y);
+        }
+    };
+    
+    proto._itemAt = function(position) {
+        if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
+            return this._packs[1].dom.childNodes[position - this._packs[1].itemFrom];
+        } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
+            return this._packs[0].dom.childNodes[position - this._packs[0].itemFrom];
+        }
+        return null;
+    };
+    
+    proto._focus = function() {
+        if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
+        
+        if (this._firstFocus) {
+            var _this = this;
+            uki.dom.bind(this._focusableInput, 'keydown', function(e) {
+                if (e.which == 38) { // UP
+                    _this.selectedIndex(_this.selectedIndex() - 1);
+                    uki.dom.stop(e);
+                } else if (e.which == 40) { // DOWN
+                    _this.selectedIndex(_this.selectedIndex() + 1);
+                    uki.dom.stop(e);
+                }
+            });
+        }
+        
+    };
+    
+    proto._blur = function() {
+        if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
     };
     
     proto._renderPack = function(pack, itemFrom, itemTo) {
@@ -86,7 +150,7 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
     proto._addToPack = function (pack, position, data) {
         var row = this._createRow(data),
             nextChild = pack.dom.childNodes[position - pack.itemFrom];
-        nextChild ? pack.dom.insertBefore(row, nextChild) : pack.appendChild(row);
+        nextChild ? pack.dom.insertBefore(row, nextChild) : pack.dom.appendChild(row);
         pack.itemTo++;
     }
     
@@ -203,11 +267,15 @@ uki.view.List = uki.newClass(uki.view.Base, new function() {
             
             this._renderPack(this._packs[1], itemFrom, itemTo);
             this._swapPacks();
-        } else {
-            return;
         }
+        
+        if (this._focusableInput) this._focusableInput.style.top = this._visibleRect.y + 'px'; // move to reduce on focus jump
             
     };
+    
+    proto._bindToDom = function(name) {
+        return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
+    }
     
     function findScrollableParent (c) {
         do {

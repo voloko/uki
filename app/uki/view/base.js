@@ -26,6 +26,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.init = function() {
         this._anchors = 0;
         this._autosize = 0;
+        this._resizeToContents = 0;
         this._parent = null;
         this._rect = null;
         this._visible = true;
@@ -33,46 +34,56 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._selectable = false;
         this._styleH = 'left';
         this._styleV = 'top';
-        // this._resizeToContents = false;
     };
     
-    // proto.resizeToContents = uki.newProperty('_resizeToContents');
-    // 
-    // proto.childResized = function( child, oldRect, newRect ) {
-    //     // do nothing
-    //     console.log(['resized', oldRect, newRect]);
-    // };
-    // 
-    // proto.triggerResized = function() {
-    //     if (!this._dom) return; // not ready yet
-    //     if (this._anchors = 15) return; // nowhere to resize
-    //     
-    //     var newSize = this.contentsSize(),
-    //         oldRect = this.rect();
-    //     if (newSize.eq(oldRect)) return; // nothing changed
-    //     
-    //     // calculate where to resize
-    //     var newRect = new Rect(oldRect.x, oldRect.y, newSize.width, newSize.height),
-    //         dX = (newSize.width - oldRect.width) /
-    //             ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +    // flexible left
-    //             (this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT ? 1 : 0)),   // flexible right
-    //         dY = (newSize.height - oldSize.height) /
-    //             ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top
-    //             (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM ? 1 : 0)); // flexible right
-    // 
-    //     if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) newRect.x -= dX;
-    //     if (this._autosize & ANCHOR_RIGHT ^ ANCHOR_RIGHT) newRect.width += dX;
-    // 
-    //     if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) newRect.y -= dY;
-    //     if (this._autosize & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM) newRect.height += dY;
-    //     
-    //     this.rect(newRect); // resize self
-    //     this.parent().childResized(this, this.rect(), newRect); // notify parent
-    // };
-    // 
-    // proto.contentsSize = function() {
-    //     return this.rect();
-    // };
+    proto.resizeToContents = uki.newProperty('_resizeToContents');
+    
+    proto.childResized = function( child, oldRect, newRect ) {
+        // do nothing
+        // console.log(['resized', oldRect, newRect]);
+    };
+    
+    proto.triggerResized = function() {
+        if (!this._dom) return; // not ready yet
+        if (this._resizeToContents = 0) return; // nowhere to resize
+        
+        var newSize = this.contentsSize(),
+            oldRect = this.rect();
+        if (newSize.eq(oldRect)) return; // nothing changed
+        
+        // calculate where to resize
+        var newRect = new Rect(oldRect.x, oldRect.y, newSize.width, newSize.height),
+            dX = (newSize.width - oldRect.width) /
+                ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +    // flexible left
+                (this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT ? 1 : 0)),   // flexible right
+            dY = (newSize.height - oldSize.height) /
+                ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top
+                (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM ? 1 : 0)); // flexible right
+    
+        if (this._resizeToContents && AUTOSIZE_WIDTH) {
+            if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) newRect.x -= dX;
+            if (this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT) newRect.width += dX;
+        }
+    
+        if (this._resizeToContents && AUTOSIZE_HEIGHT) {
+            if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) newRect.y -= dY;
+            if (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM) newRect.height += dY;
+        }
+        
+        this.rect(newRect); // resize self
+        this.parent().childResized(this, this.rect(), newRect); // notify parent
+    };
+    
+    proto.contentsSize = function() {
+        return this.rect();
+    };
+    
+    proto.id = function(id) {
+        if (id === undefined) return this._id;
+        if (this._id) uki.unregisterId(this);
+        this._id = id;
+        uki.registerId(this);
+    };
     
     /* ----------------------------- Description --------------------------------*/
     /**
@@ -308,8 +319,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     /* ---------------------------------- Events --------------------------------*/
     proto._bindToDom = function(name) {
-        if ('resize layout'.indexOf(name) > -1) return;
-        uki.view.Observable._bindToDom.call(this, name);
+        if ('resize layout'.indexOf(name) > -1) return true;
+        return uki.view.Observable._bindToDom.call(this, name);
     }
     
 });

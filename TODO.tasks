@@ -68,6 +68,10 @@ Views
     ✓ separate functional test
     ✓ switch on resize
     ✓ switch in layout
+- label
+    - use top instead of margin-top for label
+- text view
+    - support multiline with textarea
 - button
     ✓ separate functional test (attachment)
     ✓ @param bgHover, bgNormal, bgPressed

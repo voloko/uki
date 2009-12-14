@@ -27,7 +27,7 @@ include('attachment.js');
         }
     };
     
-    uki.each(['html', 'text', 'background', 'value', 'rect', 'checked'], function(i, name) {
+    uki.each(['html', 'text', 'background', 'value', 'rect', 'checked', 'selectedIndex'], function(i, name) {
         self[name] = function( value ) { return this.attr( name, value ) };
     })
     

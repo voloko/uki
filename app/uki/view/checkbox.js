@@ -75,7 +75,12 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
     typeName: function() {
         return 'uki.view.Checkbox';
+    },
+    
+    _bindToDom: function(name) {
+        return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     }
+    
 });
 
 })();

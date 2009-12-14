@@ -65,7 +65,12 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
     placeholder: function(text) {
         if (text === undefined) return this._input.getAttribute('placeholder');
         this._input.setAttribute('placeholder', text);
+    },
+    
+    _bindToDom: function(name) {
+        return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     }
+    
 });
     
 })();

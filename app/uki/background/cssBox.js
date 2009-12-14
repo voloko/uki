@@ -27,6 +27,7 @@ uki.background.CssBox = uki.newClass(new function() {
         this._inset = inset = uki.geometry.Inset.create(ext.inset) || new uki.geometry.Inset(0, 0, 0, 0);
         this._insetWidth  = getInsets(options).left + inset.left + inset.right;
         this._insetHeight = getInsets(options).top + inset.top + inset.bottom;
+
         this._container = uki.createElement(
             'div', 
             options + ';position:absolute;overflow:hidden;z-index:' + (ext.zIndex || '-1') + ';' + 

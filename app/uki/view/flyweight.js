@@ -13,7 +13,12 @@ uki.view.Flyweight = uki.newClass({
      * @return String html
      */
     render: function(data) {
-        return '<div style="line-height: 30px; text-align: center;">' + data + '</div>' + '';
+        return '<div style="line-height: 30px; text-align: center; font-size: 12px">' + data + '</div>' + '';
+    },
+    
+    setSelected: function(container, data, state, focus) {
+        container.style.backgroundColor = state && focus ? '#3875D7' : state ? '#CCC' : '';
+        container.style.color = state && focus ? '#FFF' : '#000';
     }
     
     /**
