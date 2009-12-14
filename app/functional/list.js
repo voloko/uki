@@ -16,15 +16,25 @@ var p = uki(
             }
         ],
         rightChildViews: [
-            { view: 'Button', rect: '10 10 100 24', anchors: 'left top', text: 'Add +', id: "add", focusable: false },
-            { view: 'TextField', rect: '125 10 50 24', anchors: 'left top', placeholder: 'where', value: '7', id: 'add-n' },
-            { view: 'TextField', rect: '180 10 200 24', anchors: 'left top', placeholder: 'what', value: 'some text', id: 'add-text' },
+            { view: 'Box', rect: '0 0 400 100', anchors: 'left top', childViews: [
+                { view: 'Button', rect: '10 10 100 24', anchors: 'left top', text: 'Add +', id: "add", focusable: false },
+                { view: 'TextField', rect: '125 10 50 24', anchors: 'left top', placeholder: 'where', value: '7', id: 'add-n' },
+                { view: 'TextField', rect: '180 10 200 24', anchors: 'left top', placeholder: 'what', value: 'some text', id: 'add-text' },
             
-            { view: 'Button', rect: '10 40 100 24', anchors: 'left top', text: 'Remove -', id: "remove", focusable: false },
-            { view: 'TextField', rect: '125 40 50 24', anchors: 'left top', placeholder: 'which', value: '7', id: 'remove-n' },
+                { view: 'Button', rect: '10 40 100 24', anchors: 'left top', text: 'Remove -', id: "remove", focusable: false },
+                { view: 'TextField', rect: '125 40 50 24', anchors: 'left top', placeholder: 'which', value: '7', id: 'remove-n' },
             
-            { view: 'Button', rect: '10 70 100 24', anchors: 'left top', text: 'Selected Index', id: 'selectedIndex', focusable: false },
-            { view: 'TextField', rect: '125 70 50 24', anchors: 'left top', placeholder: 'index', value: '7', id: 'selectedIndex-value' }
+                { view: 'Button', rect: '10 70 100 24', anchors: 'left top', text: 'Selected Index', id: 'selectedIndex', focusable: false },
+                { view: 'TextField', rect: '125 70 50 24', anchors: 'left top', placeholder: 'index', value: '7', id: 'selectedIndex-value' }
+            ]},
+            { view: 'List', rect: '10 100 300 300', anchors: 'left top bottom', data: ['sample', 'sample 2'], minHeight: 300 },
+            
+            { view: 'Button', rect: '350 70 100 24', anchors: 'left top', id: 'add-s', text: 'add to list 2' },
+            { view: 'Button', rect: '550 70 100 24', anchors: 'left top', id: 'remove-s', text: 'remove list 2' },
+            { view: 'ScrollPane', rect: '350 100 300 270', anchors: 'left top bottom', childViews: [
+                { view: 'List', rect: '0 0 300 270', anchors: 'left top rigth', autosize: 'width', minHeight: 100, data: ['sample #1', 'sample #2', 'sample #3', 'sample #4'], id: 'list2' }
+            ]}
+            
         ]
     }
 ).attachTo( document.getElementById('test'), '1000 600' )
@@ -39,4 +49,12 @@ uki('#remove', p).click(function() {
 
 uki('#selectedIndex').click(function() {
     uki('#list').selectedIndex(uki('#selectedIndex-value').value())
+})
+
+uki('#add-s').click(function() {
+    uki('#list2')[0].addRow(0, 'text');
+})
+
+uki('#remove-s').click(function() {
+    uki('#list2')[0].removeRow(0);
 })

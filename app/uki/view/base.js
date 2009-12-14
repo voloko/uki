@@ -20,7 +20,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
 
     var proto = this;
     
-    proto.defaultCss = 'position:absolute;z-index:100;'
+    proto.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
                      + 'font-family:Arial,Helvetica,sans-serif;overflow:hidden;';
     
     proto.init = function() {

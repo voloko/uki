@@ -133,6 +133,11 @@ include('../uki.js');
             return this.y + this.height;
         },
         
+        normalize: function() {
+            this.x = this.y = 0;
+            return this;
+        },
+        
         empty: function() {
             return this.width <= 0.0 || this.height <= 0.0;
         },

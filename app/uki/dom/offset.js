@@ -6,8 +6,9 @@ include('../dom.js');
     
     if ( doc.documentElement["getBoundingClientRect"] ) {
     	self = uki.dom.offset = function( elem ) {
-    		if ( !elem ) return { top: 0, left: 0 };
+    		if ( !elem ) return { x: 0, y: 0 };
     		if ( elem === elem.ownerDocument.body ) return jQuery.offset.bodyOffset( elem );
+    		self.boxModel === undefined && self.initializeBoxModel();
     		var box  = elem.getBoundingClientRect(), 
     		    doc = elem.ownerDocument, 
     		    body = doc.body, 
@@ -16,11 +17,12 @@ include('../dom.js');
     			clientLeft = docElem.clientLeft || body.clientLeft || 0,
     			top  = box.top  + (self.pageYOffset || self.boxModel && docElem.scrollTop  || body.scrollTop ) - clientTop,
     			left = box.left + (self.pageXOffset || self.boxModel && docElem.scrollLeft || body.scrollLeft) - clientLeft;
+
     		return { y: top, x: left };
     	};
     } else {
     	self = uki.dom.offset = function( elem ) {
-    		if ( !elem ) return { top: 0, left: 0 };
+    		if ( !elem ) return { x: 0, y: 0 };
     		if ( elem === elem.ownerDocument.body ) return self.bodyOffset( elem );
     		self.initialized || self.initialize();
 
@@ -101,15 +103,18 @@ include('../dom.js');
     		this.doesNotIncludeMarginInBodyOffset = (body.offsetTop === 0);
     		body.style.marginTop = bodyMarginTop;
 		
+    		body.removeChild(container);
+    		this.boxModel === undefined && this.initializeBoxModel();
+    		this.initialized = true;
+    	},
+    	
+    	initializeBoxModel: function() {
     		var div = doc.createElement("div");
     		div.style.width = div.style.paddingLeft = "1px";
 
     		doc.body.appendChild( div );
     		this.boxModel = div.offsetWidth === 2;
     		doc.body.removeChild( div ).style.display = 'none';
-
-    		body.removeChild(container);
-    		this.initialized = true;
     	},
 
     	bodyOffset: function(body) {

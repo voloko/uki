@@ -21,6 +21,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._packSize = 20;
         this._visibleRectExt = 300;
         this._selectedIndex = -1;
+        this._minHeight = 0;
     };
     
     proto.background = function(bg) {
@@ -32,12 +33,34 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto.data = function(d) {
         if (d === undefined) return this._data;
+        this.selectedIndex(-1);
         this._data = d;
-        // if (this.rect()) {
-        //     var rect = this.rect().clone();
-        //     rect.height = d.length * this._rowHeight;
-        //     this.rect(rect);
-        // }
+        this._updateRectOnDataChnage();
+    };
+    
+    proto.minHeight = function(h) {
+        if (h === undefined) return this._minHeight;
+        
+        this._minHeight = h;
+        if (this.rect() && this.rect().height < h) {
+            var newRect = this.rect().clone();
+            newRect.height = h;
+            this.rect(newRect);
+        }
+    };
+    
+    proto._updateRectOnDataChnage = function() {
+        if (this.rect()) {
+            var newRect = this.rect().clone(),
+                oldRect = this.rect(),
+                h = this._data.length * this._rowHeight;
+                
+            if (h > this._minHeight) {
+                newRect.height = h;
+                this.rect(newRect);
+                if (this.parent()) this.parent().childResized(this, oldRect, newRect);
+            }
+        }
     };
     
     proto._domCreate = function() {
@@ -48,7 +71,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this.className(this.className())
         this.background().attachTo(this);
         
-        var packDom = uki.createElement('div', 'border-bottom:1px solid red;position:absolute;left:0;top:0px;width:100%;overflow:hidden');
+        var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
         this._packs = [
             {
                 dom: packDom,
@@ -65,11 +88,11 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._dom.appendChild(this._packs[1].dom);
         
         var _this = this;
-        this._scrollableParent.bind('scroll', function() {
+        if (this._scrollableParent) this._scrollableParent.bind('scroll', function() {
             _this.layout();
         });
         
-        this.bind('click', function(e) {
+        this.bind('mousedown', function(e) {
             var o = uki.dom.offset(this._dom),
                 y = e.domEvent.pageY - o.y,
                 p = Math.floor(y / this._rowHeight);
@@ -77,22 +100,27 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         });
         
         this._initFocusable();
+        if (this._scrollableParent && this._focusableInput) this._scrollableParent.dom().appendChild(this._focusableInput)
     };
     
     proto.selectedIndex = function(position) {
         if (position === undefined) return this._selectedIndex;
-        var nextIndex = Math.max(0, Math.min(this._data.length - 1, position));
+        var nextIndex = Math.max(0, Math.min((this._data || []).length - 1, position));
         if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
-        this._setSelected(this._selectedIndex = nextIndex, true);
+        if (nextIndex == position) this._setSelected(this._selectedIndex = nextIndex, true);
     };
     
     proto._setSelected = function(position, state) {
         if (!this._dom) return;
-        var item = this._itemAt(position),
-            maxY, minY;
+        var item = this._itemAt(position);
         if (!item) return;
         this._flyweightView.setSelected(item, this._data[position], state, this.hasFocus());
         if (!state) return;
+        this._scrollToPosition(position);
+    };
+    
+    proto._scrollToPosition = function(position) {
+        var maxY, minY;
         maxY = (position+1)*this._rowHeight;
         minY = position*this._rowHeight;
         if (maxY >= this._visibleRect.maxY()) {
@@ -112,18 +140,18 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._focus = function() {
-        if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
-        
+        this._selectedIndex = this._selectedIndex > -1 ? this._selectedIndex : 0;
+        this._setSelected(this._selectedIndex, true);
         if (this._firstFocus) {
             var _this = this,
                 userAgent = navigator.userAgent.toLowerCase(),
                 useKeyPress = /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent );
             uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
                 if (e.which == 38 || e.keyCode == 38) { // UP
-                    _this.selectedIndex(_this.selectedIndex() - 1);
+                    _this.selectedIndex(Math.max(0, _this.selectedIndex() - 1));
                     uki.dom.preventDefault(e);
                 } else if (e.which == 40 || e.keyCode == 40) { // DOWN
-                    _this.selectedIndex(_this.selectedIndex() + 1);
+                    _this.selectedIndex(Math.min(_this._data.length-1, _this.selectedIndex() + 1));
                     uki.dom.preventDefault(e);
                 }
             });
@@ -169,6 +197,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     // data api
     proto.addRow = function(position, data) {
+        this.selectedIndex(-1);
         this._data.splice(position, 0, data);
         if (position < this._packs[0].itemFrom) {
             this._movePack(this._packs[0], 1);
@@ -180,9 +209,11 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this._movePack(this._packs[1], 1);
             this._packs[1].itemTo++;
         }
+        this._updateRectOnDataChnage();
     };
     
     proto.removeRow = function(position) {
+        this.selectedIndex(-1);
         this._data.splice(position, 1);
         if (position < this._packs[0].itemFrom) {
             this._movePack(this._packs[0], -1);
@@ -196,6 +227,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this._packs[1].itemTo--;
             this._domLayout(this.rect());
         }
+        this._updateRectOnDataChnage();
     };
     
     proto._createRow = function(data) {
@@ -213,9 +245,9 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
     };
     
-    proto.visibleRect = function() {
-        return this._visibleRect;
-    };
+    // proto.visibleRect = function() {
+    //     return this._visibleRect;
+    // };
     
     proto._layoutPack = function(pack) {
     };
@@ -227,7 +259,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     }
     
     proto._domLayout = function(rect) {
-        this._visibleRect = getVisibleRect(this, this._scrollableParent);
+        this._visibleRect = this._scrollableParent ? getVisibleRect(this, this._scrollableParent) : this.rect().clone().normalize();
         Base._domLayout.call(this, rect);
         
         var totalHeight = this._rowHeight * this._data.length,
@@ -272,7 +304,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this._swapPacks();
         }
         
-        if (this._focusableInput) this._focusableInput.style.top = this._visibleRect.y + 'px'; // move to reduce on focus jump
+        // if (this._focusableInput) this._focusableInput.style.top = this._visibleRect.y + 'px'; // move to reduce on focus jump
             
     };
     
@@ -299,7 +331,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
 
         for (i = queue.length - 1; i >= 0; i--){
             c = queue[i];
-            tmpRect = c != from && c.visibleRect ? c.visibleRect() : c.rect().clone();
+            tmpRect = c.visibleRect ? c.visibleRect() : c.rect().clone();
             rect = rect ? rect.intersection(tmpRect) : tmpRect;
             rect.x -= c.rect().x;
             rect.y -= c.rect().y;

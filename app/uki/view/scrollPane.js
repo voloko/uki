@@ -51,6 +51,11 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     this.scrollableV = uki.newProperty('_scrollableV');
     this.scrollableH = uki.newProperty('_scrollableH');
     
+    this.childResized = function(child) {
+        this._updateInnerRect();
+        this._needsLayout ? this.layout() : child.layout();
+    };
+    
     this.scroll = function(dx, dy) {
         if (dx) this.scrollTop(this.scrollLeft() + dy);
         if (dy) this.scrollTop(this.scrollTop() + dy);
@@ -69,7 +74,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     };
     
     this.visibleRect = function() {
-        return new Rect(this.scrollLeft(), this.scrollTop(), this.innerRect().width, this.innerRect().height);
+        return new Rect(this.scrollLeft(), this.scrollTop(), this._innerRect.width, this._innerRect.height);
     };
     
     proto._domCreate = function() {
@@ -94,51 +99,52 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         return val;
     }
     
-    // proto._calcMaxRect = function() {
-    //     this._maxRect = new Rect(0, 0, Math.max(this._innerRect.width, this._maxX || 0), Math.max(this._innerRect.height, this._maxY || 0));
-    // };
+    proto.contentsSize = function() {
+        return new Rect(this.maxProp(this, 'maxX'), this.maxProp(this, 'maxY'));
+    };
     
     proto.visibleRect = function() {
-        var tmpRect = this.innerRect().clone();
-        tmpRect.x = this.scrollLeft();
-        tmpRect.y = this.scrollTop();
+        this._updateInnerRect();
+        var tmpRect = this._innerRect.clone();
+        tmpRect.x = this.rect().x + this.scrollLeft();
+        tmpRect.y = this.rect().y + this.scrollTop();
         return tmpRect;
     };
     
-    proto.innerRect = function(newRect) {
-        if (newRect === undefined) return this._innerRect;
-        
+    // rect - scroll bars if needed
+    proto._updateInnerRect = function() {
         initScrollWidth();
+        
         var oldRect = this._innerRect;
-        if (this._innerRect && newRect.eq(this._innerRect)) return;
-        this._innerRect = newRect;
-        this._needsLayout = true;
+        this._innerRect = new Rect(0, 0, this.rect().width - (this._scrollV ? scrollWidth : 0), this.rect().height - (this._scrollH ? scrollWidth : 0) );
         
         if (oldRect) {
-            if (oldRect.width != newRect.width || oldRect.height != newRect.height) {
-                this._resizeChildViews(oldRect);
+            if (!oldRect.eq(this._innerRect)) this._resizeChildViews(oldRect);
 
-                var max, scroll, dx = 0, dy = 0;
-                if (this._scrollableV) {
-                    this._maxY = max = maxProp(this, 'maxY');
-                    scroll = max > newRect.height;
-                    if (scroll != this._scrollV) dx = (scroll ? -1 : 1) * scrollWidth;
-                    this._scrollV = scroll;
-                }
-                if (this._scrollableH) {
-                    this._maxX = max = maxProp(this, 'maxX');
-                    scroll = max > newRect.width;
-                    if (scroll != this._scrollH) dy = (scroll ? -1 : 1) * scrollWidth;
-                    this._scrollH = scroll;
-                }
-                
-                if (dx || dy) {
-                    this._innerRect.width += dx;
-                    this._innerRect.height += dy;
-                    
-                    this._resizeChildViews(oldRect);
-                }
+            var max, scroll, dx = 0, dy = 0;
+            if (this._scrollableV) {
+                this._maxY = max = maxProp(this, 'maxY');
+                scroll = max > this._innerRect.height;
+                if (scroll != this._scrollV) dx = (scroll ? -1 : 1) * scrollWidth;
+                this._scrollV = scroll;
             }
+            if (this._scrollableH) {
+                this._maxX = max = maxProp(this, 'maxX');
+                scroll = max > this._innerRect.width;
+                if (scroll != this._scrollH) dy = (scroll ? -1 : 1) * scrollWidth;
+                this._scrollH = scroll;
+            }
+            
+            if (dx || dy) {
+                oldRect = this._innerRect.clone();
+                this._innerRect.width += dx;
+                this._innerRect.height += dy;
+                this._needsLayout = true;
+                
+                this._resizeChildViews(oldRect);
+            }
+        } else {
+            this._needsLayout = true;
         }
         this._clientRect = requirePaneResize ? new Rect(0, 0, this._scrollH ? this._maxX : this._innerRect.width, this._scrollV ? this._maxY : this._innerRect.height) : this._innerRect;
         
@@ -156,7 +162,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         
         var oldRect = this._rect;
         if (!this._resizeSelf(newRect)) return;
-        this.innerRect( new Rect(0, 0, newRect.width - (this._scrollV ? scrollWidth : 0), newRect.height - (this._scrollH ? scrollWidth : 0) ) );
+        this._updateInnerRect();
     };
     
     proto._resizeChildViews = function(oldRect) {
