@@ -208,7 +208,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto.rect = function(newRect) {
         if (newRect === undefined) return this._rect;
-        
+
         newRect = Rect.create(newRect);
         if (this._rect && newRect.eq(this._rect)) return false;
         this._rect = newRect;

@@ -20,7 +20,7 @@ uki.background.Rows = uki.newClass(new function() {
         if (!this._container) {
             this._container = uki.createElement(
                 'div', 
-                'position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1'
+                'position:absolute;left:0;top:0;width:100%;z-index:-1'
             );
         }
         var _this = this;

@@ -33,15 +33,15 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     proto.data = function(d) {
         if (d === undefined) return this._data;
         this._data = d;
-        if (this.rect()) {
-            var rect = this.rect().clone();
-            rect.height = d.length * this._rowHeight;
-            this.rect(rect);
-        }
+        // if (this.rect()) {
+        //     var rect = this.rect().clone();
+        //     rect.height = d.length * this._rowHeight;
+        //     this.rect(rect);
+        // }
     };
     
     proto._domCreate = function() {
-        this._dom = uki.createElement('div', this.defaultCss);
+        this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
         this._scrollableParent = findScrollableParent(this);
         
         this.selectable(this.selectable());
@@ -92,6 +92,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             maxY, minY;
         if (!item) return;
         this._flyweightView.setSelected(item, this._data[position], state, this.hasFocus());
+        if (!state) return;
         maxY = (position+1)*this._rowHeight;
         minY = position*this._rowHeight;
         if (maxY >= this._visibleRect.maxY()) {
@@ -114,14 +115,16 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
         
         if (this._firstFocus) {
-            var _this = this;
-            uki.dom.bind(this._focusableInput, 'keydown', function(e) {
-                if (e.which == 38) { // UP
+            var _this = this,
+                userAgent = navigator.userAgent.toLowerCase(),
+                useKeyPress = /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent );
+            uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
+                if (e.which == 38 || e.keyCode == 38) { // UP
                     _this.selectedIndex(_this.selectedIndex() - 1);
-                    uki.dom.stop(e);
-                } else if (e.which == 40) { // DOWN
+                    uki.dom.preventDefault(e);
+                } else if (e.which == 40 || e.keyCode == 40) { // DOWN
                     _this.selectedIndex(_this.selectedIndex() + 1);
-                    uki.dom.stop(e);
+                    uki.dom.preventDefault(e);
                 }
             });
         }

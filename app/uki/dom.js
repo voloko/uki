@@ -96,7 +96,7 @@ uki.dom = {
         };
     },
     
-    stop: function(e) {
+    preventDefault: function(e) {
         e.preventDefault ? e.preventDefault() : e.returnValue = false        
     },
     
