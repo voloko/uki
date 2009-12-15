@@ -1,9 +1,3 @@
-include('../view.js');
-include('focusable.js');
-include('../dom/offset.js');
-
-include('base.js');
-
 (function() {
 
 var Base = uki.view.Base.prototype,

@@ -1,5 +1,3 @@
-include('container.js');
-
 uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     var Base = uki.view.Container.prototype,
         Rect = uki.geometry.Rect;

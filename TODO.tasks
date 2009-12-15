@@ -4,7 +4,7 @@ Core
     - reduce rect clones
     - goog export
 - optimize
-    ✓ dom assign layout (_domLayout callculates, assign stores/writes difference to style)
+    ✓ dom assign layout (_layoutDom callculates, assign stores/writes difference to style)
     ✓ try single cssText instead of left = , right =, ... (worse)
     ✓ do not recalculate width if possible
     ✓ smooth label/button layout
@@ -29,7 +29,7 @@ Core
     ✓ access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
 - split uki into uki-core and uki-viewlib
 ✓ focusable
-    ✓ create dummy input/use existing input after _domCreate()
+    ✓ create dummy input/use existing input after _createDom()
     ✓ attach focusable to
         ✓ checkbox
         ✓ button

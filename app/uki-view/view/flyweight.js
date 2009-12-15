@@ -1,5 +1,3 @@
-include('../view.js');
-
 /**
  * Flyweight view rendering
  * Used in lists, tables, grids

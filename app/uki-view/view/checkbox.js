@@ -1,6 +1,3 @@
-include('base.js');
-include('focusable.js');
-
 (function() {
 
 var Base = uki.view.Base.prototype,

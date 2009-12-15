@@ -1,6 +1,4 @@
-include('base.js');
 include('flyweight.js');
-include('focusable.js');
 
 uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     var Base = uki.view.Base.prototype,

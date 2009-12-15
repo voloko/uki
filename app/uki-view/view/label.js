@@ -1,5 +1,3 @@
-include('base.js');
-
 (function() {
 
 var Base = uki.view.Base.prototype;

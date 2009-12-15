@@ -1,6 +1,4 @@
-include('base.js');
 include('label.js');
-include('focusable.js');
 
 (function() {
 

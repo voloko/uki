@@ -1,5 +1,3 @@
-include('container.js');
-
 uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     /**
      * Scroll pane. Pane with scrollbars with content overflowing the borders.
