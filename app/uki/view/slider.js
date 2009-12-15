@@ -38,7 +38,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         return val / (this._max - this._min) * this._rect.width;
     },
     
-    _domCreate: function() {
+    _createDom: function() {
         this._dom = uki.createElement('div', Base.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');
         this._handle = uki.createElement('div', Base.defaultCss + 'cursor:default;background:url(' + uki.theme.image('x').src + ')');
         this._bg = uki.theme.image('slider-handle');
@@ -119,10 +119,10 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._dom.removeChild(this._focusBg);
     },
     
-    _domLayout: function(rect) {
+    _layoutDom: function(rect) {
         var fixedRect = rect.clone();
         fixedRect.height = 18;
-        Base._domLayout.call(this, fixedRect);
+        Base._layoutDom.call(this, fixedRect);
         this.value(this.value());
         return true;
     },

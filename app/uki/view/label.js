@@ -35,13 +35,13 @@ uki.view.Label = uki.newClass(uki.view.Base, {
     },
     
     
-    _domCreate: function() {
-        Base._domCreate.call(this);
+    _createDom: function() {
+        Base._createDom.call(this);
         this._dom.appendChild(this._label);
     },
     
-    _domLayout: function() {
-        Base._domLayout.apply(this, arguments);
+    _layoutDom: function() {
+        Base._layoutDom.apply(this, arguments);
         var inset = this._inset;
         // if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
         if (!this.multiline()) this._label.style.paddingTop = (this._rect.height/2 - 6) + 'px';

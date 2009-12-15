@@ -21,7 +21,7 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
         };
     });
     
-    proto._domCreate = function() {
+    proto._createDom = function() {
         // dom
         this._dom = uki.createElement('div', this.defaultStyle);
         this._dom.appendChild(this._label);

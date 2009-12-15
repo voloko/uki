@@ -58,8 +58,8 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     
     
     
-    proto._domLayout = function(rect) {
-        Base._domLayout.call(this, rect);
+    proto._layoutDom = function(rect) {
+        Base._layoutDom.call(this, rect);
         this._layoutChildViews(rect);
     };
 

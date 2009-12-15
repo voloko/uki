@@ -81,7 +81,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         return handle;
     };
     
-    proto._domCreate = function() {
+    proto._createDom = function() {
         this.handlePosition(this.handlePosition()); // force handle position within rect limits
         this._dom = uki.createElement('div', Base.defaultCss);
         if (this._handleWidth <= 3) this._handleWidth = 1;
@@ -184,8 +184,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         this._resizeChildViewsWithRect(this._rect, this._handlePosition);
     };
     
-    proto._domLayout = function(rect) {
-        Base._domLayout.call(this, rect);
+    proto._layoutDom = function(rect) {
+        Base._layoutDom.call(this, rect);
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';
     };
 });

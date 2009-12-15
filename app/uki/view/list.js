@@ -63,7 +63,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         }
     };
     
-    proto._domCreate = function() {
+    proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
         this._scrollableParent = findScrollableParent(this);
         
@@ -220,12 +220,12 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this._movePack(this._packs[1], -1);
         } else if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
             this._removeFromPack(this._packs[1], position);
-            this._domLayout(this.rect());
+            this._layoutDom(this.rect());
         } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
             this._removeFromPack(this._packs[0], position);
             this._movePack(this._packs[1], -1);
             this._packs[1].itemTo--;
-            this._domLayout(this.rect());
+            this._layoutDom(this.rect());
         }
         this._updateRectOnDataChnage();
     };
@@ -236,11 +236,11 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto.layout = function() {
         if (!this._dom) {
-            this._domCreate(this._rect);
+            this._createDom(this._rect);
             this._parent.domForChild(this).appendChild(this._dom);
             this._bindPendingEventsToDom();
         }
-        this._domLayout(this._rect);
+        this._layoutDom(this._rect);
         this._needsLayout = false;
         this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
     };
@@ -258,9 +258,9 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._packs[1] = tmp;
     }
     
-    proto._domLayout = function(rect) {
+    proto._layoutDom = function(rect) {
         this._visibleRect = this._scrollableParent ? getVisibleRect(this, this._scrollableParent) : this.rect().clone().normalize();
-        Base._domLayout.call(this, rect);
+        Base._layoutDom.call(this, rect);
         
         var totalHeight = this._rowHeight * this._data.length,
             prefferedPackSize = Math.ceil((this._visibleRect.height + this._visibleRectExt*2) / this._rowHeight),

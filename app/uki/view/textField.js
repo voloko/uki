@@ -28,7 +28,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
         return 'uki.component.TextField';
     },
     
-    _domCreate: function() {
+    _createDom: function() {
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
         this._dom.appendChild(this._input);
         
@@ -39,8 +39,8 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._initFocusable(this._input);
     },
 
-    _domLayout: function() {
-        Base._domLayout.apply(this, arguments);
+    _layoutDom: function() {
+        Base._layoutDom.apply(this, arguments);
         uki.dom.layout(this._input.style, {
             width: this._rect.width - 4
         });

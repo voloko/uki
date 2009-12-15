@@ -158,11 +158,11 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto.layout = function() {
         if (!this._dom) {
-            this._domCreate(this._rect);
+            this._createDom(this._rect);
             this._parent.domForChild(this).appendChild(this._dom);
             this._bindPendingEventsToDom();
         }
-        this._domLayout(this._rect);
+        this._layoutDom(this._rect);
         this._needsLayout = false;
         this.trigger('layout', {rect: this._rect, source: this});
     };
@@ -170,7 +170,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /**
      * Called through a second layout pass when _dom should be created
      */
-    proto._domCreate = function() {
+    proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
         this.selectable(this.selectable());
         this.className(this.className())
@@ -180,7 +180,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     /**
      * Called through a second layout pass when _dom is allready created
      */
-    proto._domLayout = function(rect) {
+    proto._layoutDom = function(rect) {
         var l = {}, s = uki.supportNativeLayout, relativeRect = this.parent().clientRect();
         if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
             l.left = rect.x;

@@ -77,8 +77,8 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         return new Rect(this.scrollLeft(), this.scrollTop(), this._innerRect.width, this._innerRect.height);
     };
     
-    proto._domCreate = function() {
-        Base._domCreate.call(this);
+    proto._createDom = function() {
+        Base._createDom.call(this);
         this._pane = uki.createElement('div', 'position:absolute;left:0;top:0;' + (uki.supportNativeLayout && !requirePaneResize ? 'right:0;bottom:0' : 'width:100%;height:100%'));
         if (requirePaneResize) {
             this._pane.style.overflow = 'hidden';
@@ -179,7 +179,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         };
     };
     
-    proto._domLayout = function(rect) {
+    proto._layoutDom = function(rect) {
         if (requirePaneResize) {
             var clientRect = this.clientRect();
             this._pane.style.height = clientRect.height + 'px';
@@ -197,7 +197,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
             }
         }
         
-        Base._domLayout.call(this, rect);
+        Base._layoutDom.call(this, rect);
         this._layoutChildViews(rect);
     };
     
