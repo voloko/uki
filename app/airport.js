@@ -1,1 +1,1 @@
-include('theme/airport.js');
+include('uki-theme/airport.js');
