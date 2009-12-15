@@ -8,7 +8,7 @@
  * Copyright (c) 2009 John Resig
  */
 
-include('uki.js');
+include('uki-core/uki.js');
 include('uki-core/utils.js');
 include('uki-core/geometry.js');
 include('uki-core/attr.js');

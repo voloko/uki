@@ -1,4 +1,4 @@
-include('../uki.js');
+include('uki.js');
 
 (function() {
     var themeRegexp  = /theme\s*\(\s*([^)]*\s*)\)/,

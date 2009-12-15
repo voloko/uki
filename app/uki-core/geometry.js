@@ -1,4 +1,4 @@
-include('../uki.js');
+include('uki.js');
 
 (function() {
     var geometry = uki.geometry = {};

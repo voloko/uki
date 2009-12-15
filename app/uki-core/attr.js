@@ -1,4 +1,4 @@
-include('../uki.js');
+include('uki.js');
 include('utils.js');
 include('geometry.js');
 

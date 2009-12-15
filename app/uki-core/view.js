@@ -1,2 +1,2 @@
-include('../uki.js');
+include('uki.js');
 uki.view = {};

@@ -1,4 +1,4 @@
-include('../uki.js');
+include('uki.js');
 include('attr.js');
 include('collection.js');
 
