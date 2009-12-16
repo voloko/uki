@@ -8,7 +8,7 @@ uki.image = function(url, dataUrl, alpha) {
     } else {
         result.src = url;
         if (alpha && uki.image.needAlphaFix) {
-            var dummy = uki.createElement('div', 'width:0;height:0;overflow:hidden;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + url + '",sizingMethod="scale")');
+            var dummy = uki.createElement('div', 'overflow:hidden;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + url + '",sizingMethod="scale")');
             uki.image.load([result], function() {
                 dummy.style.width = result.width + 'px';
                 dummy.style.height = result.height + 'px';
@@ -50,6 +50,6 @@ uki.image.load = function(images, callback) {
     });
 };
 
-uki.image.dataUrlSupported = document.createElement('canvas').toDataURL || /MSIE (8)/.test(navigator.userAgent);
-uki.image.needAlphaFix = /MSIE 6/.test(navigator.userAgent);
-if(uki.image.needAlphaFix) document.execCommand("BackgroundImageCache", false, true);
+uki.image.dataUrlSupported = doc.createElement('canvas').toDataURL || /MSIE (8)/.test(ua);
+uki.image.needAlphaFix = /MSIE 6/.test(ua);
+if(uki.image.needAlphaFix) doc.execCommand("BackgroundImageCache", false, true);

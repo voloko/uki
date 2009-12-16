@@ -1,2 +1,4 @@
 var root = this,
-    doc  = document;
+    doc  = document,
+    nav = navigator,
+    ua  = nav.userAgent;

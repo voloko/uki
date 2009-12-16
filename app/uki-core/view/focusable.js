@@ -25,7 +25,8 @@ uki.view.Focusable = {
         this._focusableInput = input;
         this._hasFocus = false;
         this._firstFocus = true;
-        var _this = this;
+        var _this = this,
+            needsRefocus = doc.attachEvent;
             
         uki.dom.bind(input, 'focus', function(e) {
             if (_this._hasFocus) return;
@@ -43,8 +44,10 @@ uki.view.Focusable = {
         });
         
         if (!preCreatedInput) this.bind('mousedown', function(e) {
-            if (!_this.hasFocus(e)) {
+            if (!_this.hasFocus()) {
                 _this._focusableInput.focus();
+            } else {
+                needsRefocus && setTimeout(function() {_this._focusableInput.focus()}, 1)
             }
             e.domEvent.preventDefault ? e.domEvent.preventDefault() : e.domEvent.returnValue = false;
         });

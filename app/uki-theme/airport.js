@@ -45,8 +45,7 @@
             },
             
             'button-focus': function() {
-                // FIXME: bg in IE6 is ugly
-                if (uki.image.needAlphaFix) return new uki.background.CssBox('border:2px solid #7594D2;', { inset: '0 0 1 0', zIndex: 2 } );
+                if (uki.image.needAlphaFix) return new uki.background.CssBox('filter:progid:DXImageTransform.Microsoft.Blur(pixelradius=3);background:#7594D2;', { inset: '-5 -5 -4 -5', zIndex: -2 } );
                 
                 var prefix = "button/focusRing-";
                 return new uki.background.Sliced9({

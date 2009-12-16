@@ -38,10 +38,6 @@ uki.background.Sliced9 = uki.newClass(new function() {
         return uki.imageHTML(setting[0], setting[1], setting[2], ' style="position:absolute;' + style + '"');
     }
     
-    function re (s) {
-        return s.replace("sizingMethod='scale'", "sizingMethod='crop'");
-    }
-    
     this._getContainer = function() {
         var key = this._getKey();
         if (!cache[key]) {
@@ -62,7 +58,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (inset.top && inset.left) {
             html[html.length] = makeDiv('tl',
                 [LEFT + 0, TOP + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                re(img(settings.c, [LEFT + 0, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                (img(settings.c, [LEFT + 0, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         if (inset.top) {
@@ -74,7 +70,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (inset.top && inset.right) {
             html[html.length] = makeDiv('tr',
                 [RIGHT + 0, TOP + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                re(img(settings.c, [LEFT + '-' + inset.right + PX, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                (img(settings.c, [LEFT + '-' + inset.right + PX, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         
@@ -100,7 +96,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (inset.bottom && inset.left) {
             html[html.length] = makeDiv('bl',
                 [LEFT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                re(img(settings.c, [LEFT + 0, TOP + '-' + inset.bottom + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                (img(settings.c, [LEFT + 0, TOP + '-' + inset.bottom + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         if (inset.bottom) {
@@ -112,7 +108,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (inset.bottom && inset.right) {
             html[html.length] = makeDiv('br',
                 [RIGHT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                re(img(settings.c, [LEFT + '-' + inset.right + PX, TOP + '-' + inset.bottom + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                (img(settings.c, [LEFT + '-' + inset.right + PX, TOP + '-' + inset.bottom + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));
