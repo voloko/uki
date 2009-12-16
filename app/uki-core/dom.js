@@ -1,12 +1,11 @@
+include('const.js');
 include('uki.js');
 include('utils.js');
 
 (function() {
  
 var guid = 1,
-    expando = 'uki' + (+new Date),
-    root = this,
-    doc = root.document;
+    expando = 'uki' + (+new Date);
    
 uki.dom = {
     bound: {},

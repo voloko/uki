@@ -2,7 +2,6 @@ include('flyweight.js');
 
 uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     var Base = uki.view.Base.prototype,
-        Rect = uki.geometry.Rect,
         proto = this,
         doc = document;
         
@@ -98,7 +97,10 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         });
         
         this._initFocusable();
-        if (this._scrollableParent && this._focusableInput) this._scrollableParent.dom().appendChild(this._focusableInput)
+        if (this._scrollableParent && this._focusableInput) {
+            var target = this._scrollableParent.parent() || this._scrollableParent;
+            target.dom().appendChild(this._focusableInput)
+        }
     };
     
     proto.selectedIndex = function(position) {

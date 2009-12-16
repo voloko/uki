@@ -27,9 +27,25 @@ include('attachment.js');
         }
     };
     
-    uki.each(['html', 'text', 'background', 'value', 'rect', 'checked', 'selectedIndex'], function(i, name) {
-        self[name] = function( value ) { return this.attr( name, value ) };
+    
+    uki.each(['parent', 'dirtyParent'], function(i, name) {
+        self[name] = function() {
+            return new uki.Collection( uki.map(this, name) );
+        };
     })
+    
+    uki.each(['layout', 'addRow', 'removeRow', 'resizeToContents'], function(i, name) {
+        self[name] = function() { 
+            for (var i=0; i < this.length; i++) {
+                this[i][name].apply(this[i], arguments);
+            };
+            return this;
+        };
+    })
+    
+    uki.each(['html', 'text', 'background', 'value', 'rect', 'checked', 'selectedIndex', 'typeName', 'id', 'name'], function(i, name) {
+        self[name] = function( value ) { return this.attr( name, value ) };
+    });
     
     uki.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
     	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +

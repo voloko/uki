@@ -55,7 +55,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         
         uki.dom.bind(this._handle, 'mousedown', function(e) {
             _this._dragging = true;
-            _this._initialPosition = new uki.geometry.Point(parseInt(_this._handle.style.left, 10), parseInt(_this._handle.style.top, 10));
+            _this._initialPosition = new Point(parseInt(_this._handle.style.left, 10), parseInt(_this._handle.style.top, 10));
             uki.dom.drag.start(_this, e);
         });
         

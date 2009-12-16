@@ -4,7 +4,7 @@
     }
     
     uki.theme.airport = {
-        imagePath: '/app/theme/airport/i/',
+        imagePath: '/app/uki-theme/airport/i/',
         
         background: function(name, params) {
             return this.backgrounds[name] && this.backgrounds[name](params);

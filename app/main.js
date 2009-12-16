@@ -7,7 +7,8 @@
  * Parts of code derived from jQuery JavaScript Library v1.3.2
  * Copyright (c) 2009 John Resig
  */
-
+(function() {
+include('uki-core/const.js');
 include('uki-core/uki.js');
 include('uki-core/utils.js');
 include('uki-core/geometry.js');
@@ -45,3 +46,5 @@ include('uki-view/view/list.js');
 include('uki-view/view/slider.js');
 include('uki-view/view/splitPane.js');
 include('uki-view/view/scrollPane.js');
+include('uki-view/view/toolbar.js');
+}());

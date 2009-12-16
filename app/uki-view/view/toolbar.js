@@ -1,4 +1,4 @@
-uki.view.Toolbar = uki.newClass(uki.view.Container, {
+uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
     var proto = this;
     
     proto.buttons = function() {
@@ -6,13 +6,15 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, {
     };
     
     proto._createDom = function() {
+        this._dom = uki.createElement('div', this.defaultCss);
+        if (this.background()) this.background().attachTo(this);
+    };
+    
+    proto._renderButton = function() {
         
     };
     
-    
+    proto.typeName = function() {
+        return 'uki.view.Toolbar';
+    };
 });
-
-{ view: Toolbar, buttons: [
-    { label: 'Edit', icon: 'url', name: 'edit' },
-    { label: 'Push', icon: 'url', name: 'woww'}
-]}

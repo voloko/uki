@@ -2,8 +2,7 @@ include('base.js');
 
 uki.view.Container = uki.newClass(uki.view.Base, new function() {
     var Base = uki.view.Base.prototype,
-        proto = this,
-        Rect = uki.geometry.Rect;
+        proto = this;
         
         
     proto.init = function() {
@@ -13,6 +12,26 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     
     proto.typeName = function() {
         return 'uki.view.Container';
+    };
+    
+    function maxProp (c, prop) {
+        var val = 0, i, l;
+        for (i = c._childViews.length - 1; i >= 0; i--){
+            val = Math.max(c._childViews[i].rect()[prop]());
+        };
+        return val;
+    }
+    
+    proto.contentsWidth = function() {
+        return maxProp(this, 'maxX') - maxProp(this, 'minX');
+    };
+    
+    proto.contentsHeight = function() {
+        return maxProp(this, 'maxY') - maxProp(this, 'minY');
+    };
+    
+    proto.contentsSize = function() {
+        return new Size(this.contentsWidth(), this.contentsHeight());
     };
     
     /**

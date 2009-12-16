@@ -11,7 +11,7 @@ uki.background.CssBox = uki.newClass(new function() {
             uki.dom.probe(
                 uki.createElement('div', options + ';position:absolute;overflow:hidden;left:-999em;width:10px;height:10px;'), 
                 function(c) {
-                    cache[options] = new uki.geometry.Inset(
+                    cache[options] = new Inset(
                         c.offsetWidth - 10,
                         c.offsetHeight - 10
                     );
@@ -24,7 +24,7 @@ uki.background.CssBox = uki.newClass(new function() {
     this.init = function(options, ext) {
         this._options = options;
         ext = ext || {};
-        this._inset = inset = uki.geometry.Inset.create(ext.inset) || new uki.geometry.Inset(0, 0, 0, 0);
+        this._inset = inset = Inset.create(ext.inset) || new Inset();
         this._insetWidth  = getInsets(options).left + inset.left + inset.right;
         this._insetHeight = getInsets(options).top + inset.top + inset.bottom;
 

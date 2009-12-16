@@ -7,7 +7,7 @@ include('../dom.js');
 
         start: function(draggable, e) {
             this.draggable = draggable;
-            this.pos = new uki.geometry.Point(e.pageX, e.pageY);
+            this.pos = new Point(e.pageX, e.pageY);
             bind();
         }
     }

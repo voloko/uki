@@ -7,7 +7,8 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
     var proto = this;
     
     proto.init = function() {
-        baseProto.init.apply(this, arguments);
+        baseProto.init.call(this);
+        this._inset = new Inset(0, 4);
         this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;" // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
     }
     
@@ -50,15 +51,15 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
             _this._over = true;
         };
         
-        this._mouseout = function() {
+        this._mouseout = function(e) {
             _this._backgroundByName('normal');
             _this._over = false;
         };
         
         uki.dom.bind(document, 'mouseup', this._mouseup);
         uki.dom.bind(this._dom, 'mousedown', this._mousedown);
-        uki.dom.bind(this._dom, 'mouseover', this._mouseover);
-        uki.dom.bind(this._dom, 'mouseout', this._mouseout);
+        uki.dom.bind(this._dom, this._dom.attachEvent ? 'mouseenter' : 'mouseover', this._mouseover);
+        uki.dom.bind(this._dom, this._dom.attachEvent ? 'mouseleave' : 'mouseout', this._mouseout);
         
         this.selectable(this.selectable());
         this.className(this.className())

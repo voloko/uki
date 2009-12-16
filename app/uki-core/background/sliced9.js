@@ -3,8 +3,7 @@ include('../image.js');
 
 uki.background.Sliced9 = uki.newClass(new function() {
     var nativeCss = ['MozBorderImage', 'WebkitBorderImage', 'borderImage'],
-        dom = uki.dom,
-        geometry = uki.geometry;
+        dom = uki.dom;
         
     var LEFT = 'left:',
         TOP  = 'top:',
@@ -19,13 +18,13 @@ uki.background.Sliced9 = uki.newClass(new function() {
     
     this.init = function(partSettings, inset, options) {
         this._settings  = uki.extend({}, partSettings);
-        this._inset     = geometry.Inset.create(inset);
+        this._inset     = Inset.create(inset);
         this._size      = null;
         this._inited    = false;
         
         options = options || {};
-        this._fixedSize = geometry.Size.create(options.fixedSize) || new geometry.Size();
-        this._bgInset   = geometry.Inset.create(options.inset)    || new geometry.Inset();
+        this._fixedSize = Size.create(options.fixedSize) || new Size();
+        this._bgInset   = Inset.create(options.inset)    || new Inset();
         this._zIndex    = options.zIndex || -1;
 
         this._container = this._getContainer();

@@ -27,11 +27,11 @@ var p = uki(
                 { view: 'Button', rect: '10 70 100 24', anchors: 'left top', text: 'Selected Index', id: 'selectedIndex', focusable: false },
                 { view: 'TextField', rect: '125 70 50 24', anchors: 'left top', placeholder: 'index', value: '7', id: 'selectedIndex-value' }
             ]},
-            { view: 'List', rect: '10 100 300 300', anchors: 'left top bottom', data: ['sample', 'sample 2'], minHeight: 300 },
+            { view: 'List', rect: '10 100 300 300', anchors: 'left top', data: ['sample', 'sample 2'], minHeight: 300 },
             
             { view: 'Button', rect: '350 70 100 24', anchors: 'left top', id: 'add-s', text: 'add to list 2' },
             { view: 'Button', rect: '550 70 100 24', anchors: 'left top', id: 'remove-s', text: 'remove list 2' },
-            { view: 'ScrollPane', rect: '350 100 300 270', anchors: 'left top bottom', childViews: [
+            { view: 'ScrollPane', rect: '350 100 300 270', anchors: 'left top', childViews: [
                 { view: 'List', rect: '0 0 300 270', anchors: 'left top rigth', autosize: 'width', minHeight: 100, data: ['sample #1', 'sample #2', 'sample #3', 'sample #4'], id: 'list2' }
             ]}
             
@@ -41,7 +41,7 @@ var p = uki(
 
 uki('#add', p).click(function() { 
     uki('#list')[0].addRow(uki('#add-n').value() || 0, uki('#add-text').value() || 'sample')
-})
+});
 
 uki('#remove', p).click(function() {
     uki('#list')[0].removeRow(uki('#remove-n').value());
@@ -49,12 +49,14 @@ uki('#remove', p).click(function() {
 
 uki('#selectedIndex').click(function() {
     uki('#list').selectedIndex(uki('#selectedIndex-value').value())
-})
+});
 
 uki('#add-s').click(function() {
-    uki('#list2')[0].addRow(0, 'text');
-})
+    uki('#list2').addRow(0, 'text');
+    uki('#list2').dirtyParent().layout();
+});
 
 uki('#remove-s').click(function() {
-    uki('#list2')[0].removeRow(0);
-})
+    uki('#list2').removeRow(0);
+    uki('#list2').dirtyParent().layout();
+});

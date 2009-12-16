@@ -954,7 +954,7 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         this._parent = null;
         this._rect = null;
         this._children = [];
-        this._domCreate();
+        this._createDom();
         
         if (rect) this.rect(rect);
     };
@@ -1003,7 +1003,7 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
 
         if (rect.eq(this._rect)) return;
         
-        this._domLayout(rect);
+        this._layoutDom(rect);
         if (this._rect) {
             var oldSize = this._rect.clone();
             this._rect = rect;
@@ -1032,7 +1032,7 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         return this._domStyle;
     };
     
-    proto._domLayout = function(rect) {
+    proto._layoutDom = function(rect) {
         var props = {};
 
         layout.schedule(this._domStyle, {
@@ -1047,7 +1047,7 @@ uki.component.Base = uki.newClass(uki.dom.Observable, new function() {
         // this._domStyle.height = rect.height + 'px';
     };
     
-    proto._domCreate = function() {
+    proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
         this._domStyle = this._dom.style;
     };
@@ -1122,7 +1122,7 @@ var base = uki.component.Base.prototype,
     };
     
 self.prototype = uki.extend({}, base, {
-   _domCreate: function() {
+   _createDom: function() {
        this._dom = this._dom = document.createElement('textarea');
        this._domStyle = this._dom.style;
        this._domStyle.cssText = base.defaultCss;
@@ -1140,7 +1140,7 @@ var Base = uki.component.Base.prototype,
     };
     
 self.prototype = uki.extend({}, Base, {
-   _domCreate: function() {
+   _createDom: function() {
        this._dom = document.createElement('input');
        this._domStyle = this._dom.style;
        this._domStyle.cssText = Base.defaultCss + "-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box";
@@ -1158,7 +1158,7 @@ var Base = uki.component.Base.prototype,
     };
     
 self.prototype = uki.extend({}, Base, {
-   _domCreate: function() {
+   _createDom: function() {
        this._dom = document.createElement('button');
        this._domStyle = this._dom.style;
        this._domStyle.cssText = Base.defaultCss + "-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box";
@@ -1189,7 +1189,7 @@ self.prototype = uki.extend({}, Base, {
         return 'uki.component.Label';
     },
     
-    _domCreate: function() {
+    _createDom: function() {
         this._selectable = true;
         this._dom = uki.createElement('div');
         this._domStyle = this._dom.style;

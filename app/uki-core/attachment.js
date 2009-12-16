@@ -1,14 +1,10 @@
+include('const.js');
 include('utils.js');
 include('dom.js');
 include('attr.js');
 include('geometry.js');
 
 (function() {
-    var root = this,
-        doc = document,
-        Rect = uki.geometry.Rect,
-        Size = uki.geometry.Size;
-
     var self = uki.Attachment = uki.newClass({
         init: function( dom, view, rect, options ) {
             uki.initNativeLayout();
@@ -28,8 +24,8 @@ include('geometry.js');
             }
             self.register(this);
 
-            this.resize();
-            this.resize(); // ff needs 2 of them o_O
+            this.layout();
+            this.layout(); // ff needs 2 of them o_O
         },
         
         domForChild: function() {
@@ -48,7 +44,7 @@ include('geometry.js');
             return null;
         },
         
-        resize: function() {
+        layout: function() {
             var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
                 height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,
                 rect = new Rect(
@@ -82,7 +78,7 @@ include('geometry.js');
     self.register = function(a) {
         if (self.instances.length == 0) {
             uki.dom.bind(root, 'resize', function() {
-                uki.each(self.instances, function() { this.resize() });
+                uki.each(self.instances, function() { this.layout() });
             })
         }
         self.instances.push(a);

@@ -11,9 +11,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     
     // Ie 6 lives happily with w:100%,h:100% and overflowed content
     var Base = uki.view.Container.prototype,
-        Rect = uki.geometry.Rect,
         proto = this,
-        doc = document,
         scrollWidth,
         requirePaneResize = !!window.opera, 
         hasSeparateOverflows;
@@ -51,7 +49,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     
     this.childResized = function(child) {
         this._updateInnerRect();
-        this._needsLayout ? this.layout() : child.layout();
     };
     
     this.scroll = function(dx, dy) {
@@ -89,14 +86,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         return this._pane;
     };
     
-    function maxProp (c, prop) {
-        var val = 0, i, l;
-        for (i = c._childViews.length - 1; i >= 0; i--){
-            val = Math.max(c._childViews[i].rect()[prop]());
-        };
-        return val;
-    }
-    
     proto.contentsSize = function() {
         return new Rect(this.maxProp(this, 'maxX'), this.maxProp(this, 'maxY'));
     };
@@ -109,7 +98,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         return tmpRect;
     };
     
-    // rect - scroll bars if needed
+    // (rect - scroll bars) if needed
     proto._updateInnerRect = function() {
         initScrollWidth();
         
@@ -121,13 +110,13 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
 
             var max, scroll, dx = 0, dy = 0;
             if (this._scrollableV) {
-                this._maxY = max = maxProp(this, 'maxY');
+                this._maxY = max = this.contentsHeight();
                 scroll = max > this._innerRect.height;
                 if (scroll != this._scrollV) dx = (scroll ? -1 : 1) * scrollWidth;
                 this._scrollV = scroll;
             }
             if (this._scrollableH) {
-                this._maxX = max = maxProp(this, 'maxX');
+                this._maxX = max = this.contentsWidth();
                 scroll = max > this._innerRect.width;
                 if (scroll != this._scrollH) dy = (scroll ? -1 : 1) * scrollWidth;
                 this._scrollH = scroll;
@@ -161,6 +150,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         var oldRect = this._rect;
         if (!this._resizeSelf(newRect)) return;
         this._updateInnerRect();
+        this._needsLayout = true;
     };
     
     proto._resizeChildViews = function(oldRect) {

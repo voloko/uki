@@ -13,7 +13,7 @@ uki(
                 bottomPane: { background: '#FFF', childViews: [
                     { view: 'Box', rect: '0 0 699 40', anchors: 'top right left', autosize: 'width', background: 'cssBox(background:#EDF3FE;border-bottom:1px solid #999)' },
                     { view: 'Slider', rect: '10 50 673 24', anchors: 'top right left', autosize: 'width' },
-                    { view: 'Label', rect: '10 80 679 300', anchors: 'top left right bottom', autosize: 'width height', multiline: true, html: 'Text here' }
+                    { view: 'Label', rect: '10 80 679 300', anchors: 'top left right bottom', autosize: 'width height', multiline: true, html: 'Text ', id: 'workpane' }
                 ]}
             }
         ]
@@ -21,6 +21,8 @@ uki(
 ).attachTo( window, '1000 600' );
 
 
-uki('Button').click(function() { alert(this.text() )})
-uki('Label').html('<p>Lorem ipsum dolor sit <b>amet</b>, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>');
+// uki('Button').click(function() { alert(this.text()) })
+
+// uki('Button').click(function() { alert(this.text() )})
+// uki('Label').html('<p>Lorem ipsum dolor sit <b>amet</b>, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>');
 // uki('SplitPane:eq(0)').attr('handlePosition', 200)[0].layout();

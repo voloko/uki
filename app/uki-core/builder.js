@@ -3,10 +3,6 @@ include('utils.js');
 include('attr.js');
 include('collection.js');
 
-(function() {
-var root = this,
-    attr = uki.attr;
-
 uki.build = function(ml) {
     if (!uki.isArray(ml)) ml = [ml];
     return new uki.Collection(createMulti(ml));
@@ -46,10 +42,7 @@ function createSingle (mlRow) {
 
 function copyAttrs(comp, mlRow) {
     uki.each(mlRow, function(name, value) {
-        attr(comp, name, value);
+        uki.attr(comp, name, value);
     });
     return comp;
 }
-
-    
-})();

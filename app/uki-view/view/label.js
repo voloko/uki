@@ -1,18 +1,15 @@
+include('../../uki-core/const.js');
+
 (function() {
 
 var Base = uki.view.Base.prototype;
-
-var ANCHOR_TOP      = 1,
-    ANCHOR_RIGHT    = 2,
-    ANCHOR_BOTTOM   = 4,
-    ANCHOR_LEFT     = 8;
 
 uki.view.Label = uki.newClass(uki.view.Base, {
     init: function() {
         Base.init.apply(this, arguments);
         this._scrollable = false;
         this._selectable = false;
-        this._inset = new uki.geometry.Inset(0, 0, 0, 0);
+        this._inset = new Inset();
         this._label = uki.createElement('div', Base.defaultCss + 
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     },
@@ -29,7 +26,15 @@ uki.view.Label = uki.newClass(uki.view.Base, {
     },
     
     contentsSize: function() {
-        return this.rect();
+        var clone = this._label.cloneNode(true),
+            size;
+        if (this._autosizeToContents & AUTOSIZE_WIDTH) clone.style.width = clone.style.right = '';
+        if (this._autosizeToContents & AUTOSIZE_HEIGHT) clone.style.height = clone.style.bottom = '';
+        clone.style.visibility = 'hidden';
+        this._dom.appendChild(clone);
+        size = new Size(clone.offsetWidth + this._inset.width(), clone.offsetHeight + this._inset.height());
+        this._dom.removeChild(clone);
+        return size;
     },
     
     
@@ -87,7 +92,7 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         if (inset === undefined) {
             return this._inset;
         } else {
-            this._inset = uki.geometry.Inset.create(inset);
+            this._inset = Inset.create(inset);
         }
     },
 

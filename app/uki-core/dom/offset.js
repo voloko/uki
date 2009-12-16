@@ -1,8 +1,7 @@
 include('../dom.js');
 
 (function() {
-    var doc = document,
-        self;
+    var self;
     
     if ( doc.documentElement["getBoundingClientRect"] ) {
     	self = uki.dom.offset = function( elem ) {

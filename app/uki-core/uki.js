@@ -1,4 +1,4 @@
-var uki = function(val, context) {
+root.uki = function(val, context) {
     if (typeof val == 'string') {
         var m = val.match(/^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/);
         if (m && !context) {
