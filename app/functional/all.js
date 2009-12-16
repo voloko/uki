@@ -22,3 +22,7 @@ uki(
 uki('Button').bind('click', function() { 
     alert(uki('TextField').attr('value'));
 });
+
+uki('Slider').bind('change', function() {
+   uki(this.parent()).find('> TextField:last').value(this.value())
+});
