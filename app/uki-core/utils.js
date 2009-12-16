@@ -154,6 +154,7 @@ var utils = {
         return function(value) {
             if (value === undefined) return this[field];
             this[field] = value;
+            return this;
         }
     },
     

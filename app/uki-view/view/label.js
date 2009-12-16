@@ -73,42 +73,35 @@ uki.view.Label = uki.newClass(uki.view.Base, {
     },
     
     html: function(html) {
-        if (html === undefined) {
-            return this._label.innerHTML;
-        } else {
-            this._label.innerHTML = html;
-        }
+        if (html === undefined) return this._label.innerHTML;
+        this._label.innerHTML = html;
+        return this;
     },
     
     align: function(align) {
-        if (align === undefined) {
-            return this._label.style.textAlign;
-        } else {
-            this._label.style.textAlign = align;
-        }
+        if (align === undefined) return this._label.style.textAlign;
+        this._label.style.textAlign = align;
+        return this;
     },
     
     inset: function(inset) {
-        if (inset === undefined) {
-            return this._inset;
-        } else {
-            this._inset = Inset.create(inset);
-        }
+        if (inset === undefined) return this._inset;
+        this._inset = Inset.create(inset);
+        return this;
     },
 
     scrollable: function(state) {
-        if (state === undefined) {
-            return this._scrollable;
-        } else {
-            this._scrollable = state;
-            this._label.style.overflow = state ? 'auto' : 'hidden';
-        }
+        if (state === undefined) return this._scrollable;
+        this._scrollable = state;
+        this._label.style.overflow = state ? 'auto' : 'hidden';
+        return this;
     },
     
     multiline: function(state) {
         if (state === undefined) return this._label.style.whiteSpace != 'nowrap';
         this._label.style.whiteSpace = state ? '' : 'nowrap';
         // if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
+        return this;
     }
 });
     

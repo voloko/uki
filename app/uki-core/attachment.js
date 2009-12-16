@@ -12,7 +12,7 @@ include('geometry.js');
             options = options || {};
             this._dom     = dom = dom || root;
             this._view    = view;
-            this._rect    = Rect.create(rect)            || new Rect(1000, 1000);
+            this._innerRect = this._rect    = Rect.create(rect)            || new Rect(1000, 1000);
             this._maxSize = Size.create(options.maxSize) || new Size(50000, 50000);
             this._minSize = Size.create(options.minSize) || new Size(0, 0);
             
@@ -47,17 +47,18 @@ include('geometry.js');
         layout: function() {
             var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
                 height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,
-                rect = new Rect(
+                innerRect = new Rect(
                     Math.min(this._maxSize.width, Math.max(this._minSize.width,  width)), 
                     Math.min(this._maxSize.height, Math.max(this._minSize.height, height))
                 ),
-                oldRect = this._rect;
+                oldRect = this._innerRect;
                 
             // if (rect.eq(this._rect)) return;
 
-            this._rect = rect;
-            this._view.parentResized(oldRect, rect);
-            if (this._view._needsLayout) this._view.layout(rect);
+            this._innerRect = innerRect;
+            this._rect = new Rect(width, height);
+            this._view.parentResized(oldRect, innerRect);
+            if (this._view._needsLayout) this._view.layout(innerRect);
         },
         
         dom: function() {

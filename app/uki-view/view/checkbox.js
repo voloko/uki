@@ -19,6 +19,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         if (state === undefined) return this._checked;
         this._checked = !!state;
         this._image.style.top = this._checked ? '0' : '-18px';
+        return this;
     },
 
     _createDom: function() {

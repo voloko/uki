@@ -40,14 +40,11 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         
         this._originalHandlePosition = this._originalHandlePosition || this._handlePosition;
         this._resizeChildViews(this._rect);
+        return this;
     };
     
-    proto.vertical = uki.newProperty('_vertical');
-    proto.leftMin = proto.topMin = uki.newProperty('_leftMin');
-    proto.rightMin = proto.topMin = uki.newProperty('_rightMin');
-    proto.autogrowTop = proto.autogrowLeft = uki.newProperty('_autogrowLeft');
-    proto.autogrowBottom = proto.autogrowRight = uki.newProperty('_autogrowRight');
-    proto.handleWidth = uki.newProperty('_handleWidth');
+    
+    uki.newProperties(proto, ['vertical', 'leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'handleWidth']);
     
     proto._createHandle = function() {
         var handle;
@@ -108,6 +105,17 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         });
         
         this.className(this.className());
+    };
+    
+    proto.rect = function(newRect) {
+        if (newRect !== undefined) {
+            if (this._vertical) {
+                newRect.height = Math.max(newRect.height, this._leftMin + this._rightMin); // force min width
+            } else {
+                newRect.width = Math.max(newRect.width, this._leftMin + this._rightMin); // force min width
+            }
+        }
+        return Base.rect.call(this, newRect);
     };
     
     proto._resizeSelf = function(newRect) {
@@ -192,12 +200,12 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._layoutDom = function(rect) {
-        rect = rect.clone();
-        if (this._vertical) {
-            rect.height = Math.max(rect.height, this._leftMin + this._rightMin); // force min width
-        } else {
-            rect.width = Math.max(rect.width, this._leftMin + this._rightMin); // force min width
-        }
+        // rect = rect.clone();
+        // if (this._vertical) {
+        //     rect.height = Math.max(rect.height, this._leftMin + this._rightMin); // force min width
+        // } else {
+        //     rect.width = Math.max(rect.width, this._leftMin + this._rightMin); // force min width
+        // }
         Base._layoutDom.call(this, rect);
         
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';

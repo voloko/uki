@@ -1,7 +1,7 @@
 uki(
     { view: 'SplitPane', rect: '1000 600', anchors: 'left top right bottom', handlePosition: 200, rightMin: 500, handleWidth: 1, id: 'top',
         leftPane: {  background: '#FFF' },
-        rightChildViews: { view: 'SplitPane', rect: '799 600', autosize: 'width height', anchors: 'left top right bottom', 
+        rightChildViews: { view: 'SplitPane', rect: '799 600', autosize: 'width height', anchors: 'left top right bottom', id: 'second',
             handlePosition: 300, autogrowRight: true, autogrowLeft: false, leftMin: 200, rightMin: 300, handleWidth: 1,
             leftPane: {  background: '#D0D7E2', childViews: [
                     { view: 'Button', rect: '10 566 280 24', anchors: 'bottom left right', text: 'left pane', autosize: 'width', focusable: false }
@@ -21,14 +21,11 @@ uki(
             ]
         }
     }
-).attachTo( window, '1000 600' );
+).attachTo( window, '1000 600', {minSize: '600 0'} );
 
 var top = uki('#top')[0];
 uki('SplitPane:eq(1)').bind('handleMove', function(e) { 
-    if (e.handlePosition > e.dragValue) {
-        top.handlePosition(top.handlePosition() - (e.handlePosition - e.dragValue) );
-        top.layout();
-    }
+    if (e.handlePosition > e.dragValue) top.handlePosition(top.handlePosition() - (e.handlePosition - e.dragValue) ).layout();
 })
 
 
