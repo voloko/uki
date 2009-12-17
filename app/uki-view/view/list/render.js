@@ -1,8 +1,10 @@
+include('../list.js');
+
 /**
  * Flyweight view rendering
  * Used in lists, tables, grids
  */
-uki.view.Flyweight = uki.newClass({
+uki.view.list.Render = uki.newClass({
     init: function() {},
     
     /**
@@ -29,4 +31,4 @@ uki.view.Flyweight = uki.newClass({
     // layout: function(rect, container) {
     //     
     // }
-})
+});

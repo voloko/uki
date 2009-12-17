@@ -1,4 +1,4 @@
-include('flyweight.js');
+uki.view.list = {};
 
 uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     var Base = uki.view.Base.prototype,
@@ -12,7 +12,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     proto.init = function() {
         Base.init.call(this);
         this._rowHeight = 30;
-        this._flyweightView = new uki.view.Flyweight();
+        this._render = new uki.view.list.Render();
         this._scrollableParent = null;
         this._data = null;
         this._packSize = 20;
@@ -26,7 +26,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return Base.background.call(this, bg);
     };
     
-    uki.newProperties(proto, ['rowHeight', 'flyweightView', 'packSize', 'visibleRectExt']);
+    uki.newProperties(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt']);
     
     proto.data = function(d) {
         if (d === undefined) return this._data;
@@ -114,7 +114,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         if (!this._dom) return;
         var item = this._itemAt(position);
         if (!item) return;
-        this._flyweightView.setSelected(item, this._data[position], state, this.hasFocus());
+        this._render.setSelected(item, this._data[position], state, this.hasFocus());
         if (!state) return;
         this._scrollToPosition(position);
     };
@@ -168,7 +168,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         for (i=itemFrom; i < itemTo; i++) {
             html[html.length] = [
                 '<div style="width:100%;height:', this._rowHeight, 'px;overflow:hidden">', 
-                this._flyweightView.render(this._data[i]),
+                this._render.render(this._data[i]),
                 '</div>'
             ].join('');
         };
@@ -231,7 +231,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._createRow = function(data) {
-        return uki.createElement('div', ['width:100%;height:', this._rowHeight, 'px;overflow:hidden'].join(''), this._flyweightView.render(data));
+        return uki.createElement('div', ['width:100%;height:', this._rowHeight, 'px;overflow:hidden'].join(''), this._render.render(data));
     };
     
     proto.layout = function() {
