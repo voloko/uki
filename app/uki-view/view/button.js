@@ -9,14 +9,21 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
     proto.init = function() {
         baseProto.init.call(this);
         this._inset = new Inset(0, 4);
-        this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;" // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
-    }
+        this._backgroundPrefix = '';
+        this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+    };
+    
+    proto.typeName = function() {
+        return 'uki.view.Button';
+    };
+    
+    uki.newProperties(proto, ['backgroundPrefix']);
     
     uki.each(['normal', 'hover', 'down', 'focus'], function(i, name) {
         var property = name + '-background';
         proto[property] = function(bg) {
             if (bg) this['_' + property] = bg;
-            return this['_' + property] = this['_' + property] || uki.theme.background('button-' + name);
+            return this['_' + property] = this['_' + property] || uki.theme.background(this._backgroundPrefix + 'button-' + name);
         };
     });
     
@@ -62,9 +69,9 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
         uki.dom.bind(this._dom, this._dom.attachEvent ? 'mouseleave' : 'mouseout', this._mouseout);
         
         this.selectable(this.selectable());
-        this.className(this.className())
+        this.className(this.className());
         this._initFocusable();
-    }
+    };
     
     proto._focus = function() {
         this['focus-background']().attachTo(this);
@@ -83,11 +90,11 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
                 }
             });
         }
-    }
+    };
     
     proto._blur = function() {
        this['focus-background']().detach();
-    }
+    };
     
     proto._backgroundByName = function(name) {
         var bg = this[name + '-background']();
@@ -96,15 +103,11 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
         bg.attachTo(this);
         this._background = bg;
         this._backgroundName = name;
-    }
+    };
 
-    proto.typeName = function() {
-        return 'uki.view.Button';
-    }
-    
     proto._bindToDom = function(name) {
         return uki.view.Focusable._bindToDom.call(this, name) || uki.view.Label.prototype._bindToDom.call(this, name);
-    }
+    };
 });
 
 })();

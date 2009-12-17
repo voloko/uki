@@ -10,7 +10,7 @@ function getEmptyInputHeight () {
             function(probe) {
                 emptyInputHeight = probe.offsetHeight;
             }
-        )
+        );
     }
     return emptyInputHeight;
 }
@@ -31,7 +31,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
         
         uki.theme.background('input').attachTo(this);
         
-        this.className(this.className())
+        this.className(this.className());
         
         this._initFocusable(this._input);
     },
@@ -57,11 +57,13 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
     value: function(text) {
         if (text === undefined) return this._input.value;
         this._input.value = text;
+        return this;
     },
 
     placeholder: function(text) {
         if (text === undefined) return this._input.getAttribute('placeholder');
         this._input.setAttribute('placeholder', text);
+        return this;
     },
     
     _bindToDom: function(name) {

@@ -85,7 +85,7 @@
                     v: [u(prefix + "v.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAKCAYAAACuaZ5oAAAAgklEQVQoz72S4QqAIAyE563e/8V8lOpPv7VciOgyKpOEA5HtO24TRGSiEMRBQ9Bord2meXkkqZWe2MuRdXDlQplJbvb2oMKpPuKDwYmXg3I4NxiwMiliQe2h1YA1E5WIPRLgajE9E6QdGDW7rwkK3m9L1l8UzrnVe39LlRqpVfNPzB2Hkjsjcj/r1AAAAABJRU5ErkJggg==", u(prefix + "v.gif")],
                     h: [u(prefix + "h.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAaCAYAAACKER0bAAAAeUlEQVQoz93QUQqAIAwA0E08XIf3DNUBqv+0tBQHI+YM+mswZPicY+icS6AELuumAgOd+Aew8zSqAO8caidT6xx5eTGnrQUlMFDSVons5CASAO2Lk70QwdEbMrwF2BrS98D+GXh2idImA7vgACTwjESLAgGVLgSaHS6z5EcNVWRLXAAAAABJRU5ErkJggg==", u(prefix + "h.gif")],
                     m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAKCAYAAACJxx+AAAAAFElEQVQYV2N48/bdf3yYYVQBcQoAlPgt8GuONh8AAAAASUVORK5CYII="]
-                }, "6 12 20 12");    
+                }, "6 12 20 12");
             }
         },
     

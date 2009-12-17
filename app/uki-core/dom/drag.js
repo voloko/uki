@@ -10,7 +10,7 @@ include('../dom.js');
             this.pos = new Point(e.pageX, e.pageY);
             bind();
         }
-    }
+    };
     var doc = document;
     
 

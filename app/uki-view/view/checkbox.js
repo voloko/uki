@@ -36,7 +36,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
 
         var _this = this;
         this._click = function() {
-            _this.checked(!_this._checked)
+            _this.checked(!_this._checked);
             _this.trigger('change', {checked: _this._checked, source: _this});
         };
         
@@ -49,7 +49,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         });
         
         this.selectable(this.selectable());
-        this.className(this.className())
+        this.className(this.className());
         
         this._initFocusable();
     },

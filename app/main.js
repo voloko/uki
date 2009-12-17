@@ -47,5 +47,6 @@ include('uki-view/view/list/render.js');
 include('uki-view/view/slider.js');
 include('uki-view/view/splitPane.js');
 include('uki-view/view/scrollPane.js');
+include('uki-view/view/popup.js');
 include('uki-view/view/toolbar.js');
 }());

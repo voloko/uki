@@ -60,12 +60,14 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         if (val === undefined) return this._dom && this._dom.scrollTop || 0;
         
         this._dom.scrollTop = val;
+        return this;
     };
     
     this.scrollLeft = function(val) {
         if (val === undefined) return this._dom && this._dom.scrollLeft || 0;
         
         this._dom.scrollLeft = val;
+        return this;
     };
     
     this.visibleRect = function() {
@@ -148,9 +150,10 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         newRect = Rect.create(newRect);
         
         var oldRect = this._rect;
-        if (!this._resizeSelf(newRect)) return;
+        if (!this._resizeSelf(newRect)) return this;
         this._updateInnerRect();
         this._needsLayout = true;
+        return this;
     };
     
     proto._resizeChildViews = function(oldRect) {

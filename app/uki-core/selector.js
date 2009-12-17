@@ -68,7 +68,7 @@ include('collection.js');
     		},
     		
     		ID: function(comp, match) {
-    		    return reducers.ATTR(comp, ['', 'id', '=', '', match[1]])
+    		    return reducers.ATTR(comp, ['', 'id', '=', '', match[1]]);
     		},
     		
     		POS: function(comp, match, i, array) {
@@ -151,7 +151,10 @@ include('collection.js');
             while (exprItem != '') {
                 found = false;
                 uki.each(regexps, function(index, row) {
+                    
+                    /*jsl:ignore*/
                     if (match = exprItem.match(row.regexp)) {
+                    /*jsl:end*/
                         found = true;
                         context = uki.grep(context, function(comp, index) { 
                             return reducers[row.name](comp, match, index, context); 

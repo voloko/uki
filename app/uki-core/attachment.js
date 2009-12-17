@@ -79,11 +79,11 @@ include('geometry.js');
     self.register = function(a) {
         if (self.instances.length == 0) {
             uki.dom.bind(root, 'resize', function() {
-                uki.each(self.instances, function() { this.layout() });
-            })
+                uki.each(self.instances, function() { this.layout(); });
+            });
         }
         self.instances.push(a);
-    }
+    };
     
     self.childViews = function() {
         return uki.map(self.instances, 'view');

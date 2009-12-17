@@ -32,7 +32,7 @@ include('attachment.js');
         self[name] = function() {
             return new uki.Collection( uki.map(this, name) );
         };
-    })
+    });
     
     uki.each(['layout', 'addRow', 'removeRow', 'resizeToContents'], function(i, name) {
         self[name] = function() { 
@@ -41,10 +41,10 @@ include('attachment.js');
             };
             return this;
         };
-    })
+    });
     
     uki.each(['html', 'text', 'background', 'value', 'rect', 'checked', 'selectedIndex', 'typeName', 'id', 'name'], function(i, name) {
-        self[name] = function( value ) { return this.attr( name, value ) };
+        self[name] = function( value ) { return this.attr( name, value ); };
     });
     
     uki.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +

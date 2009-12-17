@@ -91,6 +91,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (this._id) uki.unregisterId(this);
         this._id = id;
         uki.registerId(this);
+        return this;
     };
     
     /* ----------------------------- Description --------------------------------*/
@@ -111,21 +112,21 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             bg.attachTo(this);
         }
         this._background = bg;
+        return this;
     };
     
     proto.selectable = function(state) {
-        if (state === undefined) {
-            return this._selectable;
-        } else {
-            this._selectable = state;
-            if (this._dom) {
-                this._dom.style.userSelect = state ? 'text' : 'none';
-                this._dom.style.MozUserSelect = state ? 'text' : '-moz-none';
-                this._dom.style.WebkitUserSelect = state ? 'text' : 'none';
-                this._dom.style.cursor = state ? 'text' : 'default';
-                this._dom.unselectable = state ? '' : 'on';
-            }
+        if (state === undefined) return this._selectable;
+        
+        this._selectable = state;
+        if (this._dom) {
+            this._dom.style.userSelect = state ? 'text' : 'none';
+            this._dom.style.MozUserSelect = state ? 'text' : '-moz-none';
+            this._dom.style.WebkitUserSelect = state ? 'text' : 'none';
+            this._dom.style.cursor = state ? 'text' : 'default';
+            this._dom.unselectable = state ? '' : 'on';
         }
+        return this;
     };
     
     proto.className = function(name) {
@@ -133,6 +134,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         this._className = name;
         if (this._dom) this._dom.className = name;
+        return this;
     };
     
     
@@ -147,6 +149,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         if (this._dom) this._dom.parentNode.removeChild(this._dom);
         this._parent = parent;
+        return this;
     };
     
     /**
@@ -194,7 +197,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
         this.selectable(this.selectable());
-        this.className(this.className())
+        this.className(this.className());
         if (this._background) this._background.attachTo(this);
     };
     
@@ -234,6 +237,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (this._rect && newRect.eq(this._rect)) return false;
         this._rect = newRect;
         this._needsLayout = this._needsLayout || layoutId++;
+        return this;
     };
     
     proto.clientRect = function(rect) {
@@ -247,6 +251,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (state === undefined) return this._visible;
         
         this._visible = state;
+        return this;
     };
     
     /**
@@ -256,6 +261,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (coords === undefined) return this.rect().toCoordsString();
         
         this.rect(Rect.fromCoordsString(coords));
+        return this;
     };
     
     /* -------------------------------- Autolayout ------------------------------*/
@@ -311,6 +317,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             if (anchors.indexOf('left'   ) > -1) {this._anchors = this._anchors | ANCHOR_LEFT;   this._styleH = 'left';   }
             if (this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT) this._autosize = this._autosize | AUTOSIZE_WIDTH;
             if (this._anchors & ANCHOR_BOTTOM && this._anchors & ANCHOR_TOP) this._autosize = this._autosize | AUTOSIZE_HEIGHT;
+            return this;
         }
     };
     
@@ -337,6 +344,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.autosize = function(autosizeStr) {
         if (autosizeStr === undefined) return encodeAutosize(this._autosize);
         this._autosize = decodeAutosize(autosizeStr);
+        return this;
     };
     
     /**
@@ -348,6 +356,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.autosizeToContents = function(autosizeStr) {
         if (autosizeStr === undefined) return encodeAutosize(this._autosizeToContents);
         this._autosizeToContents = decodeAutosize(autosizeStr);
+        return this;
     };
     
     
@@ -363,6 +372,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto._bindToDom = function(name) {
         if ('resize layout'.indexOf(name) > -1) return true;
         return uki.view.Observable._bindToDom.call(this, name);
-    }
+    };
     
 });

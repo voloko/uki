@@ -11,7 +11,7 @@ uki.initNativeLayout = function() {
             function(div) {
                 uki.supportNativeLayout = div.childNodes[0].offsetWidth == 100;
             }
-        )
+        );
     }
 };
 

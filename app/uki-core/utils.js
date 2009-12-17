@@ -26,7 +26,7 @@ var utils = {
             '"': '&quot;',
             "'": '&#x27;'
         };
-        return html.replace(/[&<>\"\']/g, function(c) { return trans[c] });
+        return html.replace(/[&<>\"\']/g, function(c) { return trans[c]; });
     },
     
     each: function( object, callback, context ) {
@@ -39,9 +39,8 @@ var utils = {
             }
         } else {
             for ( var value = object[0]; i < length && callback.call( context || value, i, value ) !== false; value = object[++i] ){}
-
-            return object;
         }
+        return object;
     },
     
     inArray: function( elem, array ) {
@@ -86,7 +85,7 @@ var utils = {
     map: function( elems, callback, context ) {
         var ret = [],
             mapper = utils.isFunction(callback) ? callback : 
-                     function(e) { return utils.isFunction(e[callback]) ? e[callback]() : e[callback] };
+                     function(e) { return utils.isFunction(e[callback]) ? e[callback]() : e[callback]; };
 
         for ( var i = 0, length = elems.length; i < length; i++ ) {
             var value = mapper.call( context || elems[ i ], elems[ i ], i );
@@ -155,11 +154,11 @@ var utils = {
             if (value === undefined) return this[field];
             this[field] = value;
             return this;
-        }
+        };
     },
     
     newProperties: function(proto, fields) {
-        uki.each(fields, function() { proto[this] = uki.newProperty('_' + this) })
+        uki.each(fields, function() { proto[this] = uki.newProperty('_' + this); });
     }
 };
 

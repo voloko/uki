@@ -118,7 +118,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         return uki.map(['v', 'h', 'm', 'c'], function(x) {
             return this._settings[x] && this._settings[x][0] || '';
         }, this).concat([this._inset, this._bgInset, this._fixedSize]).join(',');
-    }
+    };
     
     this.attachTo = function(comp) {
         this._comp = comp;
@@ -178,6 +178,6 @@ uki.background.Sliced9 = uki.newClass(new function() {
         dom.layout(this._container.style, {
             width: width,
             height: height
-        })
+        });
     };
 });

@@ -48,6 +48,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         uki.each(uki.build(val), function(tmp, child) {
             this.appendChild(child);
         }, this);
+        return this;
     };
     
     /**
@@ -96,13 +97,14 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         newRect = Rect.create(newRect);
         
         var oldRect = this._rect;
-        if (!this._resizeSelf(newRect)) return;
+        if (!this._resizeSelf(newRect)) return this;
         this._needsLayout = true;
         
         if (oldRect) {
             if (oldRect.width != newRect.width || oldRect.height != newRect.height) this._resizeChildViews(oldRect);
             this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
         }
+        return this;
     };
     
     proto._resizeSelf = function(newRect) {

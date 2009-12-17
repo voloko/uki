@@ -150,19 +150,19 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto.topPane = proto.leftPane = function(pane) {
-        this._paneAt(0, pane);
+        return this._paneAt(0, pane);
     };
     
     proto.bottomPane = proto.rightPane = function(pane) {
-        this._paneAt(1, pane);
+        return this._paneAt(1, pane);
     };
     
     proto.topChildViews = proto.leftChildViews = function(views) {
-        this._childViewsAt(0, views);
+        return this._childViewsAt(0, views);
     };
     
     proto.bottomChildViews = proto.rightChildViews = function(views) {
-        this._childViewsAt(1, views);
+        return this._childViewsAt(1, views);
     };
     
     proto._childViewsAt = function(i, views) {
@@ -170,11 +170,13 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         this._paneML[i] = {
             childViews: views
         };
+        return this;
     };
     
     proto._paneAt = function(i, pane) {
         if (pane === undefined) return this._paneML[i] || this._panes[i];
         this._paneML[i] = pane;
+        return this;
     };
     
     proto._resizeChildViewsWithRect = function(rect, handlePosition) {
@@ -212,8 +214,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._bindToDom = function(name) {
-        if (name == 'handleMove') return;
+        if (name == 'handleMove') return true;
         return Base._bindToDom.call(this, name);
-    }
+    };
     
 });

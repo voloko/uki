@@ -23,6 +23,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._position = this._val2pos(this._value);
         this._moveHandle();
         this.trigger('change', {source: this, value: this._value});
+        return this;
     },
     
     _pos2val: function(pos) {
@@ -49,10 +50,10 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
     _afterHandleLoad: function() {
         this._focusBg.style.cssText += ';z-index:10;height:25px;width:18px;margin-left:-' + (this._focusBg.width) / 2 + 'px;margin-top:-' + (this._focusBg.height-(this._bg.height/2)+1)/2 + 'px;';
-        this._handle.style.cssText += ';margin-left:-' + (this._bg.width / 2) + 'px;width:' +this._bg.width + 'px;height:' + (this._bg.height / 2) + 'px;'
+        this._handle.style.cssText += ';margin-left:-' + (this._bg.width / 2) + 'px;width:' +this._bg.width + 'px;height:' + (this._bg.height / 2) + 'px;';
         this._dom.appendChild(this._handle);
         var _this = this;
-        uki.dom.bind(this._handle, 'dragstart', function(e) { e.returnValue = false });
+        uki.dom.bind(this._handle, 'dragstart', function(e) { e.returnValue = false; });
         
         uki.dom.bind(this._handle, 'mousedown', function(e) {
             _this._dragging = true;
@@ -129,7 +130,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     },
     
     _bindToDom: function(name) {
-        if (name == 'change') return;
+        if (name == 'change') return true;
         return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     }
     

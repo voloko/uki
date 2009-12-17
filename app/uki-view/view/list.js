@@ -33,6 +33,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this.selectedIndex(-1);
         this._data = d;
         this._updateRectOnDataChnage();
+        return this;
     };
     
     proto.minHeight = function(h) {
@@ -44,6 +45,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             newRect.height = h;
             this.rect(newRect);
         }
+        return this;
     };
     
     proto._updateRectOnDataChnage = function() {
@@ -65,7 +67,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._scrollableParent = findScrollableParent(this);
         
         this.selectable(this.selectable());
-        this.className(this.className())
+        this.className(this.className());
         this.background().attachTo(this);
         
         var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
@@ -99,7 +101,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._initFocusable();
         if (this._scrollableParent && this._focusableInput) {
             var target = this._scrollableParent.parent() || this._scrollableParent;
-            target.dom().appendChild(this._focusableInput)
+            target.dom().appendChild(this._focusableInput);
         }
     };
     
@@ -108,6 +110,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         var nextIndex = Math.max(0, Math.min((this._data || []).length - 1, position));
         if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
         if (nextIndex == position) this._setSelected(this._selectedIndex = nextIndex, true);
+        return this;
     };
     
     proto._setSelected = function(position, state) {
@@ -145,7 +148,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         if (this._firstFocus) {
             var _this = this,
                 userAgent = navigator.userAgent.toLowerCase(),
-                useKeyPress = /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent );
+                useKeyPress = /mozilla/.test( userAgent ) && !(/(compatible|webkit)/).test( userAgent );
             uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
                 if (e.which == 38 || e.keyCode == 38) { // UP
                     _this.selectedIndex(Math.max(0, _this.selectedIndex() - 1));
@@ -183,7 +186,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             nextChild = pack.dom.childNodes[position - pack.itemFrom];
         nextChild ? pack.dom.insertBefore(row, nextChild) : pack.dom.appendChild(row);
         pack.itemTo++;
-    }
+    };
     
     proto._removeFromPack = function(pack, position) {
         pack.dom.removeChild(pack.dom.childNodes[position - pack.itemFrom]);
@@ -192,7 +195,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._movePack = function(pack, offset) {
         pack.itemFrom += offset;
-        pack.dom.style.top = pack.itemFrom * this._rowHeight + 'px'
+        pack.dom.style.top = pack.itemFrom * this._rowHeight + 'px';
     };
     
     // data api
@@ -256,7 +259,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         var tmp = this._packs[0];
         this._packs[0] = this._packs[1];
         this._packs[1] = tmp;
-    }
+    };
     
     proto._layoutDom = function(rect) {
         this._visibleRect = this._scrollableParent ? getVisibleRect(this, this._scrollableParent) : this.rect().clone().normalize();
@@ -282,7 +285,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             // render both packs, move them to be at the center of visible area
             startAt = minVisibleY + (maxVisibleY - minVisibleY - prefferedPackSize*this._rowHeight*2) / 2;
             itemFrom = Math.max(0, Math.round(startAt / this._rowHeight));
-            itemTo = Math.min(this._data.length, itemFrom + prefferedPackSize)
+            itemTo = Math.min(this._data.length, itemFrom + prefferedPackSize);
             
             this._renderPack(this._packs[0], itemFrom, itemTo);
             this._renderPack(this._packs[1], itemTo, Math.min(this._data.length, itemTo + prefferedPackSize));
@@ -310,7 +313,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._bindToDom = function(name) {
         return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
-    }
+    };
     
     function findScrollableParent (c) {
         do {

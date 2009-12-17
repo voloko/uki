@@ -71,8 +71,8 @@ uki.dom = {
     unbind: function(el, types, handler) {
         var id = el[expando],
             huid = handler.huid,
-            types = types.split(' '),
             i, type;
+        types = types.split(' ');
         for (i=0; i < types.length; i++) {
             type = types[i];
             if (!huid || !id || !uki.dom.bound[id] || !uki.dom.bound[id][type]) continue;
@@ -96,7 +96,7 @@ uki.dom = {
     },
     
     preventDefault: function(e) {
-        e.preventDefault ? e.preventDefault() : e.returnValue = false        
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
     },
     
     /**
@@ -128,7 +128,7 @@ uki.dom = {
 
 		// Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
 		if ( !event.metaKey && event.ctrlKey )
-			try { event.metaKey = event.ctrlKey } catch(e){};
+			try { event.metaKey = event.ctrlKey; } catch(e){};
 
 		// Add which for click: 1 == left; 2 == middle; 3 == right
 		// Note: button is not normalized, so don't use it

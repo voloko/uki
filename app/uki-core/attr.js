@@ -9,6 +9,7 @@ uki.attr = function(comp, attr, value) {
         } else {
             comp[attr] = value;
         }
+        return comp;
     } else {
         if (uki.isFunction(comp[attr])) {
             return comp[attr]();

@@ -47,7 +47,7 @@ uki.view.Focusable = {
             if (!_this.hasFocus()) {
                 _this._focusableInput.focus();
             } else {
-                needsRefocus && setTimeout(function() {_this._focusableInput.focus()}, 1)
+                needsRefocus && setTimeout(function() {_this._focusableInput.focus();}, 1);
             }
             e.domEvent.preventDefault ? e.domEvent.preventDefault() : e.domEvent.returnValue = false;
         });

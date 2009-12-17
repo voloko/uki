@@ -9,7 +9,7 @@ uki.build = function(ml) {
 };
 
 function createMulti (ml) {
-    return uki.map(ml, function(mlRow) { return createSingle(mlRow) });
+    return uki.map(ml, function(mlRow) { return createSingle(mlRow); });
 }
 
 function createSingle (mlRow) {
