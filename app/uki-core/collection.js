@@ -57,7 +57,14 @@ include('attachment.js');
     	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +
     	"change,select,submit,keydown,keypress,keyup,error").split(","), function(i, name){
     	self[name] = function( handler ){
-    		this.bind(name, handler);
+    	    if (handler) {
+        		this.bind(name, handler);
+    	    } else {
+                for (var i=0; i < this.length; i++) {
+                    this[i][name]();
+                };
+    	    }
+    		return this;
     	};
     });
     	    

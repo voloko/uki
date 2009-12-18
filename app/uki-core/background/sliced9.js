@@ -28,6 +28,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         this._zIndex    = options.zIndex || -1;
 
         this._container = this._getContainer();
+        this._container.style.zIndex = this._zIndex;
     };
     
     function makeDiv (name, style, inner) {
@@ -95,20 +96,20 @@ uki.background.Sliced9 = uki.newClass(new function() {
         
         if (inset.bottom && inset.left) {
             html[html.length] = makeDiv('bl',
-                [LEFT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                (img(settings.c, [LEFT + 0, TOP + '-' + inset.bottom + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                [LEFT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.bottom + PX].join(';'),
+                (img(settings.c, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         if (inset.bottom) {
             html[html.length] = makeDiv('b',
                 [LEFT + inset.left + PX, BOTTOM + 0, HEIGHT + inset.bottom + PX, RIGHT + inset.right + PX].join(';'),
-                img(settings.h, [LEFT + 0, TOP + '-' + inset.bottom + PX, WIDTH + P100, HEIGHT + height + PX].join(';'))
+                img(settings.h, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + P100, HEIGHT + height + PX].join(';'))
             );
         }
         if (inset.bottom && inset.right) {
             html[html.length] = makeDiv('br',
-                [RIGHT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                (img(settings.c, [LEFT + '-' + inset.right + PX, TOP + '-' + inset.bottom + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                [RIGHT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.bottom + PX].join(';'),
+                (img(settings.c, [LEFT + '-' + inset.right + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));

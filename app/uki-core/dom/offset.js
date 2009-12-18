@@ -5,8 +5,8 @@ include('../dom.js');
     
     if ( doc.documentElement["getBoundingClientRect"] ) {
     	self = uki.dom.offset = function( elem ) {
-    		if ( !elem ) return { x: 0, y: 0 };
-    		if ( elem === elem.ownerDocument.body ) return jQuery.offset.bodyOffset( elem );
+    		if ( !elem ) return new Point();
+    		if ( elem === elem.ownerDocument.body ) return self.bodyOffset( elem );
     		self.boxModel === undefined && self.initializeBoxModel();
     		var box  = elem.getBoundingClientRect(), 
     		    doc = elem.ownerDocument, 
@@ -17,11 +17,11 @@ include('../dom.js');
     			top  = box.top  + (self.pageYOffset || self.boxModel && docElem.scrollTop  || body.scrollTop ) - clientTop,
     			left = box.left + (self.pageXOffset || self.boxModel && docElem.scrollLeft || body.scrollLeft) - clientLeft;
 
-    		return { y: top, x: left };
+    		return new Point(left, top);
     	};
     } else {
     	self = uki.dom.offset = function( elem ) {
-    		if ( !elem ) return { x: 0, y: 0 };
+    		if ( !elem ) return new Point();
     		if ( elem === elem.ownerDocument.body ) return self.bodyOffset( elem );
     		self.initialized || self.initialize();
 
@@ -69,7 +69,7 @@ include('../dom.js');
     			left += Math.max(docElem.scrollLeft, body.scrollLeft);
     		}
 
-    		return { y: top, x: left };
+    		return new Point(left, top);
     	};
     }
 
@@ -117,13 +117,13 @@ include('../dom.js');
     	},
 
     	bodyOffset: function(body) {
-    		uki.dom.initialized || uki.dom.initialize();
+    		self.initialized || self.initialize();
     		var top = body.offsetTop, left = body.offsetLeft;
     		if ( uki.dom.doesNotIncludeMarginInBodyOffset ) {
     			top  += parseInt( uki.dom.elem.currentStyle(body).marginTop, 10 ) || 0;
     			left += parseInt( uki.dom.elem.currentStyle(body).marginLeft, 10 ) || 0;
     		}
-    		return { y: top, x: left };
+    		return new Point(left, top);
     	}
     });    
 })();

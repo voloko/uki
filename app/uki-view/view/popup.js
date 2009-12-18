@@ -5,6 +5,17 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     
     proto.init = function() {
         Base.init.call(this);
+        this._offset = 2;
+        this._relativeTo = null;
+        this._horizontal = false;
+        this._flipOnResize = true;
+        this._shadow = null;
+    };
+    
+    uki.newProperties(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
+    
+    proto.typeName = function() {
+        return 'uki.view.Popup';
     };
     
     proto.background = function(bg) {
@@ -12,43 +23,86 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         return Base.background.call(this, bg);
     };
     
-    proto.layout = function() {
-        if (!this._dom) {
-            this._createDom(this._rect);
-            // attach to document.body directly
-            doc.body.appendChild(this._dom);
-            this._bindPendingEventsToDom();
-        }
-        this._layoutDom(this._rect);
-        this._needsLayout = false;
-        this.trigger('layout', {rect: this._rect, source: this});
-    };
-    
-    function offset (c) {
-        var offsetX = 0,
-            offsetY = 0,
-            rect;
-            
-        while(c) {
-            rect = c.visibleRect ? c.visibleRect() : c.rect();
-            offsetX += c.rect().x;
-            offsetX += c.rect().y;
-        }
-    }
-    
-    proto.parentResized = function() {
-        // do nothing
+    proto.shadow = function(bg) {
+        if (bg === undefined && !this._shadow) this._shadow = uki.theme.background('shadow-medium');
+        if (bg === undefined) return this._shadow;
+        this._shadow = uki.background(bg);
+        return this;
     };
     
     proto._createDom = function() {
-        this._dom = uki.createElement('div', this.defaultCss);
-        
-        this.selectable(this.selectable());
-        this.className(this.className());
-        this.background().attachTo(this);
+        Base._createDom.call(this);
+        this.shadow().attachTo(this);
     };
     
-    proto._layoutDom = function(rect) {
-        
+    proto.parentResized = function() {
+        this.rect(this._recalculateRect());
     };
+    
+    proto._recalculateRect = function() {
+        var relativeOffset = uki.view.offset(this._relativeTo),
+            relativeAttachment = uki.view.top(this._relativeTo),
+            relativeAttachmentOffset = uki.dom.offset(relativeAttachment.dom()),
+            relativeRect = this._relativeTo.rect(),
+            rect = this.rect().clone(),
+            attachment = uki.view.top(this),
+            attachmentRect = attachment.rect(),
+            attachmentOffset = uki.dom.offset(attachment.dom()),
+            position = new Point(),
+            hOffset = this._horizontal ? this._offset : 0,
+            vOffset = this._horizontal ? 0 : this._offset;
+            
+        relativeOffset.offset(relativeAttachmentOffset.x, relativeAttachmentOffset.y);
+        relativeOffset.offset(-attachmentOffset.x, -attachmentOffset.y);
+        
+        if (this._autosize && AUTOSIZE_WIDTH) rect.width = relativeRect.width;
+        if (this._autosize && AUTOSIZE_HEIGHT) rect.height = relativeRect.height;
+        
+        // var flipToRight = relativeOffset.x + rect.width + hOffset + (this._horizontal ? relativeRect.width : 0) > attachmentRect.width,
+        //     flipToLeft = relativeOffset.x - rect.width - hOffset < 0,
+        //     flipToTop = relativeOffset.y + rect.height + vOffset + (this._horizontal ? 0 : relativeRect.height) > attachmentRect.height,
+        //     flipToBottom = relativeOffset.x - rect.height - hOffset < 0;
+        
+        if (this._anchors & ANCHOR_RIGHT) {
+            position.x = relativeOffset.x + relativeRect.width - (this._horizontal ? 0 : rect.width) + hOffset;
+        } else {
+            position.x = relativeOffset.x - (this._horizontal ? rect.width : 0) - hOffset;
+        }
+        
+        if (this._anchors & ANCHOR_BOTTOM) {
+            position.y = relativeOffset.y + (this._horizontal ? 0 : relativeRect.height) + vOffset;
+        } else {
+            position.y = relativeOffset.y + (this._horizontal ? relativeRect.height : 0) - rect.height - vOffset;
+        }
+        
+        return new Rect(position.x, position.y, rect.width, rect.height);
+    };
+    
+    // proto.layout = function() {
+    //     if (!this._dom) {
+    //         this._createDom(this._rect);
+    //         // attach to document.body directly
+    //         doc.body.appendChild(this._dom);
+    //         this._bindPendingEventsToDom();
+    //     }
+    //     this._layoutDom(this._rect);
+    //     this._needsLayout = false;
+    //     this.trigger('layout', {rect: this._rect, source: this});
+    // };
+    
+    // proto.parentResized = function() {
+    //     // do nothing
+    // };
+    // 
+    // proto._createDom = function() {
+    //     this._dom = uki.createElement('div', this.defaultCss);
+    //     
+    //     this.selectable(this.selectable());
+    //     this.className(this.className());
+    //     this.background().attachTo(this);
+    // };
+    // 
+    // proto._layoutDom = function(rect) {
+    //     
+    // };
 });

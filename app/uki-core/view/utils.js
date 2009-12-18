@@ -25,6 +25,11 @@ uki.view.utils = new function() {
         return rect;
     };
     
+    proto.top = function(c) {
+        while (c.parent()) c = c.parent();
+        return c;
+    };
+    
     proto.offset = function(c, upTo) {
         var offset = new Point(),
             rect;

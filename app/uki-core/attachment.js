@@ -55,10 +55,6 @@ include('view/observable.js');
             return null;
         },
         
-        attachment: function() {
-            return this;
-        },
-        
         layout: function() {
             var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
                 height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,

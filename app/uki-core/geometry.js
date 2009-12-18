@@ -150,7 +150,10 @@ Rect.prototype = {
         this.y += dy;
         this.width -= dx*2.0;
         this.height -= dy*2.0;
+        return this;
     },
+    
+    offset: Point.prototype.offset,
     
     intersection: function(rect) {
         var origin = new Point(
