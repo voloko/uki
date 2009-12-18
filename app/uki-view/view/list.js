@@ -99,10 +99,10 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         });
         
         this._initFocusable();
-        if (this._focusableInput) {
-            var target = this._scrollableParent.parent() || this._scrollableParent;
-            target.dom().appendChild(this._focusableInput);
-        }
+        // if (this._focusableInput) {
+        //     var target = this._scrollableParent.parent() || this._scrollableParent;
+        //     target.dom().appendChild(this._focusableInput);
+        // }
     };
     
     proto.selectedIndex = function(position) {
@@ -301,7 +301,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this._swapPacks();
         }
         
-        // if (this._focusableInput) this._focusableInput.style.top = this._visibleRect.y + 'px'; // move to reduce on focus jump
+        if (this._focusableInput) this._focusableInput.style.top = this._visibleRect.y + 'px'; // move to reduce on focus jump
             
     };
     
