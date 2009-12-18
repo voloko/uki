@@ -43,43 +43,11 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (0 == this._autosizeToContents) return;
         
         var oldRect = this.rect(),
-            newRect = this.calcRectOnContentResize();
+            newRect = this._calcRectOnContentResize();
         if (newRect.eq(oldRect)) return;
         this.rect(newRect); // triggers _needsLayout
         
         this.parent() && this.parent().childResized( this );
-    };
-    
-    proto.calcRectOnContentResize = function() {
-        var newSize = this.contentsSize( ),
-            oldSize = this.rect();
-
-        if (newSize.eq(oldSize)) return oldSize; // nothing changed
-        
-        // calculate where to resize
-        var newRect = this.rect().clone(),
-            dX = newSize.width - oldSize.width,
-            dY = newSize.height - oldSize.height;
-    
-        if (this._autosizeToContents && AUTOSIZE_WIDTH) {
-            if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT) {
-                newRect.x -= dX/2;
-            } else if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) {
-                newRect.x -= dX;
-            }
-            newRect.width += dX;
-        }
-        
-        if (this._autosizeToContents && AUTOSIZE_HEIGHT) {
-            if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP && this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM) {
-                newRect.y -= dY/2;
-            } else if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) {
-                newRect.y -= dY;
-            }
-            newRect.height += dY;
-        }
-        
-        return newRect;
     };
     
     proto.contentsSize = function() {
@@ -152,17 +120,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    /**
-     * Finds the uppermost parent which needs layout
-     */
-    proto.dirtyParent = function() {
-        var c = this.parent(), 
-            prevC = this;
-        while (c && c._needsLayout) {
-            prevC = c;
-            c = c.parent();
-        }
-        return prevC;
+    proto.attachment = function() {
+        return this.parent() ? this.parent().attachment() : null;
     };
     
     /* ------------------------- Layot 2-nd pass + Dom --------------------------*/
@@ -189,40 +148,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._layoutDom(this._rect);
         this._needsLayout = false;
         this.trigger('layout', {rect: this._rect, source: this});
-    };
-    
-    /**
-     * Called through a second layout pass when _dom should be created
-     */
-    proto._createDom = function() {
-        this._dom = uki.createElement('div', this.defaultCss);
-        this.selectable(this.selectable());
-        this.className(this.className());
-        if (this._background) this._background.attachTo(this);
-    };
-    
-    /**
-     * Called through a second layout pass when _dom is allready created
-     */
-    proto._layoutDom = function(rect) {
-        var l = {}, s = uki.supportNativeLayout, relativeRect = this.parent().clientRect();
-        if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
-            l.left = rect.x;
-            l.right = relativeRect.width - rect.x - rect.width;
-        } else {
-            l.width = rect.width;
-            l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
-        }
-        
-        if (s && this._anchors & ANCHOR_TOP && this._anchors & ANCHOR_BOTTOM && this._autosize & AUTOSIZE_HEIGHT) {
-            l.top = rect.y;
-            l.bottom = relativeRect.height - rect.y - rect.height;
-        } else {
-            l.height = rect.height;
-            l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
-        }
-        this._lastLayout = uki.dom.layout(this._dom.style, l, this._lastLayout);
-        return true;
     };
     
     /* ---------------------------- Layout 1-st pass ----------------------------*/
@@ -359,7 +284,71 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
+    proto._calcRectOnContentResize = function() {
+        var newSize = this.contentsSize( ),
+            oldSize = this.rect();
+
+        if (newSize.eq(oldSize)) return oldSize; // nothing changed
+        
+        // calculate where to resize
+        var newRect = this.rect().clone(),
+            dX = newSize.width - oldSize.width,
+            dY = newSize.height - oldSize.height;
     
+        if (this._autosizeToContents && AUTOSIZE_WIDTH) {
+            if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT) {
+                newRect.x -= dX/2;
+            } else if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) {
+                newRect.x -= dX;
+            }
+            newRect.width += dX;
+        }
+        
+        if (this._autosizeToContents && AUTOSIZE_HEIGHT) {
+            if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP && this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM) {
+                newRect.y -= dY/2;
+            } else if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) {
+                newRect.y -= dY;
+            }
+            newRect.height += dY;
+        }
+        
+        return newRect;
+    };
+    
+    /**
+     * Called through a second layout pass when _dom should be created
+     */
+    proto._createDom = function() {
+        this._dom = uki.createElement('div', this.defaultCss);
+        this.selectable(this.selectable());
+        this.className(this.className());
+        if (this._background) this._background.attachTo(this);
+    };
+    
+    /**
+     * Called through a second layout pass when _dom is allready created
+     */
+    proto._layoutDom = function(rect) {
+        var l = {}, s = uki.supportNativeLayout, relativeRect = this.parent().clientRect();
+        if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
+            l.left = rect.x;
+            l.right = relativeRect.width - rect.x - rect.width;
+        } else {
+            l.width = rect.width;
+            l[this._styleH] = this._styleH == 'left' ? rect.x : relativeRect.width - rect.x - rect.width;
+        }
+        
+        if (s && this._anchors & ANCHOR_TOP && this._anchors & ANCHOR_BOTTOM && this._autosize & AUTOSIZE_HEIGHT) {
+            l.top = rect.y;
+            l.bottom = relativeRect.height - rect.y - rect.height;
+        } else {
+            l.height = rect.height;
+            l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
+        }
+        this._lastLayout = uki.dom.layout(this._dom.style, l, this._lastLayout);
+        return true;
+    };
     
     uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'], function(index, attr) {
         proto[attr] = function() {

@@ -28,9 +28,15 @@ include('attachment.js');
     };
     
     
-    uki.each(['parent', 'dirtyParent'], function(i, name) {
+    uki.each(['parent'], function(i, name) {
         self[name] = function() {
             return new uki.Collection( uki.map(this, name) );
+        };
+    });
+    
+    uki.each(['dirtyParent', 'scrollableParent'], function(i, name) {
+       self[name] = function() {
+            return new uki.Collection( uki.map(this, function(c) { return uki.view[name](c); }) );
         };
     });
     

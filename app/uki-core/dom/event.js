@@ -10,9 +10,9 @@ uki.extend(uki.dom, {
 		if ( el.setInterval && el != window )
 			el = window;
 			
-        handler.huid = handler.huid || guid++;
+        handler.huid = handler.huid || uki.dom.guid++;
         
-        var id = el[expando] = el[expando] || guid++,
+        var id = el[expando] = el[expando] || uki.dom.guid++,
             handle = uki.dom.handles[id] = uki.dom.handles[id] || function() {
                 uki.dom.handler.apply(arguments.callee.elem, arguments);
             },

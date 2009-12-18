@@ -5,11 +5,13 @@ include('utils.js');
 (function() {
  
 uki.dom = {
+    guid: 1,
+    
     createElement: function(tagName, cssText, innerHTML) {
         var e = doc.createElement(tagName);            
         if (cssText) e.style.cssText = cssText;
         if (innerHTML) e.innerHTML = innerHTML;
-        e[expando] = guid++;
+        e[expando] = uki.dom.guid++;
         return e;
     },
     

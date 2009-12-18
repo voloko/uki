@@ -3,9 +3,10 @@ include('utils.js');
 include('dom.js');
 include('attr.js');
 include('geometry.js');
+include('view/observable.js');
 
 (function() {
-    var self = uki.Attachment = uki.newClass({
+    var self = uki.Attachment = uki.newClass(uki.view.Observable, {
         init: function( dom, view, rect, options ) {
             uki.initNativeLayout();
             
@@ -40,8 +41,22 @@ include('geometry.js');
             return this._rect;
         },
         
+        // TODO: support window scrolling
+        scrollTop: function() {
+            return 0; //this._dom.scrollTop;
+        },
+        
+        // TODO: support window scrolling
+        scrollLeft: function() {
+            return 0; //this._dom.scrollLeft;
+        },
+        
         parent: function() {
             return null;
+        },
+        
+        attachment: function() {
+            return this;
         },
         
         layout: function() {
@@ -59,6 +74,7 @@ include('geometry.js');
             this._rect = new Rect(width, height);
             this._view.parentResized(oldRect, innerRect);
             if (this._view._needsLayout) this._view.layout(innerRect);
+            this.trigger('layout', {source: this, rect: innerRect});
         },
         
         dom: function() {

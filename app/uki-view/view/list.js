@@ -64,7 +64,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
-        this._scrollableParent = findScrollableParent(this);
+        this._scrollableParent = uki.view.scrollableParent(this);
         
         this.selectable(this.selectable());
         this.className(this.className());
@@ -87,7 +87,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._dom.appendChild(this._packs[1].dom);
         
         var _this = this;
-        if (this._scrollableParent) this._scrollableParent.bind('scroll', function() {
+        this._scrollableParent.bind('scroll', function() {
             _this.layout();
         });
         
@@ -99,7 +99,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         });
         
         this._initFocusable();
-        if (this._scrollableParent && this._focusableInput) {
+        if (this._focusableInput) {
             var target = this._scrollableParent.parent() || this._scrollableParent;
             target.dom().appendChild(this._focusableInput);
         }
@@ -245,14 +245,8 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         }
         this._layoutDom(this._rect);
         this._needsLayout = false;
+        // send visibleRect with layout
         this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
-    };
-    
-    // proto.visibleRect = function() {
-    //     return this._visibleRect;
-    // };
-    
-    proto._layoutPack = function(pack) {
     };
     
     proto._swapPacks = function() {
@@ -262,7 +256,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._layoutDom = function(rect) {
-        this._visibleRect = this._scrollableParent ? getVisibleRect(this, this._scrollableParent) : this.rect().clone().normalize();
+        this._visibleRect = uki.view.visibleRect(this, this._scrollableParent);
         Base._layoutDom.call(this, rect);
         
         var totalHeight = this._rowHeight * this._data.length,
@@ -321,25 +315,5 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             c = c.parent();
         } while (c);
         return null;
-    }
-    
-    function getVisibleRect (from, upTo) {
-        var queue = [],
-            rect, i, tmpRect, c = from;
-        do {
-            queue[queue.length] = c;
-            c = c.parent();
-        } while (c && c != upTo);
-        if (upTo && upTo != from) queue[queue.length] = upTo;
-
-        for (i = queue.length - 1; i >= 0; i--){
-            c = queue[i];
-            tmpRect = c.visibleRect ? c.visibleRect() : c.rect().clone();
-            rect = rect ? rect.intersection(tmpRect) : tmpRect;
-            rect.x -= c.rect().x;
-            rect.y -= c.rect().y;
-            
-        };
-        return rect;
     }
 });

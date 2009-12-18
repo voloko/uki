@@ -70,10 +70,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         return this;
     };
     
-    this.visibleRect = function() {
-        return new Rect(this.scrollLeft(), this.scrollTop(), this._innerRect.width, this._innerRect.height);
-    };
-    
     proto._createDom = function() {
         Base._createDom.call(this);
         this._pane = uki.createElement('div', 'position:absolute;left:0;top:0;' + (uki.supportNativeLayout && !requirePaneResize ? 'right:0;bottom:0' : 'width:100%;height:100%'));
@@ -93,7 +89,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto.visibleRect = function() {
-        this._updateInnerRect();
+        // this._updateInnerRect();
         var tmpRect = this._innerRect.clone();
         tmpRect.x = this.rect().x + this.scrollLeft();
         tmpRect.y = this.rect().y + this.scrollTop();
