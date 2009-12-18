@@ -308,12 +308,4 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     proto._bindToDom = function(name) {
         return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
-    
-    function findScrollableParent (c) {
-        do {
-            if (uki.isFunction(c.scrollTop)) return c;
-            c = c.parent();
-        } while (c);
-        return null;
-    }
 });

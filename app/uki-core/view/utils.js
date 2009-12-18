@@ -23,7 +23,7 @@ uki.view.utils = new function() {
             
         };
         return rect;
-    }
+    };
     
     proto.offset = function(c, upTo) {
         var offset = new Point(),
@@ -65,6 +65,6 @@ uki.view.utils = new function() {
     function visibleRect (c) {
         return c.visibleRect ? c.visibleRect() : c.rect().clone();
     }
-}
+};
 
 uki.extend(uki.view, uki.view.utils);
