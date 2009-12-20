@@ -37,19 +37,23 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         return new Size(this.contentsWidth(), height );
     };
     
+    proto._updateHeight = function(dh) {
+        var rect = this.rect(),
+            width = this._autosizeToContents & AUTOSIZE_WIDTH && rect.width != childRect.width ? this.contentsWidth() : rect.width;
+        this.rect( new Rect(rect.x, rect.y, width, rect.height + dh) );
+        this.parent().childResized( this );
+    };
+    
     proto.childResized = function(child) {
         var rect = this.rect(),
             childRect = child.rect(),
             index = child._viewIndex,
             container = this._containers[index],
             height = this._containerHeights[index],
-            dh = childRect.height - height,
-            width = this._autosizeToContents & AUTOSIZE_WIDTH && rect.width != childRect.width ? this.contentsWidth() : rect.width;
+            dh = childRect.height - height;
             
-        if (!dh && width == rect.width) return;
-        
-        this.rect( new Rect(rect.x, rect.y, width, rect.height + dh) );
-        this.parent().childResized( this );
+        if (!dh && rect.width == childRect.width) return;
+        this._updateHeight(dh);
     };
     
     proto._createDom = function() {
