@@ -48,9 +48,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
             _this.checked(_this._checked);
         });
         
-        this.selectable(this.selectable());
-        this.className(this.className());
-        
+        this._initCommonAttrs();
         this._initFocusable();
     },
     

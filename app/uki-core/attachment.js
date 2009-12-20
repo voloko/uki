@@ -13,7 +13,7 @@ include('view/observable.js');
             options = options || {};
             this._dom     = dom = dom || root;
             this._view    = view;
-            this._innerRect = this._rect    = Rect.create(rect)            || new Rect(1000, 1000);
+            this._innerRect = this._rect = Rect.create(rect) || new Rect(1000, 1000);
             this._maxSize = Size.create(options.maxSize) || new Size(50000, 50000);
             this._minSize = Size.create(options.minSize) || new Size(0, 0);
             
@@ -27,6 +27,9 @@ include('view/observable.js');
 
             this.layout();
             this.layout(); // ff needs 2 of them o_O
+        },
+        
+        childResized: function() {
         },
         
         domForChild: function() {
@@ -43,12 +46,12 @@ include('view/observable.js');
         
         // TODO: support window scrolling
         scrollTop: function() {
-            return 0; //this._dom.scrollTop;
+            return this._dom.scrollTop;
         },
         
         // TODO: support window scrolling
         scrollLeft: function() {
-            return 0; //this._dom.scrollLeft;
+            return this._dom.scrollLeft;
         },
         
         parent: function() {

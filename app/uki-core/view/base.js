@@ -53,16 +53,19 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    proto.background = function(bg) {
-        if (bg === undefined) return this._background;
-        bg = uki.background(bg);
-        if (this._dom) {
-            if (this._background) this._background.detach(this);
-            bg.attachTo(this);
-        }
-        this._background = bg;
-        return this;
-    };
+    uki.each(['background', 'shadow'], function(i, name) {
+        var field = '_' + name;
+        proto[name] = function(val) {
+            if (val === undefined) return this[field];
+            val = uki.background(val);
+            if (this._dom) {
+                if (this[field]) this[field].detach(this);
+                val.attachTo(this);
+            }
+            this[field] = val;
+            return this;
+        };
+    })
     
     proto.selectable = function(state) {
         if (state === undefined) return this._selectable;
@@ -93,7 +96,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (state === undefined) return this._visible;
         
         this._visible = state;
+        if (this._dom) this._dom.style.display = state ? 'block' : 'none';
         return this;
+    };
+    
+    proto.toggle = function() {
+        this.visible(!this.visible());
     };
     
     /* ----------------------------- Container api ------------------------------*/
@@ -106,7 +114,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         if (this._dom) this._dom.parentNode.removeChild(this._dom);
         this._parent = parent;
-        if (this._dom) this._parent.domForChild(this).appendChild(this._dom);
+        if (this._dom && parent) this._parent.domForChild(this).appendChild(this._dom);
         return this;
     };
     
@@ -324,9 +332,15 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
+        this._initCommonAttrs();
+    };
+    
+    proto._initCommonAttrs = function() {
+        this.visible(this.visible());
         this.selectable(this.selectable());
         this.className(this.className());
         if (this.background()) this.background().attachTo(this);
+        if (this.shadow()) this.shadow().attachTo(this);
     };
     
     /**

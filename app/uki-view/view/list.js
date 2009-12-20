@@ -66,9 +66,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
         this._scrollableParent = uki.view.scrollableParent(this);
         
-        this.selectable(this.selectable());
-        this.className(this.className());
-        this.background().attachTo(this);
+        this._initCommonAttrs();
         
         var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
         this._packs = [

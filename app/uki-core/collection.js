@@ -16,6 +16,10 @@ include('attachment.js');
         return this;
     };
     
+    self.grep = function( callback ) {
+        return new uki.Collection( uki.grep(this, callback) );
+    };
+    
     self.attr = function( name, value ) {
         if (value !== undefined) {
             this.each(function() {
@@ -40,7 +44,8 @@ include('attachment.js');
         };
     });
     
-    uki.each(['layout', 'addRow', 'removeRow', 'resizeToContents'], function(i, name) {
+    uki.each(('layout,appendChild,removeChild,addRow,removeRow,' +
+        'resizeToContents,toggle').split(','), function(i, name) {
         self[name] = function() { 
             for (var i=0; i < this.length; i++) {
                 this[i][name].apply(this[i], arguments);
@@ -49,7 +54,8 @@ include('attachment.js');
         };
     });
     
-    uki.each(['html', 'text', 'background', 'value', 'rect', 'checked', 'selectedIndex', 'typeName', 'id', 'name'], function(i, name) {
+    uki.each(('html,text,background,value,rect,checked,selectedIndex,' +
+        'childViews,typeName,id,name,visible').split(','), function(i, name) {
         self[name] = function( value ) { return this.attr( name, value ); };
     });
     

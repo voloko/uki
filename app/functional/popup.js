@@ -24,12 +24,17 @@ var p;
 //     this.unbind('click', arguments.callee);
 // }).focus();
 
+uki('Button').click(function() {
+    var button = this;
+    uki('Popup').grep(function(e) { return e.relativeTo() == button }).toggle();
+})
+
 
 // uki({ view: }).popup( component );
 
 
-uki({ view: 'Popup', rect: '120 120', anchors: 'left bottom', shadow: 'theme(shadow-big)', relativeTo: uki('#left_bottom')[0] }).attachTo( document.body );
-uki({ view: 'Popup', rect: '120 120', anchors: 'left top', relativeTo: uki('#left_top')[0] }).attachTo( document.body );
+uki({ view: 'Popup', rect: '120 120', anchors: 'left bottom', shadow: 'theme(shadow-big)', relativeTo: uki('#left_bottom')[0] })[0].show();
+uki({ view: 'Popup', rect: '120 120', anchors: 'left top', visible: false, relativeTo: uki('#left_top')[0] }).attachTo( document.body );
 uki({ view: 'Popup', rect: '120 120', anchors: 'right bottom', relativeTo: uki('#right_bottom')[0] }).attachTo( document.body );
 uki({ view: 'Popup', rect: '120 120', anchors: 'right top', relativeTo: uki('#right_top')[0] }).attachTo( document.body );
 

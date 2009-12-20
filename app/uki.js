@@ -51,4 +51,5 @@ include('uki-view/view/splitPane.js');
 include('uki-view/view/scrollPane.js');
 include('uki-view/view/popup.js');
 include('uki-view/view/toolbar.js');
+include('uki-view/view/flow.js');
 }());

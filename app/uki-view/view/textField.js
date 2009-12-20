@@ -31,7 +31,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
         
         uki.theme.background('input').attachTo(this);
         
-        this.className(this.className());
+        this._initCommonAttrs();
         
         this._initFocusable(this._input);
     },

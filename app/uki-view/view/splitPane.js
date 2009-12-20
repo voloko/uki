@@ -104,7 +104,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
             uki.dom.drag.start(_this, e);
         });
         
-        this.className(this.className());
+        this._initCommonAttrs();
     };
     
     proto.rect = function(newRect) {

@@ -24,15 +24,12 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     };
     
     proto.shadow = function(bg) {
-        if (bg === undefined && !this._shadow) this._shadow = uki.theme.background('shadow-medium');
-        if (bg === undefined) return this._shadow;
-        this._shadow = uki.background(bg);
-        return this;
+        if (bg === undefined && !this._shadow) this._shadow = uki.theme.background('popup-shadow');
+        return Base.shadow.call(this, bg);
     };
     
-    proto._createDom = function() {
-        Base._createDom.call(this);
-        this.shadow().attachTo(this);
+    proto.show = function() {
+        new uki.Attachment( doc.body, this );
     };
     
     proto.parentResized = function() {
@@ -77,32 +74,4 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         
         return new Rect(position.x, position.y, rect.width, rect.height);
     };
-    
-    // proto.layout = function() {
-    //     if (!this._dom) {
-    //         this._createDom(this._rect);
-    //         // attach to document.body directly
-    //         doc.body.appendChild(this._dom);
-    //         this._bindPendingEventsToDom();
-    //     }
-    //     this._layoutDom(this._rect);
-    //     this._needsLayout = false;
-    //     this.trigger('layout', {rect: this._rect, source: this});
-    // };
-    
-    // proto.parentResized = function() {
-    //     // do nothing
-    // };
-    // 
-    // proto._createDom = function() {
-    //     this._dom = uki.createElement('div', this.defaultCss);
-    //     
-    //     this.selectable(this.selectable());
-    //     this.className(this.className());
-    //     this.background().attachTo(this);
-    // };
-    // 
-    // proto._layoutDom = function(rect) {
-    //     
-    // };
 });
