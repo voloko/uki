@@ -19,15 +19,15 @@ Core
             ✓ use server side pngcrush to reduce image size
         ✓ gif images for ie6
         
-- childResized
-    - resizeToContents!!!
+✓ childResized
+    ✓ resizeToContents!!!
     
 - Disabled
 ✓ themes
     ✓ merge registered themes
     ✓ do not used defaultTheme in code directly
     ✓ access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
-- split uki into uki-core and uki-viewlib
+✓ split uki into uki-core and uki-view
 ✓ focusable
     ✓ create dummy input/use existing input after _createDom()
     ✓ attach focusable to
@@ -53,7 +53,7 @@ Views
 - slider
     ✓ separate functional test
     ✓ @param min, max
-    - @event change
+    ✓ @event change
     - @param step
     ✓ move bar on resize
     - labels under the bar
@@ -68,14 +68,14 @@ Views
     ✓ separate functional test
     ✓ switch on resize
     ✓ switch in layout
-- label
-    - use top instead of margin-top for label
+✓ label
+    ✓ use top instead of margin-top for label
 - text view
     - support multiline with textarea
-- button
+✓ button
     ✓ separate functional test (attachment)
     ✓ @param bgHover, bgNormal, bgPressed
-    - bgPrefix
+    ✓ bgPrefix
 - segmented view
     - separate functional test
     - layout child buttons
@@ -86,10 +86,10 @@ Views
     - switch event
 - scroll view
     ✓ separate functional test
-    - opera 9.2 support (no overflowX, overflowY)
+    ✓ opera 9.2 support (no overflowX, overflowY)
 - list
     ✓ separate functional test
-    - data manimupulation
+    ✓ data manimupulation
 - tree
 - table view
     - separate functional test

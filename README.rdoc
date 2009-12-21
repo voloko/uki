@@ -1,4 +1,4 @@
-= UiKit for web apps
+= UKI – simple UiKit for complex web apps
 Uki is a javascript user interface toolkit for desktop-like web applications.
 It comes with rich view-component library ranging from Slider to Grids and SplitPanes.
 
