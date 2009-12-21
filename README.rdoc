@@ -24,7 +24,7 @@ Thats why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, Chrome. And it looks 
 
 == Fast
 One of the reasons uki appeared is that I had to create a 4000 rows, complex, client side searchable table. 
-Just rendering the table made any IE busy for half a minute. TODO: Uki uses progressive rendering and can do it mostly instantly.
+Just rendering the table made any IE busy for half a minute. Uki uses progressive rendering and can render 30k+ lists and tables mostly instantly.
 
 == Small
 With all the images packed into (not supported in IE6 and IE7) gziped uki build is under 30kb. And it's a single HTTP request.
@@ -42,9 +42,11 @@ Uki is written in plain JavaScript. It leverages known DOM and JS idioms such as
 jQuery learning uki won't take long.
 
 == Specific
-Uki doesn't want to be a Jack-of-all-trades. It only does layout but it does it well. You won't find any Model layer code here. 
+Uki doesn't want to be a Jack-of-all-trades. It only does layout but it does it well. You won't find any ajax or data storage layer code here. 
     
 == Programmable layout
+HTML and CSS are great technologies. Though you can't layout everything with them. There are things that require programmable layout calculations. Think of a toolbar, which should show a popup when some of the buttons don't fit. Or a split pane. Or moving a slider bar on window resize. 
+That's the reason uki calculates view positions and sizes with JavaScript. Unfortunately resizing everything with JS only will make you layout slow as a turtle. So uki uses as much native browser layout as possible.
 
 == Selector
 

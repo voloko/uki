@@ -13,9 +13,9 @@ uki.background.Css = uki.newClass(new function() {
         var dom = comp.dom();
         
         uki.each(this._options, function(name, value) {
-            this._originalValues = dom.style[name];
+            this._originalValues[name] = dom.style[name];
             dom.style[name] = value;
-        });
+        }, this);
     };
     
     this.detach = function() {
@@ -23,7 +23,7 @@ uki.background.Css = uki.newClass(new function() {
             var dom = this._comp.dom();
             uki.each(this._options, function(name, value) {
                 dom[name] = this._originalValues[name];
-            });
+            }, this);
         }
     };
 });

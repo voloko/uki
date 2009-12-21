@@ -137,6 +137,10 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
     };
     
+    proto.rectForChild = function() {
+        return this._clientRect;
+    };
+    
     proto.clientRect = function() {
         return this._clientRect;
     };

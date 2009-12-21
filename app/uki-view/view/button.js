@@ -35,7 +35,7 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
         // load bgs
         this['hover-background']();
         this['down-background']();
-        
+
         this._backgroundByName('normal');
         
         // events

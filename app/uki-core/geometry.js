@@ -287,6 +287,7 @@ Inset.fromString = function(string, relative) {
 
 Inset.create = function(a1, a2, a3, a4) {
     if (a1 === undefined) return null;
+    if (a1.top !== undefined) return a1;
     if (/\S+\s+\S+/.test(a1 + '')) return Inset.fromString(a1, a2);
     if (a3 === undefined) return new Inset(a1, a2);
     return new Inset(a1, a2, a3, a4);

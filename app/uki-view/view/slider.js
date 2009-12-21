@@ -121,7 +121,8 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         var fixedRect = rect.clone();
         fixedRect.height = 18;
         Base._layoutDom.call(this, fixedRect);
-        this.value(this.value());
+        this._position = this._val2pos(this._value);
+        this._moveHandle();
         return true;
     },
 

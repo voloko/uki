@@ -159,8 +159,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    proto.clientRect = function(rect) {
-        return this.rect(rect);
+    proto.rectForChild = function(child) {
+        return this.rect();
     };
     
     /**
@@ -347,7 +347,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Called through a second layout pass when _dom is allready created
      */
     proto._layoutDom = function(rect) {
-        var l = {}, s = uki.supportNativeLayout, relativeRect = this.parent().clientRect();
+        var l = {}, s = uki.supportNativeLayout, relativeRect = this.parent().rectForChild(this);
         if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT && this._autosize & AUTOSIZE_WIDTH) {
             l.left = rect.x;
             l.right = relativeRect.width - rect.x - rect.width;

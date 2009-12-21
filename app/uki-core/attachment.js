@@ -40,7 +40,7 @@ include('view/observable.js');
             return this._rect;
         },
         
-        clientRect: function() {
+        rectForChild: function(child) {
             return this._rect;
         },
         
