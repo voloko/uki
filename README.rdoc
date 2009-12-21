@@ -2,16 +2,10 @@
 Uki is a javascript user interface toolkit for desktop-like web applications.
 It comes with rich view-component library ranging from Slider to Grids and SplitPanes.
 
-    uki({
-        view: 'Button',
-        rect: '400px 40px 200px 24px',
-        text: 'uki is awesome!'
-    }).attachTo( document.getElementById('test'), '1000px 100px' );
-
-    uki('Button[text^=uki]').bind('click', function() {
-        alert('Hello world!');
-    });
+    uki({ view: 'Button', text: 'Click me', rect: '10 10 100 24' }).attachTo( window );
     
+    uki('Button[text^=Click]').click(function() { alert(this.text()); });
+
 == Simple
 Web should be simple. Adding a new library to your app should not require using specific build process or learning a new language.
 It should be as simple as adding a <script> tag to your HTML. That's exactly the way uki works. No frameworks to install,
@@ -51,6 +45,17 @@ That's the reason uki calculates view positions and sizes with JavaScript. Unfor
 == Selector
 
 == Builder
+    uki({
+        view: 'Button',
+        rect: '400px 40px 200px 24px',
+        text: 'uki is awesome!'
+    }).attachTo( document.getElementById('test'), '1000px 100px' );
+
+    uki('Button[text^=uki]').click(function() {
+        alert('Hello world!');
+    });
+
+
     uki({ view: 'SplitPane', rect: '1000 600', autosize: 'width height', anchors: 'left top right bottom', 
         handlePosition: 300, autogrowLeft: false, leftMin: 300, rightMin: 300,
         leftChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left right', text: 'left pane', autosize: 'width' },
