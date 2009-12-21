@@ -61,3 +61,6 @@ That's the reason uki calculates view positions and sizes with JavaScript. Unfor
             }
         ]
     }).attachTo( window, '1000 600' );
+    
+== PS
+And one more thing. Unobtrusive javascript is evil.
