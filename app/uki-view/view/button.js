@@ -1,23 +1,21 @@
 include('label.js');
 
-(function() {
-
-var baseProto = uki.view.Label.prototype,
-self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function() {
-    var proto = this;
+uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function() {
+    var proto = this,
+        Base = uki.view.Label[PROTOTYPE];
     
     proto.init = function() {
-        baseProto.init.call(this);
+        Base.init.call(this);
         this._inset = new Inset(0, 4);
         this._backgroundPrefix = '';
-        this.defaultStyle = this.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;"; // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this.defaultCss = Base.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;text-shadow:0 1px 0px rgba(255,255,255,0.8)"; // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
     };
     
     proto.typeName = function() {
         return 'uki.view.Button';
     };
     
-    uki.newProperties(proto, ['backgroundPrefix']);
+    uki.addProperties(proto, ['backgroundPrefix']);
     
     uki.each(['normal', 'hover', 'down', 'focus'], function(i, name) {
         var property = name + '-background';
@@ -29,7 +27,7 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
     
     proto._createDom = function() {
         // dom
-        this._dom = uki.createElement('div', this.defaultStyle);
+        this._dom = uki.createElement('div', this.defaultCss);
         this._dom.appendChild(this._label);
         
         // load bgs
@@ -105,8 +103,6 @@ self = uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new fu
     };
 
     proto._bindToDom = function(name) {
-        return uki.view.Focusable._bindToDom.call(this, name) || uki.view.Label.prototype._bindToDom.call(this, name);
+        return uki.view.Focusable._bindToDom.call(this, name) || uki.view.Label[PROTOTYPE]._bindToDom.call(this, name);
     };
 });
-
-})();

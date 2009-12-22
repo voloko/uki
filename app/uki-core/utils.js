@@ -2,7 +2,7 @@ include('uki.js');
 
 (function() {
 
-var toString = Object.prototype.toString;
+var toString = Object[PROTOTYPE].toString;
 	
 var utils = {
     
@@ -113,11 +113,7 @@ var utils = {
                 for ( var name in options ) {
                     var copy = options[ name ];
 
-                    // Prevent never-ending loop
-                    if ( target === copy ) {
-                        continue;
-                    // Don't bring in undefined values
-                    } else if ( copy !== undefined ) {
+                    if ( copy !== undefined ) {
                         target[ name ] = copy;
                     }
 
@@ -136,30 +132,42 @@ var utils = {
             inheritance, i, startFrom = 0;
             
         if (arguments.length > 1) {
-            if (arguments[0].prototype) { // real inheritance
+            if (arguments[0][PROTOTYPE]) { // real inheritance
                 inheritance = function() {};
-                inheritance.prototype = arguments[0].prototype;
-                klass.prototype = new inheritance();
+                inheritance[PROTOTYPE] = arguments[0][PROTOTYPE];
+                klass[PROTOTYPE] = new inheritance();
                 startFrom = 1;
             }
         }
         for (i=startFrom; i < arguments.length; i++) {
-            uki.extend(klass.prototype, arguments[i]);
+            uki.extend(klass[PROTOTYPE], arguments[i]);
         };
         return klass;
     },
     
-    newProperty: function(field) {
+    newProperty: function(field, setter) {
         return function(value) {
             if (value === undefined) return this[field];
             this[field] = value;
+            setter && setter.call(this, value);
             return this;
         };
     },
     
-    newProperties: function(proto, fields) {
+    addProperties: function(proto, fields) {
         uki.each(fields, function() { proto[this] = uki.newProperty('_' + this); });
+    },
+    
+    delegateProperty: function(proto, name, target) {
+        var propName = '_' + name;
+        proto[name] = function(value) {
+            if (this[target]) return this[target][propName](value);
+            if (value === undefined) return this[propName];
+            this[propName] = value;
+            return this;
+        };
     }
+    
 };
 
 uki.utils = utils;

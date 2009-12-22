@@ -1,6 +1,6 @@
 
 uki.view.Popup = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container.prototype,
+    var Base = uki.view.Container[PROTOTYPE],
         proto = this;
     
     proto.init = function() {
@@ -10,22 +10,14 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         this._horizontal = false;
         this._flipOnResize = true;
         this._shadow = null;
+        this._defaultBackground = 'popup-normal';
+        this._defaultShadow = 'popup-shadow';
     };
     
-    uki.newProperties(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
+    uki.addProperties(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
     
     proto.typeName = function() {
         return 'uki.view.Popup';
-    };
-    
-    proto.background = function(bg) {
-        if (bg === undefined && !this._background) this._background = uki.theme.background('popup-normal');
-        return Base.background.call(this, bg);
-    };
-    
-    proto.shadow = function(bg) {
-        if (bg === undefined && !this._shadow) this._shadow = uki.theme.background('popup-shadow');
-        return Base.shadow.call(this, bg);
     };
     
     proto.show = function() {

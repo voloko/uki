@@ -12,8 +12,8 @@ uki.view.list.Render = uki.newClass({
      * @param Object data Data to render
      * @return String html
      */
-    render: function(data) {
-        return '<div style="line-height: 30px; text-align: center; font-size: 12px">' + data + '</div>' + '';
+    render: function(data, rect, i) {
+        return '<div style="line-height: 30px; text-align: center; font-size: 12px">' + data + '</div>';
     },
     
     setSelected: function(container, data, state, focus) {

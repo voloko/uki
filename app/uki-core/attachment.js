@@ -62,8 +62,8 @@ include('view/observable.js');
             var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
                 height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,
                 innerRect = new Rect(
-                    Math.min(this._maxSize.width, Math.max(this._minSize.width,  width)), 
-                    Math.min(this._maxSize.height, Math.max(this._minSize.height, height))
+                    MIN(this._maxSize.width, Math.max(this._minSize.width,  width)), 
+                    MIN(this._maxSize.height, Math.max(this._minSize.height, height))
                 ),
                 oldRect = this._innerRect;
                 

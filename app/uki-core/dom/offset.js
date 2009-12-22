@@ -65,8 +65,8 @@ include('../dom.js');
     		}
 
     		if ( prevComputedStyle.position === "fixed" ) {
-    			top  += Math.max(docElem.scrollTop, body.scrollTop);
-    			left += Math.max(docElem.scrollLeft, body.scrollLeft);
+    			top  += MAX(docElem.scrollTop, body.scrollTop);
+    			left += MAX(docElem.scrollLeft, body.scrollLeft);
     		}
 
     		return new Point(left, top);

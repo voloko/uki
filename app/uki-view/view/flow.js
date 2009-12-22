@@ -1,12 +1,14 @@
 uki.view.Flow = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container.prototype,
+    var Base = uki.view.Container[PROTOTYPE],
         proto = this;
 
     
     proto.init = function() {
         Base.init.call(this);
+        this._horizontal = false;
+        this._dimension = 'height';
         this._containers = [];
-        this._containerHeights = [];
+        this._containerSizes = [];
         this._autosizeToContents = AUTOSIZE_HEIGHT;
     };
     
@@ -14,11 +16,22 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         return 'uki.view.Flow';
     };
     
+    proto.horizontal = uki.newProperty('_horizontal', function(h) {
+        this._dimension = h ? 'width' : 'height';
+    });
+    
     proto.appendChild = function(view) {
         Base.appendChild.call(this, view);
-        this._containers[view._viewIndex] = this._createContainer(view);
-        this._containerHeights[view._viewIndex] = view.rect().height;
-        if (this._dom) this._dom.appendChild(this._containers[view._viewIndex]);
+        var container = this._createContainer(view),
+            v = view.rect()[this._dimension];
+        this._containers[view._viewIndex] = container;
+        this._containerSizes[view._viewIndex] = 0;
+        if (this._dom) {
+            this._initContainer(container);
+            container.style[this._dimension] = v + 'px';
+            this._dom.appendChild(container);
+            this._containerSizes[view._viewIndex] = v;
+        }
     };
     
     proto.removeChild = function(view) {
@@ -33,14 +46,27 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
     };
     
     proto.contentsSize = function() {
-        var height = uki.reduce(0, this._childViews, function(sum, e) { return sum + e.rect().height } );
-        return new Size(this.contentsWidth(), height );
+        var d = this._dimension,
+            value = uki.reduce(0, this._childViews, function(sum, e) { return sum + e.rect()[d]; } );
+        if (this._horizontal) {
+            return new Size( value, this.contentsHeight() );
+        } else {
+            return new Size( this.contentsWidth(), value );
+        }
     };
     
-    proto._updateHeight = function(dh) {
+    proto._updateSize = function(dv) {
         var rect = this.rect(),
+            width, height;
+            
+        if (this._horizontal) {
+            width = rect.width + dv;
+            height = this._autosizeToContents & AUTOSIZE_HEIGHT && rect.height != childRect.height ? this.contentsHeight() : rect.height;
+        } else {
             width = this._autosizeToContents & AUTOSIZE_WIDTH && rect.width != childRect.width ? this.contentsWidth() : rect.width;
-        this.rect( new Rect(rect.x, rect.y, width, rect.height + dh) );
+            height = rect.height + dv;
+        }
+        this.rect( new Rect(rect.x, rect.y, width, height) );
         this.parent().childResized( this );
     };
     
@@ -49,34 +75,46 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
             childRect = child.rect(),
             index = child._viewIndex,
             container = this._containers[index],
-            height = this._containerHeights[index],
-            dh = childRect.height - height;
+            value = this._containerSizes[index],
+            dv = childRect[this._dimension] - value,
+            sizeChanged = !!dv;
             
-        if (!dh && rect.width == childRect.width) return;
-        this._updateHeight(dh);
+        if (this._horizontal) sizeChanged = sizeChanged || rect.height == childRect.height;
+        else sizeChanged = sizeChanged || rect.width == childRect.width;
+        
+        if (!sizeChanged) return;
+        this._updateHeight(dv);
     };
     
     proto._createDom = function() {
         Base._createDom.call(this);
         for (var i=0; i < this._containers.length; i++) {
+            this._initContainer(this._containers[i]);
             this._dom.appendChild(this._containers[i]);
         };
     };
     
+    proto._initContainer = function(c) {
+        if (this._horizontal) {
+            c.style.cssText += ';float:left';
+            c.style.height = this.rect().height + 'px';
+        }
+    };
+    
     proto._layoutDom = function(rect) {
         Base._layoutDom.call(this, rect);
-        var i, l, c, h;
+        var i, l, c, v;
         for (i=0, l = this._containers.length; i < l; i++) {
             c = this._containers[i];
-            h = this._childViews[i].rect().height;
-            if (h != this._containerHeights[i]) {
-                c.style.height = h + 'px';
-                this._containerHeights[i] = h;
+            v = this._childViews[i].rect()[this._dimension];
+            if (v != this._containerSizes[i]) {
+                c.style[this._dimension] = v + 'px';
+                this._containerSizes[i] = v;
             }
         };
     };
     
     proto._createContainer = function(view) {
-        return uki.createElement('div', 'position:relative;top:0;left:0;width:100%;padding:0;height:' + view.rect().height + 'px');
+        return uki.createElement('div', 'position:relative;top:0;left:0;width:100%;padding:0;');
     };
 });

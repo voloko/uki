@@ -54,8 +54,10 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     };
     
     uki.each(['background', 'shadow'], function(i, name) {
-        var field = '_' + name;
+        var field = '_' + name,
+            defaultField = '_default' + name.substr(0, 1).toUpperCase() + name.substr(1);
         proto[name] = function(val) {
+            if (val === undefined && !this[field] && this[defaultField]) this[field] = uki.theme.background(this[defaultField]);
             if (val === undefined) return this[field];
             val = uki.background(val);
             if (this._dom) {

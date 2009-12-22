@@ -6,10 +6,10 @@ include('attachment.js');
 (function() {
     uki.Collection = function( elems ) {
         this.length = 0;
-    	Array.prototype.push.apply( this, elems );
+    	Array[PROTOTYPE].push.apply( this, elems );
     };
 
-    var self = uki.fn = uki.Collection.prototype = {};
+    var self = uki.fn = uki.Collection[PROTOTYPE] = {};
     
     self.each = function( callback ) {
         uki.each( this, callback );

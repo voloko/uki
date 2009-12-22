@@ -2,7 +2,7 @@ include('../../uki-core/const.js');
 
 (function() {
 
-var Base = uki.view.Base.prototype;
+var Base = uki.view.Base[PROTOTYPE];
 
 uki.view.Label = uki.newClass(uki.view.Base, {
     init: function() {
@@ -23,6 +23,13 @@ uki.view.Label = uki.newClass(uki.view.Base, {
             this._label.unselectable = state ? '' : 'on';
         }
         return Base.selectable.call(this, state);
+    },
+    
+    fontSize: function(size) {
+        if (size === undefined) return this._label.style.fontSize;
+        
+        this._label.style.fontSize = this._label.style.lineHeight = size + 'px';
+        return this;
     },
     
     contentsSize: function() {

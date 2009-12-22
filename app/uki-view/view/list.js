@@ -1,9 +1,8 @@
 uki.view.list = {};
 
 uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
-    var Base = uki.view.Base.prototype,
-        proto = this,
-        doc = document;
+    var Base = uki.view.Base[PROTOTYPE],
+        proto = this;
         
     proto.typeName = function() {
         return 'uki.view.List';
@@ -14,11 +13,13 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._rowHeight = 30;
         this._render = new uki.view.list.Render();
         this._scrollableParent = null;
-        this._data = null;
+        this._data = [];
         this._packSize = 20;
         this._visibleRectExt = 300;
         this._selectedIndex = -1;
         this._minHeight = 0;
+        this._minWidth = 0;
+        this._defaultBackground = 'list';
     };
     
     proto.background = function(bg) {
@@ -26,7 +27,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return Base.background.call(this, bg);
     };
     
-    uki.newProperties(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt']);
+    uki.addProperties(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'minWidth', 'minHeight']);
     
     proto.data = function(d) {
         if (d === undefined) return this._data;
@@ -34,166 +35,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._data = d;
         this._updateRectOnDataChnage();
         return this;
-    };
-    
-    proto.minHeight = function(h) {
-        if (h === undefined) return this._minHeight;
-        
-        this._minHeight = h;
-        if (this.rect() && this.rect().height < h) {
-            var newRect = this.rect().clone();
-            newRect.height = h;
-            this.rect(newRect);
-        }
-        return this;
-    };
-    
-    proto._updateRectOnDataChnage = function() {
-        if (this.rect()) {
-            var newRect = this.rect().clone(),
-                oldRect = this.rect(),
-                h = this._data.length * this._rowHeight;
-                
-            if (h > this._minHeight) {
-                newRect.height = h;
-                this.rect(newRect);
-                if (this.parent()) this.parent().childResized(this, oldRect, newRect);
-            }
-        }
-    };
-    
-    proto._createDom = function() {
-        this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
-        this._scrollableParent = uki.view.scrollableParent(this);
-        
-        this._initCommonAttrs();
-        
-        var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
-        this._packs = [
-            {
-                dom: packDom,
-                itemTo: 0,
-                itemFrom: 0
-            },
-            {
-                dom: packDom.cloneNode(false),
-                itemTo: 0,
-                itemFrom: 0
-            }
-        ];
-        this._dom.appendChild(this._packs[0].dom);
-        this._dom.appendChild(this._packs[1].dom);
-        
-        var _this = this;
-        this._scrollableParent.bind('scroll', function() {
-            _this.layout();
-        });
-        
-        this.bind('mousedown', function(e) {
-            var o = uki.dom.offset(this._dom),
-                y = e.domEvent.pageY - o.y,
-                p = Math.floor(y / this._rowHeight);
-            this.selectedIndex(p);
-        });
-        
-        this._initFocusable();
-        // if (this._focusableInput) {
-        //     var target = this._scrollableParent.parent() || this._scrollableParent;
-        //     target.dom().appendChild(this._focusableInput);
-        // }
-    };
-    
-    proto.selectedIndex = function(position) {
-        if (position === undefined) return this._selectedIndex;
-        var nextIndex = Math.max(0, Math.min((this._data || []).length - 1, position));
-        if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
-        if (nextIndex == position) this._setSelected(this._selectedIndex = nextIndex, true);
-        return this;
-    };
-    
-    proto._setSelected = function(position, state) {
-        if (!this._dom) return;
-        var item = this._itemAt(position);
-        if (!item) return;
-        this._render.setSelected(item, this._data[position], state, this.hasFocus());
-        if (!state) return;
-        this._scrollToPosition(position);
-    };
-    
-    proto._scrollToPosition = function(position) {
-        var maxY, minY;
-        maxY = (position+1)*this._rowHeight;
-        minY = position*this._rowHeight;
-        if (maxY >= this._visibleRect.maxY()) {
-            this._scrollableParent.scroll(0, maxY - this._visibleRect.maxY());
-        } else if (minY < this._visibleRect.y) {
-            this._scrollableParent.scroll(0, minY - this._visibleRect.y);
-        }
-    };
-    
-    proto._itemAt = function(position) {
-        if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
-            return this._packs[1].dom.childNodes[position - this._packs[1].itemFrom];
-        } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
-            return this._packs[0].dom.childNodes[position - this._packs[0].itemFrom];
-        }
-        return null;
-    };
-    
-    proto._focus = function() {
-        this._selectedIndex = this._selectedIndex > -1 ? this._selectedIndex : 0;
-        this._setSelected(this._selectedIndex, true);
-        if (this._firstFocus) {
-            var _this = this,
-                userAgent = navigator.userAgent.toLowerCase(),
-                useKeyPress = /mozilla/.test( userAgent ) && !(/(compatible|webkit)/).test( userAgent );
-            uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
-                if (e.which == 38 || e.keyCode == 38) { // UP
-                    _this.selectedIndex(Math.max(0, _this.selectedIndex() - 1));
-                    uki.dom.preventDefault(e);
-                } else if (e.which == 40 || e.keyCode == 40) { // DOWN
-                    _this.selectedIndex(Math.min(_this._data.length-1, _this.selectedIndex() + 1));
-                    uki.dom.preventDefault(e);
-                }
-            });
-        }
-        
-    };
-    
-    proto._blur = function() {
-        if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
-    };
-    
-    proto._renderPack = function(pack, itemFrom, itemTo) {
-        var html = [];
-        for (i=itemFrom; i < itemTo; i++) {
-            html[html.length] = [
-                '<div style="width:100%;height:', this._rowHeight, 'px;overflow:hidden">', 
-                this._render.render(this._data[i]),
-                '</div>'
-            ].join('');
-        };
-        pack.dom.innerHTML = html.join('');
-        pack.itemFrom = itemFrom;
-        pack.itemTo   = itemTo;
-        pack.dom.style.top = itemFrom*this._rowHeight + 'px';
-    };
-    
-    proto._addToPack = function (pack, position, data) {
-        var row = this._createRow(data),
-            nextChild = pack.dom.childNodes[position - pack.itemFrom];
-        nextChild ? pack.dom.insertBefore(row, nextChild) : pack.dom.appendChild(row);
-        pack.itemTo++;
-    };
-    
-    proto._removeFromPack = function(pack, position) {
-        pack.dom.removeChild(pack.dom.childNodes[position - pack.itemFrom]);
-        pack.itemTo--;
-    };
-    
-    proto._movePack = function(pack, offset) {
-        pack.itemFrom += offset;
-        pack.dom.style.top = pack.itemFrom * this._rowHeight + 'px';
     };
     
     // data api
@@ -229,10 +70,27 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this._layoutDom(this.rect());
         }
         this._updateRectOnDataChnage();
+    };    
+    
+    proto.rect = function(rect) {
+        if (rect !== undefined) {
+            this._outerRect = rect = Rect.create(rect);
+            rect = new Rect(rect.x, rect.y, MAX(this._minWidth, rect.width), MAX(this._minHeight, rect.height));
+        }
+        return Base.rect.call(this, rect);
     };
     
-    proto._createRow = function(data) {
-        return uki.createElement('div', ['width:100%;height:', this._rowHeight, 'px;overflow:hidden'].join(''), this._render.render(data));
+    proto.parentResized = function(oldSize, newSize) {
+        this._rect = this._outerRect;
+        Base.parentResized.call(this, oldSize, newSize);
+    };
+    
+    proto.selectedIndex = function(position) {
+        if (position === undefined) return this._selectedIndex;
+        var nextIndex = MAX(0, MIN((this._data || []).length - 1, position));
+        if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
+        if (nextIndex == position) this._setSelected(this._selectedIndex = nextIndex, true);
+        return this;
     };
     
     proto.layout = function() {
@@ -245,6 +103,158 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._needsLayout = false;
         // send visibleRect with layout
         this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
+    };
+    
+    
+    
+    
+    proto._updateRectOnDataChnage = function() {
+        if (this.rect()) {
+            var newRect = this.rect().clone(),
+                oldRect = this.rect(),
+                h = this._data.length * this._rowHeight;
+                
+            if (h > this._minHeight) {
+                newRect.height = h;
+                this.rect(newRect);
+                if (this.parent()) this.parent().childResized(this, oldRect, newRect);
+            }
+        }
+    };
+    
+    proto._createDom = function() {
+        this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
+        this._scrollableParent = uki.view.scrollableParent(this);
+        
+        this._initCommonAttrs();
+
+        var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
+        this._packs = [
+            {
+                dom: packDom,
+                itemTo: 0,
+                itemFrom: 0
+            },
+            {
+                dom: packDom.cloneNode(false),
+                itemTo: 0,
+                itemFrom: 0
+            }
+        ];
+        this._dom.appendChild(this._packs[0].dom);
+        this._dom.appendChild(this._packs[1].dom);
+        
+        var _this = this;
+        this._scrollableParent.bind('scroll', function() {
+            _this.layout();
+        });
+        
+        this.bind('mousedown', function(e) {
+            var o = uki.dom.offset(this._dom),
+                y = e.domEvent.pageY - o.y,
+                p = Math.floor(y / this._rowHeight);
+            this.selectedIndex(p);
+        });
+        
+        this._initFocusable();
+        // if (this._focusableInput) {
+        //     var target = this._scrollableParent.parent() || this._scrollableParent;
+        //     target.dom().appendChild(this._focusableInput);
+        // }
+    };
+    
+    proto._setSelected = function(position, state) {
+        if (!this._dom) return;
+        var item = this._itemAt(position);
+        if (!item) return;
+        if (state) this._scrollToPosition(position);
+        this._render.setSelected(item, this._data[position], state, this.hasFocus());
+    };
+    
+    proto._scrollToPosition = function(position) {
+        var maxY, minY;
+        maxY = (position+1)*this._rowHeight;
+        minY = position*this._rowHeight;
+        if (maxY >= this._visibleRect.maxY()) {
+            this._scrollableParent.scroll(0, maxY - this._visibleRect.maxY());
+        } else if (minY < this._visibleRect.y) {
+            this._scrollableParent.scroll(0, minY - this._visibleRect.y);
+        }
+    };
+    
+    proto._itemAt = function(position) {
+        if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
+            return this._packs[1].dom.childNodes[position - this._packs[1].itemFrom];
+        } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
+            return this._packs[0].dom.childNodes[position - this._packs[0].itemFrom];
+        }
+        return null;
+    };
+    
+    proto._focus = function() {
+        this._selectedIndex = this._selectedIndex > -1 ? this._selectedIndex : 0;
+        this._setSelected(this._selectedIndex, true);
+        if (this._firstFocus) {
+            var _this = this,
+                userAgent = navigator.userAgent.toLowerCase(),
+                useKeyPress = /mozilla/.test( userAgent ) && !(/(compatible|webkit)/).test( userAgent );
+            uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
+                if (e.which == 38 || e.keyCode == 38) { // UP
+                    _this.selectedIndex(MAX(0, _this.selectedIndex() - 1));
+                    uki.dom.preventDefault(e);
+                } else if (e.which == 40 || e.keyCode == 40) { // DOWN
+                    _this.selectedIndex(MIN(_this._data.length-1, _this.selectedIndex() + 1));
+                    uki.dom.preventDefault(e);
+                }
+            });
+        }
+        
+    };
+    
+    proto._blur = function() {
+        if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
+    };
+    
+    proto._rowCss = function() {
+        return ['width:100%;height:', this._rowHeight, 'px;overflow:hidden'].join('');
+    };
+    
+    proto._renderPack = function(pack, itemFrom, itemTo) {
+        var html = [],
+            rect = new Rect(0, itemFrom*this._rowHeight, this.rect().width, this._rowHeight);
+        for (i=itemFrom; i < itemTo; i++) {
+            html[html.length] = [
+                '<div style="', this._rowCss(), '">', 
+                this._render.render(this._data[i], rect, i),
+                '</div>'
+            ].join('');
+            rect.y += this._rowHeight;
+        };
+        pack.dom.innerHTML = html.join('');
+        pack.itemFrom = itemFrom;
+        pack.itemTo   = itemTo;
+        pack.dom.style.top = itemFrom*this._rowHeight + 'px';
+    };
+    
+    proto._addToPack = function (pack, position, data) {
+        var row = this._createRow(data),
+            nextChild = pack.dom.childNodes[position - pack.itemFrom];
+        nextChild ? pack.dom.insertBefore(row, nextChild) : pack.dom.appendChild(row);
+        pack.itemTo++;
+    };
+    
+    proto._removeFromPack = function(pack, position) {
+        pack.dom.removeChild(pack.dom.childNodes[position - pack.itemFrom]);
+        pack.itemTo--;
+    };
+    
+    proto._movePack = function(pack, offset) {
+        pack.itemFrom += offset;
+        pack.dom.style.top = pack.itemFrom * this._rowHeight + 'px';
+    };
+    
+    proto._createRow = function(data) {
+        return uki.createElement('div', this._rowCss(), this._render.render(data));
     };
     
     proto._swapPacks = function() {
@@ -260,8 +270,8 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         var totalHeight = this._rowHeight * this._data.length,
             prefferedPackSize = Math.ceil((this._visibleRect.height + this._visibleRectExt*2) / this._rowHeight),
 
-            minVisibleY  = Math.max(0, this._visibleRect.y - this._visibleRectExt),
-            maxVisibleY  = Math.min(totalHeight, this._visibleRect.maxY() + this._visibleRectExt),
+            minVisibleY  = MAX(0, this._visibleRect.y - this._visibleRectExt),
+            maxVisibleY  = MIN(totalHeight, this._visibleRect.maxY() + this._visibleRectExt),
             minRenderedY = this._packs[0].itemFrom * this._rowHeight,
             maxRenderedY = this._packs[1].itemTo * this._rowHeight,
             
@@ -276,23 +286,23 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             // this happens a) on first render b) on scroll jumps c) on container resize
             // render both packs, move them to be at the center of visible area
             startAt = minVisibleY + (maxVisibleY - minVisibleY - prefferedPackSize*this._rowHeight*2) / 2;
-            itemFrom = Math.max(0, Math.round(startAt / this._rowHeight));
-            itemTo = Math.min(this._data.length, itemFrom + prefferedPackSize);
+            itemFrom = MAX(0, Math.round(startAt / this._rowHeight));
+            itemTo = MIN(this._data.length, itemFrom + prefferedPackSize);
             
             this._renderPack(this._packs[0], itemFrom, itemTo);
-            this._renderPack(this._packs[1], itemTo, Math.min(this._data.length, itemTo + prefferedPackSize));
+            this._renderPack(this._packs[1], itemTo, MIN(this._data.length, itemTo + prefferedPackSize));
         } else if (maxVisibleY > maxRenderedY) { // we need to render below current area
             // this happens on normal scroll down
             // rerender bottom, swap
             itemFrom = this._packs[1].itemTo;
-            itemTo   = Math.min(this._data.length, this._packs[1].itemTo + prefferedPackSize);
+            itemTo   = MIN(this._data.length, this._packs[1].itemTo + prefferedPackSize);
             
             this._renderPack(this._packs[0], itemFrom, itemTo);
             this._swapPacks();
         } else if (minVisibleY < minRenderedY) { // we need to render above current area
             // this happens on normal scroll up
             // rerender top, swap
-            itemFrom = Math.max(this._packs[0].itemFrom - prefferedPackSize, 0);
+            itemFrom = MAX(this._packs[0].itemFrom - prefferedPackSize, 0);
             itemTo   = this._packs[0].itemFrom;
             
             this._renderPack(this._packs[1], itemFrom, itemTo);
@@ -307,3 +317,5 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
 });
+
+include('list/render.js');

@@ -1,5 +1,5 @@
 uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container.prototype;
+    var Base = uki.view.Container[PROTOTYPE];
 
     var proto = this,
         commonVerticalStyle = 'cursor:row-resize;cursor:ns-resize;z-index:200;overflow:hidden;',
@@ -27,11 +27,11 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         if (val === undefined) return this._handlePosition;
         if (this._rect) {
             var prop = this._vertical ? 'height' : 'width';
-            this._handlePosition = Math.max(
+            this._handlePosition = MAX(
                     this._leftMin,
-                    Math.min(
+                    MIN(
                         this._rect[prop] - this._rightMin - this._handleWidth,
-                        Math.max(0, Math.min(this._rect ? this._rect[prop] : 1000, val * 1))
+                        MAX(0, MIN(this._rect ? this._rect[prop] : 1000, val * 1))
                     )) || this._handlePosition;
         } else {
             this._handlePosition = val;
@@ -44,7 +44,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     
-    uki.newProperties(proto, ['vertical', 'leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'handleWidth']);
+    uki.addProperties(proto, ['vertical', 'leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'handleWidth']);
     
     proto._createHandle = function() {
         var handle;
@@ -110,9 +110,9 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     proto.rect = function(newRect) {
         if (newRect !== undefined) {
             if (this._vertical) {
-                newRect.height = Math.max(newRect.height, this._leftMin + this._rightMin); // force min width
+                newRect.height = MAX(newRect.height, this._leftMin + this._rightMin); // force min width
             } else {
-                newRect.width = Math.max(newRect.width, this._leftMin + this._rightMin); // force min width
+                newRect.width = MAX(newRect.width, this._leftMin + this._rightMin); // force min width
             }
         }
         return Base.rect.call(this, newRect);
@@ -129,11 +129,11 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         }
         if (this._vertical) {
             if (newRect.height - this._handlePosition < this._rightMin) {
-                this._handlePosition = Math.max(this._leftMin, newRect.height - this._rightMin);
+                this._handlePosition = MAX(this._leftMin, newRect.height - this._rightMin);
             }
         } else {
             if (newRect.width - this._handlePosition < this._rightMin) {
-                this._handlePosition = Math.max(this._leftMin, newRect.width - this._rightMin);
+                this._handlePosition = MAX(this._leftMin, newRect.width - this._rightMin);
             }
         }
         return true;
@@ -204,9 +204,9 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     proto._layoutDom = function(rect) {
         // rect = rect.clone();
         // if (this._vertical) {
-        //     rect.height = Math.max(rect.height, this._leftMin + this._rightMin); // force min width
+        //     rect.height = MAX(rect.height, this._leftMin + this._rightMin); // force min width
         // } else {
-        //     rect.width = Math.max(rect.width, this._leftMin + this._rightMin); // force min width
+        //     rect.width = MAX(rect.width, this._leftMin + this._rightMin); // force min width
         // }
         Base._layoutDom.call(this, rect);
         

@@ -7,7 +7,7 @@ var Point = geometry.Point = function(x, y) {
     this.y = y || 0.0;
 };
 
-Point.prototype = {
+Point[PROTOTYPE] = {
     toString: function() {
         return this.x + ' ' + this.y;
     },
@@ -41,7 +41,7 @@ var Size = geometry.Size = function(width, height) {
     this.height = height || 0.0;
 };
 
-Size.prototype = {
+Size[PROTOTYPE] = {
     toString: function() {
         return this.width + ' ' + this.height;
     },
@@ -93,7 +93,7 @@ var Rect = geometry.Rect = function(a1, a2, a3, a4) {
     }
 };
 
-Rect.prototype = {
+Rect[PROTOTYPE] = {
     toString: function() {
         return [this.x, this.y, this.width, this.height].join(' ');
     },
@@ -153,7 +153,7 @@ Rect.prototype = {
         return this;
     },
     
-    offset: Point.prototype.offset,
+    offset: Point[PROTOTYPE].offset,
     
     intersection: function(rect) {
         var origin = new Point(
@@ -190,8 +190,8 @@ Rect.prototype = {
     constructor: Rect
 };
 
-Rect.prototype.left = Rect.prototype.minX;
-Rect.prototype.top  = Rect.prototype.minY;
+Rect[PROTOTYPE].left = Rect[PROTOTYPE].minX;
+Rect[PROTOTYPE].top  = Rect[PROTOTYPE].minY;
 
 Rect.fromCoords = function(minX, minY, maxX, maxY) {
     if (maxX === undefined) {
@@ -246,7 +246,7 @@ var Inset = geometry.Inset = function(top, right, bottom, left) {
     this.left   = left === undefined ? this.right : left;
 };
 
-Inset.prototype = {
+Inset[PROTOTYPE] = {
     toString: function() {
         return [this.top, this.right, this.bottom, this.left].join(' ');
     },

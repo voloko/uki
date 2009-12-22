@@ -10,7 +10,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     // and inflict scrollbars with inner pane
     
     // Ie 6 lives happily with w:100%,h:100% and overflowed content
-    var Base = uki.view.Container.prototype,
+    var Base = uki.view.Container[PROTOTYPE],
         proto = this,
         scrollWidth,
         requirePaneResize = !!window.opera, 
@@ -44,8 +44,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         this._scrollH = false;
     };
     
-    this.scrollableV = uki.newProperty('_scrollableV');
-    this.scrollableH = uki.newProperty('_scrollableH');
+    uki.addProperties(proto, ['scrollableV', 'scrollableH']);
     
     this.childResized = function(child) {
         this._updateInnerRect();
@@ -72,20 +71,17 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     
     proto._createDom = function() {
         Base._createDom.call(this);
-        this._pane = uki.createElement('div', 'position:absolute;left:0;top:0;' + (uki.supportNativeLayout && !requirePaneResize ? 'right:0;bottom:0' : 'width:100%;height:100%'));
+        this._pane = uki.createElement('div', 'position:absolute;left:0;top:0;' + (uki.supportNativeLayout && !requirePaneResize ? 'right:0;bottom:0' : 'width:100%;height:100%;'));
         if (requirePaneResize) {
-            this._pane.style.overflow = 'hidden';
+            this._pane.style.overflow = 'visible';
             if (!hasSeparateOverflows) this._dom.style.overflow = 'auto';
         }
         this._dom.appendChild(this._pane);
+        this._initCommonAttrs();
     };
     
     proto.domForChild = function() {
         return this._pane;
-    };
-    
-    proto.contentsSize = function() {
-        return new Rect(this.maxProp(this, 'maxX'), this.maxProp(this, 'maxY'));
     };
     
     proto.visibleRect = function() {
@@ -137,6 +133,15 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
     };
     
+    proto.resizeToContents = function() {
+        initScrollWidth();
+        var size = this.contentsSize();
+        this._scrollV = this._scrollableV && size.height > this._rect.height;
+        this._scrollH = this._scrollableH && size.width > this._rect.width;
+        this._innerRect.width = this._rect.width - (this._scrollH ? scrollWidth : 0);
+        this._innerRect.height = this._rect.height - (this._scrollV ? scrollWidth : 0);
+    };
+    
     proto.rectForChild = function() {
         return this._clientRect;
     };
@@ -171,11 +176,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._layoutDom = function(rect) {
-        if (requirePaneResize) {
-            var clientRect = this.clientRect();
-            this._pane.style.height = clientRect.height + 'px';
-            this._pane.style.width = clientRect.width + 'px';
-        } 
         if (hasSeparateOverflows) {
             if (this._scrollableH && this._layoutScrollH !== this._scrollH) {
                 this._dom.style.overflowX = this._scrollH ? 'scroll' : 'hidden';
@@ -188,8 +188,14 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
             }
         }
         
+        if (requirePaneResize) {
+            var clientRect = this.clientRect();
+            this._pane.style.height = clientRect.height + 'px';
+            this._pane.style.width = clientRect.width + 'px';
+        } 
         Base._layoutDom.call(this, rect);
         this._layoutChildViews(rect);
+        var _this = this;
     };
     
     // if (useOuterRect && uki.supportNativeLayout) this._pane.style.bottom = this._scrollH ? scrollWidth + 'px' : 0;

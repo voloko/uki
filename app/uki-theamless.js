@@ -45,7 +45,7 @@ include('uki-view/view/checkbox.js');
 include('uki-view/view/textField.js');
 include('uki-view/view/label.js');
 include('uki-view/view/list.js');
-include('uki-view/view/list/render.js');
+include('uki-view/view/table.js');
 include('uki-view/view/slider.js');
 include('uki-view/view/splitPane.js');
 include('uki-view/view/scrollPane.js');

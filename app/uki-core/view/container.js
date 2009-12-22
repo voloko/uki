@@ -1,7 +1,7 @@
 include('base.js');
 
 uki.view.Container = uki.newClass(uki.view.Base, new function() {
-    var Base = uki.view.Base.prototype,
+    var Base = uki.view.Base[PROTOTYPE],
         proto = this;
         
         
@@ -17,7 +17,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     function maxProp (c, prop) {
         var val = 0, i, l;
         for (i = c._childViews.length - 1; i >= 0; i--){
-            val = Math.max(c._childViews[i].rect()[prop]());
+            val = MAX(c._childViews[i].rect()[prop]());
         };
         return val;
     }
