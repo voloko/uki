@@ -22,10 +22,6 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         };
     });
     
-    proto._rowCss = function() {
-        return ['width:100%;height:', this._rowHeight, 'px;overflow:hidden;position:relative;top:0;left:0;'].join('');
-    };
-    
     proto._createDom = function() {
         Base._createDom.call(this);
         var scrollPaneRect = new Rect(0, this._headerHeight, this.rect().width, this.rect().height - this._headerHeight),
@@ -38,7 +34,6 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         }, this);
         this._scrollPane = uki.build(paneML)[0];
         this._list = this._scrollPane.childViews()[0];
-        this._list._rowCss = this._rowCss;
         this._scrollPane.resizeToContents();
         this.appendChild(this._scrollPane);
     };
