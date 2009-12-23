@@ -44,7 +44,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         this._scrollH = false;
     };
     
-    uki.addProperties(proto, ['scrollableV', 'scrollableH']);
+    uki.addProps(proto, ['scrollableV', 'scrollableH']);
     
     this.childResized = function(child) {
         this._updateInnerRect();
@@ -55,19 +55,9 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         if (dy) this.scrollTop(this.scrollTop() + dy);
     };
     
-    this.scrollTop = function(val) {
-        if (val === undefined) return this._dom && this._dom.scrollTop || 0;
-        
-        this._dom.scrollTop = val;
-        return this;
-    };
-    
-    this.scrollLeft = function(val) {
-        if (val === undefined) return this._dom && this._dom.scrollLeft || 0;
-        
-        this._dom.scrollLeft = val;
-        return this;
-    };
+    proto._scrollTop = proto._scrollLeft = 0;
+    uki.delegateProp(proto, 'scrollTop', '_dom');
+    uki.delegateProp(proto, 'scrollLeft', '_dom');
     
     proto._createDom = function() {
         Base._createDom.call(this);

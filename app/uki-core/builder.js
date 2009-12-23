@@ -1,6 +1,5 @@
 include('uki.js');
 include('utils.js');
-include('attr.js');
 include('collection.js');
 
 uki.build = function(ml) {

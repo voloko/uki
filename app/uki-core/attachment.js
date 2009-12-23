@@ -1,7 +1,6 @@
 include('const.js');
 include('utils.js');
 include('dom.js');
-include('attr.js');
 include('geometry.js');
 include('view/observable.js');
 

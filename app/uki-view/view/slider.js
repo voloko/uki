@@ -12,10 +12,10 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         Base.init.call(this);
     },
     
-    min: uki.newProperty('_min'),
-    max: uki.newProperty('_max'),
-    values: uki.newProperty('_values'),
-    keyStep: uki.newProperty('_keyStep'),
+    min: uki.newProp('_min'),
+    max: uki.newProp('_max'),
+    values: uki.newProp('_values'),
+    keyStep: uki.newProp('_keyStep'),
     
     value: function(val) {
         if (val === undefined) return this._value;

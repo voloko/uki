@@ -6,6 +6,23 @@ var toString = Object[PROTOTYPE].toString;
 	
 var utils = {
     
+    attr: function(comp, attr, value) {
+        if (value !== undefined) {
+            if (utils.isFunction(comp[attr])) {
+                comp[attr](value);
+            } else {
+                comp[attr] = value;
+            }
+            return comp;
+        } else {
+            if (utils.isFunction(comp[attr])) {
+                return comp[attr]();
+            } else {
+                return comp[attr];
+            }
+        }
+    },
+    
 	isFunction: function( obj ) {
 		return toString.call(obj) === "[object Function]";
 	},
@@ -85,7 +102,7 @@ var utils = {
     map: function( elems, callback, context ) {
         var ret = [],
             mapper = utils.isFunction(callback) ? callback : 
-                     function(e) { return utils.isFunction(e[callback]) ? e[callback]() : e[callback]; };
+                     function(e) { return utils.attr(e, callback); };
 
         for ( var i = 0, length = elems.length; i < length; i++ ) {
             var value = mapper.call( context || elems[ i ], elems[ i ], i );
@@ -140,12 +157,12 @@ var utils = {
             }
         }
         for (i=startFrom; i < arguments.length; i++) {
-            uki.extend(klass[PROTOTYPE], arguments[i]);
+            utils.extend(klass[PROTOTYPE], arguments[i]);
         };
         return klass;
     },
     
-    newProperty: function(field, setter) {
+    newProp: function(field, setter) {
         return function(value) {
             if (value === undefined) return this[field];
             this[field] = value;
@@ -154,14 +171,14 @@ var utils = {
         };
     },
     
-    addProperties: function(proto, fields) {
-        uki.each(fields, function() { proto[this] = uki.newProperty('_' + this); });
+    addProps: function(proto, fields) {
+        utils.each(fields, function() { proto[this] = utils.newProp('_' + this); });
     },
     
-    delegateProperty: function(proto, name, target) {
+    delegateProp: function(proto, name, target) {
         var propName = '_' + name;
         proto[name] = function(value) {
-            if (this[target]) return this[target][propName](value);
+            if (this[target]) return utils.attr(this[target], name, value);
             if (value === undefined) return this[propName];
             this[propName] = value;
             return this;

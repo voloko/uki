@@ -12,7 +12,6 @@ include('uki-core/const.js');
 include('uki-core/uki.js');
 include('uki-core/utils.js');
 include('uki-core/geometry.js');
-include('uki-core/attr.js');
 include('uki-core/builder.js');
 include('uki-core/selector.js');
 

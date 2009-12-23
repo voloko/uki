@@ -11,9 +11,9 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     proto._rowHeight = 17;
     proto._headerHeight = 21;
     
-    uki.each(propertiesToDelegate, function(i, name) { uki.delegateProperty(proto, name, '_list'); });
+    uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(proto, name, '_list'); });
     
-    proto.columns = uki.newProperty('_columns', function(c) {
+    proto.columns = uki.newProp('_columns', function(c) {
         this._columns = uki.build(c);
         for (var i=0, offset = 0; i < this._columns.length; i++) {
             this._columns[i].position(i);

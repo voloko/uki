@@ -15,7 +15,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         return 'uki.view.Button';
     };
     
-    uki.addProperties(proto, ['backgroundPrefix']);
+    uki.addProps(proto, ['backgroundPrefix']);
     
     uki.each(['normal', 'hover', 'down', 'focus'], function(i, name) {
         var property = name + '-background';

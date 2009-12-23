@@ -27,7 +27,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return Base.background.call(this, bg);
     };
     
-    uki.addProperties(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'minWidth', 'minHeight']);
+    uki.addProps(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'minWidth', 'minHeight']);
     
     proto.data = function(d) {
         if (d === undefined) return this._data;

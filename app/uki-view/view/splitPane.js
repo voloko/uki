@@ -44,7 +44,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     
-    uki.addProperties(proto, ['vertical', 'leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'handleWidth']);
+    uki.addProps(proto, ['vertical', 'leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'handleWidth']);
     
     proto._createHandle = function() {
         var handle;

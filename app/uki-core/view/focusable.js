@@ -8,7 +8,7 @@ uki.view.Focusable = {
     
     _focusable: true, // default value
     
-    focusable: uki.newProperty('_focusable'),
+    focusable: uki.newProp('_focusable'),
     
     _initFocusable: function(preCreatedInput) {
         if (!this._focusable) return;

@@ -157,22 +157,22 @@ Rect[PROTOTYPE] = {
     
     intersection: function(rect) {
         var origin = new Point(
-                Math.max(this.x, rect.x),
-                Math.max(this.y, rect.y)
+                MAX(this.x, rect.x),
+                MAX(this.y, rect.y)
             ),
             size = new Size(
-                Math.min(this.maxX(), rect.maxX()) - origin.x,
-                Math.min(this.maxY(), rect.maxY()) - origin.y
+                MIN(this.maxX(), rect.maxX()) - origin.x,
+                MIN(this.maxY(), rect.maxY()) - origin.y
             );
         return size.empty() ? new Rect() : new Rect(origin, size);
     },
     
     union: function(rect) {
         return Rect.fromCoords(
-            Math.min(this.x, rect.x),
-            Math.min(this.y, rect.y),
-            Math.max(this.maxX(), rect.maxX()),
-            Math.max(this.maxY(), rect.maxY())
+            MIN(this.x, rect.x),
+            MIN(this.y, rect.y),
+            MAX(this.maxX(), rect.maxX()),
+            MAX(this.maxY(), rect.maxY())
         );
     },
     

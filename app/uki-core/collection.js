@@ -1,5 +1,4 @@
 include('uki.js');
-include('attr.js');
 include('attachment.js');
 
 

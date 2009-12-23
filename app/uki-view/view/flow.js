@@ -16,7 +16,7 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         return 'uki.view.Flow';
     };
     
-    proto.horizontal = uki.newProperty('_horizontal', function(h) {
+    proto.horizontal = uki.newProp('_horizontal', function(h) {
         this._dimension = h ? 'width' : 'height';
     });
     

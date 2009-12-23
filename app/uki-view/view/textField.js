@@ -37,14 +37,14 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
         return this;
     },
     
-    placeholder: uki.newProperty('_placeholder', function(v) {
+    placeholder: uki.newProp('_placeholder', function(v) {
         if (this._dom) {
             this._input.placeholder = v;
             if (this._placeholderDom) this._placeholderDom.innerHTML = v;
         }
     }),
     
-    multiline: uki.newProperty('_multiline'),
+    multiline: uki.newProp('_multiline'),
     
     typeName: function() {
         return 'uki.component.TextField';

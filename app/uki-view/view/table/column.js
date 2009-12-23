@@ -4,12 +4,12 @@ uki.view.table.Column = uki.newClass(new function() {
     proto._width = 100;
     proto._offset = 0;
     proto._position = 0;
-    proto._css = 'overflow:hidden;position:absolute;font-size:11px;line-height:11px;white-space:nowrap;text-overflow:elipsis;';
+    proto._css = 'overflow:hidden;position:absolute;font-size:11px;line-height:11px;white-space:nowrap;text-overflow:ellipsis;';
     proto._inset = new Inset(3, 5);
 
     proto.init = function() {};
     
-    uki.addProperties(proto, ['width', 'offset', 'position', 'css', 'formatter']);
+    uki.addProps(proto, ['width', 'offset', 'position', 'css', 'formatter']);
     
     proto.render = function(row, rect, i) {
         if (!this._template) this._template = this._buildTemplate(rect);

@@ -14,7 +14,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         this._defaultShadow = 'popup-shadow';
     };
     
-    uki.addProperties(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
+    uki.addProps(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
     
     proto.typeName = function() {
         return 'uki.view.Popup';

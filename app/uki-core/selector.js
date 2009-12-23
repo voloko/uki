@@ -1,5 +1,4 @@
 include('uki.js');
-include('attr.js');
 include('collection.js');
 
 /* Ideas and code parts borrowed from Sizzle (http://sizzlejs.com/) */
