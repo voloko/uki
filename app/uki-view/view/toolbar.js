@@ -34,17 +34,21 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this.appendChild(this._flow);
         this.appendChild(this._more);
         this._initCommonAttrs();
-        // this._layoutChildViews();
         uki(this._flow.childViews()).resizeToContents();
-        this._flow.rect(flowRect);
         this._totalWidth = uki.reduce(0, this._flow.childViews(), function(s, v) { return s + v.rect().width });
         this._more.visible(rect.width < this._totalWidth);
+        if (rect.width < this._totalWidth) flowRect.width -= this._moreWidth;
+        this._flow.rect(flowRect);
     };
     
     proto.rect = function(rect) {
         var result = Base.rect.call(this, rect);
         if (this._more && rect !== undefined) {
-            this._more.visible(rect.width < this._totalWidth);
+            if (this._more.visible() != rect.width < this._totalWidth) {
+                this._more.visible(rect.width < this._totalWidth);
+                var flowRect = this._flow.rect();
+                flowRect.width += (rect.width < this._totalWidth ? -1 : 1)*this._moreWidth;
+            }
         }
         return result;
     };

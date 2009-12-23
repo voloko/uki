@@ -12,7 +12,7 @@ uki.view.table.Render = uki.newClass(uki.view.list.Render, new function() {
         if (!this._template) this._template = this._buildTemplate(rect);
         var table = this._table,
             columns = table.columns();
-        this._template[1] = uki.map(row, function(val, j) {
+        this._template[1] = uki.map(columns, function(val, j) {
             return columns[j].render(row, rect, i);
         }).join('');
         return this._template.join('');

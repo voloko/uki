@@ -15,10 +15,8 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     
     proto.columns = uki.newProp('_columns', function(c) {
         this._columns = uki.build(c);
-        for (var i=0, offset = 0; i < this._columns.length; i++) {
+        for (var i=0; i < this._columns.length; i++) {
             this._columns[i].position(i);
-            this._columns[i].offset(offset);
-            offset += this._columns[i].width();
         };
     });
     

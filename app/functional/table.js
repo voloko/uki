@@ -1,12 +1,22 @@
-var data = [],
-    words = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'.split(/[,\.]\s?/)
+$.ajax({
+    url: '/app/functional/Library_f.json',
+    complete: function(r) {
+        data = eval('(' + r.responseText + ')')
+        uki({ view: 'SplitPane', rect: '1000 1000', anchors: 'left top right bottom', handleWidth: 1, handlePosition: 199,
+                leftMin: 150, rightMin: 400,
+                leftPane: { background: '#D0D7E2' },
+                rightChildViews: { view: 'Table', rect: '0 0 800 1000', minHeight: 200, anchors: 'left top right bottom', data: data, minWidth: 800, columns: [
+                    { view: 'table.NumberColumn', label: 'ID', width: 40 },
+                    { view: 'table.CustomColumn', label: 'Name', width: 250 },
+                    { view: 'table.NumberColumn', label: 'Time', width: 50 },
+                    { view: 'table.CustomColumn', label: 'Artist', width: 150 },
+                    { view: 'table.CustomColumn', label: 'Album',  width: 150 },
+                    { view: 'table.CustomColumn', label: 'Genre', width: 100 },
+                    { view: 'table.NumberColumn', label: 'Rating', width: 30 },
+                    { view: 'table.NumberColumn', label: 'Play Count', width: 30 }
+                ] }
+            }
+        ).attachTo( window );        
+    }
+})
 
-for (var i=0; i < 1000; i++) {
-    data[i] = [ i + 1, words[i % words.length], new Date() ];
-};
-
-uki({ view: 'Table', rect: '1000 1000', minHeight: 200, anchors: 'left top right bottom', data: data, columns: [
-    { view: 'table.NumberColumn', width: 40 },
-    { view: 'table.CustomColumn', width: 300 },
-    { view: 'table.CustomColumn', width: 200, formatter: function(d) { return d.getFullYear() } }
-] }).attachTo( window );
