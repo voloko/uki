@@ -124,8 +124,7 @@ var utils = {
         var target = arguments[0] || {}, i = 1, length = arguments.length, options;
 
         for ( ; i < length; i++ ) {
-            // Only deal with non-null/undefined values
-            if ( (options = arguments[ i ]) != null ) {
+            if ( (options = arguments[i]) != null ) {
                 
                 for ( var name in options ) {
                     var copy = options[ name ];
@@ -138,7 +137,6 @@ var utils = {
             }
         }
 
-        // Return the modified object
         return target;      
     },
     

@@ -10,6 +10,7 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         this._containers = [];
         this._containerSizes = [];
         this._autosizeToContents = AUTOSIZE_HEIGHT;
+        this.defaultCss = this.defaultCss + 'overflow:hidden;'
     };
     
     proto.typeName = function() {
@@ -61,9 +62,9 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
             
         if (this._horizontal) {
             width = rect.width + dv;
-            height = this._autosizeToContents & AUTOSIZE_HEIGHT && rect.height != childRect.height ? this.contentsHeight() : rect.height;
+            height = this._autosizeToContents & AUTOSIZE_HEIGHT ? this.contentsHeight() : rect.height;
         } else {
-            width = this._autosizeToContents & AUTOSIZE_WIDTH && rect.width != childRect.width ? this.contentsWidth() : rect.width;
+            width = this._autosizeToContents & AUTOSIZE_WIDTH ? this.contentsWidth() : rect.width;
             height = rect.height + dv;
         }
         this.rect( new Rect(rect.x, rect.y, width, height) );
@@ -83,7 +84,7 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         else sizeChanged = sizeChanged || rect.width == childRect.width;
         
         if (!sizeChanged) return;
-        this._updateHeight(dv);
+        this._updateSize(dv);
     };
     
     proto._createDom = function() {

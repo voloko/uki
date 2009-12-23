@@ -1,7 +1,7 @@
 function elements() {
     return [    
         { view: 'Button',   rect: '10px 10px 200px 24px',  anchors: 'left top', text: 'focusable button!' },
-        { view: 'TextField',rect: '10 35 200 40', multiline: true, anchors: 'left top' },
+        { view: 'TextField',rect: '10 35 200 40', multiline: true, anchors: 'left top', value: 'textarea' },
         { view: 'Checkbox', rect: '250px 10px 24px 24px',  anchors: 'left top', name: 'probe' },
         { view: 'Label',    rect: '275px 10px 100px 24px', anchors: 'left top', html: 'Checkbox 1', selectable: false },
         { view: 'Checkbox', rect: '250px 35px 24px 24px',  anchors: 'left top', checked: true },

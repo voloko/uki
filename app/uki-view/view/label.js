@@ -32,18 +32,39 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         return this;
     },
     
+    /**
+     * Warning! this operation is expensive
+     */
     contentsSize: function() {
-        var clone = this._label.cloneNode(true),
-            size;
-        if (this._autosizeToContents & AUTOSIZE_WIDTH) clone.style.width = clone.style.right = '';
-        if (this._autosizeToContents & AUTOSIZE_HEIGHT) clone.style.height = clone.style.bottom = '';
-        clone.style.visibility = 'hidden';
-        this._dom.appendChild(clone);
-        size = new Size(clone.offsetWidth + this._inset.width(), clone.offsetHeight + this._inset.height());
-        this._dom.removeChild(clone);
+        var clone = this._createLabelClone(), inset = this.inset(), size;
+        
+        uki.dom.probe(clone, function() {
+            size = new Size(clone.offsetWidth + inset.width(), clone.offsetHeight + inset.height());
+        });
+        
         return size;
     },
     
+    _createLabelClone: function() {
+        var clone = this._label.cloneNode(true),
+            inset = this.inset(), rect = this.rect();
+            
+        if (this._autosizeToContents & AUTOSIZE_WIDTH) {
+            clone.style.width = clone.style.right = '';
+        } else if (uki.supportNativeLayout) {
+            clone.style.right = '';
+            clone.style.width = rect.width - inset.width() + 'px';
+        }
+        if (this._autosizeToContents & AUTOSIZE_HEIGHT) {
+            clone.style.height = clone.style.bottom = '';
+        } else if (uki.supportNativeLayout) {
+            clone.style.bottom = '';
+            clone.style.height = rect.height - inset.height() + 'px';
+        }
+        clone.style.paddingTop = 0;
+        clone.style.visibility = 'hidden';
+        return clone;
+    },
     
     _createDom: function() {
         Base._createDom.call(this);
@@ -68,8 +89,8 @@ uki.view.Label = uki.newClass(uki.view.Base, {
             l = {
                 left: inset.left, 
                 top: inset.top, 
-                width: this._rect.width - inset.left - inset.right,
-                height: this._rect.height - inset.top - inset.bottom
+                width: this._rect.width - inset.width(),
+                height: this._rect.height - inset.height()
             };
         }
         this._lastLabelLayout = uki.dom.layout(this._label.style, l, this._lastLabelLayout);

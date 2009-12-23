@@ -33,7 +33,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
     value: function(value) {
         if (value === undefined) return this._dom ? this._input.value : this._value;
         this._value = value;
-        if (this._dom) this._input.value = v;
+        if (this._dom) this._input.value = value;
         return this;
     },
     
@@ -54,6 +54,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, {
         var tagName = this.multiline() ? 'textarea' : 'input';
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
         this._input = uki.createElement(tagName, this.defaultCss + (this.multiline() ? '' : ';overflow:hidden;'));
+        this._input.value = this._value;
         this._dom.appendChild(this._input);
         
         this._input.value = this.value();

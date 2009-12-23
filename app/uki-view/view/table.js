@@ -36,6 +36,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this._list = this._scrollPane.childViews()[0];
         this._scrollPane.resizeToContents();
         this.appendChild(this._scrollPane);
+        this._initCommonAttrs();
     };
     
     
