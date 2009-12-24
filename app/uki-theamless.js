@@ -25,12 +25,14 @@ include('uki-core/attachment.js');
 include('uki-core/image.js');
 
 include('uki-core/background.js');
+include('uki-core/background/null.js');
 include('uki-core/background/sliced9.js');
 include('uki-core/background/css.js');
 include('uki-core/background/cssBox.js');
 include('uki-core/background/rows.js');
 
 include('uki-core/theme.js');
+include('uki-core/theme/base.js');
 
 include('uki-core/view/utils.js');
 include('uki-core/view/observable.js');

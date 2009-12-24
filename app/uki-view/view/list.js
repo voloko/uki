@@ -8,18 +8,20 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return 'uki.view.List';
     };
     
+    proto._throttle = 5; // do not try to render more often than every 5ms
+    proto._minHeight = 0;
+    proto._minWidth = 0;
+    proto._visibleRectExt = 300;
+    proto._packSize = 20;
+    proto._defaultBackground = 'list';
+    
     proto.init = function() {
         Base.init.call(this);
         this._rowHeight = 30;
         this._render = new uki.view.list.Render();
         this._scrollableParent = null;
         this._data = [];
-        this._packSize = 20;
-        this._visibleRectExt = 300;
         this._selectedIndex = -1;
-        this._minHeight = 0;
-        this._minWidth = 0;
-        this._defaultBackground = 'list';
     };
     
     proto.background = function(bg) {
@@ -27,7 +29,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return Base.background.call(this, bg);
     };
     
-    uki.addProps(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'minWidth', 'minHeight']);
+    uki.addProps(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'minWidth', 'minHeight', 'throttle']);
     
     proto.data = function(d) {
         if (d === undefined) return this._data;
@@ -146,7 +148,16 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         
         var _this = this;
         this._scrollableParent.bind('scroll', function() {
-            _this.layout();
+            if (_this._throttle) {
+                if (_this._throttleStarted) return;
+                _this._throttleStarted = true;
+                setTimeout(function() {
+                    _this._throttleStarted = false;
+                    _this.layout();
+                }, _this._throttle)
+            } else {
+                _this.layout();
+            }
         });
         
         this.bind('mousedown', function(e) {

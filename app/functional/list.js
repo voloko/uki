@@ -10,7 +10,7 @@ var p = uki(
                 childViews: { view: 'Box', rect: '10 10 180 900002', autosize: 'width', anchors: 'top left right', background: '#CCC',
                     childViews: [
                         { view: 'List', rect: '1 1 178 900000', autosize: 'width', anchors: 'top left right', 
-                            data: data, rowHeight: 30, id: 'list' }
+                            data: data, rowHeight: 30, id: 'list', throttle: 0 }
                     ]
                 }
             }

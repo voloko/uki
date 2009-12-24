@@ -22,6 +22,12 @@ uki.image = function(url, dataUrl, alpha) {
     return result;
 };
 
+uki.imageSrc = function(url, dataUrl, alpha) {
+    if (uki.image.dataUrlSupported && dataUrl) return dataUrl;
+    if (alpha && uki.image.needAlphaFix) return alpha;
+    return url;
+};
+
 uki.imageHTML = function(url, dataUrl, alpha, html) {
     if (uki.image.needAlphaFix && alpha) {
         url = alpha;

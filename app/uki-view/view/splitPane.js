@@ -1,9 +1,6 @@
 uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container[PROTOTYPE];
-
-    var proto = this,
-        commonVerticalStyle = 'cursor:row-resize;cursor:ns-resize;z-index:200;overflow:hidden;',
-        commonHorizontalStyle = 'cursor:col-resize;cursor:ew-resize;z-index:200;overflow:hidden;';
+    var Base = uki.view.Container[PROTOTYPE],
+        proto = this;
         
     proto.typeName = function() {
         return 'uki.view.SplitPane';
@@ -20,7 +17,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         this._rightMin = 100;
         
         this._panes = [];
-        this._paneML = [];
+        this._paneML = [{childViews:[]}, {childViews: []}];
     };
     
     proto.handlePosition = function(val) {
@@ -49,29 +46,11 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     proto._createHandle = function() {
         var handle;
         if (this._vertical) {
-            handle = this._handleWidth == 1 ?
-                uki.createElement('div', 
-                    Base.defaultCss + 'width:100%;height:5px;margin-top:-2px;top:' + this._handlePosition + 'px;' + 
-                    commonVerticalStyle + 'background: url(' + uki.theme.image('x').src + ')',
-                    '<div style="' + 
-                    Base.defaultCss + 'background:#999;width:100%;height:1px;left:0px;top:2px;overflow:hidden;' + 
-                    '"></div>') :
-                uki.createElement('div', 
-                    Base.defaultCss + 'width:100%;height:' + (this._handleWidth - 2) + 'px;top:' + this._handlePosition + 'px;' +
-                    'border: 1px solid #CCC;border-width: 1px 0;' + commonVerticalStyle +
-                    'background: url(' + uki.theme.image('splitPane-vertical').src + ') 50% 50% no-repeat;');
+            handle = uki.theme.dom('splitPane-vertical', {handleWidth: this._handleWidth});
+            handle.style.top = this._handlePosition + 'px';
         } else {
-            handle = this._handleWidth == 1 ?
-                uki.createElement('div', 
-                    Base.defaultCss + 'height:100%;width:5px;margin-left:-2px;left:' + this._handlePosition + 'px;' + 
-                    commonHorizontalStyle + 'background: url(' + uki.theme.image('x').src + ')',
-                    '<div style="' + 
-                    Base.defaultCss + 'background:#999;height:100%;width:1px;top:0px;left:2px;overflow:hidden;' + 
-                    '"></div>') :
-                uki.createElement('div', 
-                    Base.defaultCss + 'height:100%;width:' + (this._handleWidth - 2) + 'px;left:' + this._handlePosition + 'px;' +
-                    'border: 1px solid #CCC;border-width: 0 1px;' + commonHorizontalStyle + 
-                    'background: url(' + uki.theme.image('splitPane-horizontal').src + ') 50% 50% no-repeat;');
+            handle = uki.theme.dom('splitPane-horizontal', {handleWidth: this._handleWidth});
+            handle.style.left = this._handlePosition + 'px';
         }
         if (!handle.style.cursor || window.opera) handle.style.cursor = this._vertical ? 'n-resize' : 'e-resize';
         return handle;

@@ -1,7 +1,8 @@
 include('uki.js');
 
 (function() {
-    var themeRegexp  = /theme\s*\(\s*([^)]*\s*)\)/,
+    var nullRegexp = /^\s*null\s*$/,
+        themeRegexp  = /theme\s*\(\s*([^)]*\s*)\)/,
         rowsRegexp = /rows\s*\(\s*([^)]*\s*)\)/,
         cssBoxRegexp = /cssBox\s*\(\s*([^)]*\s*)\)/;
         
@@ -9,6 +10,7 @@ include('uki.js');
         if (typeof(bg) === 'string') {
             var match;
             /*jsl:ignore*/
+            if ( match = bg.match(nullRegexp) ) return new self.Null();
             if ( match = bg.match(themeRegexp) ) return uki.theme.background( match[1] );
             if ( match = bg.match(rowsRegexp) ) return new self.Rows( match[1].split(',', 2)[0], match[1].split(',', 2)[1] );
             if ( match = bg.match(cssBoxRegexp) ) return new self.CssBox( match[1] );
