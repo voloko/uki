@@ -41,6 +41,7 @@ include('uki-core/view/base.js');
 include('uki-core/view/container.js');
 
 include('uki-view/view/box.js');
+include('uki-view/view/image.js');
 include('uki-view/view/button.js');
 include('uki-view/view/checkbox.js');
 include('uki-view/view/textField.js');

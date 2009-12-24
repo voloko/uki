@@ -16,6 +16,8 @@ include('view/observable.js');
             this._maxSize = Size.create(options.maxSize) || new Size(50000, 50000);
             this._minSize = Size.create(options.minSize) || new Size(0, 0);
             
+            uki.dom.offset.initialize();
+            
             view.parent(this);
             
             if (dom != root) {

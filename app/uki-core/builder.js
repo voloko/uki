@@ -25,7 +25,7 @@ function createSingle (mlRow) {
     } else if (typeof c === 'string') {
         var parts = c.split('.'),
             obj   = root;
-        if (!root[parts[0]]) {
+        if (!root[parts[0]] || parts[0] == 'Image') {
             parts = ['uki', 'view'].concat(parts); // try with default prefix
         }
         for (var i=0; i < parts.length; i++) {

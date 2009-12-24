@@ -5,7 +5,7 @@ include('../dom.js');
     
     if ( doc.documentElement["getBoundingClientRect"] ) {
     	self = uki.dom.offset = function( elem ) {
-    		if ( !elem ) return new Point();
+    		if ( !elem || elem == root ) return new Point();
     		if ( elem === elem.ownerDocument.body ) return self.bodyOffset( elem );
     		self.boxModel === undefined && self.initializeBoxModel();
     		var box  = elem.getBoundingClientRect(), 
@@ -21,7 +21,7 @@ include('../dom.js');
     	};
     } else {
     	self = uki.dom.offset = function( elem ) {
-    		if ( !elem ) return new Point();
+    		if ( !elem || elem == root ) return new Point();
     		if ( elem === elem.ownerDocument.body ) return self.bodyOffset( elem );
     		self.initialized || self.initialize();
 
@@ -108,6 +108,7 @@ include('../dom.js');
     	},
     	
     	initializeBoxModel: function() {
+    	    if (this.boxModel !== undefined) return;
     		var div = doc.createElement("div");
     		div.style.width = div.style.paddingLeft = "1px";
 

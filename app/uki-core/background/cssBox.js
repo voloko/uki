@@ -12,8 +12,8 @@ uki.background.CssBox = uki.newClass(new function() {
                 uki.createElement('div', options + ';position:absolute;overflow:hidden;left:-999em;width:10px;height:10px;'), 
                 function(c) {
                     cache[options] = new Inset(
-                        c.offsetWidth - 10,
-                        c.offsetHeight - 10
+                        c.offsetHeight - 10,
+                        c.offsetWidth - 10
                     );
                 }
             );

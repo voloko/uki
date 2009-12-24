@@ -11,7 +11,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         this._selectable = false;
         this._inset = new Inset();
         this._label = uki.createElement('div', Base.defaultCss + 
-            "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+            "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
     };
     
     proto.typeName = function() {
@@ -120,7 +120,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         // if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
         if (!this.multiline()) {
             var fz = parseInt(this._fontSize) || 12;
-            this._label.style.paddingTop = (this._rect.height/2 - fz/2) + 'px';
+            this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
         }
         var l;
         

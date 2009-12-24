@@ -1,6 +1,8 @@
+document.body.style.backgroundImage = 'url(' + uki.theme.imageSrc('body') + ')';
+
 function panel (label, args) {
     args = args || {};
-    args.childViews = (args.childViews || []).concat({ view: 'Label', rect: '7 6 100 10', anchors: 'left top right', text: label, color: '#FFF', fontSize: '13px' });
+    args.childViews = (args.childViews || []).concat({ view: 'Label', rect: '7 6 100 14', anchors: 'left top right', text: label, color: '#FFF', fontSize: '13px' });
     return uki.extend({}, { view: 'Box', name: 'panel', background: 'theme(panel-blue)', rect: '100 100', anchors: 'left top right bottom' }, args);
 }
 
@@ -15,8 +17,8 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', anchors: 'left 
                     backgroundPrefix: 'search-', value: '', placeholder: 'Search contacts' }
             ] },
             { view: 'Box', rect: '0 678 166 32', background: 'theme(box-lblue-bottom)', anchors: 'left bottom right', childViews: [
-                { view: 'Label', rect: '7 13 30 12', anchors: 'left top', fontSize: '12px', text: 'Manage contacts', background: 'theme(link)' },
-                { view: 'Button', rect: '136 10 24 18', backgroundPrefix: 'plus-', anchors: 'right bottom' }
+                { view: 'Label', rect: '7 13 90 12', anchors: 'left top', fontSize: '12px', html: '<u>Manage contacts</u>', background: 'theme(link)' },
+                { view: 'Button', rect: '136 10 24 18', backgroundPrefix: 'plus-', anchors: 'right bottom', focusable: false }
             ] }
         ] })
     },
@@ -40,7 +42,7 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', anchors: 'left 
             { view: 'Toolbar', rect: '0 79 470 24', anchors: 'left top right', background: 'theme(toolbar-normal)' },
             { view: 'Box', rect: '0 894 470 32', background: 'theme(box-lblue-bottom)', anchors: 'left bottom right', childViews: [
                 { view: 'Label', rect: '7 13 30 12', anchors: 'left top', fontSize: '12px', text: 'Tags:' },
-                { view: 'Button', rect: '45 10 24 18', backgroundPrefix: 'plus-', anchors: 'left bottom' },
+                { view: 'Button', rect: '45 10 24 18', backgroundPrefix: 'plus-', anchors: 'left bottom', focusable: false },
                 { view: 'Button', rect: '343 7 65 24', anchors: 'right bottom', text: 'Images', 
                     backgroundPrefix: 'a-', inset: '0 16 0 2', fontWeight: 'normal', fontSize: '11px', focusable: false },
                 { view: 'Button', rect: '413 7 50 24', anchors: 'right bottom', text: 'Files', 
@@ -53,6 +55,4 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', anchors: 'left 
 uki('#splitRight').bind('handleMove', function(e) {
     var main = uki('#splitMain')[0];
     if (e.handlePosition > e.dragValue) main.handlePosition(main.handlePosition() - (e.handlePosition - e.dragValue) ).layout();
-})
-
-document.body.style.backgroundImage = 'url(' + uki.theme.imageSrc('body') + ')';
+});

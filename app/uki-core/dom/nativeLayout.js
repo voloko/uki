@@ -9,7 +9,7 @@ uki.initNativeLayout = function() {
                 '<div style="position:absolute;left:0;right:0"></div>'
             ),
             function(div) {
-                uki.supportNativeLayout = div.childNodes[0].offsetWidth == 100;
+                uki.supportNativeLayout = div.childNodes[0].offsetWidth == 100 && !root.opera;
             }
         );
     }

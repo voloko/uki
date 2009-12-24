@@ -1,8 +1,9 @@
 root.uki = function(val, context) {
     if (typeof val == 'string') {
-        var m = val.match(/^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/);
+        var m = val.match(/^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/),
+            e = m && uki._ids[m[1]];
         if (m && !context) {
-            return new uki.Collection( [uki._ids[m[1]]] );
+            return new uki.Collection( e ? [e] : [] );
         }
         return uki.find(val, context);
     }
