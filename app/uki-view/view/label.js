@@ -1,41 +1,41 @@
 include('../../uki-core/const.js');
 
-(function() {
-
-var Base = uki.view.Base[PROTOTYPE];
-
-uki.view.Label = uki.newClass(uki.view.Base, {
-    init: function() {
+uki.view.Label = uki.newClass(uki.view.Base, new function() {
+    var Base = uki.view.Base[PROTOTYPE],
+        proto = this;
+    
+    
+    proto.init = function() {
         Base.init.apply(this, arguments);
         this._scrollable = false;
         this._selectable = false;
         this._inset = new Inset();
         this._label = uki.createElement('div', Base.defaultCss + 
             "font-family:Helvetica-Neue,Helvetica,Arial,sans-serif;font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
-    },
+    };
     
-    typeName: function() {
+    proto.typeName = function() {
         return 'uki.view.Label';
-    },
+    };
     
-    selectable: function(state) {
+    proto.selectable = function(state) {
         if (state !== undefined) {
             this._label.unselectable = state ? '' : 'on';
         }
         return Base.selectable.call(this, state);
-    },
+    };
     
-    fontSize: function(size) {
+    proto.fontSize = function(size) {
         if (size === undefined) return this._label.style.fontSize;
         
         this._label.style.fontSize = this._label.style.lineHeight = size + 'px';
         return this;
-    },
+    };
     
     /**
      * Warning! this operation is expensive
      */
-    contentsSize: function() {
+    proto.contentsSize = function() {
         var clone = this._createLabelClone(), inset = this.inset(), size;
         
         uki.dom.probe(clone, function() {
@@ -43,9 +43,51 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         });
         
         return size;
-    },
+    };
     
-    _createLabelClone: function() {
+    proto.text = function(text) {
+        return text === undefined ? this.html() : this.html(uki.escapeHTML(text));
+    };
+    
+    proto.html = function(html) {
+        if (html === undefined) return this._label.innerHTML;
+        this._label.innerHTML = html;
+        return this;
+    };
+    
+    proto.css = function(name, value) {
+        if (value === undefined) return this._label.style[name];
+        this._label.style[name] = value;
+        return this;
+    };
+    
+    uki.each(['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight'], function(i, name) {
+        proto[name] = function(value) {
+            return this.css(name, value);
+        };
+    });
+    
+    proto.inset = function(inset) {
+        if (inset === undefined) return this._inset;
+        this._inset = Inset.create(inset);
+        return this;
+    };
+
+    proto.scrollable = function(state) {
+        if (state === undefined) return this._scrollable;
+        this._scrollable = state;
+        this._label.style.overflow = state ? 'auto' : 'hidden';
+        return this;
+    };
+    
+    proto.multiline = function(state) {
+        if (state === undefined) return this._label.style.whiteSpace != 'nowrap';
+        this._label.style.whiteSpace = state ? '' : 'nowrap';
+        // if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
+        return this;
+    };
+    
+    proto._createLabelClone = function() {
         var clone = this._label.cloneNode(true),
             inset = this.inset(), rect = this.rect();
             
@@ -64,14 +106,14 @@ uki.view.Label = uki.newClass(uki.view.Base, {
         clone.style.paddingTop = 0;
         clone.style.visibility = 'hidden';
         return clone;
-    },
+    };
     
-    _createDom: function() {
+    proto._createDom = function() {
         Base._createDom.call(this);
         this._dom.appendChild(this._label);
-    },
+    };
     
-    _layoutDom: function() {
+    proto._layoutDom = function() {
         Base._layoutDom.apply(this, arguments);
         var inset = this._inset;
         // if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
@@ -94,43 +136,5 @@ uki.view.Label = uki.newClass(uki.view.Base, {
             };
         }
         this._lastLabelLayout = uki.dom.layout(this._label.style, l, this._lastLabelLayout);
-    },
-    
-    text: function(text) {
-        return text === undefined ? this.html() : this.html(uki.escapeHTML(text));
-    },
-    
-    html: function(html) {
-        if (html === undefined) return this._label.innerHTML;
-        this._label.innerHTML = html;
-        return this;
-    },
-    
-    align: function(align) {
-        if (align === undefined) return this._label.style.textAlign;
-        this._label.style.textAlign = align;
-        return this;
-    },
-    
-    inset: function(inset) {
-        if (inset === undefined) return this._inset;
-        this._inset = Inset.create(inset);
-        return this;
-    },
-
-    scrollable: function(state) {
-        if (state === undefined) return this._scrollable;
-        this._scrollable = state;
-        this._label.style.overflow = state ? 'auto' : 'hidden';
-        return this;
-    },
-    
-    multiline: function(state) {
-        if (state === undefined) return this._label.style.whiteSpace != 'nowrap';
-        this._label.style.whiteSpace = state ? '' : 'nowrap';
-        // if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
-        return this;
-    }
+    };
 });
-    
-})();

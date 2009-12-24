@@ -62,7 +62,6 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         if (this._handleWidth <= 3) this._handleWidth = 1;
 
         this._dom.appendChild(this._handle = this._createHandle());
-        
         for (var i=0, paneML; i < 2; i++) {
             this._paneML[i].view = this._paneML[i].view || new uki.view.Container();
             this._paneML[i].anchors = i == 1         ? 'left top bottom right' :
@@ -80,6 +79,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         uki.dom.bind(this._handle, 'dragstart', function(e) { e.returnValue = false; });
         
         uki.dom.bind(this._handle, 'mousedown', function(e) {
+            var offset = uki.dom.offset(_this.dom());
+            _this._posWithinHandle = (e[_this._vertical ? 'pageY' : 'pageX'] - offset[_this._vertical ? 'y' : 'x']) - _this._handlePosition;
             uki.dom.drag.start(_this, e);
         });
         
@@ -120,7 +121,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     
     proto._drag = function(e) {
         var offset = uki.dom.offset(this.dom());
-        this.handlePosition(e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x']);
+        this.handlePosition(e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x'] - this._posWithinHandle);
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
         this.layout();
     };
@@ -181,12 +182,6 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._layoutDom = function(rect) {
-        // rect = rect.clone();
-        // if (this._vertical) {
-        //     rect.height = MAX(rect.height, this._leftMin + this._rightMin); // force min width
-        // } else {
-        //     rect.width = MAX(rect.width, this._leftMin + this._rightMin); // force min width
-        // }
         Base._layoutDom.call(this, rect);
         
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';

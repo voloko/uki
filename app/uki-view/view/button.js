@@ -8,7 +8,10 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         Base.init.call(this);
         this._inset = new Inset(0, 4);
         this._backgroundPrefix = '';
-        this.defaultCss = Base.defaultCss + "overflow:visible;font-weight:bold;color:#333;font-size:12px;cursor:default;-moz-user-select:none;-webkit-user-select:none;text-align:center;text-shadow:0 1px 0px rgba(255,255,255,0.8)"; // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this.defaultCss = Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;text-shadow:0 1px 0px rgba(255,255,255,0.8)"; // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this.textAlign('center');
+        this.fontWeight('bold');
+        this.color('#333');
     };
     
     proto.typeName = function() {

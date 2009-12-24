@@ -70,8 +70,8 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
         if (inset.top && inset.right) {
             html[html.length] = makeDiv('tr',
-                [RIGHT + 0, TOP + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                (img(settings.c, [LEFT + '-' + inset.right + PX, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                [RIGHT + 0, TOP + 0, WIDTH + inset.right + PX, HEIGHT + inset.top + PX].join(';'),
+                (img(settings.c, [LEFT + '-' + inset.left + PX, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         
@@ -90,7 +90,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (inset.right) {
             html[html.length] = makeDiv('r',
                 [RIGHT + 0, TOP + inset.top + PX, WIDTH + inset.right + PX, BOTTOM + inset.bottom + PX].join(';'),
-                img(settings.v, [LEFT + '-' + inset.right + PX, TOP + 0, HEIGHT + P100, WIDTH + width + PX].join(';'))
+                img(settings.v, [LEFT + '-' + inset.left + PX, TOP + 0, HEIGHT + P100, WIDTH + width + PX].join(';'))
             );
         }
         
@@ -108,8 +108,8 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
         if (inset.bottom && inset.right) {
             html[html.length] = makeDiv('br',
-                [RIGHT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.bottom + PX].join(';'),
-                (img(settings.c, [LEFT + '-' + inset.right + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                [RIGHT + 0, BOTTOM + 0, WIDTH + inset.right + PX, HEIGHT + inset.bottom + PX].join(';'),
+                (img(settings.c, [LEFT + '-' + inset.left + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
             );
         }
         return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));
