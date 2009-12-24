@@ -55,15 +55,16 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         return this;
     };
     
-    proto.css = function(name, value) {
+    proto._css = function(name, value) {
         if (value === undefined) return this._label.style[name];
         this._label.style[name] = value;
+        this['_' + name] = value;
         return this;
     };
     
-    uki.each(['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight'], function(i, name) {
+    uki.each(['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight', 'lineHeight'], function(i, name) {
         proto[name] = function(value) {
-            return this.css(name, value);
+            return this._css(name, value);
         };
     });
     
@@ -117,7 +118,10 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         Base._layoutDom.apply(this, arguments);
         var inset = this._inset;
         // if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
-        if (!this.multiline()) this._label.style.paddingTop = (this._rect.height/2 - 6) + 'px';
+        if (!this.multiline()) {
+            var fz = parseInt(this._fontSize) || 12;
+            this._label.style.paddingTop = (this._rect.height/2 - fz/2) + 'px';
+        }
         var l;
         
         if (uki.supportNativeLayout) {

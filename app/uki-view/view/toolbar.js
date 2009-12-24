@@ -13,7 +13,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
     
     proto.init = function() {
         Base.init.call(this);
-        this._containers = [];
+        this._buttons = [];
         this._widths = [];
     };
     

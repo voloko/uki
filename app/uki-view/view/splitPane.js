@@ -22,17 +22,8 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     
     proto.handlePosition = function(val) {
         if (val === undefined) return this._handlePosition;
-        if (this._rect) {
-            var prop = this._vertical ? 'height' : 'width';
-            this._handlePosition = MAX(
-                    this._leftMin,
-                    MIN(
-                        this._rect[prop] - this._rightMin - this._handleWidth,
-                        MAX(0, MIN(this._rect ? this._rect[prop] : 1000, val * 1))
-                    )) || this._handlePosition;
-        } else {
-            this._handlePosition = val;
-        }
+        
+        this._handlePosition = this._normalizePosition(val) || this._handlePosition;
         this.trigger('handleMove', {source: this, handlePosition: this._handlePosition, dragValue: val });
         
         this._originalHandlePosition = this._originalHandlePosition || this._handlePosition;
@@ -40,8 +31,21 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         return this;
     };
     
+    proto._normalizePosition = function(val) {
+        if (!this._rect) return val;
+        var prop = this._vertical ? 'height' : 'width';
+        return MAX(
+                this._leftMin,
+                MIN(
+                    this._rect[prop] - this._rightMin - this._handleWidth,
+                    MAX(0, MIN(this._rect ? this._rect[prop] : 1000, val * 1))
+                ));
+    };
+    
     
     uki.addProps(proto, ['vertical', 'leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'handleWidth']);
+    proto.topMin = proto.leftMin;
+    proto.bottomMin = proto.rightMin;
     
     proto._createHandle = function() {
         var handle;
@@ -105,7 +109,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         if (!Base._resizeSelf.call(this, newRect)) return false;
         if (this._autogrowLeft) {
             dx = newRect[prop] - oldRect[prop];
-            this._handlePosition += this._autogrowRight ? dx / 2 : dx;
+            this._handlePosition = this._normalizePosition(this._handlePosition + (this._autogrowRight ? dx / 2 : dx))
         }
         if (this._vertical) {
             if (newRect.height - this._handlePosition < this._rightMin) {
