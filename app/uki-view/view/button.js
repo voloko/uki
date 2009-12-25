@@ -68,23 +68,24 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
             }
             return parent === elem;
         }
+        var supportMouseEnter = this._dom.attachEvent && !root.opera;
         
         this._mouseover = function(e) {
-            if ((!_this._dom.attachEvent && isWithin(e, _this._dom)) || _this._over) return;
+            if (!supportMouseEnter && isWithin(e, _this._dom) || _this._over) return;
             _this._backgroundByName((_this._down) ? 'down' : 'hover');
             _this._over = true;
         };
         
         this._mouseout = function(e) {
-            if ((!_this._dom.attachEvent && isWithin(e, _this._dom)) || !_this._over) return;
+            if (!supportMouseEnter && isWithin(e, _this._dom) || !_this._over) return;
             _this._backgroundByName('normal');
             _this._over = false;
         };
         
         uki.dom.bind(document, 'mouseup', this._mouseup);
         uki.dom.bind(this._dom, 'mousedown', this._mousedown);
-        uki.dom.bind(this._dom, this._dom.attachEvent ? 'mouseenter' : 'mouseover', this._mouseover);
-        uki.dom.bind(this._dom, this._dom.attachEvent ? 'mouseleave' : 'mouseout', this._mouseout);
+        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseenter' : 'mouseover', this._mouseover);
+        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseleave' : 'mouseout', this._mouseout);
         
         this._initCommonAttrs();
         this._initFocusable();
