@@ -9,8 +9,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._throttle = 5; // do not try to render more often than every 5ms
-    proto._minHeight = 0;
-    proto._minWidth = 0;
     proto._visibleRectExt = 300;
     proto._packSize = 20;
     proto._defaultBackground = 'list';
@@ -29,7 +27,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return Base.background.call(this, bg);
     };
     
-    uki.addProps(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'minWidth', 'minHeight', 'throttle']);
+    uki.addProps(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'throttle']);
     
     proto.data = function(d) {
         if (d === undefined) return this._data;
@@ -74,19 +72,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._updateRectOnDataChnage();
     };    
     
-    proto.rect = function(rect) {
-        if (rect !== undefined) {
-            this._outerRect = rect = Rect.create(rect);
-            rect = new Rect(rect.x, rect.y, MAX(this._minWidth, rect.width), MAX(this._minHeight, rect.height));
-        }
-        return Base.rect.call(this, rect);
-    };
-    
-    proto.parentResized = function(oldSize, newSize) {
-        this._rect = this._outerRect;
-        Base.parentResized.call(this, oldSize, newSize);
-    };
-    
     proto.selectedIndex = function(position) {
         if (position === undefined) return this._selectedIndex;
         var nextIndex = MAX(0, MIN((this._data || []).length - 1, position));
@@ -116,7 +101,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
                 oldRect = this.rect(),
                 h = this._data.length * this._rowHeight;
                 
-            if (h > this._minHeight) {
+            if (!this._minSize || h > this._minSize.height) {
                 newRect.height = h;
                 this.rect(newRect);
                 if (this.parent()) this.parent().childResized(this, oldRect, newRect);
@@ -154,7 +139,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
                 setTimeout(function() {
                     _this._throttleStarted = false;
                     _this.layout();
-                }, _this._throttle)
+                }, _this._throttle);
             } else {
                 _this.layout();
             }
@@ -328,5 +313,8 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
 });
+
+uki.fn.data = function( value ) { return this.attr( 'data', value ); };
+
 
 include('list/render.js');

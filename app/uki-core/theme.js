@@ -27,6 +27,10 @@ uki.theme = {
         return uki.theme._namedResource(name, 'dom', params) || uki.createElement('div');
     },
     
+    template: function(name, params) {
+        return uki.theme._namedResource(name, 'template', params) || '';
+    },
+    
     _namedResource: function(name, type, params) {
         for (var i = uki.theme.themes.length - 1; i >= 0; i--){
             var result = uki.theme.themes[i][type](name, params);

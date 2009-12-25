@@ -25,5 +25,6 @@ uki.background.Css = uki.newClass(new function() {
                 dom[name] = this._originalValues[name];
             }, this);
         }
+        
     };
 });

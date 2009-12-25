@@ -12,9 +12,7 @@ include('view/observable.js');
             options = options || {};
             this._dom     = dom = dom || root;
             this._view    = view;
-            this._innerRect = this._rect = Rect.create(rect) || new Rect(1000, 1000);
-            this._maxSize = Size.create(options.maxSize) || new Size(50000, 50000);
-            this._minSize = Size.create(options.minSize) || new Size(0, 0);
+            this._rect = Rect.create(rect) || new Rect(1000, 1000);
             
             uki.dom.offset.initialize();
             
@@ -62,19 +60,14 @@ include('view/observable.js');
         layout: function() {
             var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
                 height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,
-                innerRect = new Rect(
-                    MIN(this._maxSize.width, Math.max(this._minSize.width,  width)), 
-                    MIN(this._maxSize.height, Math.max(this._minSize.height, height))
-                ),
-                oldRect = this._innerRect;
+                oldRect = this._rect;
                 
             // if (rect.eq(this._rect)) return;
 
-            this._innerRect = innerRect;
             this._rect = new Rect(width, height);
-            this._view.parentResized(oldRect, innerRect);
-            if (this._view._needsLayout) this._view.layout(innerRect);
-            this.trigger('layout', {source: this, rect: innerRect});
+            this._view.parentResized(oldRect, this._rect);
+            if (this._view._needsLayout) this._view.layout();
+            this.trigger('layout', {source: this, rect: this._rect});
         },
         
         dom: function() {

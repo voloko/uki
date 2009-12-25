@@ -197,3 +197,5 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
 });
+
+uki.fn.handlePosition = function( value ) { return this.attr( 'handlePosition', value ); };

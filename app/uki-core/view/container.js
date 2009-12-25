@@ -101,8 +101,9 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     proto.rect = function(newRect) {
         if (newRect === undefined) return this._rect;
         newRect = Rect.create(newRect);
-        
+
         var oldRect = this._rect;
+        this._parentRect = newRect;
         if (!this._resizeSelf(newRect)) return this;
         this._needsLayout = true;
         
@@ -115,7 +116,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     
     proto._resizeSelf = function(newRect) {
         if (this._rect && newRect.eq(this._rect)) return false;
-        this._rect = newRect;
+        this._rect = this._normalizeRect(newRect);
         return true;
     };
     

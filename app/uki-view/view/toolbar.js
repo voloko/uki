@@ -27,7 +27,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
             moreRect = new Rect(rect.width - this._moreWidth, 0, this._moreWidth, rect.height),
             buttonsML = uki.map(this._buttons, this._createButton, this),
             flowML = { view: 'Flow', rect: flowRect, anchors: 'left top right', className: 'toolbar-flow', horizontal: true, childViews: buttonsML },
-            moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  backgroundPrefix: 'toolbar-', visible: false, text: '>>' };
+            moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  backgroundPrefix: 'toolbar-more-', visible: false, text: '>>', focusable: false };
             
         this._flow = uki.build(flowML)[0];
         this._more = uki.build(moreML)[0];
@@ -35,7 +35,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this.appendChild(this._more);
         this._initCommonAttrs();
         uki(this._flow.childViews()).resizeToContents();
-        this._totalWidth = uki.reduce(0, this._flow.childViews(), function(s, v) { return s + v.rect().width });
+        this._totalWidth = uki.reduce(0, this._flow.childViews(), function(s, v) { return s + v.rect().width; });
         this._more.visible(rect.width < this._totalWidth);
         if (rect.width < this._totalWidth) flowRect.width -= this._moreWidth;
         this._flow.rect(flowRect);
@@ -54,16 +54,9 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._createButton = function(descr) {
-        var size = Size.create(descr.size || '16 16'),
-            url  = descr.icon,
-            label = descr.label,
-            inset = new Inset(0, 4, 0, 8 + size.width);
-            html = [label, '<img src="', url, '" width="', size.width, '" height="', size.height, 
-                '" style="position:absolute;top: ', (this.rect().height - size.height)/2, 'px;',
-                ' left: -', (size.width + 4), 'px;" />'].join('');
-        return { 
+        return uki.extend({ 
                 view: 'Button', rect: new Rect(100, this.rect().height), focusable: false, align: 'left',
-                anchors: 'left top', backgroundPrefix: 'toolbar-', inset: inset, autosizeToContents: 'width', html: html 
-            };
+                anchors: 'left top', backgroundPrefix: 'toolbar-', autosizeToContents: 'width', focusable: false
+            }, descr);
     };    
 });

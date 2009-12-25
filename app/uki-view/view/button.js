@@ -8,7 +8,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         Base.init.call(this);
         this._inset = new Inset(0, 4);
         this._backgroundPrefix = '';
-        this.defaultCss = Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;text-shadow:0 1px 0px rgba(255,255,255,0.8)"; // background: url(" + uki.theme.image('x').src + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this.defaultCss = Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;text-shadow:0 1px 0px rgba(255,255,255,0.8);background:url(" + uki.theme.imageSrc('x') + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this.textAlign('center');
         this.fontWeight('bold');
         this.color('#333');
@@ -18,13 +18,14 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         return 'uki.view.Button';
     };
     
-    uki.addProps(proto, ['backgroundPrefix']);
+    uki.addProps(proto, ['backgroundPrefix', 'icon']);
     
     uki.each(['normal', 'hover', 'down', 'focus'], function(i, name) {
         var property = name + '-background';
         proto[property] = function(bg) {
             if (bg) this['_' + property] = bg;
-            return this['_' + property] = this['_' + property] || uki.theme.background(this._backgroundPrefix + 'button-' + name);
+            return this['_' + property] = this['_' + property] || 
+                uki.theme.background(this._backgroundPrefix + 'button-' + name, {height: this.rect().height, view: this});
         };
     });
     
@@ -60,12 +61,22 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
             _this._down = true;
         };
         
+        function isWithin (e, elem) {
+            var parent = e.relatedTarget;
+            while ( parent && parent != elem ) {
+                parent = parent.parentNode;
+            }
+            return parent === elem;
+        }
+        
         this._mouseover = function(e) {
+            if ((!_this._dom.attachEvent && isWithin(e, _this._dom)) || _this._over) return;
             _this._backgroundByName((_this._down) ? 'down' : 'hover');
             _this._over = true;
         };
         
         this._mouseout = function(e) {
+            if ((!_this._dom.attachEvent && isWithin(e, _this._dom)) || !_this._over) return;
             _this._backgroundByName('normal');
             _this._over = false;
         };

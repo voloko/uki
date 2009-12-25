@@ -117,10 +117,10 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     proto._layoutDom = function() {
         Base._layoutDom.apply(this, arguments);
         var inset = this._inset;
-        // if (!this.multiline()) this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
         if (!this.multiline()) {
             var fz = parseInt(this._fontSize) || 12;
-            this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
+            this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
+            // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
         }
         var l;
         

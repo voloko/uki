@@ -61,6 +61,7 @@ class Uki < Sinatra::Base
   get %r{^/app/.*} do
     path = request.path
     response.header['Content-type'] = 'image/png' if path.match(/\.png$/)
+    response.header['Content-type'] = 'image/jpeg' if path.match(/\.jpg$/)
     response.header['Content-type'] = 'text/javascript;charset=utf-8' if path.match(/\.js$/)
     File.read File.join(File.dirname(__FILE__), path)
   end

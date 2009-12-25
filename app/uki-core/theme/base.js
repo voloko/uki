@@ -5,6 +5,7 @@ uki.theme.Base = {
     backgrounds: [],
     doms: [],
     styles: [],
+    templates: [],
     
     background: function(name, params) {
         return this.backgrounds[name] && this.backgrounds[name](params);
@@ -24,5 +25,9 @@ uki.theme.Base = {
     
     style: function(name, params) {
         return this.styles[name] && this.styles[name](params);
+    },
+    
+    template: function(name, params) {
+        return this.templates[name] && this.templates[name](params);
     }
 };

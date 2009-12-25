@@ -145,6 +145,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         newRect = Rect.create(newRect);
         
         var oldRect = this._rect;
+        this._parentRect = newRect;
         if (!this._resizeSelf(newRect)) return this;
         this._updateInnerRect();
         this._needsLayout = true;

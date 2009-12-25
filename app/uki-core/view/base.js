@@ -73,7 +73,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         proto[defaultAttr] = function() {
             return this[defaultField] && uki.theme.background(this[defaultField]);
         };
-    })
+    });
     
     proto.selectable = function(state) {
         if (state === undefined) return this._selectable;
@@ -161,10 +161,22 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (newRect === undefined) return this._rect;
 
         newRect = Rect.create(newRect);
+        this._parentRect = newRect;
         if (this._rect && newRect.eq(this._rect)) return false;
-        this._rect = newRect;
+        this._rect = this._normalizeRect(newRect);
         this._needsLayout = this._needsLayout || layoutId++;
         return this;
+    };
+    
+    proto.minSize = uki.newProp('_minSize', function(s) {
+        this._minSize = Size.create(s);
+    });
+    
+    proto._normalizeRect = function(rect) {
+        if (this._minSize) {
+            rect = new Rect(rect.x, rect.y, MAX(this._minSize.width, rect.width), MAX(this._minSize.height, rect.height));
+        }
+        return rect;
     };
     
     proto.rectForChild = function(child) {
@@ -186,7 +198,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Resizes view when parent changes size acording to anchors and autosize
      */
     proto.parentResized = function(oldSize, newSize) {
-        var newRect = this._rect.clone(),
+        var newRect = this._parentRect.clone(),
             dX = (newSize.width - oldSize.width) /
                 ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +   // flexible left
                 (this._autosize & AUTOSIZE_WIDTH ? 1 : 0) +             
@@ -306,7 +318,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             dX = newSize.width - oldSize.width,
             dY = newSize.height - oldSize.height;
     
-        if (this._autosizeToContents && AUTOSIZE_WIDTH) {
+        if (this._autosizeToContents & AUTOSIZE_WIDTH) {
             if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT) {
                 newRect.x -= dX/2;
             } else if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) {
@@ -315,7 +327,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             newRect.width += dX;
         }
         
-        if (this._autosizeToContents && AUTOSIZE_HEIGHT) {
+        if (this._autosizeToContents & AUTOSIZE_HEIGHT) {
             if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP && this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM) {
                 newRect.y -= dY/2;
             } else if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) {

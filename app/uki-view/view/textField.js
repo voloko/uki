@@ -5,7 +5,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
 
     function getEmptyInputHeight (fontSize) {
         if (!emptyInputHeight[fontSize]) {
-            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;overflow:hidden;font-size:11px;left:-999em;top:0");
+            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;overflow:hidden;font-size:"+fontSize+";left:-999em;top:0");
             uki.dom.probe(
                 node,
                 function(probe) {
