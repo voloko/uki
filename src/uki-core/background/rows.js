@@ -44,8 +44,8 @@ uki.background.Rows = uki.newClass(new function() {
     
     proto.detach = function() {
         this._comp.dom().removeChild(this._container);
-        this._comp = null;
         this._comp.unbind('layout', this._layoutHandler);
+        this._comp = null;
     };
     
     function getPackHTML (height, colors) {

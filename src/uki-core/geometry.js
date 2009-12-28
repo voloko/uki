@@ -68,7 +68,7 @@ Size.fromString = function(string, relative) {
 
 Size.create = function(a1, a2) {
     if (a1 === undefined) return null;
-    if (a1.width) return a1;
+    if (a1.width !== undefined) return a1;
     if (/\S+\s+\S+/.test(a1 + '')) return Size.fromString(a1, a2);
     return new Size(a1, a2);
 };

@@ -23,12 +23,18 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         });
     };
     
-    proto.background = function(bg) {
-        if (bg === undefined) return this._background = this._background || uki.theme.background('list', this._rowHeight);
-        return Base.background.call(this, bg);
+    proto.defaultBackground = function() {
+        return uki.theme.background('list', this._rowHeight);
     };
     
     uki.addProps(proto, ['rowHeight', 'render', 'packSize', 'visibleRectExt', 'throttle']);
+    
+    proto.rowHeight = uki.newProp('_rowHeight', function(val) {
+        this._rowHeight = val;
+        if (this._background) this._background.detach();
+        this._background = null;
+        if (this.background()) this.background().attachTo(this);
+    });
     
     proto.data = function(d) {
         if (d === undefined) return this._data;
