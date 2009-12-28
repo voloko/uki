@@ -22,17 +22,25 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
                      + 'font-family:Arial,Helvetica,sans-serif;';
     
-    proto.init = function() {
-        this._anchors = 0;
-        this._autosize = 0;
-        this._autosizeToContents = 0;
-        this._parent = null;
-        this._rect = null;
-        this._visible = true;
-        this._needsLayout = false;
-        this._selectable = false;
-        this._styleH = 'left';
-        this._styleV = 'top';
+    proto.init = function(rect) {
+        this._parentRect = this._rect = Rect.create(rect);
+        this._setup();
+        uki.initNativeLayout();
+        this._createDom();
+        this._initBackgrounds();
+    };
+    
+    proto._setup = function() {
+        uki.extend(this, {
+           _anchors: 0,
+           _autosize: 0,
+           _parent: null,
+           _visible: true,
+           _needsLayout: true,
+           _selectable: false,
+           _styleH: 'left',
+           _styleH: 'top'
+        });
     };
     
     /* ----------------------------- Description --------------------------------*/
@@ -62,10 +70,11 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             if (val === undefined && !this[field] && this[defaultAttr]) this[field] = this[defaultAttr]();
             if (val === undefined) return this[field];
             val = uki.background(val);
-            if (this._dom) {
-                if (this[field]) this[field].detach(this);
-                val.attachTo(this);
-            }
+            
+            if (val == this[field]) return;
+            if (this[field]) this[field].detach(this);
+            val.attachTo(this);
+            
             this[field] = val;
             return this;
         };
@@ -75,25 +84,28 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         };
     });
     
+    proto._initBackgrounds = function() {
+        if (this.background()) this.background().attachTo(this);
+        if (this.shadow()) this.shadow().attachTo(this);
+    };
+    
+    
     proto.selectable = function(state) {
-        if (state === undefined) return this._selectable;
+        if (state === undefined) return this._dom.unselectable != 'on';
         
-        this._selectable = state;
-        if (this._dom) {
-            this._dom.style.userSelect = state ? 'text' : 'none';
-            this._dom.style.MozUserSelect = state ? 'text' : '-moz-none';
-            this._dom.style.WebkitUserSelect = state ? 'text' : 'none';
-            this._dom.style.cursor = state ? 'text' : 'default';
-            this._dom.unselectable = state ? '' : 'on';
-        }
+        this._dom.unselectable = state ? '' : 'on';
+        var style = this._dom.style;
+        style.userSelect = state ? 'text' : 'none';
+        style.MozUserSelect = state ? 'text' : '-moz-none';
+        style.WebkitUserSelect = state ? 'text' : 'none';
+        style.cursor = state ? 'text' : 'default';
         return this;
     };
     
     proto.className = function(name) {
-        if (name === undefined) return this._className;
+        if (name === undefined) return this._dom.className;
         
-        this._className = name;
-        if (this._dom) this._dom.className = name;
+        this._dom.className = name;
         return this;
     };
     
@@ -101,10 +113,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Sets or gets whenever the view is visible
      */
     proto.visible = function(state) {
-        if (state === undefined) return this._visible;
+        if (state === undefined) return this._dom.style.display != 'none';
         
-        this._visible = state;
-        if (this._dom) this._dom.style.display = state ? 'block' : 'none';
+        this._dom.style.display = state ? 'block' : 'none';
         return this;
     };
     
@@ -120,9 +131,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.parent = function(parent) {
         if (parent === undefined) return this._parent;
         
-        if (this._dom) this._dom.parentNode.removeChild(this._dom);
+        if (this._parent) this._dom.parentNode.removeChild(this._dom);
         this._parent = parent;
-        if (this._dom && parent) this._parent.domForChild(this).appendChild(this._dom);
+        this._parent.domForChild(this).appendChild(this._dom);
         return this;
     };
     
@@ -142,11 +153,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Called on second layot pass when view becomes visible/changes it's size
      */
     proto.layout = function() {
-        if (!this._dom) {
-            this._createDom(this._rect);
-            this._parent.domForChild(this).appendChild(this._dom);
-            this._bindPendingEventsToDom();
-        }
         this._layoutDom(this._rect);
         this._needsLayout = false;
         this.trigger('layout', {rect: this._rect, source: this});
@@ -162,7 +168,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
 
         newRect = Rect.create(newRect);
         this._parentRect = newRect;
-        if (this._rect && newRect.eq(this._rect)) return false;
+        if (newRect.eq(this._rect)) return false;
         this._rect = this._normalizeRect(newRect);
         this._needsLayout = this._needsLayout || layoutId++;
         return this;
@@ -181,16 +187,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     proto.rectForChild = function(child) {
         return this.rect();
-    };
-    
-    /**
-     * Utility method to set rect through coords
-     */
-    proto.coords = function(coords) {
-        if (coords === undefined) return this.rect().toCoordsString();
-        
-        this.rect(Rect.fromCoordsString(coords));
-        return this;
     };
     
     /* -------------------------------- Autolayout ------------------------------*/
@@ -213,7 +209,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
 
         if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) newRect.y += dY;
         if (this._autosize & AUTOSIZE_HEIGHT) newRect.height += dY;
-        
         this.rect(newRect);
     };
     
@@ -230,11 +225,11 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto.anchors = function(anchors) {
         if (anchors === undefined) {
-            var result = [];
-            if (this._anchors & ANCHOR_LEFT  ) result.push('left');
-            if (this._anchors & ANCHOR_TOP   ) result.push('top');
-            if (this._anchors & ANCHOR_RIGHT ) result.push('right');
-            if (this._anchors & ANCHOR_BOTTOM) result.push('bottom');
+            var result = [], anchors = this._anchors;
+            if (anchors & ANCHOR_LEFT  ) result.push('left');
+            if (anchors & ANCHOR_TOP   ) result.push('top');
+            if (anchors & ANCHOR_RIGHT ) result.push('right');
+            if (anchors & ANCHOR_BOTTOM) result.push('bottom');
             return result.join(' ');
         } else {
             this._anchors = 0;
@@ -276,38 +271,21 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    /**
-     * Set or get directions view should grow/shrink on contents resize
-     * May be any combination of "width" and "height"
-     *
-     * @param String autosizeStr
-     */
-    proto.autosizeToContents = function(autosizeStr) {
-        if (autosizeStr === undefined) return encodeAutosize(this._autosizeToContents);
-        this._autosizeToContents = decodeAutosize(autosizeStr);
-        return this;
-    };
-    
-    proto.childResized = function( child ) {
-        this.resizeToContents();
-    };
-    
-    proto.resizeToContents = function() {
-        if (0 == this._autosizeToContents) return;
+    proto.resizeToContents = function(autosize) {
+        autosize = decodeAutosize(autosize);
+        if (0 == autosize) return;
         
         var oldRect = this.rect(),
-            newRect = this._calcRectOnContentResize();
+            newRect = this._calcRectOnContentResize(autosize);
         if (newRect.eq(oldRect)) return;
         this.rect(newRect); // triggers _needsLayout
-        
-        this.parent() && this.parent().childResized( this );
     };
     
     proto.contentsSize = function() {
         return this.rect();
     };
     
-    proto._calcRectOnContentResize = function() {
+    proto._calcRectOnContentResize = function(autosize) {
         var newSize = this.contentsSize( ),
             oldSize = this.rect();
 
@@ -318,7 +296,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             dX = newSize.width - oldSize.width,
             dY = newSize.height - oldSize.height;
     
-        if (this._autosizeToContents & AUTOSIZE_WIDTH) {
+        if (autosize & AUTOSIZE_WIDTH) {
             if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT ^ ANCHOR_RIGHT) {
                 newRect.x -= dX/2;
             } else if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) {
@@ -327,7 +305,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             newRect.width += dX;
         }
         
-        if (this._autosizeToContents & AUTOSIZE_HEIGHT) {
+        if (autosize & AUTOSIZE_HEIGHT) {
             if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP && this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM) {
                 newRect.y -= dY/2;
             } else if (this._anchors & ANCHOR_TOP ^ ANCHOR_TOP) {
@@ -352,15 +330,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      */
     proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
-        this._initCommonAttrs();
-    };
-    
-    proto._initCommonAttrs = function() {
-        this.visible(this.visible());
-        this.selectable(this.selectable());
-        this.className(this.className());
-        if (this.background()) this.background().attachTo(this);
-        if (this.shadow()) this.shadow().attachTo(this);
     };
     
     /**

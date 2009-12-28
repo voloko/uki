@@ -36,19 +36,18 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         return 'uki.view.ScrollPane';
     };
     
-    proto.init = function() {
-        Base.init.call(this);
-        this._scrollableV = true;
-        this._scrollableH = false;
-        this._scrollV = false;
-        this._scrollH = false;
+    proto._setup = function() {
+        Base._setup.call(this);
+        this._innerRect = this.rect().clone();
+        uki.extend(this, {
+            _scrollableV: true,
+            _scrollableH: false,
+            _scrollV: false,
+            _scrollH: false
+        });
     };
     
     uki.addProps(proto, ['scrollableV', 'scrollableH']);
-    
-    this.childResized = function(child) {
-        this._updateInnerRect();
-    };
     
     this.scroll = function(dx, dy) {
         if (dx) this.scrollTop(this.scrollLeft() + dy);
@@ -67,7 +66,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
             if (!hasSeparateOverflows) this._dom.style.overflow = 'auto';
         }
         this._dom.appendChild(this._pane);
-        this._initCommonAttrs();
     };
     
     proto.domForChild = function() {
@@ -89,33 +87,29 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         var oldRect = this._innerRect;
         this._innerRect = new Rect(0, 0, this.rect().width - (this._scrollV ? scrollWidth : 0), this.rect().height - (this._scrollH ? scrollWidth : 0) );
         
-        if (oldRect) {
-            if (!oldRect.eq(this._innerRect)) this._resizeChildViews(oldRect);
+        if (!oldRect.eq(this._innerRect)) this._resizeChildViews(oldRect);
 
-            var max, scroll, dx = 0, dy = 0;
-            if (this._scrollableV) {
-                this._maxY = max = this.contentsHeight();
-                scroll = max > this._innerRect.height;
-                if (scroll != this._scrollV) dx = (scroll ? -1 : 1) * scrollWidth;
-                this._scrollV = scroll;
-            }
-            if (this._scrollableH) {
-                this._maxX = max = this.contentsWidth();
-                scroll = max > this._innerRect.width;
-                if (scroll != this._scrollH) dy = (scroll ? -1 : 1) * scrollWidth;
-                this._scrollH = scroll;
-            }
-            
-            if (dx || dy) {
-                oldRect = this._innerRect.clone();
-                this._innerRect.width += dx;
-                this._innerRect.height += dy;
-                this._needsLayout = true;
-                
-                this._resizeChildViews(oldRect);
-            }
-        } else {
+        var max, scroll, dx = 0, dy = 0;
+        if (this._scrollableV) {
+            this._maxY = max = this.contentsHeight();
+            scroll = max > this._innerRect.height;
+            if (scroll != this._scrollV) dx = (scroll ? -1 : 1) * scrollWidth;
+            this._scrollV = scroll;
+        }
+        if (this._scrollableH) {
+            this._maxX = max = this.contentsWidth();
+            scroll = max > this._innerRect.width;
+            if (scroll != this._scrollH) dy = (scroll ? -1 : 1) * scrollWidth;
+            this._scrollH = scroll;
+        }
+        
+        if (dx || dy) {
+            oldRect = this._innerRect.clone();
+            this._innerRect.width += dx;
+            this._innerRect.height += dy;
             this._needsLayout = true;
+            
+            this._resizeChildViews(oldRect);
         }
         this._clientRect = requirePaneResize ? new Rect(0, 0, this._scrollH ? this._maxX : this._innerRect.width, this._scrollV ? this._maxY : this._innerRect.height) : this._innerRect;
         

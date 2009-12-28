@@ -49,7 +49,7 @@ task :build_scripts do
     FileUtils.rm target.sub('.dev.js', '.shrinked.js')
   end
   
-  FileUtils.cp_r(File.join(base, 'app', 'uki-theme'), File.join(base, 'pkg', 'uki-theme'))
+  FileUtils.cp_r(File.join(base, 'src', 'uki-theme'), File.join(base, 'pkg', 'uki-theme'))
 end
 
 desc "Push version"

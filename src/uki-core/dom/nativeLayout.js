@@ -1,4 +1,4 @@
-include('../uki.js');
+include('../dom.js');
 
 uki.initNativeLayout = function() {
     if (uki.supportNativeLayout === undefined) {

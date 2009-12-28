@@ -163,8 +163,7 @@ var utils = {
     newProp: function(field, setter) {
         return function(value) {
             if (value === undefined) return this[field];
-            this[field] = value;
-            setter && setter.call(this, value);
+            if (setter) { setter.call(this, value); } else { this[field] = value; };
             return this;
         };
     },

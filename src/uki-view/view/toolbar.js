@@ -11,8 +11,8 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
     
     proto._moreWidth = 30;
     
-    proto.init = function() {
-        Base.init.call(this);
+    proto._setup = function() {
+        Base._setup.call(this);
         this._buttons = [];
         this._widths = [];
     };
@@ -33,7 +33,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this._more = uki.build(moreML)[0];
         this.appendChild(this._flow);
         this.appendChild(this._more);
-        this._initCommonAttrs();
+
         uki(this._flow.childViews()).resizeToContents();
         this._totalWidth = uki.reduce(0, this._flow.childViews(), function(s, v) { return s + v.rect().width; });
         this._more.visible(rect.width < this._totalWidth);

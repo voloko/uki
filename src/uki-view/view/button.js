@@ -4,14 +4,13 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     var proto = this,
         Base = uki.view.Label[PROTOTYPE];
     
-    proto.init = function() {
-        Base.init.call(this);
-        this._inset = new Inset(0, 4);
-        this._backgroundPrefix = '';
-        this.defaultCss = Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;text-shadow:0 1px 0px rgba(255,255,255,0.8);background:url(" + uki.theme.imageSrc('x') + ")"; //text-shadow:0 1px 0px rgba(255,255,255,0.8);
-        this.textAlign('center');
-        this.fontWeight('bold');
-        this.color('#333');
+    proto._setup = function() {
+        Base._setup.call(this);
+        uki.extend(this, {
+            _inset: new Inset(0, 4),
+            _backgroundPrefix: '',
+            defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;text-shadow:0 1px 0px rgba(255,255,255,0.8);background:url(" + uki.theme.imageSrc('x') + ")" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
+        });
     };
     
     proto.typeName = function() {
@@ -38,6 +37,8 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     proto._createDom = function() {
         // dom
         this._dom = uki.createElement('div', this.defaultCss);
+        this._label = uki.createElement('div', Base.defaultCss + 
+            "font-size:12px;line-height:12px;white-space:nowrap;text-align:center;font-weight:bold;color:#333"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
         
         // load bgs
@@ -87,7 +88,6 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         uki.dom.bind(this._dom, supportMouseEnter ? 'mouseenter' : 'mouseover', this._mouseover);
         uki.dom.bind(this._dom, supportMouseEnter ? 'mouseleave' : 'mouseout', this._mouseout);
         
-        this._initCommonAttrs();
         this._initFocusable();
     };
     

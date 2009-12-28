@@ -1,13 +1,12 @@
 Core
-- repackage
-    app/uki-* -> src/uki-*
+✓ repackage
+    ✓ app/uki-* -> src/uki-*
 - remove childResized, move w,h  options to resizeToContents param
 - create dom in constructor, not on first layout
-    - remove all if (this._dom) checks
-    - split TextField into MultilineTextField
-    - split SplitPane into VerticalSplitPane and HorizontalSplitPane
-    - simplify parent()
-    - remove _layoutDom
+    ✓ remove all if (this._dom) checks
+    ✓ split TextField into MultilineTextField
+    ✓ split SplitPane into VerticalSplitPane and HorizontalSplitPane
+    ✓ simplify parent()
 - stylable
 
 - micro-optimize JS + profile
@@ -40,7 +39,7 @@ Core
     ✓ access backgrounds/images through theme.backgroud('button-hover'), not theme['button-hover']()
 ✓ split uki into uki-core and uki-view
 ✓ focusable
-    ✓ create dummy input/use existing input after _createDom()
+    ✓ create dummy input/use existing input after createDom()
     ✓ attach focusable to
         ✓ checkbox
         ✓ button

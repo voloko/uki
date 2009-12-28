@@ -7,9 +7,7 @@ uki.view.Observable = {
     
     bind: function(name, callback) {
         uki.each(name.split(' '), function(i, name) {
-            if (!this._bound(name) && this._boundToDom) {
-                this._bindToDom(name);
-            }
+            if (!this._bound(name)) this._bindToDom(name);
             this._observersFor(name).push(callback);
         }, this);
     },
@@ -50,15 +48,6 @@ uki.view.Observable = {
     
     _bound: function(name) {
         return this._observers && this._observers[name];
-    },
-    
-    _bindPendingEventsToDom: function() {
-        if (this._boundToDom) return;
-        this._boundToDom = true;
-        if (!this._observers) return;
-        uki.each(this._observers, function(name) {
-            this._bindToDom(name);
-        }, this);
     },
     
     _observersFor: function(name, skipCreate) {

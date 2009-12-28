@@ -13,13 +13,14 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     proto._packSize = 20;
     proto._defaultBackground = 'list';
     
-    proto.init = function() {
-        Base.init.call(this);
-        this._rowHeight = 30;
-        this._render = new uki.view.list.Render();
-        this._scrollableParent = null;
-        this._data = [];
-        this._selectedIndex = -1;
+    proto._setup = function() {
+        Base._setup.call(this);
+        uki.extend(this, {
+            _rowHeight: 30,
+            _render: new uki.view.list.Render(),
+            _data: [],
+            _selectedIndex: -1
+        });
     };
     
     proto.background = function(bg) {
@@ -81,18 +82,11 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto.layout = function() {
-        if (!this._dom) {
-            this._createDom(this._rect);
-            this._parent.domForChild(this).appendChild(this._dom);
-            this._bindPendingEventsToDom();
-        }
         this._layoutDom(this._rect);
         this._needsLayout = false;
         // send visibleRect with layout
         this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
     };
-    
-    
     
     
     proto._updateRectOnDataChnage = function() {
@@ -104,17 +98,13 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             if (!this._minSize || h > this._minSize.height) {
                 newRect.height = h;
                 this.rect(newRect);
-                if (this.parent()) this.parent().childResized(this, oldRect, newRect);
             }
         }
     };
     
     proto._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
-        this._scrollableParent = uki.view.scrollableParent(this);
         
-        this._initCommonAttrs();
-
         var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
         this._packs = [
             {
@@ -132,35 +122,18 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._dom.appendChild(this._packs[1].dom);
         
         var _this = this;
-        this._scrollableParent.bind('scroll', function() {
-            if (_this._throttle) {
-                if (_this._throttleStarted) return;
-                _this._throttleStarted = true;
-                setTimeout(function() {
-                    _this._throttleStarted = false;
-                    _this.layout();
-                }, _this._throttle);
-            } else {
-                _this.layout();
-            }
-        });
         
         this.bind('mousedown', function(e) {
             var o = uki.dom.offset(this._dom),
                 y = e.domEvent.pageY - o.y,
-                p = Math.floor(y / this._rowHeight);
+                p = FLOOR(y / this._rowHeight);
             this.selectedIndex(p);
         });
         
         this._initFocusable();
-        // if (this._focusableInput) {
-        //     var target = this._scrollableParent.parent() || this._scrollableParent;
-        //     target.dom().appendChild(this._focusableInput);
-        // }
     };
     
     proto._setSelected = function(position, state) {
-        if (!this._dom) return;
         var item = this._itemAt(position);
         if (!item) return;
         if (state) this._scrollToPosition(position);
@@ -260,11 +233,30 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._layoutDom = function(rect) {
+        if (!this._scrollableParent) {
+            var _this = this;
+            this._scrollableParent = uki.view.scrollableParent(this);
+
+            this._scrollableParent.bind('scroll', function() {
+                if (_this._throttle) {
+                    if (_this._throttleStarted) return;
+                    _this._throttleStarted = true;
+                    setTimeout(function() {
+                        _this._throttleStarted = false;
+                        _this.layout();
+                    }, _this._throttle);
+                } else {
+                    _this.layout();
+                }
+            });
+        }
+        
+        
         this._visibleRect = uki.view.visibleRect(this, this._scrollableParent);
         Base._layoutDom.call(this, rect);
         
         var totalHeight = this._rowHeight * this._data.length,
-            prefferedPackSize = Math.ceil((this._visibleRect.height + this._visibleRectExt*2) / this._rowHeight),
+            prefferedPackSize = CEIL((this._visibleRect.height + this._visibleRectExt*2) / this._rowHeight),
 
             minVisibleY  = MAX(0, this._visibleRect.y - this._visibleRectExt),
             maxVisibleY  = MIN(totalHeight, this._visibleRect.maxY() + this._visibleRectExt),

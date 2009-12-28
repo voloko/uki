@@ -3,15 +3,17 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     var Base = uki.view.Container[PROTOTYPE],
         proto = this;
     
-    proto.init = function() {
-        Base.init.call(this);
-        this._offset = 2;
-        this._relativeTo = null;
-        this._horizontal = false;
-        this._flipOnResize = true;
-        this._shadow = null;
-        this._defaultBackground = 'popup-normal';
-        this._defaultShadow = 'popup-shadow';
+    proto._setup = function() {
+        Base._setup.call(this);
+        uki.extend(this, {
+            _offset: 2,
+            _relativeTo: null,
+            _horizontal: false,
+            _flipOnResize: true,
+            _shadow: null,
+            _defaultBackground: 'popup-normal',
+            _defaultShadow: 'popup-shadow'
+        });
     };
     
     uki.addProps(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
@@ -22,6 +24,10 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     
     proto.show = function() {
         new uki.Attachment( doc.body, this );
+    };
+    
+    proto.hide = function() {
+        if (this.parent()) this.visible(false);
     };
     
     proto.parentResized = function() {

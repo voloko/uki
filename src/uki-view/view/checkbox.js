@@ -8,11 +8,12 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         Base._bindToDom.apply(this, arguments);
     },
     
-    init: function() {
-        this._checked = false;
-        this._selectable = false;
-        this._image = uki.theme.image('checkbox');
-        Base.init.apply(this, arguments);
+    _setup: function() {
+        Base._setup.call(this);
+        uki.extend(this, {
+            _checked: false,
+            _selectable: false
+        });
     },
     
     checked: function(state) {
@@ -23,6 +24,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
     },
 
     _createDom: function() {
+        this._image = uki.theme.image('checkbox');
         this._dom = uki.createElement('div', Base.defaultCss + 'overflow:visible');
         this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-9px;margin-top:-9px;width:18px;height:18px');
         this._image.style.position = 'absolute';
@@ -48,7 +50,6 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
             _this.checked(_this._checked);
         });
         
-        this._initCommonAttrs();
         this._initFocusable();
     },
     

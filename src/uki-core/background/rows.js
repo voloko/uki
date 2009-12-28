@@ -8,7 +8,7 @@ uki.background.Rows = uki.newClass(new function() {
     proto.init = function(height, colors) {
         this._height = height || 20;
         this._colors = uki.isArray(colors) ? colors : colors.split(' ');
-        this._packSize = Math.ceil(packSize/this._colors.length)*this._colors.length;
+        this._packSize = CEIL(packSize/this._colors.length)*this._colors.length;
         this._renderedHeight = 0;
         this._visibleExt = 200;
         if (this._colors.length == 1) this._colors = this._colors.concat(['#FFF']);
@@ -38,7 +38,7 @@ uki.background.Rows = uki.newClass(new function() {
             this._container.appendChild(c);
         }
         if (visibleRect) {
-            this._container.style.top = Math.ceil((visibleRect.y - this._visibleExt)/this._height/this._colors.length)*this._height*this._colors.length + 'px';
+            this._container.style.top = CEIL((visibleRect.y - this._visibleExt)/this._height/this._colors.length)*this._height*this._colors.length + 'px';
         }
     };
     

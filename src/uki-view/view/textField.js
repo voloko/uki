@@ -21,29 +21,28 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     }
 
     
-    proto.init = function() {
-        this._value = '';
-        this._multiline = false;
-        this._placeholder = '';
-        this._backgroundPrefix = '';
-        this._fontSize = '11px';
-        this.defaultCss = Base.defaultCss + "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ")";
-        Base.init.apply(this, arguments);
+    proto._setup = function() {
+        Base._setup.apply(this, arguments);
+        uki.extend(this, {
+            _multiline: false,
+            _placeholder: '',
+            _backgroundPrefix: '',
+            _fontSize: '11px',
+            defaultCss: Base.defaultCss + "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ")"
+        });
     };
     
     proto.value = function(value) {
-        if (value === undefined) return this._dom ? this._input.value : this._value;
-        this._value = value;
-        if (this._dom) this._input.value = value;
+        if (value === undefined) return this._input.value;
+
+        this._input.value = value;
         this._updatePlaceholderVis();
         return this;
     };
     
     proto.placeholder = uki.newProp('_placeholder', function(v) {
-        if (this._dom) {
-            this._input.placeholder = v;
-            if (this._placeholderDom) this._placeholderDom.innerHTML = v;
-        }
+        this._input.placeholder = v;
+        if (this._placeholderDom) this._placeholderDom.innerHTML = v;
     });
     
     var cssProps = ['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight'];
@@ -51,7 +50,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         uki.delegateProp(proto, name, '_inputStyle');
     });
     
-    uki.addProps(proto, ['backgroundPrefix', 'multiline']);
+    uki.addProps(proto, ['backgroundPrefix']);
     
     proto.defaultBackground = function() {
         return uki.theme.background(this._backgroundPrefix + 'input');
@@ -62,9 +61,9 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     };
     
     proto._createDom = function() {
-        var tagName = this.multiline() ? 'textarea' : 'input';
+        var tagName = this._multiline ? 'textarea' : 'input';
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
-        this._input = uki.createElement(tagName, this.defaultCss + (this.multiline() ? '' : ';overflow:hidden;'));
+        this._input = uki.createElement(tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
         this._inputStyle = this._input.style;
         
         this._input.value = this._value;
@@ -72,7 +71,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         
         this._input.value = this.value();
         if (this.placeholder()) {
-            if (!this.multiline() && nativePlaceholder(this._input)) {
+            if (!this._multiline && nativePlaceholder(this._input)) {
                 this._input.placeholder = this.placeholder();
             } else {
                 this._placeholderDom = uki.createElement('div', this.defaultCss + 'z-input:101;color:#999;cursor:text', this.placeholder());
@@ -89,9 +88,6 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             }
         }, this)
         
-        
-        this._initCommonAttrs();
-        
         this._initFocusable(this._input);
     };
     
@@ -101,14 +97,14 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             width: this._rect.width - 4
         });
         var padding;
-        if (this.multiline()) {
+        if (this._multiline) {
             this._input.style.height = this._rect.height - 4 + 'px';
             this._input.style.top = 2 + 'px'
             padding = '2px 0';
         } else {
             var o = (this._rect.height - getEmptyInputHeight(this._fontSize)) / 2;
             
-            padding = Math.floor(o) + 'px 0 ' + Math.ceil(o) + 'px 0';
+            padding = FLOOR(o) + 'px 0 ' + CEIL(o) + 'px 0';
             this._input.style.padding = padding;
         }
         if (this._placeholderDom) this._placeholderDom.style.padding = padding;
@@ -132,4 +128,11 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     proto._bindToDom = function(name) {
         return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
+});
+
+uki.view.MultilineTextField = uki.newClass(uki.view.TextField, {
+    _setup: function() {
+        uki.view.TextField[PROTOTYPE]._setup.call(this);
+        this._multiline = true;
+    }
 });

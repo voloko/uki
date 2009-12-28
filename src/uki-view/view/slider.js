@@ -3,13 +3,15 @@
 var Base = uki.view.Base[PROTOTYPE],
 self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
-    init: function() {
-        this._min = 0;
-        this._max = 1;
-        this._value = 0;
-        this._values = null;
-        this._keyStep = 0.01;
-        Base.init.call(this);
+    _setup: function() {
+        Base._setup.call(this);
+        uki.extend({
+            _min: 0,
+            _max: 1,
+            _value: 0,
+            _values: null,
+            _keyStep: 0.01
+        });
     },
     
     min: uki.newProp('_min'),

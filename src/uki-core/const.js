@@ -6,4 +6,6 @@ var root = this,
     
     PROTOTYPE = 'prototype',
     MAX = Math.max,
-    MIN = Math.min;
+    MIN = Math.min,
+    FLOOR = Math.floor,
+    CEIL = Math.ceil;

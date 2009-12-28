@@ -9,7 +9,6 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         this._dimension = 'height';
         this._containers = [];
         this._containerSizes = [];
-        this._autosizeToContents = AUTOSIZE_HEIGHT;
         this.defaultCss = this.defaultCss + 'overflow:hidden;'
     };
     
@@ -27,18 +26,18 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
             v = view.rect()[this._dimension];
         this._containers[view._viewIndex] = container;
         this._containerSizes[view._viewIndex] = 0;
-        if (this._dom) {
-            this._initContainer(container);
-            container.style[this._dimension] = v + 'px';
-            this._dom.appendChild(container);
-            this._containerSizes[view._viewIndex] = v;
-        }
+
+        this._initContainer(container);
+        container.style[this._dimension] = v + 'px';
+        this._dom.appendChild(container);
+        this._containerSizes[view._viewIndex] = v;
     };
     
     proto.removeChild = function(view) {
         var container = this._containers[view._viewIndex];
         Base.removeChild.call(this, view);
-        if (this._dom) this._dom.removeChild(container);
+        
+        this._dom.removeChild(container);
         this._containers = uki.grep(this._containers, function(c) { return c != container; });
     };
     
@@ -56,36 +55,35 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         }
     };
     
-    proto._updateSize = function(dv) {
-        var rect = this.rect(),
-            width, height;
-            
-        if (this._horizontal) {
-            width = rect.width + dv;
-            height = this._autosizeToContents & AUTOSIZE_HEIGHT ? this.contentsHeight() : rect.height;
-        } else {
-            width = this._autosizeToContents & AUTOSIZE_WIDTH ? this.contentsWidth() : rect.width;
-            height = rect.height + dv;
-        }
-        this.rect( new Rect(rect.x, rect.y, width, height) );
-        this.parent().childResized( this );
-    };
+    // proto._updateSize = function(dv) {
+    //     var rect = this.rect(),
+    //         width, height;
+    //         
+    //     if (this._horizontal) {
+    //         width = rect.width + dv;
+    //         height = rect.height;
+    //     } else {
+    //         width = rect.width;
+    //         height = rect.height + dv;
+    //     }
+    //     this.rect( new Rect(rect.x, rect.y, width, height) );
+    // };
     
-    proto.childResized = function(child) {
-        var rect = this.rect(),
-            childRect = child.rect(),
-            index = child._viewIndex,
-            container = this._containers[index],
-            value = this._containerSizes[index],
-            dv = childRect[this._dimension] - value,
-            sizeChanged = !!dv;
-            
-        if (this._horizontal) sizeChanged = sizeChanged || rect.height == childRect.height;
-        else sizeChanged = sizeChanged || rect.width == childRect.width;
-        
-        if (!sizeChanged) return;
-        this._updateSize(dv);
-    };
+    // proto.childResized = function(child) {
+    //     var rect = this.rect(),
+    //         childRect = child.rect(),
+    //         index = child._viewIndex,
+    //         container = this._containers[index],
+    //         value = this._containerSizes[index],
+    //         dv = childRect[this._dimension] - value,
+    //         sizeChanged = !!dv;
+    //         
+    //     if (this._horizontal) sizeChanged = sizeChanged || rect.height == childRect.height;
+    //     else sizeChanged = sizeChanged || rect.width == childRect.width;
+    //     
+    //     if (!sizeChanged) return;
+    //     this._updateSize(dv);
+    // };
     
     proto._createDom = function() {
         Base._createDom.call(this);

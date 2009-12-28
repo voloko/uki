@@ -40,7 +40,6 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this._scrollPane.resizeToContents();
         this.appendChild(this._header);
         this.appendChild(this._scrollPane);
-        this._initCommonAttrs();
     };
     
     

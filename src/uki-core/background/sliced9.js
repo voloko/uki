@@ -14,9 +14,10 @@ uki.background.Sliced9 = uki.newClass(new function() {
         PX = 'px',
         P100 = '100%';
         
-    var cache = {};
+    var cache = {},
+        proto = this;
     
-    this.init = function(partSettings, inset, options) {
+    proto.init = function(partSettings, inset, options) {
         this._settings  = uki.extend({}, partSettings);
         this._inset     = Inset.create(inset);
         this._size      = null;
@@ -34,12 +35,12 @@ uki.background.Sliced9 = uki.newClass(new function() {
     function makeDiv (name, style, inner) {
         return '<div class="' +  name + '" style="position:absolute;overflow:hidden;' + style + '">' + inner + '</div>';
     }
-    
+
     function img (setting, style) {
         return uki.imageHTML(setting[0], setting[1], setting[2], ' galleryimg="no" style="-webkit-user-drag:none;position:absolute;' + style + '"');
     }
     
-    this._getContainer = function() {
+    proto._getContainer = function() {
         var key = this._getKey();
         if (!cache[key]) {
             return cache[key] = this._createContainer();
@@ -47,7 +48,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         return cache[key].cloneNode(true);
     };
     
-    this._createContainer = function() {
+    proto._createContainer = function() {
         var inset = this._inset,
             bgInset = this._bgInset,
             settings = this._settings,
@@ -115,13 +116,13 @@ uki.background.Sliced9 = uki.newClass(new function() {
         return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));
     };
     
-    this._getKey = function() {
+    proto._getKey = function() {
         return uki.map(['v', 'h', 'm', 'c'], function(x) {
             return this._settings[x] && this._settings[x][0] || '';
         }, this).concat([this._inset, this._bgInset, this._fixedSize]).join(',');
     };
     
-    this.attachTo = function(comp) {
+    proto.attachTo = function(comp) {
         this._comp = comp;
         
         this._comp.dom().appendChild(this._container);
@@ -138,7 +139,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
     };
     
-    this.detach = function() {
+    proto.detach = function() {
         if (this._comp) {
             this._comp.dom().removeChild(this._container);
             if (!uki.supportNativeLayout) this._comp.unbind('layout', this._layoutHandler);
@@ -147,14 +148,14 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
     };
     
-    this.layout = function() {
+    proto.layout = function() {
         var size = this._comp.rect(),
             parts = this._parts,
             inset = this._inset,
             bgInset = this._bgInset,
             fixedSize = this._fixedSize,
-            width = Math.floor(fixedSize.width || size.width - bgInset.left - bgInset.right),
-            height = Math.floor(fixedSize.height || size.height - bgInset.top - bgInset.bottom),
+            width = FLOOR(fixedSize.width || size.width - bgInset.left - bgInset.right),
+            height = FLOOR(fixedSize.height || size.height - bgInset.top - bgInset.bottom),
             insetWidth = inset.left + inset.right,
             insetHeight = inset.top + inset.bottom;
             

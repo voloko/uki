@@ -6,7 +6,7 @@ uki(
     leftChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left right', text: 'Clear text field' },
     // ...and a vertical split pane on the right...
     rightChildViews: [
-       { view: 'SplitPane', rect: '693 600', anchors: 'left top right bottom', vertical: true,
+       { view: 'VerticalSplitPane', rect: '693 600', anchors: 'left top right bottom', vertical: true,
            // ...with text field in the top part
            topChildViews: { view: 'TextField', rect: '10 10 280 24', anchors: 'top left', value: '0', id: 'field' },
            // ...and a slider in the bottom

@@ -5,13 +5,13 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         proto = this;
     
     
-    proto.init = function() {
-        Base.init.apply(this, arguments);
-        this._scrollable = false;
-        this._selectable = false;
-        this._inset = new Inset();
-        this._label = uki.createElement('div', Base.defaultCss + 
-            "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+    proto._setup = function() {
+        Base._setup.call(this);
+        uki.extend(this, {
+            _scrollable: false,
+            _selectable: false,
+            _inset: new Inset()
+        });
     };
     
     proto.typeName = function() {
@@ -58,7 +58,6 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     proto._css = function(name, value) {
         if (value === undefined) return this._label.style[name];
         this._label.style[name] = value;
-        this['_' + name] = value;
         return this;
     };
     
@@ -84,7 +83,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     proto.multiline = function(state) {
         if (state === undefined) return this._label.style.whiteSpace != 'nowrap';
         this._label.style.whiteSpace = state ? '' : 'nowrap';
-        // if (this._rect) this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
+        // this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
         return this;
     };
     
@@ -111,14 +110,17 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     
     proto._createDom = function() {
         Base._createDom.call(this);
+        this._label = uki.createElement('div', Base.defaultCss + 
+            "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
     };
     
     proto._layoutDom = function() {
         Base._layoutDom.apply(this, arguments);
+        
         var inset = this._inset;
         if (!this.multiline()) {
-            var fz = parseInt(this._fontSize) || 12;
+            var fz = parseInt(this._css('fontSize')) || 12;
             this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
             // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
         }
