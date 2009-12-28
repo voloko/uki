@@ -52,7 +52,7 @@ class Uki < Sinatra::Base
     }
   end
   
-  get %r{^/app/.*\.cjs$} do
+  get %r{^/(app|src)/.*\.cjs$} do
     path = request.path.sub(/\.cjs$/, '.js')
     response.header['Content-type'] = 'application/x-javascript; charset=UTF-8'
     process_path(File.join(File.dirname(__FILE__), path))

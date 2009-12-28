@@ -16,7 +16,7 @@
     };
     
     uki.theme.airport = uki.extend({}, uki.theme.Base, {
-        imagePath: '/app/uki-theme/airport/i/',
+        imagePath: '/src/uki-theme/airport/i/',
         
         backgrounds: {
             'button-normal': function() {

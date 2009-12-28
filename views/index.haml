@@ -3,7 +3,7 @@
 %html
   %head
     %meta{ "http-equiv" => "Content-type", "content" => "text/html; charset=utf-8" }
-    %title UKI – Simple UI kit for complex web apps
+    %title UKI – Simple UI Kit for complex web apps
     %link{ :rel => 'stylesheet', :href => '/app/css/master.css', :type => 'text/css', :media => 'screen' }
     %script{ :src => '/app/uki.cjs', :type => 'text/javascript' }
     
@@ -13,13 +13,13 @@
     .content
       %h1.title
         UKI
-        %span.small Simple UI kit for complex web apps
+        %span.small Simple UI Kit for complex web apps
         %span.version= "(#{version})"
       .links
         %h3 Links
         %ul
-          %li Google wave <a href="http://ukijs.org/wave.html" target="_blank">layout</a> in <a href="http://github.com/voloko/uki/blob/master/app/functional/wave.js" target="_blank">70 lines</a> of uki code
-          %li Public <a href="http://github.com/voloko/uki/">release 0.0.1</a> on github.
+          %li Google wave <a href="http://ukijs.org/functional/wave.html" target="_blank">layout</a> in <a href="http://github.com/voloko/uki/blob/master/app/functional/wave.js" target="_blank">100 lines</a> of uki code
+          %li Public <a href="http://github.com/voloko/uki/tree/v0.0.1b">release 0.0.1</a> on github.
       %p.slogan
         Uki is a <em>fast</em> and <em>simple</em> JavaScript user interface toolkit for desktop-like web applications.<br />
         It comes with rich view-component library ranging from 
@@ -29,17 +29,22 @@
       %p.download
         %span.title Download:
         %span.variant 
-          %a{:href => "http://static.ukijs.org/pkg/#{version}/ukijs.js"} compressed
+          %a{:href => "http://static.ukijs.org/pkg/#{version}/uki.js"} compressed
           (27KB, gzip, compiled)
         %span.variant 
-          %a{:href => "http://static.ukijs.org/pkg/#{version}/ukijs.dev.js"} development
+          %a{:href => "http://static.ukijs.org/pkg/#{version}/uki.dev.js"} development
           (161KB, with comments)
       .example
-        .left-pane
-          %h2 Code uki
-          %pre= File.read File.join(File.dirname(__FILE__), 'example.txt')
-        .right-pane
-          = "#test"
+        %table
+          %tr
+            %td.left-pane
+              %h2 Code uki
+              %pre#code{ :class => 'brush: javascript;' }= File.read File.join(File.dirname(__FILE__), 'example.txt')
+              #runner
+            %td.right-pane
+              #test
+                .label= "#test"
+          
     .features
       .content
         %table
@@ -74,7 +79,7 @@
               .feature
                 %h2 Plugable
                 %p It’s great when you start building your whole app with uki. But sometimes you have to add desktop-like experience to a working site. Say adding a widget, or a table to existing design.
-                %p While uki can occupy the whole browser window it feels perfectly OK in small <div> in your sidebar. Just use <code>.attachTo( myDiv )</code> for any widget you want to add.
+                %p While uki can occupy the whole browser window it feels perfectly OK in small &lt;div&gt; in your sidebar. Just use <code>.attachTo( myDiv )</code> for any widget you want to add.
         
         .help
           %h2 Uki needs your help
@@ -85,5 +90,15 @@
             %li Complete missing features (view.Table, view.Tree, view.Grid, disabled, d&d)
       .copy
         &copy; 2010 Vladimir Kolesnikov
-        %a.mail{ :href => 'mailto:voloko@gmail.com' } send feedback
+        %a.mail{ :href => 'mailto:voloko@gmail.com?subject=Uki' } send feedback
         %a{ :href => 'http://twitter.com/voloko' } twitter
+    %script{ :src => '/app/promo.js', :type => 'text/javascript' }
+    %script{ :src => '/app/hlt/shCore.js', :type => 'text/javascript' }
+    %script{ :src => '/app/hlt/shBrushJScript.js', :type => 'text/javascript' }
+    %link{ :rel => 'stylesheet', :href => '/app/hlt/shCore.css', :type => 'text/css', :media => 'screen' }
+    %link{ :rel => 'stylesheet', :href => '/app/hlt/shThemeUki.css', :type => 'text/css', :media => 'screen' }
+    %script{ :type => 'text/javascript' }
+      SyntaxHighlighter.config.clipboardSwf = '/app/hlt/clipboard.swf'; 
+      SyntaxHighlighter.defaults.light = true;
+      SyntaxHighlighter.all();
+

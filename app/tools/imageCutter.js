@@ -221,7 +221,7 @@ tools.imageCutter.build = function() {
                     childViews: [
                         { view: 'Label', rect: '10 10 50 22', anchors: 'left top', align: 'right', text: 'URL:' },
                         { view: 'TextField', coords: '70 10 380 32',  anchors: 'top left right', autosize: 'width', 
-                            value: '/app/uki-theme/airport/i/button/normal.png', name: 'url' },
+                            value: '/src/uki-theme/airport/i/button/normal.png', name: 'url' },
                         { view: 'Box', coords: '60 32 390 78', anchors: 'left rigth top', autosize: 'width',
                             childViews: [
                                 { view: 'TextField', rect: '10 10 50 22', anchors: 'top left', name: 'top', placeholder: 'top', value: '3' },
