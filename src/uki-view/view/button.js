@@ -70,7 +70,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         function isWithin (e, elem) {
             var parent = e.relatedTarget;
             while ( parent && parent != elem ) {
-                parent = parent.parentNode;
+                try { parent = parent.parentNode } catch(e) { parent = null };
             }
             return parent === elem;
         }
