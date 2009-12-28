@@ -9,14 +9,6 @@
     uki.theme.wave = uki.extend({}, uki.theme.Base, {
         imagePath: '/app/functional/wave/i/',
         
-        background: function(name, params) {
-            return this.backgrounds[name] && this.backgrounds[name](params);
-        },
-    
-        image: function(name, params) {
-            return this.images[name] && this.images[name](params);
-        },
-        
         backgrounds: {
             link: function() {
                 return new uki.background.Css({color:'#003EA8', textDecoration: 'underline', cursor: 'pointer'});

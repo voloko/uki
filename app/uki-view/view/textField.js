@@ -27,7 +27,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         this._placeholder = '';
         this._backgroundPrefix = '';
         this._fontSize = '11px';
-        this.defaultCss = Base.defaultCss + "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.image('x').src + ")";
+        this.defaultCss = Base.defaultCss + "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ")";
         Base.init.apply(this, arguments);
     };
     
