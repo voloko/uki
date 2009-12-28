@@ -92,6 +92,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._needsLayout = false;
         // send visibleRect with layout
         this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
+        this._firstLayout = false;
     };
     
     
@@ -135,8 +136,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
                 p = FLOOR(y / this._rowHeight);
             this.selectedIndex(p);
         });
-        
-        this._initFocusable();
     };
     
     proto._setSelected = function(position, state) {
@@ -239,7 +238,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._layoutDom = function(rect) {
-        if (!this._scrollableParent) {
+        if (this._firstLayout) {
             var _this = this;
             this._scrollableParent = uki.view.scrollableParent(this);
 
@@ -255,6 +254,8 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
                     _this.layout();
                 }
             });
+            
+            this._initFocusable();
         }
         
         

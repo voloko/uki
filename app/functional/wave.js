@@ -30,10 +30,10 @@ function panel (label, args) {
 }
 
 uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', minSize: '800 400', anchors: 'left top right bottom', handleWidth: 15, handlePosition: 166, leftMin: 166, rightMin: 600,
-    leftChildViews: { view: 'SplitPane', id: 'splitLeft', rect: '166 950', anchors: 'left top right bottom', handleWidth: 16, vertical: true, handlePosition: 200, bottomMin: 230, topMin: 120,
+    leftChildViews: { view: 'VerticalSplitPane', id: 'splitLeft', rect: '166 950', anchors: 'left top right bottom', handleWidth: 16, handlePosition: 200, bottomMin: 230, topMin: 120,
         topChildViews: panel('Navigation', { rect: '166 200', background: 'theme(panel-white)', childViews: [
             { view: 'ScrollPane', rect: '0 24 166 170', anchors: 'left top right bottom', childViews: [
-                { view: 'Flow', rect: '0 0 166 168', anchors: 'left top right', childViews: [
+                { view: 'VerticalFlow', rect: '0 0 166 168', anchors: 'left top right', childViews: [
                     menuButton('Inbox', '-176px 0', '166 24'), menuButton('All', '-160px 0', '0 2 166 24'), menuButton('By me', '-192px 0', '0 0 166 24'), menuButton('Requests', '-240px 0', '0 0 166 24'), menuButton('Spam', '-208px 0', '0 0 166 24'), menuButton('Settings', '-240px 0', '0 0 166 24'), menuButton('Trash', '-223px 0', '0 0 166 24')
                 ] }
             ] }
@@ -95,6 +95,6 @@ uki('#splitRight').bind('handleMove', function(e) {
 });
 
 uki('#splitRight').handlePosition(400).layout();
-uki('#contactsList').data(contacts).layout();
-uki('#waveList').data(waves).layout();
+uki('#contactsList').data(contacts).parent().resizeToContents('height').layout();
+uki('#waveList').data(waves).parent().resizeToContents('height').layout();
 uki('#message').html( document.getElementById('message').innerHTML );

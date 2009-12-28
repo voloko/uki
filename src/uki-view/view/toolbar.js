@@ -17,7 +17,17 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this._widths = [];
     };
     
-    uki.addProps(proto, ['buttons', 'moreWidth']);
+    this.buttons = uki.newProp('_buttons', function(b) {
+        this._buttons = b;
+        var buttons = uki.build(uki.map(this._buttons, this._createButton, this)).resizeToContents('width');
+        this._flow.childViews(buttons);
+        this._totalWidth = uki.reduce(0, this._flow.childViews(), function(s, v) { return s + v.rect().width; });
+    });
+    
+    uki.moreWidth = uki.newProp('_moreWidth', function(v) {
+        this._moreWidth = v;
+        this._updateMoveVisible();
+    });
     
     proto._createDom = function() {
         Base._createDom.call(this);
@@ -25,31 +35,28 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         var rect = this.rect(),
             flowRect = rect.clone().normalize(),
             moreRect = new Rect(rect.width - this._moreWidth, 0, this._moreWidth, rect.height),
-            buttonsML = uki.map(this._buttons, this._createButton, this),
-            flowML = { view: 'Flow', rect: flowRect, anchors: 'left top right', className: 'toolbar-flow', horizontal: true, childViews: buttonsML },
-            moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  backgroundPrefix: 'toolbar-more-', visible: false, text: '>>', focusable: false };
+            flowML = { view: 'HorizontalFlow', rect: flowRect, anchors: 'left top right', className: 'toolbar-flow', horizontal: true },
+            moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  visible: false, backgroundPrefix: 'toolbar-more-', text: '>>', focusable: false };
             
         this._flow = uki.build(flowML)[0];
         this._more = uki.build(moreML)[0];
         this.appendChild(this._flow);
         this.appendChild(this._more);
-
-        uki(this._flow.childViews()).resizeToContents();
-        this._totalWidth = uki.reduce(0, this._flow.childViews(), function(s, v) { return s + v.rect().width; });
-        this._more.visible(rect.width < this._totalWidth);
-        if (rect.width < this._totalWidth) flowRect.width -= this._moreWidth;
-        this._flow.rect(flowRect);
+    };
+    
+    proto._updateMoveVisible = function() {
+        var rect = this._rect;
+        if (this._more.visible() != rect.width < this._totalWidth) {
+            this._more.visible(rect.width < this._totalWidth);
+            var flowRect = this._flow.rect();
+            flowRect.width += (rect.width < this._totalWidth ? -1 : 1)*this._moreWidth;
+            this._flow.rect(flowRect);
+        }
     };
     
     proto.rect = function(rect) {
         var result = Base.rect.call(this, rect);
-        if (this._more && rect !== undefined) {
-            if (this._more.visible() != rect.width < this._totalWidth) {
-                this._more.visible(rect.width < this._totalWidth);
-                var flowRect = this._flow.rect();
-                flowRect.width += (rect.width < this._totalWidth ? -1 : 1)*this._moreWidth;
-            }
-        }
+        if (rect) this._updateMoveVisible();
         return result;
     };
     

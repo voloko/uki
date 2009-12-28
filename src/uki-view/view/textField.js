@@ -27,7 +27,6 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             _multiline: false,
             _placeholder: '',
             _backgroundPrefix: '',
-            _fontSize: '11px',
             defaultCss: Base.defaultCss + "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ")"
         });
     };
@@ -41,13 +40,36 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     };
     
     proto.placeholder = uki.newProp('_placeholder', function(v) {
-        this._input.placeholder = v;
-        if (this._placeholderDom) this._placeholderDom.innerHTML = v;
+        this._placeholder = v;
+        if (!this._multiline && nativePlaceholder(this._input)) {
+            this._input.placeholder = v;
+        } else {
+            if (!this._placeholderDom) {
+                this._placeholderDom = uki.createElement('div', this.defaultCss + 'z-input:101;color:#999;cursor:text', v);
+                this._dom.appendChild(this._placeholderDom);
+                this._updatePlaceholderVis();
+                uki.each(['fontSize', 'fontFamily', 'fontWeight'], function(i, name) {
+                    this._placeholderDom.style[name] = this[name]();
+                }, this)
+                
+                var _this = this;
+                uki.dom.bind(this._placeholderDom, 'mousedown', function() { _this.focus() });
+            } else {
+                this._placeholderDom.innerHTML = v;
+            }
+        }
     });
     
     var cssProps = ['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight'];
     uki.each(cssProps, function(i, name) {
-        uki.delegateProp(proto, name, '_inputStyle');
+        proto[name] = function(v) {
+            if (v === undefined) return this._input.style[name];
+            this._input.style[name] = v;
+            if (this._placeholderDom) {
+                this._placeholderDom.style[name] = v;
+            }
+            return this;
+        };
     });
     
     uki.addProps(proto, ['backgroundPrefix']);
@@ -70,28 +92,11 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         this._dom.appendChild(this._input);
         
         this._input.value = this.value();
-        if (this.placeholder()) {
-            if (!this._multiline && nativePlaceholder(this._input)) {
-                this._input.placeholder = this.placeholder();
-            } else {
-                this._placeholderDom = uki.createElement('div', this.defaultCss + 'z-input:101;color:#999;cursor:text', this.placeholder());
-                this._dom.appendChild(this._placeholderDom);
-                this._updatePlaceholderVis();
-                var _this = this;
-                uki.dom.bind(this._placeholderDom, 'mousedown', function() { _this.focus() });
-            }
-        }
-        uki.each(cssProps, function(i, name) {
-            if (this['_' + name]) {
-                this._inputStyle[name] = this['_' + name];
-                if (this._placeholderDom) this._placeholderDom.style[name] = this['_' + name];
-            }
-        }, this)
         
         this._initFocusable(this._input);
     };
     
-    proto._layoutDom = function() {
+    proto._layoutDom = function(rect) {
         Base._layoutDom.apply(this, arguments);
         uki.dom.layout(this._input.style, {
             width: this._rect.width - 4
@@ -102,12 +107,17 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             this._input.style.top = 2 + 'px'
             padding = '2px 0';
         } else {
-            var o = (this._rect.height - getEmptyInputHeight(this._fontSize)) / 2;
+            var o = (this._rect.height - getEmptyInputHeight(this.fontSize())) / 2;
             
             padding = FLOOR(o) + 'px 0 ' + CEIL(o) + 'px 0';
             this._input.style.padding = padding;
         }
         if (this._placeholderDom) this._placeholderDom.style.padding = padding;
+        if (this._firstLayout) this._initFocusable(this._input);
+    };
+    
+    proto._recalcOffset = function() {
+        if (this._multiline) return;
     };
     
     proto._updatePlaceholderVis = function() {

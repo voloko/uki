@@ -33,6 +33,17 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         clone.style.fontWeight = 'bold';
         return clone;
     };
+    
+    proto._layoutDom = function(rect) {
+        Base._layoutDom.call(this, rect);
+        if (this._firstLayout) {
+            this['hover-background']();
+            this['down-background']();
+
+            this._backgroundByName('normal');
+            this._initFocusable();
+        }
+    };
         
     proto._createDom = function() {
         // dom
@@ -40,12 +51,6 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         this._label = uki.createElement('div', Base.defaultCss + 
             "font-size:12px;line-height:12px;white-space:nowrap;text-align:center;font-weight:bold;color:#333"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
-        
-        // load bgs
-        this['hover-background']();
-        this['down-background']();
-
-        this._backgroundByName('normal');
         
         // events
         this._down = false;
@@ -87,8 +92,6 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         uki.dom.bind(this._dom, 'mousedown', this._mousedown);
         uki.dom.bind(this._dom, supportMouseEnter ? 'mouseenter' : 'mouseover', this._mouseover);
         uki.dom.bind(this._dom, supportMouseEnter ? 'mouseleave' : 'mouseout', this._mouseout);
-        
-        this._initFocusable();
     };
     
     proto._focus = function() {

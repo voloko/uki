@@ -77,8 +77,6 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
             var x = e.pageX - uki.dom.offset(_this._dom).x;
             _this.value(_this._pos2val(x));
         });
-        
-        this._initFocusable();
     },
     
     _moveHandle: function() {
@@ -125,6 +123,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         Base._layoutDom.call(this, fixedRect);
         this._position = this._val2pos(this._value);
         this._moveHandle();
+        if (this._firstLayout) this._initFocusable();
         return true;
     },
 

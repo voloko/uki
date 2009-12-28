@@ -5,7 +5,7 @@ include('collection.js');
 
 (function() {
     uki.build = function(ml) {
-        if (!uki.isArray(ml)) ml = [ml];
+        if (ml.length === undefined) ml = [ml];
         return new uki.Collection(createMulti(ml));
     };
 
@@ -15,7 +15,6 @@ include('collection.js');
 
     function createSingle (mlRow) {
         if (uki.isFunction(mlRow.typeName)) {
-            if (parent) parent.appendChild(mlRow);
             return mlRow;
         }
 

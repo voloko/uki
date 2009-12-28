@@ -27,7 +27,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._setup();
         uki.initNativeLayout();
         this._createDom();
-        this._initBackgrounds();
     };
     
     proto._setup = function() {
@@ -39,7 +38,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
            _needsLayout: true,
            _selectable: false,
            _styleH: 'left',
-           _styleV: 'top'
+           _styleV: 'top',
+           _firstLayout: true
         });
     };
     
@@ -156,6 +156,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this._layoutDom(this._rect);
         this._needsLayout = false;
         this.trigger('layout', {rect: this._rect, source: this});
+        this._firstLayout = false;
     };
     
     /* ---------------------------- Layout 1-st pass ----------------------------*/
@@ -177,6 +178,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     proto.minSize = uki.newProp('_minSize', function(s) {
         this._minSize = Size.create(s);
         this.rect(this._normalizeRect(this._rect));
+        if (this._minSize.width) this._dom.style.minWidth = this._minSize.width + 'px';
+        if (this._minSize.height) this._dom.style.minHeight = this._minSize.height + 'px';
     });
     
     proto._normalizeRect = function(rect) {
@@ -355,6 +358,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
             l[this._styleV] = this._styleV == 'top'  ? rect.y : relativeRect.height - rect.y - rect.height;
         }
         this._lastLayout = uki.dom.layout(this._dom.style, l, this._lastLayout);
+        if (this._firstLayout) this._initBackgrounds();
         return true;
     };
     

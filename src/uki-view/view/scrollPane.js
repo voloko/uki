@@ -39,6 +39,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     proto._setup = function() {
         Base._setup.call(this);
         this._innerRect = this.rect().clone();
+        this._clientRect = this.rect().clone();
         uki.extend(this, {
             _scrollableV: true,
             _scrollableH: false,
@@ -80,25 +81,37 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
         return tmpRect;
     };
     
+    proto.rect = function(newRect) {
+        if (newRect === undefined) return this._rect;
+        
+        newRect = Rect.create(newRect);
+        
+        this._parentRect = newRect;
+        if (!this._resizeSelf(newRect)) return this;
+        
+        this._updateInnerRect();
+        this._needsLayout = true;
+        return this;
+    };
+    
     // (rect - scroll bars) if needed
     proto._updateInnerRect = function() {
         initScrollWidth();
         
         var oldRect = this._innerRect;
-        this._innerRect = new Rect(0, 0, this.rect().width - (this._scrollV ? scrollWidth : 0), this.rect().height - (this._scrollH ? scrollWidth : 0) );
-        
-        if (!oldRect.eq(this._innerRect)) this._resizeChildViews(oldRect);
+        this._innerRect = new Rect(this._rect.width + (this._scrollH ? -1 : 0) * scrollWidth,  this._rect.height + (this._scrollV ? -1 : 0) * scrollWidth);
+        this._resizeChildViews(oldRect);
 
         var max, scroll, dx = 0, dy = 0;
         if (this._scrollableV) {
             this._maxY = max = this.contentsHeight();
-            scroll = max > this._innerRect.height;
+            scroll = max > this._rect.height;
             if (scroll != this._scrollV) dx = (scroll ? -1 : 1) * scrollWidth;
             this._scrollV = scroll;
         }
         if (this._scrollableH) {
             this._maxX = max = this.contentsWidth();
-            scroll = max > this._innerRect.width;
+            scroll = max > this._rect.width;
             if (scroll != this._scrollH) dy = (scroll ? -1 : 1) * scrollWidth;
             this._scrollH = scroll;
         }
@@ -111,19 +124,18 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
             
             this._resizeChildViews(oldRect);
         }
-        this._clientRect = requirePaneResize ? new Rect(0, 0, this._scrollH ? this._maxX : this._innerRect.width, this._scrollV ? this._maxY : this._innerRect.height) : this._innerRect;
+        this._clientRect = 
+            requirePaneResize ? 
+            new Rect(0, 0, this._scrollH ? this._maxX : this._innerRect.width, this._scrollV ? this._maxY : this._innerRect.height) : 
+            this._innerRect;
+        this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
         
         // this._calcMaxRect();
-        this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
     };
     
     proto.resizeToContents = function() {
         initScrollWidth();
-        var size = this.contentsSize();
-        this._scrollV = this._scrollableV && size.height > this._rect.height;
-        this._scrollH = this._scrollableH && size.width > this._rect.width;
-        this._innerRect.width = this._rect.width - (this._scrollH ? scrollWidth : 0);
-        this._innerRect.height = this._rect.height - (this._scrollV ? scrollWidth : 0);
+        this._updateInnerRect();
     };
     
     proto.rectForChild = function() {
@@ -132,18 +144,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     
     proto.clientRect = function() {
         return this._clientRect;
-    };
-    
-    proto.rect = function(newRect) {
-        if (newRect === undefined) return this._rect;
-        newRect = Rect.create(newRect);
-        
-        var oldRect = this._rect;
-        this._parentRect = newRect;
-        if (!this._resizeSelf(newRect)) return this;
-        this._updateInnerRect();
-        this._needsLayout = true;
-        return this;
     };
     
     proto._resizeChildViews = function(oldRect) {

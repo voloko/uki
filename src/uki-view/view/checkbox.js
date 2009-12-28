@@ -49,8 +49,11 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         uki.dom.bind(this._box, 'mouseout', function() {
             _this.checked(_this._checked);
         });
-        
-        this._initFocusable();
+    },
+    
+    _layoutDom: function(rect) {
+        Base._layoutDom.call(this, rect);
+        if (this._firstLayout) this._initFocusable();
     },
     
     _focus: function() {

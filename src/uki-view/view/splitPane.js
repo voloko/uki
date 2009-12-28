@@ -97,7 +97,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._normalizeRect = function(rect) {
-        rect = Base._normalizeRect(rect);
+        rect = Base._normalizeRect.call(this, rect);
         var newRect = rect.clone();
         if (this._vertical) {
             newRect.height = MAX(newRect.height, this._leftMin + this._rightMin); // force min width

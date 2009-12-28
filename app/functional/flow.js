@@ -14,14 +14,14 @@ for (var i=1; i < 11; i++) {
     l = uki({ view: 'Label', rect: '0 0 100 20', anchors: 'left top', inset: '1 5', html: '<a href="#">Link ' + (i+1) + '</a>' });
     uki('Flow:eq(1)').append(l);
 };
-uki('Flow:eq(0)').layout();
-uki('Flow:eq(1)').layout();
+uki('Flow:eq(0)').resizeToContents('height').layout();
+uki('Flow:eq(1)').resizeToContents('width').layout();
 
 uki({ view: 'Button', rect: '0 0 100 22', text: 'Remove' }).attachTo(window, '100 100').click(function() {
-    uki('Flow:eq(0)').removeChild(uki('Flow:eq(0)').childViews()[1]).layout();
+    uki('Flow:eq(0)').removeChild(uki('Flow:eq(0)').childViews()[1]).resizeToContents('height').layout();
 });
 
 uki({ view: 'Button', rect: '0 30 100 22', text: 'Remove from list 2'}).attachTo(window, '100 100')
 .resizeToContents('width').layout().click(function() {
-    uki('Flow:eq(1)').removeChild(uki('Flow:eq(1)').childViews()[1]).layout();
+    uki('Flow:eq(1)').removeChild(uki('Flow:eq(1)').childViews()[1]).resizeToContents('width').layout();
 })
