@@ -22,7 +22,7 @@
           %li Public <a href="http://github.com/voloko/uki/tree/v0.0.1b">release 0.0.1</a> on github.
       %p.slogan
         Uki is a <em>fast</em> and <em>simple</em> JavaScript user interface toolkit for desktop-like web applications.<br />
-        It comes with rich view-component library ranging from 
+        It comes with a rich view-component library ranging from 
         <a href="/functional/slider.html">Slider</a> to 
         <a href="/functional/list.html">List</a> and 
         <a href="/functional/splitPane.html">SplitPane</a>.
@@ -52,34 +52,34 @@
             %td.left-column
               .feature
                 %h2 Simple
-                %p Web should be simple. Adding a new library to your app should not require using specific build process or learning a new language.
-                %p It should be as <em>simple as adding a &lt;script&gt; tag</em> to your HTML. That’s exactly the way uki works. No frameworks to install, no dependencies to manage, no css to include. Simple.
+                %p Web should be simple. Adding a new library to your app should not require using a specific build process or learning a new language.
+                %p It should be as <em>simple as adding a &lt;script&gt; tag</em> to your HTML. That’s exactly the way uki works. No builders to install, no dependencies to manage, no css to include. Simple.
                 %p
                   %code= "&lt;script src=&#x27;http://static.ukijs.org/pkg/#{version}/uki.gz.js&#x27;&gt;&lt;/script&gt;"
               
-              .feature
+              .feature{:valign => 'top'}
                 %h2 Cross browser
-                %p I can imagine leaving in a fairy-tail world where any browser support HTML 5 and there’s no such a thing as IE6 :) Unfortunately reality is different. I have to support all the browser spices available. Even the dinosaurs.
-                %p Thats why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, Chrome. And it looks exactly the same on any of them.
+                %p I can imagine living in a fairy-tale world where any browser supports HTML 5 and there’s no such thing as IE6 :) Unfortunately reality is different. I have to support all the browser spices available. Even the dinosaurs.
+                %p Thats why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, Chrome. And it looks exactly the same in all of them.
               
               .feature
                 %h2 Specific
                 %p Uki doesn't want to be a Jack-of-all-trades. It only does layout but it does it well. You won't find any ajax or data storage layer code here.
             
-            %td.right-column
+            %td.right-column{:valign => 'top'}
               .feature
                 %h2 Fast
                 %p One of the reasons uki appeared is that I had to create a 4000-row, complex, client side searchable table. Just rendering the table made any IE busy for half a minute.
-                %p Uki uses progressive rendering and <em>can render 30k+ lists</em> and tables <em>mostly instantly</em>.
+                %p Uki uses progressive rendering and <em>can render 30k+ lists</em> and tables <em>most instantly</em>.
             
               .feature
                 %h2 Small
                 %p With all the images packed into (not supported in IE6 and IE7) gziped uki build is <em>under 30kb</em>. And it’s a single HTTP request.
             
               .feature
-                %h2 Plugable
-                %p It’s great when you start building your whole app with uki. But sometimes you have to add desktop-like experience to a working site. Say adding a widget, or a table to existing design.
-                %p While uki can occupy the whole browser window it feels perfectly OK in small &lt;div&gt; in your sidebar. Just use <code>.attachTo( myDiv )</code> for any widget you want to add.
+                %h2 Pluggable
+                %p It’s great when you start building your whole app with uki. But sometimes you have to add desktop-like experience to a working site. Say, adding a widget, or a table to existing design.
+                %p While uki can occupy the whole browser window it feels perfectly OK in a small &lt;div&gt; in your sidebar. Just use <code>.attachTo( myDiv )</code> for any widget you want to add.
         
         .help
           %h2 Uki needs your help

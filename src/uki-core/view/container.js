@@ -69,9 +69,9 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
      * Adds a child
      */
     proto.appendChild = function(child) {
-        child.parent(this);
         child._viewIndex = this._childViews.length;
         this._childViews.push(child);
+        child.parent(this);
     };
     
     /**

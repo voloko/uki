@@ -39,7 +39,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
            _needsLayout: true,
            _selectable: false,
            _styleH: 'left',
-           _styleH: 'top'
+           _styleV: 'top'
         });
     };
     
@@ -133,7 +133,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         if (this._parent) this._dom.parentNode.removeChild(this._dom);
         this._parent = parent;
-        this._parent.domForChild(this).appendChild(this._dom);
+        if (this._parent) this._parent.domForChild(this).appendChild(this._dom);
         return this;
     };
     
@@ -204,7 +204,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
                 ((this._anchors & ANCHOR_TOP ^ ANCHOR_TOP ? 1 : 0) +      // flexible top
                 (this._autosize & AUTOSIZE_HEIGHT ? 1 : 0) + 
                 (this._anchors & ANCHOR_BOTTOM ^ ANCHOR_BOTTOM ? 1 : 0)); // flexible right
-
+                
         if (this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT) newRect.x += dX;
         if (this._autosize & AUTOSIZE_WIDTH) newRect.width += dX;
 
