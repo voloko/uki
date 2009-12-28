@@ -55,18 +55,6 @@ uki.view.utils = new function() {
         return null;
     };
     
-    /**
-     * Finds the uppermost parent which needs layout
-     */
-    proto.dirtyParent = function(c) {
-        var prevC;
-        do {
-            prevC = c;
-            c = c.parent();
-        } while(c && c._needsLayout);
-        return prevC;
-    };
-    
     function visibleRect (c) {
         return c.visibleRect ? c.visibleRect() : c.rect().clone();
     }

@@ -254,6 +254,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     }
     
     function decodeAutosize (autosizeStr) {
+        if (!autosizeStr) return 0;
         var autosize = 0;
         if (autosizeStr.indexOf('width' ) > -1) autosize = autosize | AUTOSIZE_WIDTH;
         if (autosizeStr.indexOf('height') > -1) autosize = autosize | AUTOSIZE_HEIGHT;
@@ -282,12 +283,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         this.rect(newRect); // triggers _needsLayout
     };
     
-    proto.contentsSize = function() {
+    proto.contentsSize = function(autosize) {
         return this.rect();
     };
     
     proto._calcRectOnContentResize = function(autosize) {
-        var newSize = this.contentsSize( ),
+        var newSize = this.contentsSize( autosize ),
             oldSize = this.rect();
 
         if (newSize.eq(oldSize)) return oldSize; // nothing changed

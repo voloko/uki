@@ -37,7 +37,7 @@ include('attachment.js');
         };
     });
     
-    uki.each(['dirtyParent', 'scrollableParent'], function(i, name) {
+    uki.each(['scrollableParent'], function(i, name) {
        self[name] = function() {
             return new uki.Collection( uki.map(this, function(c) { return uki.view[name](c); }) );
         };

@@ -95,6 +95,6 @@ uki('#splitRight').bind('handleMove', function(e) {
 });
 
 uki('#splitRight').handlePosition(400).layout();
-uki('#contactsList').data(contacts).dirtyParent().layout();
-uki('#waveList').data(waves).dirtyParent().layout();
+uki('#contactsList').data(contacts).layout();
+uki('#waveList').data(waves).layout();
 uki('#message').html( document.getElementById('message').innerHTML );

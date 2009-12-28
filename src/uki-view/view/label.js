@@ -35,8 +35,8 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     /**
      * Warning! this operation is expensive
      */
-    proto.contentsSize = function() {
-        var clone = this._createLabelClone(), inset = this.inset(), size;
+    proto.contentsSize = function(autosize) {
+        var clone = this._createLabelClone(autosize), inset = this.inset(), size;
         
         uki.dom.probe(clone, function() {
             size = new Size(clone.offsetWidth + inset.width(), clone.offsetHeight + inset.height());
@@ -87,17 +87,17 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         return this;
     };
     
-    proto._createLabelClone = function() {
+    proto._createLabelClone = function(autosize) {
         var clone = this._label.cloneNode(true),
             inset = this.inset(), rect = this.rect();
             
-        if (this._autosizeToContents & AUTOSIZE_WIDTH) {
+        if (autosize & AUTOSIZE_WIDTH) {
             clone.style.width = clone.style.right = '';
         } else if (uki.supportNativeLayout) {
             clone.style.right = '';
             clone.style.width = rect.width - inset.width() + 'px';
         }
-        if (this._autosizeToContents & AUTOSIZE_HEIGHT) {
+        if (autosize & AUTOSIZE_HEIGHT) {
             clone.style.height = clone.style.bottom = '';
         } else if (uki.supportNativeLayout) {
             clone.style.bottom = '';

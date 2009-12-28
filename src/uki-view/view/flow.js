@@ -3,8 +3,8 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
         proto = this;
 
     
-    proto.init = function() {
-        Base.init.call(this);
+    proto._setup = function() {
+        Base._setup.call(this);
         this._horizontal = false;
         this._dimension = 'height';
         this._containers = [];
@@ -21,16 +21,17 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
     });
     
     proto.appendChild = function(view) {
-        Base.appendChild.call(this, view);
+        view.resizeToContents(this._horizontal ? 'width' : 'height');
         var container = this._createContainer(view),
             v = view.rect()[this._dimension];
         this._containers[view._viewIndex] = container;
         this._containerSizes[view._viewIndex] = 0;
-
         this._initContainer(container);
         container.style[this._dimension] = v + 'px';
         this._dom.appendChild(container);
         this._containerSizes[view._viewIndex] = v;
+        
+        Base.appendChild.call(this, view);
     };
     
     proto.removeChild = function(view) {

@@ -28,8 +28,8 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         };
     });
     
-    proto._createLabelClone = function() {
-        var clone = Base._createLabelClone.call(this);
+    proto._createLabelClone = function(autosize) {
+        var clone = Base._createLabelClone.call(this, autosize);
         clone.style.fontWeight = 'bold';
         return clone;
     };
