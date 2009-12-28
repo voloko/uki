@@ -26,15 +26,19 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         Base._createDom.call(this);
         var scrollPaneRect = new Rect(0, this._headerHeight, this.rect().width, this.rect().height - this._headerHeight),
             listRect = scrollPaneRect.clone().normalize(),
+            headerRect = new Rect(0, 0, this.rect().width, this._headerHeight),
             listML = { view: 'List', minSize: new Size(this._totalWidth+20, 0), rect: listRect, anchors: 'left top bottom right', render: new uki.view.table.Render(this), className: 'table-list' },
-            paneML = { view: 'ScrollPane', rect: scrollPaneRect, anchors: 'left top right bottom', scrollableH: true, childViews: [listML], className: 'table-scroll-pane'};
+            paneML = { view: 'ScrollPane', rect: scrollPaneRect, anchors: 'left top right bottom', scrollableH: true, childViews: [listML], className: 'table-scroll-pane'},
+            headerML = { view: 'Label', rect: headerRect, text: 'todo: header should be here', inset: '2 0 0 10', fontWeight: 'bold' };
             
         uki.each(propertiesToDelegate, function(i, name) { 
             if (this['_' + name] !== undefined) listML[name] = this['_' + name];
         }, this);
         this._scrollPane = uki.build(paneML)[0];
         this._list = this._scrollPane.childViews()[0];
+        this._header = uki.build(headerML)[0];
         this._scrollPane.resizeToContents();
+        this.appendChild(this._header);
         this.appendChild(this._scrollPane);
         this._initCommonAttrs();
     };

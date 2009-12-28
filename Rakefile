@@ -1,4 +1,7 @@
 require 'fileutils'
+require 'rubygems'
+require 'yaml'
+
 def process_path(path, included = {})
   code = File.read(path)
   base = File.dirname(path)
@@ -31,15 +34,58 @@ end
 desc "Build scripts"
 task :build_scripts do
   base = File.dirname(__FILE__)
-  compiler_path = File.join(base, 'pkg', 'compiler.jar')
+  config = YAML.load(File.read File.join(base, 'config.yaml'))
+  version = File.read('VERSION')
+  compiler_path = File.join(base, 'compiler.jar')
+  FileUtils.rm_rf('pkg')
+  FileUtils.mkdir('pkg')
   
   ['uki.js', 'uki-theamless.js', 'airport.js'].each do |name|
     src = File.join(base, 'app', name)
-    target = File.join(base, 'pkg', name)
-    File.open(target, 'w') { |f| f.write process_path(src) }
-    `java -jar #{compiler_path} --js #{target} > #{target.sub('.js', '.shrinked.js')}`
-    `gzip -c #{target.sub('.js', '.shrinked.js')} > #{target}.gz`
-    # FileUtils.rm target.sub('.js', '.shrinked.js')
+    target = File.join(base, 'pkg', name).sub(/.js$/, '.dev.js')
+    File.open(target, 'w') { |f| f.write process_path(src).sub('/app/uki-theme/airport/i/', "http://static.ukijs.org/pkg/#{version}/uki-theme/airport/i/") }
+    `java -jar #{compiler_path} --js #{target} > #{target.sub('.dev.js', '.shrinked.js')}`
+    `gzip -c #{target.sub('.dev.js', '.shrinked.js')} > #{target.sub('.dev.js', '.gz.js')}`
+    FileUtils.rm target.sub('.dev.js', '.shrinked.js')
   end
+  
+  FileUtils.cp_r(File.join(base, 'app', 'uki-theme'), File.join(base, 'pkg', 'uki-theme'))
+end
+
+desc "Push version"
+task :push_version do
+  require 'aws/s3'
+  include AWS::S3
+  
+  base = File.dirname(__FILE__)
+  config = YAML.load(File.read File.join(base, 'config.yaml'))
+  version = File.read('VERSION')
+  Base.establish_connection!(
+    :access_key_id => config['access_key_id'], 
+    :secret_access_key => config['secret_access_key']
+  ) unless Base.connected?
+  Dir.glob(File.join(base, 'pkg', '*.js')).each do |path|
+    filename = File.basename(path)
+    targetPath = "/pkg/#{version}/#{filename}"
+    options = {:context_type => 'text/javascript', :access => :public_read, 'Cache-Control' => 'max-age=315360000'}
+    if filename.match(/\.gz.js/)
+      options['Content-Encoding'] = 'gzip' 
+      targetPath.sub!('.gz.js', '.js')
+    end
+    p "#{path} -> #{targetPath}"
+    S3Object.store(targetPath, File.read(path), config['bucket_name'], options)
+  end
+  
+  Dir.glob(File.join(base, 'pkg', 'uki-theme', '**', '*')).each do |path|
+    next if File.directory?(path)
+    filename = File.basename(path)
+    targetPath = "pkg/#{version}/uki-theme/#{path.sub(/.*uki-theme\//, '')}"
+    p "#{path} -> #{targetPath}"
+    S3Object.store(
+      targetPath, File.read(path), config['bucket_name'],
+      :access => :public_read, 'Cache-Control' => 'max-age=315360000'
+    )
+  end
+  
   
 end

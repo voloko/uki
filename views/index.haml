@@ -1,7 +1,89 @@
+- version = File.read File.join(File.dirname(__FILE__), '..', 'VERSION')
 !!!1.1
-%head
-  %title Test
-  %javascript{:src => '/app/jquery.cjs'}
-  %javascript{:src => '/app/uki-theamless.cjs'}
-%body
-  %p test
+%html
+  %head
+    %meta{ "http-equiv" => "Content-type", "content" => "text/html; charset=utf-8" }
+    %title UKI – Simple UI kit for complex web apps
+    %link{ :rel => 'stylesheet', :href => '/app/css/master.css', :type => 'text/css', :media => 'screen' }
+    %script{ :src => '/app/uki.cjs', :type => 'text/javascript' }
+    
+  %body
+    %a{ :href => "http://github.com/voloko/uki/" }
+      %img{ :style => "position: absolute; top: 0; right: 0; border: 0;", :src => "http://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png", :alt => "Fork me on GitHub" }
+    .content
+      %h1.title
+        UKI
+        %span.small Simple UI kit for complex web apps
+        %span.version= "(#{version})"
+      .links
+        %h3 Links
+        %ul
+          %li Google wave <a href="http://ukijs.org/wave.html" target="_blank">layout</a> in <a href="http://github.com/voloko/uki/blob/master/app/functional/wave.js" target="_blank">70 lines</a> of uki code
+          %li Public <a href="http://github.com/voloko/uki/">release 0.0.1</a> on github.
+      %p.slogan
+        Uki is a <em>fast</em> and <em>simple</em> JavaScript user interface toolkit for desktop-like web applications.<br />
+        It comes with rich view-component library ranging from 
+        <a href="/functional/slider.html">Slider</a> to 
+        <a href="/functional/list.html">List</a> and 
+        <a href="/functional/splitPane.html">SplitPane</a>.
+      %p.download
+        %span.title Download:
+        %span.variant 
+          %a{:href => "http://static.ukijs.org/pkg/#{version}/ukijs.js"} compressed
+          (27KB, gzip, compiled)
+        %span.variant 
+          %a{:href => "http://static.ukijs.org/pkg/#{version}/ukijs.dev.js"} development
+          (161KB, with comments)
+      .example
+        .left-pane
+          %h2 Code uki
+          %pre= File.read File.join(File.dirname(__FILE__), 'example.txt')
+        .right-pane
+          = "#test"
+    .features
+      .content
+        %table
+          %tr
+            %td.left-column
+              .feature
+                %h2 Simple
+                %p Web should be simple. Adding a new library to your app should not require using specific build process or learning a new language.
+                %p It should be as <em>simple as adding a &lt;script&gt; tag</em> to your HTML. That’s exactly the way uki works. No frameworks to install, no dependencies to manage, no css to include. Simple.
+                %p
+                  %code= "&lt;script src=&#x27;http://static.ukijs.org/pkg/#{version}/uki.gz.js&#x27;&gt;&lt;/script&gt;"
+              
+              .feature
+                %h2 Cross browser
+                %p I can imagine leaving in a fairy-tail world where any browser support HTML 5 and there’s no such a thing as IE6 :) Unfortunately reality is different. I have to support all the browser spices available. Even the dinosaurs.
+                %p Thats why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, Chrome. And it looks exactly the same on any of them.
+              
+              .feature
+                %h2 Specific
+                %p Uki doesn't want to be a Jack-of-all-trades. It only does layout but it does it well. You won't find any ajax or data storage layer code here.
+            
+            %td.right-column
+              .feature
+                %h2 Fast
+                %p One of the reasons uki appeared is that I had to create a 4000-row, complex, client side searchable table. Just rendering the table made any IE busy for half a minute.
+                %p Uki uses progressive rendering and <em>can render 30k+ lists</em> and tables <em>mostly instantly</em>.
+            
+              .feature
+                %h2 Small
+                %p With all the images packed into (not supported in IE6 and IE7) gziped uki build is <em>under 30kb</em>. And it’s a single HTTP request.
+            
+              .feature
+                %h2 Plugable
+                %p It’s great when you start building your whole app with uki. But sometimes you have to add desktop-like experience to a working site. Say adding a widget, or a table to existing design.
+                %p While uki can occupy the whole browser window it feels perfectly OK in small <div> in your sidebar. Just use <code>.attachTo( myDiv )</code> for any widget you want to add.
+        
+        .help
+          %h2 Uki needs your help
+          %ul
+            %li Refine component design
+            %li Write docs
+            %li Write unit tests
+            %li Complete missing features (view.Table, view.Tree, view.Grid, disabled, d&d)
+      .copy
+        &copy; 2010 Vladimir Kolesnikov
+        %a.mail{ :href => 'mailto:voloko@gmail.com' } send feedback
+        %a{ :href => 'http://twitter.com/voloko' } twitter

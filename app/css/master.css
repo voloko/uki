@@ -1,0 +1,204 @@
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: url(../i/page.png);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.2;
+}
+
+h1, h2, h3, p {
+    margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+td, th {
+    padding: 0;
+}
+
+a {
+    color: #355FBE;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+a:hover
+{
+    color: #FFF;
+    background-color: #355FBE;
+}
+
+.content {
+    margin: 0 auto;
+    text-align: left;
+    width: 980px;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 50px 0 40px 50px;
+}
+
+    h1 .small {
+        font-size: 16px;
+        font-weight:  normal;
+        color: #333;
+    }
+
+    h1 .version {
+        font-size: 13px;
+        font-weight: normal;
+        color: #666;
+        position: relative;
+        bottom: 5px;
+    }
+    
+p.slogan {
+    font-size: 14px;
+    color: #333;
+    margin: 0 0 20px 50px;
+}
+
+p.download {
+    font-size: 15px;
+    color: #333;
+    margin: 0 0 60px 50px;
+    width: 670px;
+}
+
+    p.download .title {
+        font-weight: bold;
+    }
+
+    p.download .variant {
+        font-size: 13px;
+        color: #666;
+        margin-right: 1em;
+    }
+    
+    p.download a {
+        font-size: 16px;
+    }
+
+.links {
+    float: right;
+    width: 200px;
+    margin-right: 80px;
+    font-size: 12px;
+    color: #333;
+}
+    .links h3
+    {
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .links ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    .links ul li {
+        margin: 4px 0 0 0;
+    }
+    
+    
+.example {
+    background-color: #FFF;
+    margin: 0 25px 35px 25px;
+    -moz-box-shadow: 0 0 5px #999;
+    -moz-border-radius: 4px;
+    -webkit-box-shadow: 0 0 5px #999;
+    -webkit-border-radius: 4px;
+    box-shadow: 0 0 5px #999;
+    border-radius: 4px;
+    padding: 20px 25px;
+}
+    .example h2
+    {
+        font-weight: bold;
+        color: #333;
+        font-size: 15px;
+    }
+
+    .example .left-pane
+    {
+        float: left;
+        width: 440px;
+        height: 200px;
+    }
+    
+    .example .right-pane
+    {
+        height: 200px;
+    }
+
+.features {
+    background: #fff;
+    border-top: 2px solid #999;
+    padding: 30px 0 0 0;
+    font-size: 13px;
+}
+    .features em {
+        background-color: #FFFF99;
+        font-style: normal;
+    }
+
+    .features table {
+        margin: 0 50px;
+    }
+    .features p {
+        margin: 0 0 16px 0;
+    }
+    
+    .features h2 {
+        font-size: 16px;
+        color: #333;
+        margin: 0 0 12px 0;
+    }
+    
+    .features .left-column {
+        width: 50%;
+    }
+    
+    .features .feature {
+        margin-bottom: 50px;
+    }
+    
+    .features .left-column {
+        padding-right: 20px;
+    }
+    .features .right-column {
+        padding-left: 20px;
+    }
+    
+.help {
+    margin: 0 50px 40px 50px;
+}
+
+.help li {
+    margin: 0 0 3px 0;
+}
+
+.copy {
+    text-align: left;
+    border-top: 2px solid #999;
+    padding: 5px 50px 15px 50px;
+    font-size: 12px;
+}
+.mail
+{
+    background: url(../i/mail.png) no-repeat;
+    background-position: 100% 50%;
+    padding-right: 20px;
+    margin: 0 1em;
+}
+    

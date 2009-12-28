@@ -54,7 +54,14 @@ That's the reason uki calculates view positions and sizes with JavaScript. Unfor
     uki('Button[text^=uki]').click(function() {
         alert('Hello world!');
     });
+    
+    uki(
+      { view: "Button", text: "Click me", rect: "10 10 100 24" }
+    ).attachTo( document.getElementById("test") );
 
+    uki("Button[text^=Click]").click(
+      function() { alert(this.text()); }
+    );
 
     uki({ view: 'SplitPane', rect: '1000 600', autosize: 'width height', anchors: 'left top right bottom', 
         handlePosition: 300, autogrowLeft: false, leftMin: 300, rightMin: 300,

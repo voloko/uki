@@ -43,6 +43,10 @@ include('view/observable.js');
             return this._rect;
         },
         
+        scroll: function() {
+            // TODO: support window scrolling
+        },  
+        
         // TODO: support window scrolling
         scrollTop: function() {
             return this._dom.scrollTop;
