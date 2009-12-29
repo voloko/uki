@@ -80,7 +80,6 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height');
         uki('Flow', this._popup).layout();
         this._popup.resizeToContents('width height').toggle();
-        this._popup.layout();
     };
     
     proto._updateMoreVisible = function() {

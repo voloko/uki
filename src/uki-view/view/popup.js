@@ -31,10 +31,13 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     };
     
     proto.show = function() {
+        this.visible(true);
         if (!this.parent()) {
             new uki.Attachment( root, this );
+        } else {
+            this._recalculateRect();
+            this.layout(this._rect);
         }
-        this.visible(true);
     };
     
     proto.hide = function() {
@@ -60,7 +63,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._recalculateRect = function() {
-        
+        if (!this.visible()) return;
         var relativeOffset = uki.view.offset(this._relativeTo),
             relativeAttachment = uki.view.top(this._relativeTo),
             relativeAttachmentOffset = uki.dom.offset(relativeAttachment.dom()),
