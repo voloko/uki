@@ -26,7 +26,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
     
     uki.moreWidth = uki.newProp('_moreWidth', function(v) {
         this._moreWidth = v;
-        this._updateMoveVisible();
+        this._updateMoreVisible();
     });
     
     proto._createDom = function() {
@@ -52,6 +52,14 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this._more.bind('click', function() {
             _this._showMissingButtons();
         });
+        
+        uki.dom.bind(root, 'resize mousedown', function() {
+            _this._popup.hide();
+        });
+        
+        this.bind('resize', function() {
+            _this._popup.hide();
+        })
     };
     
     proto._showMissingButtons = function() {
@@ -64,6 +72,9 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         };
         var newButtons = uki.map(missing, function(i) {
             var descr = { html: childViews[i].html(), backgroundPrefix: 'toolbar-popup-' };
+            uki.each(['fontSize', 'fontWeight', 'color', 'textAlign', 'inset'], function(j, name) {
+                descr[name] = uki.attr(childViews[i], name);
+            })
             return _this._createButton(descr);
         });
         uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height');
@@ -71,7 +82,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         uki('Flow', this._popup).layout();
     };
     
-    proto._updateMoveVisible = function() {
+    proto._updateMoreVisible = function() {
         var rect = this._rect;
         if (this._more.visible() != rect.width < this._totalWidth) {
             this._more.visible(rect.width < this._totalWidth);
@@ -83,7 +94,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
     
     proto.rect = function(rect) {
         var result = Base.rect.call(this, rect);
-        if (rect) this._updateMoveVisible();
+        if (rect) this._updateMoreVisible();
         return result;
     };
     

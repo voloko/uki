@@ -9,7 +9,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         uki.extend(this, {
             _inset: new Inset(0, 4),
             _backgroundPrefix: '',
-            defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;text-shadow:0 1px 0px rgba(255,255,255,0.8);background:url(" + uki.theme.imageSrc('x') + ")" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
+            defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;background:url(" + uki.theme.imageSrc('x') + ")" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
         });
     };
     

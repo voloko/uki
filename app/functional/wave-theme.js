@@ -97,6 +97,9 @@
             'link-button-normal': function() {
                 return new uki.background.Css({color:'#003EA8', textShadow: 'none', textDecoration: 'underline', cursor: 'pointer', textIndent: '2px'});
             },
+            'toolbar-popup-button-hover': function() {
+                return new uki.background.Css({ background: '#4086FF', color: '#FFF' });
+            },
             
             
             'popup-normal': function() {
@@ -106,7 +109,7 @@
                     v: [u(prefix + "v.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAABkCAYAAACCXsDxAAAAVklEQVRoge3MoQFAUABAwRcVSVRFTTHJn8tsFmIF+t0AV9W47uePcd1PdVZHtVdbtVZLNVdTYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLBaLxWLxt/gFweGiHhjkmgQAAAAASUVORK5CYII=", u(prefix + "v.gif")],
                     h: [u(prefix + "h.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGUAAAAXCAYAAAASloEFAAAAX0lEQVRo3u3YoQ2FAABDwUoMColF4jBMAmvxV4OB+Gs05JrcBM81x3W/dMlrdRNFFBNFFBNFFBNFFBPFRBHFRPlslPP3eGbbXuIkO3WyUScrdbJQJzN1MlEnI3Uy0OUPS/P5ZrQwdlIAAAAASUVORK5CYII=", u(prefix + "h.gif")],
                     m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGUAAABkCAYAAACfIP5qAAAAmklEQVR42u3RAQ0AAAgDIPf+nbXG56ACWepkqCNFClKkIEUKUqQgBSlSkCIFKVKQghQpSJGCFClIQYoUpEhBihSkIEUKUqQgRQpSkCIFKVKQIgUpSJGCFClIkYIUpEhBihSkSEEKUqQgRQpSpCAFKVKQIgUpUpCCFClIkYIUKUhBihSkSEGKFKQgRQpSpCBFClKkIAUpUpDy1QGga5NE1OzMgwAAAABJRU5ErkJggg=="]
-                }, "12 11 11 11", {inset: '0 -8px -8px 0'});
+                }, "12 11 11 11", {inset: '-3 -9 -11 -2'});
             },
             
             'toolbar-normal': function() {

@@ -22,7 +22,7 @@ uki.background.Css = uki.newClass(new function() {
         if (this._comp) {
             var dom = this._comp.dom();
             uki.each(this._options, function(name, value) {
-                dom[name] = this._originalValues[name];
+                dom.style[name] = this._originalValues[name];
             }, this);
         }
         

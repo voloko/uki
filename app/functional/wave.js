@@ -17,7 +17,7 @@ var WaveRender = uki.extend({}, ContactsRender, {
 
 function toolbarButton (label, offset) {
     var html = uki.extend(uki.theme.template('toolbar-button', {height: 24, size: new uki.geometry.Size(16, 16)}), [label, undefined, 'url('+uki.theme.imageSrc('icons-sprite')+') ' + offset]);
-    return { html: html.join(''), inset: '0 8 0 28', fontWeight: 'normal', fontSize: '11px' };
+    return { html: html.join(''), inset: '0 8 0 28', fontWeight: 'normal', fontSize: '11px', textAlign: 'left', color: '' };
 }
 
 function menuButton (label, offset, rect) {

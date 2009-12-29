@@ -31,15 +31,14 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     };
     
     proto.show = function() {
-        if (this.parent()) {
-            this.visible(true);
-        } else {
+        if (!this.parent()) {
             new uki.Attachment( root, this );
         }
+        this.visible(true);
     };
     
     proto.hide = function() {
-        if (this.parent()) this.visible(false);
+        this.visible(false);
     };
     
     proto.parentResized = function() {
@@ -52,6 +51,11 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         if (autosize & AUTOSIZE_WIDTH) newRect.width = newSize.width;
         if (autosize & AUTOSIZE_HEIGHT) newRect.height = newSize.height;
         return newRect;
+    };
+    
+    proto._resizeSelf = function(newRect) {
+        this._rect = this._normalizeRect(newRect);
+        return true;
     };
     
     proto._recalculateRect = function() {
