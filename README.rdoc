@@ -70,7 +70,7 @@ That's the reason uki calculates view positions and sizes with JavaScript. Unfor
         uki('#field').value('') // find by id
     });
 
-results in  http://ukijs.org/functional/splitPaneEx.html
+results in http://ukijs.org/functional/splitPaneEx.html
 
 == Builder
     uki({
@@ -101,6 +101,10 @@ results in  http://ukijs.org/functional/splitPaneEx.html
             }
         ]
     }).attachTo( window, '1000 600' );
+    
+== Tests
+    cd tests
+    narwhal runner.js
     
 == PS
 And one more thing. Unobtrusive javascript is evil.

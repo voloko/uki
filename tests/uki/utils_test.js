@@ -1,5 +1,5 @@
 require('../test_helper.js');
-include('uki/utils.js');
+include('uki-core/utils.js');
 
 var utils = uki.utils;
 

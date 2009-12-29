@@ -1,8 +1,10 @@
 require('../test_helper.js');
-include('uki/builder.js');
-include('uki/view/base.js');
+include('uki-core/builder.js');
+include('uki-core/view/base.js');
 
 var builder = uki;
+
+uki.supportNativeLayout = true;
 
 QUnit.test("should create single view", function() {
     var c = builder.build([{
@@ -41,32 +43,6 @@ QUnit.test("should create view with lazy function call", function() {
 });
 
 
-QUnit.test("should layout with pixel values view", function() {
-    var c = uki.build([{
-        view: new uki.view.Base(),
-        rect: '10px 11 500 501px'
-    }])[0];
-    
-    QUnit.equals(c.dom().style.left, '10px');
-    QUnit.equals(c.dom().style.top, '11px');
-    QUnit.equals(c.dom().style.width, '500px');
-    QUnit.equals(c.dom().style.height, '501px');
-});
-
-
-QUnit.test("should layout with pixel values view", function() {
-    var c = builder.build([{
-        view: new uki.view.Base(),
-        coords: '10px 11 510 512px'
-    }])[0];
-    
-    QUnit.equals(c.dom().style.left, '10px');
-    QUnit.equals(c.dom().style.top, '11px');
-    QUnit.equals(c.dom().style.width, '500px');
-    QUnit.equals(c.dom().style.height, '501px');
-});
-
-
 QUnit.test("should create single view", function() {
     var c = builder.build({
         view: new uki.view.Base()
@@ -79,23 +55,4 @@ QUnit.test("should not build readymade views", function() {
     var c = builder.build([new uki.view.Base()]);
     
     QUnit.ok(c[0] instanceof uki.view.Base, 'instance of');
-});
-
-QUnit.test("should call setters in specified order", function() {
-    var order = [];
-    var mock = function() { this.init.apply(this, arguments) };
-    mock.prototype = uki.extend({}, uki.view.Base.prototype, {
-        rect: function() { order.push('rect') },
-        text: function() { order.push('text') },
-        childViews: function() { order.push('childViews') }
-    });
-    
-    builder.build({
-        view: new mock(),
-        text: 'test',
-        childViews: [],
-        rect: '12'
-    });
-    
-    QUnit.same(order, ['rect', 'text', 'childViews']);
 });

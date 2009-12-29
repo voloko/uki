@@ -1,5 +1,5 @@
 require('../test_helper.js');
-include('uki/geometry.js');
+include('uki-core/geometry.js');
 
 var Rect = uki.geometry.Rect;
 var Size = uki.geometry.Size;

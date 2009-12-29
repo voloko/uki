@@ -17,9 +17,9 @@ uki.dom = {
     
     probe: function(div, callback) {
         var target = doc.body;
-        doc.body.appendChild(div);
+        target.appendChild(div);
         callback(div);
-        doc.body.removeChild(div);
+        target.removeChild(div);
     },
     
     layout: function(style, layout, prevLayout) {

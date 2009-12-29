@@ -1,11 +1,14 @@
-- version = File.read File.join(File.dirname(__FILE__), '..', 'VERSION')
+- base = File.dirname(__FILE__)
+- version = File.read File.join(base, '..', 'VERSION')
+- dev_size = File.size File.join(base, '..', 'pkg', 'uki.dev.js')
+- compressed_size = File.size File.join(base, '..', 'pkg', 'uki.gz.js')
 !!!1.1
 %html
   %head
     %meta{ "http-equiv" => "Content-type", "content" => "text/html; charset=utf-8" }
     %title UKI – Simple UI Kit for complex web apps
     %link{ :rel => 'stylesheet', :href => '/app/css/master.css', :type => 'text/css', :media => 'screen' }
-    %script{ :src => '/app/uki.cjs', :type => 'text/javascript' }
+    %script{ :src => '/src/uki.cjs', :type => 'text/javascript' }
     
   %body
     %a{ :href => "http://github.com/voloko/uki/" }
@@ -30,10 +33,10 @@
         %span.title Download:
         %span.variant 
           %a{:href => "http://static.ukijs.org/pkg/#{version}/uki.js"} compressed
-          (27KB, gzip, compiled)
+          = "(#{compressed_size / 1024}KB, gzip, compiled)"
         %span.variant 
           %a{:href => "http://static.ukijs.org/pkg/#{version}/uki.dev.js"} development
-          (161KB, with comments)
+          = "(#{dev_size / 1024}KB, with comments)"
       .example
         %table
           %tr

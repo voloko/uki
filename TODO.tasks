@@ -8,7 +8,7 @@ Core
     ✓ split SplitPane into VerticalSplitPane and HorizontalSplitPane
     ✓ simplify parent()
 - view.Stylable
-- background.Sliced9 with cell backgrounds and repeat (no scaling)
+- resizeToContents
 
 - micro-optimize JS + profile
     ✓ do not call autolayoutSupport
@@ -20,6 +20,7 @@ Core
     ✓ do not recalculate width if possible
     ✓ smooth label/button layout
     - Backgrounds
+        - background.Sliced9 with cell backgrounds and repeat (no scaling)
         ✓ use overflow:hidden + bigger size 9sliced (opera bugfix)
         ✓ try creating 9sliced through innerHTML
         ✓ 9sliced bg with 4 images instead of 9

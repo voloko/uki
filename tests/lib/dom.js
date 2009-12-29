@@ -1,7 +1,7 @@
 // Load jquery
 // Minimal broswer api to make it work
 var GenericNode = function() {
-    this.childViews = [];
+    this.childNodes = [];
     this.style = {};
     this.nextSibling = null;
     this.listeners = {};
@@ -9,12 +9,12 @@ var GenericNode = function() {
 }
 GenericNode.prototype = {
     appendChild: function(node) {
-        this.childViews.push(node);
+        this.childNodes.push(node);
         node.parentNode = this;
         node.nextSibling = null;
     },
     insertBefore: function(node, before) {
-        this.childViews.push(node);
+        this.childNodes.push(node);
         node.parentNode = this;
         node.nextSibling = before;
     },
@@ -23,7 +23,7 @@ GenericNode.prototype = {
         node.nextSibling = null;
     },
     getElementsByTagName: function() { 
-        return  this.childViews; 
+        return  this.childNodes; 
     },
     addEventListener: function(type, handler) {
         this.listeners[type] = this.listeners[type] || [];
@@ -42,6 +42,7 @@ GenericNode.prototype = {
 
 
 global.document = new GenericNode();
+global.document.body = new GenericNode();
 global.document.documentElement = {compareDocumentPosition: ''};
 global.document.createElement = function(tagName) {
     var e = new GenericNode(); e.tagName = tagName.toUpperCase(); return e; 

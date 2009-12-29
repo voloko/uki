@@ -1,35 +1,15 @@
 require('../test_helper.js');
-include('uki/attr.js');
-include('uki/view/base.js');
-include('uki/geometry.js');
+include('uki-core/utils.js');
+include('uki-core/view/base.js');
+include('uki-core/geometry.js');
 
 
 var attr = uki.attr,
     Base = uki.view.Base,
     Rect = uki.geometry.Rect;
     
+uki.supportNativeLayout = true;
     
-QUnit.module('Writing rect');
-
-QUnit.test("should write rect attr with px string", function() {
-    var c = new Base();
-    attr(c, 'rect', '10px 11px 500px 501px');
-
-    QUnit.equals(c.dom().style.left, '10px');
-    QUnit.equals(c.dom().style.top, '11px');
-    QUnit.equals(c.dom().style.width, '500px');
-    QUnit.equals(c.dom().style.height, '501px');
-});
-
-QUnit.test("should write rect attr with Rect instance", function() {
-    var c = new Base();
-    attr(c, 'rect', new uki.geometry.Rect(10, 11, 500, 501));
-    QUnit.equals(c.dom().style.left, '10px');
-    QUnit.equals(c.dom().style.top, '11px');
-    QUnit.equals(c.dom().style.width, '500px');
-    QUnit.equals(c.dom().style.height, '501px');
-});
-
 QUnit.module('Default writers');
 
 QUnit.test("should set with default setter", function() {
@@ -48,31 +28,6 @@ QUnit.test("should write to property if no setter present", function() {
     attr(c, 'foo', v);
     QUnit.equals(c.foo, v);
 });
-
-
-QUnit.module("Coords accessors");
-
-QUnit.test("should read width", function() {
-    var c = new Base(new Rect(10, 11, 100, 101));
-    QUnit.same(attr(c, 'width'), 100);
-    QUnit.same(attr(c, 'height'), 101);
-    QUnit.same(attr(c, 'left'), 10);
-    QUnit.same(attr(c, 'top'), 11);
-});
-
-
-QUnit.test("should read width", function() {
-    var c = new Base(new Rect(10, 11, 100, 101));
-    attr(c, 'left', 12);
-    attr(c, 'top', 13);
-    attr(c, 'width', 102);
-    attr(c, 'height', 103);
-    QUnit.same(attr(c, 'width'), 102);
-    QUnit.same(attr(c, 'height'), 103);
-    QUnit.same(attr(c, 'left'), 12);
-    QUnit.same(attr(c, 'top'), 13);
-});
-
 
 
 QUnit.module('Default readers');
