@@ -30,6 +30,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
                 var _this = this;
                 this._clickHandler = function(e) {
                     if (uki.dom.contains(_this._relativeTo.dom(), e.target)) return;
+                    if (uki.dom.contains(_this.dom(), e.target)) return;
                     _this.hide();
                 };
                 uki.dom.bind(root, 'resize mousedown', this._clickHandler);
