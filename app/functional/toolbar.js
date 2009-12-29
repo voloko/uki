@@ -27,7 +27,7 @@ uki(
     }
 ).attachTo( window, '1000 600' )
 
-uki({ view: 'Popup', rect: '0 0 100 100', anchors: 'left bottom', relativeTo: uki('#button')[0], id: 'test' }).show();
+uki({ view: 'Popup', rect: '0 0 100 100', anchors: 'left top', relativeTo: uki('#button')[0], id: 'test' }).show();
 
 uki('#button').click(function() {
     uki('#test').toggle();

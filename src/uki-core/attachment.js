@@ -48,7 +48,6 @@ include('view/observable.js');
         
         rectForChild: function(child) {
             return this._getRect();
-            return this._rect;
         },
         
         scroll: function() {

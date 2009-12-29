@@ -171,7 +171,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
 
         newRect = Rect.create(newRect);
         this._parentRect = newRect;
-        if (newRect.eq(this._rect)) return false;
+        // if (newRect.eq(this._rect)) return false;
         this._rect = this._normalizeRect(newRect);
         this._needsLayout = this._needsLayout || layoutId++;
         return this;
@@ -326,16 +326,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         return newRect;
     };
-    
-    proto._calcRectOnContentResize = function(autosize) {
-        var newSize = this.contentsSize( autosize ),
-            newRect = this.rect().clone();
-        
-        if (autosize & AUTOSIZE_WIDTH) newRect.width = newSize.width;
-        if (autosize & AUTOSIZE_HEIGHT) newRect.height = newSize.height;
-        return newRect;
-    };
-    
     
     uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'], function(index, attr) {
         proto[attr] = function() {

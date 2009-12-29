@@ -113,7 +113,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     };
     
     proto._resizeSelf = function(newRect) {
-        if (newRect.eq(this._rect)) return false;
+        // if (newRect.eq(this._rect)) return false;
         this._rect = this._normalizeRect(newRect);
         return true;
     };
