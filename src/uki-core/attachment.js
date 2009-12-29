@@ -25,7 +25,7 @@ include('view/observable.js');
             self.register(this);
 
             this.layout();
-            this.layout(); // ff needs 2 of them o_O
+            // this.layout(); // ff needs 2 of them o_O
         },
         
         childResized: function() {
@@ -39,7 +39,15 @@ include('view/observable.js');
             return this._rect;
         },
         
+        _getRect: function() {
+            var width = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientWidth, this._dom.offsetWidth || 0) : this._dom.offsetWidth,
+                height = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientHeight, this._dom.offsetHeight || 0) : this._dom.offsetHeight;
+            
+            return new Rect(width, height);
+        },
+        
         rectForChild: function(child) {
+            return this._getRect();
             return this._rect;
         },
         
@@ -62,13 +70,10 @@ include('view/observable.js');
         },
         
         layout: function() {
-            var width = this._dom === root ? getRootElement().clientWidth : this._dom.offsetWidth,
-                height = this._dom === root ? getRootElement().clientHeight : this._dom.offsetHeight,
-                oldRect = this._rect;
+            var oldRect = this._rect;
                 
             // if (rect.eq(this._rect)) return;
-
-            this._rect = new Rect(width, height);
+            this._rect = this._getRect();
 
             this._view.parentResized(oldRect, this._rect);
             if (this._view._needsLayout) this._view.layout();

@@ -76,11 +76,13 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         return true;
     };
     
+    proto._layoutDom = function(rect) {
+        return Base._layoutDom.call(this, rect);
+    };
+    
     proto._recalculateRect = function() {
         if (!this.visible()) return;
-        var relativeOffset = uki.view.offset(this._relativeTo),
-            relativeAttachment = uki.view.top(this._relativeTo),
-            relativeAttachmentOffset = uki.dom.offset(relativeAttachment.dom()),
+        var relativeOffset = uki.dom.offset(this._relativeTo.dom()),
             relativeRect = this._relativeTo.rect(),
             rect = this.rect().clone(),
             attachment = uki.view.top(this),
@@ -90,7 +92,6 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
             hOffset = this._horizontal ? this._offset : 0,
             vOffset = this._horizontal ? 0 : this._offset;
             
-        relativeOffset.offset(relativeAttachmentOffset.x, relativeAttachmentOffset.y);
         relativeOffset.offset(-attachmentOffset.x, -attachmentOffset.y);
 
         if (this._anchors & ANCHOR_RIGHT) {
@@ -100,9 +101,9 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         }
         
         if (this._anchors & ANCHOR_BOTTOM) {
-            position.y = relativeOffset.y + (this._horizontal ? 0 : relativeRect.height) + vOffset;
-        } else {
             position.y = relativeOffset.y + (this._horizontal ? relativeRect.height : 0) - rect.height - vOffset;
+        } else {
+            position.y = relativeOffset.y + (this._horizontal ? 0 : relativeRect.height) + vOffset;
         }
 
         return new Rect(position.x, position.y, rect.width, rect.height);

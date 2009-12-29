@@ -37,7 +37,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
             moreRect = new Rect(rect.width - this._moreWidth, 0, this._moreWidth, rect.height),
             flowML = { view: 'HorizontalFlow', rect: flowRect, anchors: 'left top right', className: 'toolbar-flow', horizontal: true },
             moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  visible: false, backgroundPrefix: 'toolbar-more-', text: '>>', focusable: false },
-            popupML = { view: 'Popup', rect: '0 0', anchors: 'right bottom', className: 'toolbar-popup', background: 'theme(toolbar-popup)', shadow: 'theme(toolbar-popup-shadow)', 
+            popupML = { view: 'Popup', rect: '0 0', anchors: 'right top', className: 'toolbar-popup', background: 'theme(toolbar-popup)', shadow: 'theme(toolbar-popup-shadow)', 
                 childViews: { view: 'VerticalFlow', rect: '0 0', anchors: 'right top left bottom' }
             };
             
