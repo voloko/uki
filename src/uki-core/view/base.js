@@ -91,8 +91,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     
     proto.selectable = function(state) {
-        if (state === undefined) return this._dom.unselectable != 'on';
+        if (state === undefined) return this._selectable;
         
+        this._selectable = state;
         this._dom.unselectable = state ? '' : 'on';
         var style = this._dom.style;
         style.userSelect = state ? 'text' : 'none';

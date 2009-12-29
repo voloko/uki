@@ -113,6 +113,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         this._label = uki.createElement('div', Base.defaultCss + 
             "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
+        this.selectable(this.selectable());
     };
     
     proto._layoutDom = function() {

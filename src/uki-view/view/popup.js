@@ -48,6 +48,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     proto._calcRectOnContentResize = function(autosize) {
         var newSize = this.contentsSize( autosize ),
             newRect = this.rect().clone();
+        
         if (autosize & AUTOSIZE_WIDTH) newRect.width = newSize.width;
         if (autosize & AUTOSIZE_HEIGHT) newRect.height = newSize.height;
         return newRect;
