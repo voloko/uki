@@ -67,23 +67,16 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
             _this._down = true;
         };
         
-        function isWithin (e, elem) {
-            var parent = e.relatedTarget;
-            while ( parent && parent != elem ) {
-                try { parent = parent.parentNode } catch(e) { parent = null };
-            }
-            return parent === elem;
-        }
         var supportMouseEnter = this._dom.attachEvent && !root.opera;
         
         this._mouseover = function(e) {
-            if (!supportMouseEnter && isWithin(e, _this._dom) || _this._over) return;
+            if (!supportMouseEnter && uki.dom.contains(_this._dom, e.relatedTarget) || _this._over) return;
             _this._backgroundByName((_this._down) ? 'down' : 'hover');
             _this._over = true;
         };
         
         this._mouseout = function(e) {
-            if (!supportMouseEnter && isWithin(e, _this._dom) || !_this._over) return;
+            if (!supportMouseEnter && uki.dom.contains(_this._dom, e.relatedTarget) || !_this._over) return;
             _this._backgroundByName('normal');
             _this._over = false;
         };

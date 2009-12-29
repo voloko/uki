@@ -16,7 +16,29 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         });
     };
     
+    proto._createDom = function() {
+        Base._createDom.call(this);
+        this.hideOnClick(true);
+    };
+    
     uki.addProps(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
+    
+    this.hideOnClick = function(state) {
+        if (state === undefined) return this._clickHandler;
+        if (state != !!this._clickHandler) {
+            if (state) {
+                var _this = this;
+                this._clickHandler = function(e) {
+                    if (uki.dom.contains(_this._relativeTo.dom(), e.target)) return;
+                    _this.hide();
+                };
+                uki.dom.bind(root, 'resize mousedown', this._clickHandler);
+            } else {
+                uki.dom.unbind(root, 'resize mousedown', this._clickHandler);
+                this._clickHandler = false;
+            }
+        }
+    };
     
     proto.typeName = function() {
         return 'uki.view.Popup';
@@ -35,7 +57,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         if (!this.parent()) {
             new uki.Attachment( root, this );
         } else {
-            this._recalculateRect();
+            this.rect(this._recalculateRect());
             this.layout(this._rect);
         }
     };
@@ -46,15 +68,6 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     
     proto.parentResized = function() {
         this.rect(this._recalculateRect());
-    };
-    
-    proto._calcRectOnContentResize = function(autosize) {
-        var newSize = this.contentsSize( autosize ),
-            newRect = this.rect().clone();
-        
-        if (autosize & AUTOSIZE_WIDTH) newRect.width = newSize.width;
-        if (autosize & AUTOSIZE_HEIGHT) newRect.height = newSize.height;
-        return newRect;
     };
     
     proto._resizeSelf = function(newRect) {
@@ -94,3 +107,9 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         return new Rect(position.x, position.y, rect.width, rect.height);
     };
 });
+
+uki.each(['show', 'hide', 'toggle'], function(i, name) {
+    uki.fn[name] = function() {
+        this.each(function() { this[name]() });
+    };
+})

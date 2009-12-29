@@ -52,14 +52,6 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this._more.bind('click', function() {
             _this._showMissingButtons();
         });
-        
-        uki.dom.bind(root, 'resize mousedown', function() {
-            _this._popup.hide();
-        });
-        
-        this.bind('resize', function() {
-            _this._popup.hide();
-        })
     };
     
     proto._showMissingButtons = function() {
@@ -77,9 +69,9 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
             })
             return _this._createButton(descr);
         });
-        uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height');
-        uki('Flow', this._popup).layout();
+        uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height').layout();
         this._popup.resizeToContents('width height').toggle();
+        uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height').layout();
     };
     
     proto._updateMoreVisible = function() {

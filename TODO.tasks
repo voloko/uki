@@ -1,13 +1,14 @@
 Core
 ✓ repackage
     ✓ app/uki-* -> src/uki-*
-- remove childResized, move w,h  options to resizeToContents param
-- create dom in constructor, not on first layout
+✓ remove childResized, move w,h  options to resizeToContents param
+✓ create dom in constructor, not on first layout
     ✓ remove all if (this._dom) checks
     ✓ split TextField into MultilineTextField
     ✓ split SplitPane into VerticalSplitPane and HorizontalSplitPane
     ✓ simplify parent()
-- stylable
+- view.Stylable
+- background.Sliced9 with cell backgrounds and repeat (no scaling)
 
 - micro-optimize JS + profile
     ✓ do not call autolayoutSupport

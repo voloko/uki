@@ -39,7 +39,19 @@ uki.dom = {
         } else if (el.currentStyle) {
             return el.currentStyle;
         }
+    },
+    
+    contains: function(parent, child) {
+        try {
+            if (parent.contains) return parent.contains(child);
+            if (parent.compareDocumentPosition) return parent.compareDocumentPosition(child) & 16;
+        } catch (e) {}
+        while ( child && child != parent ) {
+            try { child = child.parentNode } catch(e) { child = null };
+        }
+        return parent == child;
     }
+    
 };
 
 uki.each(['createElement'], function(i, name) {
