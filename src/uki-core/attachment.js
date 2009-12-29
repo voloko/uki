@@ -18,7 +18,7 @@ include('view/observable.js');
             
             view.parent(this);
             
-            if (dom != root) {
+            if (dom != root && dom.tagName != 'BODY') {
                 var computedStyle = dom.runtimeStyle || dom.ownerDocument.defaultView.getComputedStyle(dom, null);
                 if (!computedStyle.position || computedStyle.position == 'static') dom.style.position = 'relative';
             }
@@ -49,12 +49,12 @@ include('view/observable.js');
         
         // TODO: support window scrolling
         scrollTop: function() {
-            return this._dom.scrollTop;
+            return this._dom.scrollTop || 0;
         },
         
         // TODO: support window scrolling
         scrollLeft: function() {
-            return this._dom.scrollLeft;
+            return this._dom.scrollLeft || 0;
         },
         
         parent: function() {
@@ -69,6 +69,7 @@ include('view/observable.js');
             // if (rect.eq(this._rect)) return;
 
             this._rect = new Rect(width, height);
+
             this._view.parentResized(oldRect, this._rect);
             if (this._view._needsLayout) this._view.layout();
             this.trigger('layout', {source: this, rect: this._rect});

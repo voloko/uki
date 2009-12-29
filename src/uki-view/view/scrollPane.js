@@ -136,6 +136,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     proto.resizeToContents = function() {
         initScrollWidth();
         this._updateInnerRect();
+        return this;
     };
     
     proto.rectForChild = function() {

@@ -282,9 +282,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         var oldRect = this.rect(),
             newRect = this._calcRectOnContentResize(autosize);
-        if (newRect.eq(oldRect)) return;
-        this.rect(newRect); // triggers _needsLayout
+        if (newRect.eq(oldRect)) return this;
+        this._rect = this._parentRect = newRect;
+        this._needsLayout = true;
+        return this;
     };
+    
     
     proto.contentsSize = function(autosize) {
         return this.rect();

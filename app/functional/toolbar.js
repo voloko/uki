@@ -13,6 +13,11 @@ uki(
             { text: 'Shorter 2', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 2'},
             { text: 'Shorter 3', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 3'},
             { text: 'Shorter 4', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 4'},
+            { text: 'Shorter 5', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 5'},
+            { text: 'Shorter 1', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 1'},
+            { text: 'Shorter 2', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 2'},
+            { text: 'Shorter 3', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 3'},
+            { text: 'Shorter 4', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 4'},
             { text: 'Shorter 5', icon: '/app/functional/i/icon.png', size: '24 24', name: 'shorter 5'}
         ]}
     ]}

@@ -176,6 +176,8 @@
     uki.theme.airport.backgrounds['button-disabled'] = uki.theme.airport.backgrounds['button-normal'];
     uki.theme.airport.backgrounds['input-focus'] = uki.theme.airport.backgrounds['button-focus'];
     uki.theme.airport.backgrounds['popup-shadow'] = uki.theme.airport.backgrounds['shadow-medium'];
+    uki.theme.airport.backgrounds['toolbar-popup'] = uki.theme.airport.backgrounds['popup-normal'];
+    uki.theme.airport.backgrounds['toolbar-popup-shadow'] = uki.theme.airport.backgrounds['shadow-medium'];
 
     uki.theme.register(uki.theme.airport);
 })();

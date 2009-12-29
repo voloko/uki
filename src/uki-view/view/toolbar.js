@@ -36,12 +36,39 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
             flowRect = rect.clone().normalize(),
             moreRect = new Rect(rect.width - this._moreWidth, 0, this._moreWidth, rect.height),
             flowML = { view: 'HorizontalFlow', rect: flowRect, anchors: 'left top right', className: 'toolbar-flow', horizontal: true },
-            moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  visible: false, backgroundPrefix: 'toolbar-more-', text: '>>', focusable: false };
+            moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  visible: false, backgroundPrefix: 'toolbar-more-', text: '>>', focusable: false },
+            popupML = { view: 'Popup', rect: '0 0', anchors: 'right bottom', className: 'toolbar-popup', background: 'theme(toolbar-popup)', shadow: 'theme(toolbar-popup-shadow)', 
+                childViews: { view: 'VerticalFlow', rect: '0 0', anchors: 'right top left bottom' }
+            };
             
         this._flow = uki.build(flowML)[0];
         this._more = uki.build(moreML)[0];
         this.appendChild(this._flow);
         this.appendChild(this._more);
+        popupML.relativeTo = this._more;
+        this._popup = uki.build(popupML)[0];
+        
+        var _this = this;
+        this._more.bind('click', function() {
+            _this._showMissingButtons();
+        });
+    };
+    
+    proto._showMissingButtons = function() {
+        var maxWith = this._flow.rect().width,
+            currentWidth = 0,
+            missing = [], _this = this;
+        for (var i=0, childViews = this._flow.childViews(), l = childViews.length; i < l; i++) {
+            currentWidth += childViews[i].rect().width;
+            if (currentWidth > maxWith) missing.push(i);
+        };
+        var newButtons = uki.map(missing, function(i) {
+            var descr = { html: childViews[i].html(), backgroundPrefix: 'toolbar-popup-' };
+            return _this._createButton(descr);
+        });
+        uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height');
+        this._popup.resizeToContents('width height').toggle();
+        uki('Flow', this._popup).layout();
     };
     
     proto._updateMoveVisible = function() {
