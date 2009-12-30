@@ -10,6 +10,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     proto.typeName = function() { return 'uki.view.Table'; };
     proto._rowHeight = 17;
     proto._headerHeight = 21;
+    proto.defaultCss = Base.defaultCss + 'overflow:hidden;';
     
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(proto, name, '_list'); });
     
@@ -21,6 +22,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
             this._totalWidth += this._columns[i].width();
         };
         this._list.minSize(new Size(this._totalWidth, 0));
+        this._header.minSize(new Size(this._totalWidth, 0));
         this._header.columns(this._columns);
     });
     
@@ -31,7 +33,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
             headerRect = new Rect(0, 0, this.rect().width, this._headerHeight),
             listML = { view: 'List', rect: listRect, anchors: 'left top bottom right', render: new uki.view.table.Render(this), className: 'table-list' },
             paneML = { view: 'ScrollPane', rect: scrollPaneRect, anchors: 'left top right bottom', scrollableH: true, childViews: [listML], className: 'table-scroll-pane'},
-            headerML = { view: 'table.Header', rect: headerRect, anchors: 'top left right' };
+            headerML = { view: 'table.Header', rect: headerRect, anchors: 'top left right', className: 'table-header' };
             
         uki.each(propertiesToDelegate, function(i, name) { 
             if (this['_' + name] !== undefined) listML[name] = this['_' + name];
@@ -42,6 +44,12 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this._scrollPane.resizeToContents();
         this.appendChild(this._header);
         this.appendChild(this._scrollPane);
+        
+        var _this = this;
+        this._scrollPane.bind('scroll', function() {
+            // this is kinda wrong but faster than colling rect() + layout()
+            _this._header.dom().style.left = -_this._scrollPane.scrollLeft() + 'px'; 
+        });
     };
     
     
