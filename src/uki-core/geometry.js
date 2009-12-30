@@ -2,24 +2,61 @@ include('uki.js');
 
 var geometry = uki.geometry = {};
 
+
+/**
+ * Point with x and y properties
+ *
+ * @author voloko
+ * @class uki.geometry.Point
+ * @constructor
+ *
+ * @param {Integer=} x defaults to 0
+ * @param {Integer=} y defaults to 0
+ */
 var Point = geometry.Point = function(x, y) {
     this.x = x || 0.0;
     this.y = y || 0.0;
 };
 
 Point[PROTOTYPE] = {
+    
+    /**
+     * Converts to "100 50" string
+     *
+     * @this {uki.geometry.Point}
+     * @return {String}
+     */
     toString: function() {
         return this.x + ' ' + this.y;
     },
     
+    /**
+     * Creates a new Point with the same properites
+     *
+     * @this {uki.geometry.Point}
+     * @return {uki.geometry.Point}
+     */
     clone: function() {
         return new Point(this.x, this.y);
     },
     
+    /**
+     * Checks if this equals to another Point
+     *
+     * @param {uki.geometry.Point} point Point to compare with
+     * @this {uki.geometry.Point}
+     * @return {Boolean}
+     */
     eq: function(point) {
         return this.x == point.x && this.y == point.y;
     },
     
+    /**
+     * Moves point by x, y
+     *
+     * @this {uki.geometry.Point}
+     * @return {uki.geometry.Point} self
+     */
     offset: function(x, y) {
         this.x += x;
         this.y += y;
@@ -29,31 +66,72 @@ Point[PROTOTYPE] = {
     constructor: Point
 };
 
+/**
+ * Creates point from "x y" string
+ * x and y may have optional units=px specified: Point.fromString("20% 10px")
+ *
+ * @param {String} string String representation of point
+ * @param {uki.geometry.Size=} relative Relative size to calculate % values
+ *
+ * @returns {uki.geometry.Point} created point
+ */
 Point.fromString = function(string, relative) {
     var parts = string.split(/\s+/);
     return new Point( unitsToPx(parts[0], relative && relative.width), unitsToPx(parts[1], relative && relative.height) );
 };
 
 
-
+/**
+ * Size with width and height properties
+ *
+ * @param {Number=} width defaults to 0
+ * @param {Number=} height defaults to 0
+ * @class uki.geometry.Size
+ * @constructor
+ */
 var Size = geometry.Size = function(width, height) {
     this.width  = width ||  0.0;
     this.height = height || 0.0;
 };
 
 Size[PROTOTYPE] = {
+    /**
+     * Converts size to "300 100" string
+     *
+     * @this {uki.geometry.Size}
+     * @return {String} 
+     */
     toString: function() {
         return this.width + ' ' + this.height;
     },
     
+    /**
+     * Creates a new Size with same properties
+     *
+     * @this {uki.geometry.Size}
+     * @return {uki.geometry.Size} new Size
+     */
     clone: function() {
         return new Size(this.width, this.height);
     },
     
-    eq: function(rect) {
-        return this.width == rect.width && this.height == rect.height;
+    /**
+     * Checks if this equals to another Size
+     *
+     * @param {uki.geometry.Size} size Size to compare with
+     * @this {uki.geometry.Size}
+     * @return {Boolean}
+     */
+    eq: function(size) {
+        return this.width == size.width && this.height == size.height;
     },
     
+    /**
+     * Checks if this size has non-positive width or height
+     *
+     * @this {uki.geometry.Size}
+     * @return {Boolean}
+     */
     empty: function() {
         return this.width <= 0 || this.height <= 0;
     },
@@ -61,11 +139,31 @@ Size[PROTOTYPE] = {
     constructor: Size
 };
 
+/**
+ * Creates size from "width height" string
+ * x and y may have optional units=px specified: Size.fromString("20% 10px")
+ *
+ * @param {String} string String representation of size
+ * @param {uki.geometry.Size=} relative Relative size to calculate % values
+ *
+ * @returns {uki.geometry.Size} created size
+ */
 Size.fromString = function(string, relative) {
     var parts = string.split(/\s+/);
     return new Size( unitsToPx(parts[0], relative && relative.width), unitsToPx(parts[1], relative && relative.height) );
 };
 
+/**
+ * Creates size from different representations
+ * - if no params given returns null
+ * - if uki.geometry.Size given returns it
+ * - if "200 300" string converts it to size
+ * - if two params given creates size from them
+ *
+ * @param {...String|Number|uki.geometry.Size} var_args Size representation
+ *
+ * @returns {uki.geometry.Size} created size
+ */
 Size.create = function(a1, a2) {
     if (a1 === undefined) return null;
     if (a1.width !== undefined) return a1;
@@ -74,7 +172,18 @@ Size.create = function(a1, a2) {
 };
 
 
-
+/**
+ * Rectangle with x, y, width and height properties
+ * May be used as uki.geometry.Point or uki.geometry.Size
+ * - if 4 arguments given creates size with x,y,width,height set to the given arguments
+ * - if 2 number arguments given creates size with x = y = 0 and width and height set
+ *   set to the given arguments
+ * - if a Point and a Size given creates rect with point as an origin and given size
+ *
+ * @param {...Number|uki.geometry.Point|uki.geometry.Size} var_args
+ * @class uki.geometry.Rect
+ * @constructor
+ */
 var Rect = geometry.Rect = function(a1, a2, a3, a4) {
     if (a3 !== undefined) {
         this.x      = a1;
@@ -95,57 +204,134 @@ var Rect = geometry.Rect = function(a1, a2, a3, a4) {
 };
 
 Rect[PROTOTYPE] = {
+    /**
+     * Converts Rect to "x y width height" string
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {String}
+     */
     toString: function() {
         return [this.x, this.y, this.width, this.height].join(' ');
     },
     
+    /**
+     * Converts Rect to "x y maxX maxY" string
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {String}
+     */
     toCoordsString: function() {
         return [this.x, this.y, this.maxX(), this.maxY()].join(' ');
     },
     
+    /**
+     * Creates a new Rect with same properties
+     *
+     * @this {uki.geometry.Size}
+     * @return {uki.geometry.Size} new Size
+     */
     clone: function() {
         return new Rect(this.x, this.y, this.width, this.height);
     },
     
-    minX: function(val) {
-        if (typeof val != 'undefined') this.x = val;
+    /**
+     * Equals to .x
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {Number}
+     */
+    minX: function() {
         return this.x;
     },
     
+    /**
+     * Equals to x + width
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {Number}
+     */
     maxX: function() {
         return this.x + this.width;
     },
     
+    /**
+     * Point between minX and maxX
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {Number}
+     */
     midX: function() {
         return this.x + this.width / 2.0;
     },
     
-    minY: function(val) {
-        if (typeof val != 'undefined') this.y = val;
+    /**
+     * Equals to .y
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {Number}
+     */
+    minY: function() {
         return this.y;
     },
     
+    /**
+     * Point between minY and maxY
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {Number}
+     */
     midY: function() {
         return this.y + this.height / 2.0;
     },
     
+    /**
+     * Equals to y + height
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {Number}
+     */
     maxY: function() {
         return this.y + this.height;
     },
     
+    /**
+     * Moves origin to 0,0 point
+     *
+     * @this {uki.geometry.Rect}
+     * @returns {uki.geometry.Point} self
+     */
     normalize: function() {
         this.x = this.y = 0;
         return this;
     },
     
-    empty: function() {
-        return this.width <= 0.0 || this.height <= 0.0;
-    },
+    /**
+     * Checks if this rect has non-positive width or height
+     *
+     * @this {uki.geometry.Rect}
+     * @return {Boolean}
+     */
+    empty: Size[PROTOTYPE].empty,
     
+    /**
+     * Checks if this equals to another Rect
+     *
+     * @param {uki.geometry.Rect} rect Rect to compare with
+     * @this {uki.geometry.Rect}
+     * @return {Boolean}
+     */
     eq: function(rect) {
         return rect && this.x == rect.x && this.y == rect.y && this.height == rect.height && this.width == rect.width;
     },
     
+    /**
+     * Insets size with dx and dy
+     *
+     * @param {Number} dx
+     * @param {Number} dy
+     * @this {uki.geometry.Rect}
+     * @returns {uki.geometry.Rect} sefl
+     */
     inset: function(dx, dy) {
         this.x += dx;
         this.y += dy;
@@ -154,8 +340,21 @@ Rect[PROTOTYPE] = {
         return this;
     },
     
+    /**
+     * Moves origin point by x, y
+     *
+     * @this {uki.geometry.Rect}
+     * @return {uki.geometry.Rect} self
+     */
     offset: Point[PROTOTYPE].offset,
     
+    /**
+     * Intersects this with given rect
+     *
+     * @this {uki.geometry.Rect}
+     * @param {uki.geometry.Rect} rect Rect to intersect with
+     * @returns {uki.geometry.Rect} intersection
+     */
     intersection: function(rect) {
         var origin = new Point(
                 MAX(this.x, rect.x),
@@ -168,6 +367,13 @@ Rect[PROTOTYPE] = {
         return size.empty() ? new Rect() : new Rect(origin, size);
     },
     
+    /**
+     * Union rect of this and given rect
+     *
+     * @this {uki.geometry.Rect}
+     * @param {uki.geometry.Rect} rect
+     * @returns {uki.geometry.Rect} union
+     */
     union: function(rect) {
         return Rect.fromCoords(
             MIN(this.x, rect.x),
@@ -177,6 +383,13 @@ Rect[PROTOTYPE] = {
         );
     },
     
+    /**
+     * Checks if point is within this
+     *
+     * @this {uki.geometry.Rect}
+     * @param {uki.geometry.Point} point
+     * @returns {Boolean}
+     */
     containsPoint: function(point) {
         return point.x >= this.minX() &&
                point.x <= this.maxX() &&
@@ -184,6 +397,13 @@ Rect[PROTOTYPE] = {
                point.y <= this.maxY();    
     },
     
+    /**
+     * Checks if this contains given rect
+     *
+     * @this {uki.geometry.Rect}
+     * @param {uki.geometry.Rect} rect
+     * @returns {Boolean}
+     */
     containsRect: function(rect) {
         return this.eq(this.union(rect));
     },
@@ -194,6 +414,15 @@ Rect[PROTOTYPE] = {
 Rect[PROTOTYPE].left = Rect[PROTOTYPE].minX;
 Rect[PROTOTYPE].top  = Rect[PROTOTYPE].minY;
 
+/**
+ * Creates Rect from minX, minY, maxX, maxY
+ *
+ * @param {Number} minX
+ * @param {Number} maxX
+ * @param {Number} minY
+ * @param {Number} maxY
+ * @returns {uki.geometry.Rect}
+ */
 Rect.fromCoords = function(minX, minY, maxX, maxY) {
     if (maxX === undefined) {
         return new Rect(
@@ -206,6 +435,13 @@ Rect.fromCoords = function(minX, minY, maxX, maxY) {
     return new Rect(minX, minY, maxX - minX, maxY - minY);
 };
 
+/**
+ * Creates Rect from "minX minY maxX maxY" string
+ *
+ * @param {String} string
+ * @param {uki.geometry.Size=} relative Relative size to calculate % values
+ * @returns {uki.geometry.Rect}
+ */
 Rect.fromCoordsString = function(string, relative) {
     var parts = string.split(/\s+/);
     return Rect.fromCoords( 
@@ -216,6 +452,13 @@ Rect.fromCoordsString = function(string, relative) {
     ) ;
 };
 
+/**
+ * Creates Rect from "x y width height" or "width height" string
+ *
+ * @param {String} string
+ * @param {uki.geometry.Size=} relative Relative size to calculate % values
+ * @returns {uki.geometry.Rect}
+ */
 Rect.fromString = function(string, relative) {
     var parts = string.split(/\s+/);
     
@@ -231,6 +474,17 @@ Rect.fromString = function(string, relative) {
     ) ;
 };
 
+/**
+ * Creates rect from different representations
+ * - if no params given returns null
+ * - if uki.geometry.Rect given returns it
+ * - if "200 300" or "0 10 200 300" string converts it to rect
+ * - if two or four params given creates rect from them
+ *
+ * @param {...String|Number|uki.geometry.Rect} var_args Rect representation
+ *
+ * @returns {uki.geometry.Rect} created size
+ */
 Rect.create = function(a1, a2, a3, a4) {
     if (a1 === undefined) return null;
     if (a1.x !== undefined) return a1;
@@ -240,6 +494,18 @@ Rect.create = function(a1, a2, a3, a4) {
 };
 
 
+/**
+ * Inset with top, right, bottom and left properties
+ * - if no params given top = right = bottom = left = 0
+ * - if two params given top = bottom and right = left
+ *
+ * @param {Number=} top
+ * @param {Number=} right
+ * @param {Number=} bottom
+ * @param {Number=} left
+ * @class uki.geometry.Rect
+ * @constructor
+ */
 var Inset = geometry.Inset = function(top, right, bottom, left) {
     this.top    = top   || 0;
     this.right  = right || 0;
@@ -248,31 +514,73 @@ var Inset = geometry.Inset = function(top, right, bottom, left) {
 };
 
 Inset[PROTOTYPE] = {
+    /**
+     * Converts Inset to "top right bottom left" string
+     *
+     * @returns {String}
+     */
     toString: function() {
         return [this.top, this.right, this.bottom, this.left].join(' ');
     },
     
+    /**
+     * Creates a new Inset with same properties
+     *
+     * @this {uki.geometry.Inset}
+     * @return {uki.geometry.Inset} new Inset
+     */
     clone: function() {
         return new Inset(this.top, this.right, this.bottom, this.left);
     },
     
+    /**
+     * left + right
+     *
+     * @this {uki.geometry.Inset}
+     * @return {Number}
+     */
     width: function() {
         return this.left + this.right;
     },
     
+    /**
+     * top + bottom
+     *
+     * @this {uki.geometry.Inset}
+     * @return {Number}
+     */
     height: function() {
         return this.top + this.bottom;
     },
     
+    /**
+     * True if any property < 0
+     *
+     * @this {uki.geometry.Inset}
+     * @return {Boolean}
+     */
     negative: function() {
         return this.top < 0 || this.left < 0 || this.right < 0 || this.bottom < 0;
     },
     
+    /**
+     * True if all properties = 0
+     *
+     * @this {uki.geometry.Inset}
+     * @return {Boolean}
+     */
     empty: function() {
         return !this.top && !this.left && !this.right && !this.bottom;
     }
 };
 
+/**
+ * Creates Rect from "top right bottom left" or "top right" string
+ *
+ * @param {String} string
+ * @param {uki.geometry.Size=} relative Relative size to calculate % values
+ * @returns {uki.geometry.Inset}
+ */
 Inset.fromString = function(string, relative) {
     var parts = string.split(/\s+/);
     if (parts.length < 3) parts[2] = parts[0];
@@ -286,6 +594,17 @@ Inset.fromString = function(string, relative) {
     );
 };
 
+/**
+ * Creates rect from different representations
+ * - if no params given returns null
+ * - if uki.geometry.Inset given returns it
+ * - if "200 300" or "0 10 200 300" string converts it to inset
+ * - if two or four params given creates inset from them
+ *
+ * @param {...String|Number|uki.geometry.Inset} var_args Rect representation
+ *
+ * @returns {uki.geometry.Inset} created inset
+ */
 Inset.create = function(a1, a2, a3, a4) {
     if (a1 === undefined) return null;
     if (a1.top !== undefined) return a1;
