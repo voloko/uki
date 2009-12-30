@@ -20,6 +20,8 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
             this._columns[i].position(i);
             this._totalWidth += this._columns[i].width();
         };
+        this._list.minSize(new Size(this._totalWidth, 0));
+        this._header.columns(this._columns);
     });
     
     proto._createDom = function() {
@@ -27,9 +29,9 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         var scrollPaneRect = new Rect(0, this._headerHeight, this.rect().width, this.rect().height - this._headerHeight),
             listRect = scrollPaneRect.clone().normalize(),
             headerRect = new Rect(0, 0, this.rect().width, this._headerHeight),
-            listML = { view: 'List', minSize: new Size(this._totalWidth+20, 0), rect: listRect, anchors: 'left top bottom right', render: new uki.view.table.Render(this), className: 'table-list' },
+            listML = { view: 'List', rect: listRect, anchors: 'left top bottom right', render: new uki.view.table.Render(this), className: 'table-list' },
             paneML = { view: 'ScrollPane', rect: scrollPaneRect, anchors: 'left top right bottom', scrollableH: true, childViews: [listML], className: 'table-scroll-pane'},
-            headerML = { view: 'Label', rect: headerRect, text: 'todo: header should be here', inset: '2 0 0 10', anchors: 'top left', fontWeight: 'bold' };
+            headerML = { view: 'table.Header', rect: headerRect, anchors: 'top left right' };
             
         uki.each(propertiesToDelegate, function(i, name) { 
             if (this['_' + name] !== undefined) listML[name] = this['_' + name];
@@ -47,3 +49,4 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
 
 include('table/render.js');
 include('table/column.js');
+include('table/header.js');

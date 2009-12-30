@@ -67,25 +67,18 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         };
     });
     
-    proto.inset = function(inset) {
-        if (inset === undefined) return this._inset;
+    proto.inset = uki.newProp('_inset', function(inset) {
         this._inset = Inset.create(inset);
-        return this;
-    };
+    });
 
-    proto.scrollable = function(state) {
-        if (state === undefined) return this._scrollable;
+    proto.scrollable = uki.newProp('_scrollable', function(state) {
         this._scrollable = state;
         this._label.style.overflow = state ? 'auto' : 'hidden';
-        return this;
-    };
+    });
     
-    proto.multiline = function(state) {
-        if (state === undefined) return this._label.style.whiteSpace != 'nowrap';
+    proto.multiline = uki.newProp('_multiline', function(state) {
         this._label.style.whiteSpace = state ? '' : 'nowrap';
-        // this._label.style.lineHeight = state ? '' : this._rect.height + 'px';
-        return this;
-    };
+    });
     
     proto._createLabelClone = function(autosize) {
         var clone = this._label.cloneNode(true),
@@ -121,7 +114,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         
         var inset = this._inset;
         if (!this.multiline()) {
-            var fz = parseInt(this._css('fontSize')) || 12;
+            var fz = parseInt(this._css('fontSize'), 10) || 12;
             this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
             // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
         }
