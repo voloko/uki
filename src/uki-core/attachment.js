@@ -5,11 +5,25 @@ include('geometry.js');
 include('view/observable.js');
 
 (function() {
+    
     var self = uki.Attachment = uki.newClass(uki.view.Observable, {
-        init: function( dom, view, rect, options ) {
+        /**
+         * Attachment serves as a connection between a uki view and a dom container.
+         * It notifies its view with parentResized on window resize. 
+         * Attachment supports part of uki.view.Base API like #domForChild or #rectForChild
+         *
+         * @param {Element} dom Container element
+         * @param {uki.view.Base} view Attached view
+         * @param {uki.geometry.Rect} rect Initial size
+         *
+         * @see uki.view.Base#parentResized
+         * @class uki.Attachment
+         * @base uki.view.Observable
+         * @constructor
+         */
+        init: function( dom, view, rect ) {
             uki.initNativeLayout();
             
-            options = options || {};
             this._dom     = dom = dom || root;
             this._view    = view;
             this._rect = Rect.create(rect) || new Rect(1000, 1000);
@@ -25,49 +39,60 @@ include('view/observable.js');
             self.register(this);
 
             this.layout();
-            // this.layout(); // ff needs 2 of them o_O
         },
         
-        childResized: function() {
-        },
-        
+        /**
+         * Returns document.body if attached to window. Otherwise returns dom
+         * uki.view.Base api
+         *
+         * @return {Element}
+         */
         domForChild: function() {
             return this._dom === root ? doc.body : this._dom;
         },
         
-        rect: function() {
-            return this._rect;
-        },
-        
-        _getRect: function() {
-            var width = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientWidth, this._dom.offsetWidth || 0) : this._dom.offsetWidth,
-                height = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientHeight, this._dom.offsetHeight || 0) : this._dom.offsetHeight;
-            
-            return new Rect(width, height);
-        },
-        
+        /**
+         * uki.view.Base api
+         *
+         * @return {uki.geometry.Rect}
+         */
         rectForChild: function(child) {
             return this._getRect();
         },
         
+        /**
+         * uki.view.Base api
+         */
         scroll: function() {
             // TODO: support window scrolling
         },  
         
-        // TODO: support window scrolling
+        /**
+         * uki.view.Base api
+         */
         scrollTop: function() {
+            // TODO: support window scrolling
             return this._dom.scrollTop || 0;
         },
         
-        // TODO: support window scrolling
+        /**
+         * uki.view.Base api
+         */
         scrollLeft: function() {
+            // TODO: support window scrolling
             return this._dom.scrollLeft || 0;
         },
         
+        /**
+         * uki.view.Base api
+         */
         parent: function() {
             return null;
         },
         
+        /**
+         * On window resize resizes and laysout its child view
+         */
         layout: function() {
             var oldRect = this._rect;
                 
@@ -79,12 +104,29 @@ include('view/observable.js');
             this.trigger('layout', {source: this, rect: this._rect});
         },
         
+        /**
+         * @return {Element} Container dom
+         */
         dom: function() {
             return this._dom;
         },
         
+        /**
+         * @return {Element} Child view
+         */
         view: function() {
             return this._view;
+        },
+        
+        /**
+         * @private
+         * @return {uki.geometry.Rect} Size of the container
+         */
+        _getRect: function() {
+            var width = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientWidth, this._dom.offsetWidth || 0) : this._dom.offsetWidth,
+                height = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientHeight, this._dom.offsetHeight || 0) : this._dom.offsetHeight;
+            
+            return new Rect(width, height);
         }
     });
     
