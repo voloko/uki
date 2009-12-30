@@ -135,13 +135,13 @@ results in http://ukijs.org/functional/splitPaneEx.html
       function() { alert(this.text()); }
     );
 
-    uki({ view: 'SplitPane', rect: '1000 600', autosize: 'width height', anchors: 'left top right bottom', 
+    uki({ view: 'SplitPane', rect: '1000 600', anchors: 'left top right bottom', 
         handlePosition: 300, autogrowLeft: false, leftMin: 300, rightMin: 300,
-        leftChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left right', text: 'left pane', autosize: 'width' },
+        leftChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left right', text: 'left pane' },
         rightChildViews: [
-            { view: 'SplitPane', rect: '693 600', autosize: 'width height', anchors: 'left top right bottom', vertical: true,
+            { view: 'SplitPane', rect: '693 600', anchors: 'left top right bottom', vertical: true,
                 topChildViews: { view: 'Button', rect: '10 10 280 24', anchors: 'top left', text: 'top pane' },
-                bottomChildViews: { view: 'Slider', rect: '10 10 673 24', anchors: 'top right left', autosize: 'width' }
+                bottomChildViews: { view: 'Slider', rect: '10 10 673 24', anchors: 'top right left' }
             }
         ]
     }).attachTo( window, '1000 600' );

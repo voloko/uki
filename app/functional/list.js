@@ -3,13 +3,13 @@ for (var i=3; i < 30000; i++) {
     data[i] = 'item #' + (i+1);
 };
 var p = uki(
-    { view: 'SplitPane', rect: '1000 600', anchors: 'top left right bottom', autosize: 'width height', handleWidth: 1,
+    { view: 'SplitPane', rect: '1000 600', anchors: 'top left right bottom', handleWidth: 1,
         leftMin: 200, rightMin: 400, handlePosition: 200,
         leftChildViews: [
-            { view: 'ScrollPane', rect: '200 600', autosize: 'width height', anchors: 'top left right bottom', 
-                childViews: { view: 'Box', rect: '10 10 180 900002', autosize: 'width', anchors: 'top left right', background: '#CCC',
+            { view: 'ScrollPane', rect: '200 600', anchors: 'top left right bottom', 
+                childViews: { view: 'Box', rect: '10 10 180 900002', anchors: 'top left right', background: '#CCC',
                     childViews: [
-                        { view: 'List', rect: '1 1 178 900000', autosize: 'width', anchors: 'top left right', 
+                        { view: 'List', rect: '1 1 178 900000', anchors: 'top left right', 
                             data: data, rowHeight: 30, id: 'list', throttle: 0 }
                     ]
                 }
@@ -32,7 +32,7 @@ var p = uki(
             { view: 'Button', rect: '350 70 100 24', anchors: 'left top', id: 'add-s', text: 'add to list 2' },
             { view: 'Button', rect: '550 70 100 24', anchors: 'left top', id: 'remove-s', text: 'remove list 2' },
             { view: 'ScrollPane', rect: '350 100 300 270', anchors: 'left top', childViews: [
-                { view: 'List', rect: '0 0 300 270', anchors: 'left top rigth', autosize: 'width', minSize: '0 300', data: ['sample #1', 'sample #2', 'sample #3', 'sample #4'], id: 'list2' }
+                { view: 'List', rect: '0 0 300 270', anchors: 'left top rigth', minSize: '0 300', data: ['sample #1', 'sample #2', 'sample #3', 'sample #4'], id: 'list2' }
             ]}
             
         ]

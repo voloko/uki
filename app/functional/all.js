@@ -9,14 +9,14 @@ function elements() {
         { view: 'TextField',rect: '400 10 100 24',         anchors: 'left top', value: "Small input", placeholder: 'text' },
         { view: 'Button',   rect: '510px 10px 200px 24px', anchors: 'left top', text: 'button without focus!', focusable: false },
         { view: 'TextField',rect: '820 10 100 34',         anchors: 'right top', value: "Big input" },
-        { view: 'Slider',   rect: '400 45 310px 24px',     anchors: 'right top left', autosize: 'width' }
+        { view: 'Slider',   rect: '400 45 310px 24px',     anchors: 'right top left width' }
     ];
 }
 
 uki(
-    { view: 'Box', rect: '0 0 1000px 300px', anchors: 'top left right', autosize: 'width', childViews: [
-        { view: 'Box', background: 'theme(panel)', rect: '0 0 1000px 100px',     anchors: 'top left right', autosize: 'width', childViews: elements() },
-        { view: 'Box',  rect: '0 150px 1000px 100px', anchors: 'top left right', autosize: 'width', childViews: elements() }
+    { view: 'Box', rect: '0 0 1000px 300px', anchors: 'top left right width', childViews: [
+        { view: 'Box', background: 'theme(panel)', rect: '0 0 1000px 100px',     anchors: 'top left right width', childViews: elements() },
+        { view: 'Box',  rect: '0 150px 1000px 100px', anchors: 'top left right width', childViews: elements() }
     ]}
 ).attachTo( document.getElementById('test'), '1000 300' );
 

@@ -8,13 +8,13 @@ function buildPanel (top) {
     var panel = uki.build({
         view: 'Base',
         rect: new uki.geometry.Rect(0, top, d.rect().width, 79),
-        anchors: 'left top right', autosize: 'width',
+        anchors: 'left top right',
         childViews: [
             {
                 view: new Label(),
                 name: 'phrase',
                 rect: '10px 10px -510px 60px',
-                anchors: 'left top right', autosize: 'width',
+                anchors: 'left top right',
                 text: 'обмен валюты -крон -лиговский -лучший -продавать -заработать -санкт -спб -электронный -мир -выгодный -петербург -продажа -москва -льготный -центр -наличный -сбербанк -заработок -оптовый -табло -курс -банк -круглосуточный -доллар -фунт -пункт'
             },
             {

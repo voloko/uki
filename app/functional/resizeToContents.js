@@ -1,5 +1,5 @@
 uki({
-    view: 'Box', rect: '1000 600', anchors: 'left right bottom top', autosize: 'width height', background: '#CCF',
+    view: 'Box', rect: '1000 600', anchors: 'left right bottom top', background: '#CCF',
     childViews: [
         {view: 'Box', rect: '790 390 200 200', anchors: 'right bottom', background: '#CCC', childViews: 
             { view: 'Label', rect: '200 200', anchors: 'top left rigth', multiline: 'true',

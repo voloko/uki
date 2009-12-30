@@ -1,5 +1,5 @@
 uki({ view: 'Flow', rect: '10 10 100 0', anchors: 'left top', background: '#CCC', className: 'flow', childViews: [
-    { view: 'Label', rect: '0 0 100 100', anchors: 'left top', inset: '1 5', autosizeToContents: 'height', multiline: true, html: '<a href="#">Link 1</a>' }
+    { view: 'Label', rect: '0 0 100 100', anchors: 'left top', inset: '1 5', multiline: true, html: '<a href="#">Link 1</a>' }
 ]}).attachTo(window, '100 100');
 
 uki({ view: 'HorizontalFlow', rect: '120 10 0 100', anchors: 'left top', background: '#CCC', horizontal: true, className: 'flow', childViews: [

@@ -84,12 +84,11 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     proto._createDom = function() {
         this._dom = uki.createElement('div', Base.defaultCss);
         for (var i=0, paneML; i < 2; i++) {
-            paneML = { view: 'Container', autosize: 'width height' };
+            paneML = { view: 'Container' };
             paneML.anchors = i == 1         ? 'left top bottom right' :
                              this._vertical ? 'left top right' :
                                               'left top bottom';
             paneML.rect = i == 0 ? this._leftRect() : this._rightRect();
-            paneML.autosize = 'width height';
             this._panes[i] = uki.build(paneML)[0];
             this.appendChild(this._panes[i]);
         };

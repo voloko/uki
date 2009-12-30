@@ -215,14 +215,14 @@ tools.imageCutter._loadImage = function (url, callback) {
 
 tools.imageCutter.build = function() {
     var p = uki(
-        { view: 'Box', rect: '0 0 400 400', anchors: 'top left right bottom', autosize: 'width height', background: '#EFEFEF',
+        { view: 'Box', rect: '0 0 400 400', anchors: 'top left right bottom', background: '#EFEFEF',
             childViews: [
-                { view: 'Box', rect: '0 0 400 80', anchors: 'top left right', background: 'theme(panel)', autosize: 'width',
+                { view: 'Box', rect: '0 0 400 80', anchors: 'top left right', background: 'theme(panel)',
                     childViews: [
                         { view: 'Label', rect: '10 10 50 22', anchors: 'left top', align: 'right', text: 'URL:' },
-                        { view: 'TextField', coords: '70 10 380 32',  anchors: 'top left right', autosize: 'width', 
+                        { view: 'TextField', coords: '70 10 380 32',  anchors: 'top left right', 
                             value: '/src/uki-theme/airport/i/button/normal.png', name: 'url' },
-                        { view: 'Box', coords: '60 32 390 78', anchors: 'left rigth top', autosize: 'width',
+                        { view: 'Box', coords: '60 32 390 78', anchors: 'left rigth top',
                             childViews: [
                                 { view: 'TextField', rect: '10 10 50 22', anchors: 'top left', name: 'top', placeholder: 'top', value: '3' },
                                 { view: 'TextField', rect: '70 10 50 22', anchors: 'top left', name: 'right', placeholder: 'right', value: '3' },
@@ -235,7 +235,7 @@ tools.imageCutter.build = function() {
                         { view: 'Button', rect: '280 42 100 22', anchors: 'top right', text: 'Cut', name: 'cut' }                
                     ]
                 },
-                { view: 'Label', coords: '20 90 380 380', anchors: 'top left right bottom', autosize: 'width height', 
+                { view: 'Label', coords: '20 90 380 380', anchors: 'top left right bottom', 
                     name: 'result', scrollable: true, selectable: true, multiline: true, 
                     background: 'cssBox(background:white;border:1px solid #CCC)', inset: '1 1 0 1' }
             ]

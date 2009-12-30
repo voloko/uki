@@ -3,8 +3,7 @@ var b = uki.build({
     rect: '0 0 1000px 1000px',
     childViews: [{
         view: 'Label',
-        rect: '300px 100px 400px 28px', anchors: "top",
-        autosize: 'width',
+        rect: '300px 100px 400px 28px', anchors: "top width",
         text: 'uki is awesome!',
         align: 'center'
     }]

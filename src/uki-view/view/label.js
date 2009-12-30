@@ -85,13 +85,13 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         var clone = this._label.cloneNode(true),
             inset = this.inset(), rect = this.rect();
             
-        if (autosize & AUTOSIZE_WIDTH) {
+        if (autosize & ANCHOR_WIDTH) {
             clone.style.width = clone.style.right = '';
         } else if (uki.supportNativeLayout) {
             clone.style.right = '';
             clone.style.width = rect.width - inset.width() + 'px';
         }
-        if (autosize & AUTOSIZE_HEIGHT) {
+        if (autosize & ANCHOR_HEIGHT) {
             clone.style.height = clone.style.bottom = '';
         } else if (uki.supportNativeLayout) {
             clone.style.bottom = '';
