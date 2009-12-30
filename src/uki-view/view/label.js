@@ -77,6 +77,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     });
     
     proto.multiline = uki.newProp('_multiline', function(state) {
+        this._multiline = state;
         this._label.style.whiteSpace = state ? '' : 'nowrap';
     });
     
