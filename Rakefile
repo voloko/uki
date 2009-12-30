@@ -18,7 +18,7 @@ end
 
 def read_version
   base = File.dirname(__FILE__)
-  File.read(File.join(base, 'src', 'uki-core', 'uki.js')).match(%r{uki.version\s*=\s*'([0-9.]+)'})[1]
+  File.read(File.join(base, 'src', 'uki-core', 'uki.js')).match(%r{uki.version\s*=\s*'([^']+)'})[1]
 end
 
 desc "Run thin"

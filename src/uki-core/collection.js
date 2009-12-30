@@ -25,8 +25,7 @@ include('attachment.js');
     /**
      * Iterates trough all items within itself
      * @param {Function} callback Callback to call for every item
-     * @returns self
-     * @type uki.view.Collection
+     * @returns {uki.view.Collection} self
      */
     self.each = function( callback ) {
         uki.each( this, callback );
@@ -36,8 +35,7 @@ include('attachment.js');
     /**
      * Creates a new uki.Collection populated with found items
      * @param {Function} callback Callback to call for every item
-     * @returns created collection
-     * @type uki.view.Collection
+     * @returns {uki.view.Collection} created collection
      */
     self.grep = function( callback ) {
         return new uki.Collection( uki.grep(this, callback) );
@@ -51,8 +49,7 @@ include('attachment.js');
      *
      * @param {String} name Name of the attribute
      * @param {Object} value [optional] Value to set
-     * @returns Self or attribute value
-     * @type uki.view.Collection|Object
+     * @returns {uki.view.Collection|Object} Self or attribute value
      */
     self.attr = function( name, value ) {
         if (value !== undefined) {
@@ -71,8 +68,7 @@ include('attachment.js');
      *   c.find('Button')
      *
      * @param {String} selector 
-     * @returns Collection of found items
-     * @type uki.view.Collection
+     * @returns {uki.view.Collection} Collection of found items
      */
     self.find = function( selector ) {
         return uki.find( selector, this );
@@ -83,8 +79,7 @@ include('attachment.js');
      *
      * @param {Element} dom Container dom element
      * @param {uki.geometry.Rect} rect Default size
-     * @returns self
-     * @type uki.view.Collection
+     * @returns {uki.view.Collection} self
      */
     self.attachTo = function( dom, rect ) {
         this.each(function() {
@@ -96,9 +91,8 @@ include('attachment.js');
     /**
      * Appends views to the first item in collection
      *
-     * @param {Array of uki.view.Base} views Views to append
-     * @returns self
-     * @type uki.view.Collection
+     * @param {Array.<uki.view.Base>} views Views to append
+     * @returns {uki.view.Collection} self
      */
     self.append = function( views ) {
         if (!this[0]) return this;

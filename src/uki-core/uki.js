@@ -11,7 +11,7 @@ root.uki = function(val, context) {
     if (val.length > 0 && uki.isFunction(val[0].typeName)) return new uki.Collection(val);
     return uki.build(val);
 };
-uki.version = '0.0.3';
+uki.version = '0.0.3b';
 
 uki.F = function() { return false; };
 uki._ids = {};

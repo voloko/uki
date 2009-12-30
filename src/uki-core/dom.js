@@ -2,8 +2,6 @@ include('const.js');
 include('uki.js');
 include('utils.js');
 
-(function() {
- 
 uki.dom = {
     guid: 1,
     
@@ -57,5 +55,3 @@ uki.dom = {
 uki.each(['createElement'], function(i, name) {
     uki[name] = uki.dom[name];
 });
-
-})();

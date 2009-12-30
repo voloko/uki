@@ -57,7 +57,7 @@ include('view/observable.js');
          * @type uki.geometry.Rect
          */
         rectForChild: function(child) {
-            return this._getRect();
+            return this.rect();
         },
         
         /**
@@ -97,7 +97,7 @@ include('view/observable.js');
             var oldRect = this._rect;
                 
             // if (rect.eq(this._rect)) return;
-            this._rect = this._getRect();
+            this._rect = this.rect();
 
             this._view.parentResized(oldRect, this._rect);
             if (this._view._needsLayout) this._view.layout();
@@ -105,16 +105,14 @@ include('view/observable.js');
         },
         
         /**
-         * @return Container dom
-         * @type Element
+         * @return {Element} Container dom
          */
         dom: function() {
             return this._dom;
         },
         
         /**
-         * @return Child view
-         * @type Element
+         * @return {Element} Child view
          */
         view: function() {
             return this._view;
@@ -122,10 +120,9 @@ include('view/observable.js');
         
         /**
          * @private
-         * @return Size of the container
-         * @type uki.geometry.Rect
+         * @return {uki.geometry.Rect} Size of the container
          */
-        _getRect: function() {
+        rect: function() {
             var width = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientWidth, this._dom.offsetWidth || 0) : this._dom.offsetWidth,
                 height = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientHeight, this._dom.offsetHeight || 0) : this._dom.offsetHeight;
             
