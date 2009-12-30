@@ -47,14 +47,14 @@ and it's a single HTTP request.
 == Extensible 
 Creating a new component requires only one function to redeclare.
 
-== Embedable
+== Embeddable
 It's great when you start building your whole app with uki. 
 But sometimes
 you have to add a desktop-like experience to a working site.
 Say, adding a widget or a table 
 to an existing design. 
-While uki can occupy the whole browser window 
-it works perfectly well in small <div> in 
+While uki can occupy the whole browser window,
+it works perfectly well in a small <div> in 
 your sidebar. 
 Just use attachTo( myDiv ) for any widget you want to add.
 
