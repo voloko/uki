@@ -1,5 +1,6 @@
 v0.0.3
 - Popup improvements
+- Table draft
 
 v0.0.2
 - Moved _createDom from first layout to view constructor
