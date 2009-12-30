@@ -13,6 +13,36 @@ var ANCHOR_TOP    = 1,
     ANCHOR_WIDTH  = 16,
     ANCHOR_HEIGHT = 32;
 
+/**
+ * Base class for all uki views
+ *
+ * View creates and layouts dom nodes. uki.view.Base defines basic API for other views.
+ * It also defines common layout algorithms.
+ *
+ * Layout
+ *
+ * View layout is defined by rectangle and anchors.
+ * Rectangle is passed to constructor, anchors are set through the #anchors attribute.
+ * 
+ * Rectangle defines initial position and size. Anchors specify how view will move and
+ * resize when its parent is resized.
+ *
+ * Example:
+ *   uki({ view: 'Base', rect: '10 20 100 50', anchors: 'left top right' })
+ * Creates Base view with initial x = 10px, y = 20px, width = 100px, height = 50px.
+ * When parent resizes x, y and height will stay the same. Width will resize with parent.
+ *
+ * @see uki.view.Base#anchors for more info on resize rules
+ *
+ *
+ * 2 phases of layout
+ *
+ * Layout process has 2 phases. 
+ * First views rectangles are recalculated. This may happen several times before dom 
+ * is touched. This is done either explictly through #rect attribute or through
+ * #parentResized callbacks. 
+ * After rectangles are set #layout is called. This actually updates dom styles.
+ */
 uki.view.Base = uki.newClass(uki.view.Observable, new function() {
 
     var proto = this,
@@ -41,16 +71,29 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         });
     };
     
-    /* ----------------------------- Description --------------------------------*/
     /**
-     * Full type name of a view. 
-     * Used in selection api and to check wherever certain object is a view
+     * Get views container dom node.
+     * @returns {Element} dom
+     */
+    proto.dom = function() {
+        return this._dom;
+    };
+    
+    /* ------------------------------- Common settings --------------------------------*/
+    /**
+     * Full type name of a view. Used by uki.Selector
+     * @return {String}
      */
     proto.typeName = function() {
         return 'uki.view.Base';
     };
     
-    /* ------------------------------- Settings --------------------------------*/
+    /**
+     * Used for fast (on hash lookup) view searches: uki('#view_id');
+     *
+     * @param {string=} id New id value
+     * @returns {string|uki.view.Base} current id or self
+     */
     proto.id = function(id) {
         if (id === undefined) return this._id;
         if (this._id) uki.unregisterId(this);
@@ -59,35 +102,37 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    uki.each(['background', 'shadow'], function(i, name) {
-        var field = '_' + name,
-            defaultAttr = 'default' + name.substr(0, 1).toUpperCase() + name.substr(1),
-            defaultField = '_' + defaultAttr;
-
-        proto[name] = function(val) {
-            if (val === undefined && !this[field] && this[defaultAttr]) this[field] = this[defaultAttr]();
-            if (val === undefined) return this[field];
-            val = uki.background(val);
-            
-            if (val == this[field]) return;
-            if (this[field]) this[field].detach(this);
-            val.attachTo(this);
-            
-            this[field] = val;
-            return this;
-        };
-        
-        proto[defaultAttr] = function() {
-            return this[defaultField] && uki.theme.background(this[defaultField]);
-        };
-    });
+    /**
+     * Accessor for dom().className
+     * @param {string=} className
+     * @returns {string|uki.view.Base} className or self
+     */
+    uki.delegateProp(proto, 'className', '_dom');
     
-    proto._initBackgrounds = function() {
-        if (this.background()) this.background().attachTo(this);
-        if (this.shadow()) this.shadow().attachTo(this);
+    /**
+     * Accessor for view visibility. 
+     *
+     * @param {boolean=} state 
+     * @returns {boolean|uki.view.Base} current visibility state of self
+     */
+    proto.visible = function(state) {
+        if (state === undefined) return this._dom.style.display != 'none';
+        
+        this._dom.style.display = state ? 'block' : 'none';
+        return this;
     };
     
+    proto.toggle = function() {
+        this.visible(!this.visible());
+    };
     
+    /**
+     * @todo move to a separate interface
+     * Sets wherether text of the view can be selected.
+     *
+     * @param {boolean=} state 
+     * @returns {boolean|uki.view.Base} current selectable state of self
+     */
     proto.selectable = function(state) {
         if (state === undefined) return this._selectable;
         
@@ -101,31 +146,59 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    proto.className = function(name) {
-        if (name === undefined) return this._dom.className;
-        
-        this._dom.className = name;
-        return this;
-    };
-    
     /**
-     * Sets or gets whenever the view is visible
+     * Accessor for background attribute. 
+     * @method #background
+     * @param {string|uki.background.Base=} background
+     * @returns {uki.background.Base|uki.view.Base} current background or self
      */
-    proto.visible = function(state) {
-        if (state === undefined) return this._dom.style.display != 'none';
+    /**
+     * Accessor for shadow background attribute. 
+     * @method #shadow
+     * @param {string|uki.background.Base=} background
+     * @returns {uki.background.Base|uki.view.Base} current background or self
+     */
+    /**
+     * Accessor for default background attribute. 
+     * @method #defaultBackground
+     * @returns {uki.background.Base} default background if not overriden through attribute
+     */
+    /**
+     * Accessor for default shadow background attribute. 
+     * @method #defaultShadow
+     * @returns {uki.background.Base} default background if not overriden through attribute
+     */
+    uki.each(['background', 'shadow'], function(i, name) {
+        var field = '_' + name,
+            defaultAttr = 'default' + name.substr(0, 1).toUpperCase() + name.substr(1),
+            defaultField = '_' + defaultAttr;
+
+        proto[name] = function(val) {
+            if (val === undefined && !this[field] && this[defaultAttr]) this[field] = this[defaultAttr]();
+            if (val === undefined) return this[field];
+            val = uki.background(val);
+            
+            if (val == this[field]) return this;
+            if (this[field]) this[field].detach(this);
+            val.attachTo(this);
+            
+            this[field] = val;
+            return this;
+        };
         
-        this._dom.style.display = state ? 'block' : 'none';
-        return this;
-    };
-    
-    proto.toggle = function() {
-        this.visible(!this.visible());
-    };
+        proto[defaultAttr] = function() {
+            return this[defaultField] && uki.theme.background(this[defaultField]);
+        };
+    });
     
     /* ----------------------------- Container api ------------------------------*/
     
     /**
-     * Sets or retrieves parent view
+     * Accessor attibute for parent view. When parent is set view appends its #dom
+     * to parents #domForChild
+     *
+     * @param {?uki.view.Base=} parent
+     * @returns {uki.view.Base} parent or self
      */
     proto.parent = function(parent) {
         if (parent === undefined) return this._parent;
@@ -136,32 +209,22 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    /* ------------------------- Layot 2-nd pass + Dom --------------------------*/
     /**
-     * Get views container dom node.
+     * Accessor for childViews. @see uki.view.Container for implementation
+     * @returns {Array.<uki.view.Base>}
      */
-    proto.dom = function() {
-        return this._dom;
-    };
-    
     proto.childViews = function() {
         return [];
     };
     
-    /**
-     * Called on second layot pass when view becomes visible/changes it's size
-     */
-    proto.layout = function() {
-        this._layoutDom(this._rect);
-        this._needsLayout = false;
-        this.trigger('layout', {rect: this._rect, source: this});
-        this._firstLayout = false;
-    };
     
-    /* ---------------------------- Layout 1-st pass ----------------------------*/
+    /* ----------------------------- Layout ------------------------------*/
+    
     /**
-     * Sets or retrieves rect relative to parents view.
-     * Rect defines the area this view should render in.
+     * Sets or retrieves view's position and size.
+     *
+     * @param {string|uki.geometry.Rect} newRect
+     * @returns {uki.view.Base} self
      */
     proto.rect = function(newRect) {
         if (newRect === undefined) return this._rect;
@@ -174,6 +237,61 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
+    /**
+     * Set or get sides which the view should be attached to.
+     * When a view is attached to a side the distance between this side and views border
+     * will remain constant on resize. Anchor can be any combination of
+     * "top", "right", "bottom", "left", "width" and "height". 
+     * If you set both "right" and "left" than "width" is assumed.
+     *
+     * Anchors are stored as a bitmask. Though its easier to set them using strings
+     * 
+     * @param {string|number} anchors
+     */
+    proto.anchors = uki.newProp('_anchors', function(anchors) {
+        if (anchors.indexOf) {
+            var tmp = 0;
+            if (anchors.indexOf('right'  ) > -1) tmp |= ANCHOR_RIGHT; 
+            if (anchors.indexOf('bottom' ) > -1) tmp |= ANCHOR_BOTTOM;
+            if (anchors.indexOf('top'    ) > -1) tmp |= ANCHOR_TOP;   
+            if (anchors.indexOf('left'   ) > -1) tmp |= ANCHOR_LEFT;  
+            if (anchors.indexOf('width'  ) > -1 || (tmp & ANCHOR_LEFT && tmp & ANCHOR_RIGHT)) tmp |= ANCHOR_WIDTH;  
+            if (anchors.indexOf('height' ) > -1 || (tmp & ANCHOR_BOTTOM && tmp & ANCHOR_TOP)) tmp |= ANCHOR_HEIGHT;
+            anchors = tmp;
+        }
+        this._anchors = anchors;
+        this._styleH = anchors & ANCHOR_LEFT ? 'left' : 'right';
+        this._styleV = anchors & ANCHOR_TOP ? 'top' : 'bottom';
+    });
+    
+    /**
+     * Returns rectangle for child layout. Usualy equals to #rect. Though in some cases,
+     * client rectangle my differ from #rect. Example uki.view.ScrollPane.
+     *
+     * @param {uki.view.Base} child 
+     * @returns {uki.geometry.Rect}
+     */
+    proto.rectForChild = function(child) {
+        return this.rect();
+    };
+    
+    /**
+     * Updates dom to match #rect property.
+     *
+     * Layout is designed to minimize dom writes. If view is anchored to the right then
+     * style.right is used, style.left for left anchor, etc. If browser supports this
+     * both style.right and style.left are used. Otherwise style.width will be updated
+     * manualy on each resize. 
+     *
+     * @see uki.dom.initNativeLayout
+     */
+    proto.layout = function() {
+        this._layoutDom(this._rect);
+        this._needsLayout = false;
+        this.trigger('layout', {rect: this._rect, source: this});
+        this._firstLayout = false;
+    };
+    
     proto.minSize = uki.newProp('_minSize', function(s) {
         this._minSize = Size.create(s);
         this.rect(this._normalizeRect(this._rect));
@@ -181,20 +299,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         if (this._minSize.height) this._dom.style.minHeight = this._minSize.height + 'px';
     });
     
-    proto._normalizeRect = function(rect) {
-        if (this._minSize) {
-            rect = new Rect(rect.x, rect.y, MAX(this._minSize.width, rect.width), MAX(this._minSize.height, rect.height));
-        }
-        return rect;
-    };
-    
-    proto.rectForChild = function(child) {
-        return this.rect();
-    };
-    
-    /* -------------------------------- Autolayout ------------------------------*/
     /**
-     * Resizes view when parent changes size acording to anchors and autosize
+     * Resizes view when parent changes size acording to anchors.
+     * Called from parent view. Usualy after parent's #rect is called.
+     *
+     * @param {uki.geometry.Rect} oldSize
+     * @param {uki.geometry.Rect} newSize
      */
     proto.parentResized = function(oldSize, newSize) {
         var newRect = this._parentRect.clone(),
@@ -216,43 +326,17 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     };
     
     /**
-     * Set or get sides which the view should be attached to.
-     * When a view is attached to a side the distance between this side a view border
-     * will remain constant on resize. Anchor can be any combination of
-     * "top", "right" , "bottom" and "left". 
+     * Resizes view to its contents. Contents size is determined by view.
+     * View can be resized by width, height or both. This is specified throght
+     * autosizeStr param.
+     * View will grow shrink acording to its #anchors.
      *
-     * If you set both "right" and "left" also remember to set autosize("width")
-     * 
-     * @param String anchors
-     * @example ""
+     * @param {autosizeStr} autosize 
+     * @returns {uki.view.Base} self
      */
-    proto.anchors = uki.newProp('_anchors', function(anchors) {
-        if (anchors.indexOf) {
-            var tmp = 0;
-            if (anchors.indexOf('right'  ) > -1) tmp |= ANCHOR_RIGHT; 
-            if (anchors.indexOf('bottom' ) > -1) tmp |= ANCHOR_BOTTOM;
-            if (anchors.indexOf('top'    ) > -1) tmp |= ANCHOR_TOP;   
-            if (anchors.indexOf('left'   ) > -1) tmp |= ANCHOR_LEFT;  
-            if (anchors.indexOf('width'  ) > -1 || (tmp & ANCHOR_LEFT && tmp & ANCHOR_RIGHT)) tmp |= ANCHOR_WIDTH;  
-            if (anchors.indexOf('height' ) > -1 || (tmp & ANCHOR_BOTTOM && tmp & ANCHOR_TOP)) tmp |= ANCHOR_HEIGHT;
-            anchors = tmp;
-        }
-        this._anchors = anchors;
-        this._styleH = anchors & ANCHOR_LEFT ? 'left' : 'right';
-        this._styleV = anchors & ANCHOR_TOP ? 'top' : 'bottom';
-    });
-    
-    function decodeAutosize (autosizeStr) {
-        if (!autosizeStr) return 0;
-        var autosize = 0;
-        if (autosizeStr.indexOf('width' ) > -1) autosize = autosize | ANCHOR_WIDTH;
-        if (autosizeStr.indexOf('height') > -1) autosize = autosize | ANCHOR_HEIGHT;
-        return autosize;
-    }
-    
-    proto.resizeToContents = function(autosize) {
-        autosize = decodeAutosize(autosize);
-        if (0 == autosize) return;
+    proto.resizeToContents = function(autosizeStr) {
+        var autosize = decodeAutosize(autosizeStr);
+        if (0 == autosize) return this;
         
         var oldRect = this.rect(),
             newRect = this._calcRectOnContentResize(autosize);
@@ -263,9 +347,37 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return this;
     };
     
-    
+    /**
+     * Calculates view's contents size. Redefined in subclasses.
+     *
+     * @param {number} autosize Bitmask
+     * @returns {uki.geometry.Rect}
+     */
     proto.contentsSize = function(autosize) {
         return this.rect();
+    };
+    
+    proto._normalizeRect = function(rect) {
+        if (this._minSize) {
+            rect = new Rect(rect.x, rect.y, MAX(this._minSize.width, rect.width), MAX(this._minSize.height, rect.height));
+        }
+        return rect;
+    };
+    
+    
+    
+    function decodeAutosize (autosizeStr) {
+        if (!autosizeStr) return 0;
+        var autosize = 0;
+        if (autosizeStr.indexOf('width' ) > -1) autosize = autosize | ANCHOR_WIDTH;
+        if (autosizeStr.indexOf('height') > -1) autosize = autosize | ANCHOR_HEIGHT;
+        return autosize;
+    }
+    
+
+    proto._initBackgrounds = function() {
+        if (this.background()) this.background().attachTo(this);
+        if (this.shadow()) this.shadow().attachTo(this);
     };
     
     proto._calcRectOnContentResize = function(autosize) {

@@ -14,3 +14,4 @@ var root = this,
     CEIL = Math.ceil,
     
     PX = 'px';
+

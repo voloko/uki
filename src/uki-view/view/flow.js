@@ -111,4 +111,4 @@ uki.view.HorizontalFlow = uki.newClass(uki.view.Flow, {
         uki.view.Flow[PROTOTYPE]._setup.call(this);
         this._horizontal = true;
     }
-})
+});

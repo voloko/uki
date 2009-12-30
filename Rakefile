@@ -5,7 +5,7 @@ require 'yaml'
 def process_path(path, included = {})
   code = File.read(path)
   base = File.dirname(path)
-  code.gsub(%r{include\s*\(\s*['"]([^"']+)["']\s*\)\s*;?}) {
+  code.gsub(%r{include\s*\(\s*['"]([^"']+)["']\s*\)\s*;?\s*\n?}) {
     include_path = File.expand_path(File.join(base, $1))
     unless included[include_path]
       included[include_path] = true

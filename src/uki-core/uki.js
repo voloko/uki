@@ -23,7 +23,7 @@ root.uki = function(val, context) {
 /**
  * @type {string}
  */
-uki.version = '0.0.3b';
+uki.version = '0.0.4';
 
 /**
  * @type {function():boolean}
