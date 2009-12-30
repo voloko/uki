@@ -1,5 +1,5 @@
 - base = File.dirname(__FILE__)
-- version = File.read File.join(base, '..', 'VERSION')
+- version = File.read(File.join(base, '..', 'src', 'uki-core', 'uki.js')).match(%r{uki.version\s*=\s*'([0-9.]+)'})[1]
 - dev_size = File.size File.join(base, '..', 'pkg', 'uki.dev.js')
 - compressed_size = File.size File.join(base, '..', 'pkg', 'uki.gz.js')
 !!!1.1

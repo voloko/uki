@@ -16,6 +16,11 @@ def process_path(path, included = {})
   }
 end
 
+def read_version
+  base = File.dirname(__FILE__)
+  File.read(File.join(base, 'src', 'uki-core', 'uki.js')).match(%r{uki.version\s*=\s*'([0-9.]+)'})[1]
+end
+
 desc "Run thin"
 task :start do
   sh "sudo thin -s 1 -C thin.yaml -R uki.ru start"
@@ -35,7 +40,7 @@ desc "Build scripts"
 task :build_scripts do
   base = File.dirname(__FILE__)
   config = YAML.load(File.read File.join(base, 'config.yaml'))
-  version = File.read('VERSION')
+  version = read_version
   compiler_path = File.join(base, 'compiler.jar')
   FileUtils.rm_rf('pkg')
   FileUtils.mkdir('pkg')
@@ -59,7 +64,7 @@ task :push_version do
   
   base = File.dirname(__FILE__)
   config = YAML.load(File.read File.join(base, 'config.yaml'))
-  version = File.read('VERSION')
+  version = read_version
   Base.establish_connection!(
     :access_key_id => config['access_key_id'], 
     :secret_access_key => config['secret_access_key']

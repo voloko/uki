@@ -1,0 +1,11 @@
+v0.0.3
+- Popup improvements
+
+v0.0.2
+- Moved _createDom from first layout to view constructor
+- Moved initWithRect into constructor
+- Split SplitPane and TextField into subclasses
+- Toolbar popups
+
+v0.0.1
+- Initial release

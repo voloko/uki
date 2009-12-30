@@ -284,7 +284,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         
         var oldRect = this.rect(),
             newRect = this._calcRectOnContentResize(autosize);
-        if (newRect.eq(oldRect)) return this;
+        // if (newRect.eq(oldRect)) return this;
+        // this.rect(newRect);
         this._rect = this._parentRect = newRect;
         this._needsLayout = true;
         return this;
