@@ -90,6 +90,13 @@ uki.image.load = function(images, callback) {
     });
 };
 
+/**
+ * @type {boolean}
+ */
 uki.image.dataUrlSupported = doc.createElement('canvas').toDataURL || (/MSIE (8)/).test(ua);
+
+/**
+ * @type {boolean}
+ */
 uki.image.needAlphaFix = /MSIE 6/.test(ua);
 if(uki.image.needAlphaFix) doc.execCommand("BackgroundImageCache", false, true);

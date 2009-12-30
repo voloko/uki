@@ -116,8 +116,24 @@ include('collection.js');
 	    for (i = 0; i < result.length; i++) { result[i][marked] = undefined; };
 	    return result;
 	}
-	    
+	
     self = uki.Selector = {
+    	/**
+    	 * Finds views by CSS3 selectors in view tree.
+    	 * Can be called as uki(selector) instead of uki.Selector.find(selector)
+    	 *
+    	 * Examples:
+    	 *   uki('Label') find all labels on page
+    	 *   uki('Box[name=main] > Label') find all imidiate descendant Labels in a box with name = "main"
+    	 *   uki('> Slider', context) find all direct descendant Sliders within given context
+    	 *   uki('Slider,Checkbox') find all Sliders and Checkboxes
+    	 *   uki('Slider:eq(3)') find 3-d slider
+    	 *
+    	 * @param {string} selector
+    	 * @param {Array.<uki.view.Base>} context to search in
+    	 *
+    	 * @return {uki.Collection} found views
+    	 */    
         find: function(selector, context, skipFiltering) {
             context = context || uki.top();
             if (context.length === undefined) context = [context];
