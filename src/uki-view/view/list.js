@@ -154,6 +154,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         } else if (minY < this._visibleRect.y) {
             this._scrollableParent.scroll(0, minY - this._visibleRect.y);
         }
+        this.layout();
     };
     
     proto._itemAt = function(position) {
