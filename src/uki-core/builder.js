@@ -4,6 +4,18 @@ include('collection.js');
 
 
 (function() {
+    
+    /**
+     * Creates uki view tree from JSON-like markup
+     *
+     * Example:
+     *    uki.build( {view: 'Button', rect: '100 100 100 24', text: 'Hello world' } )
+     * Creates uki.view.Button with '100 100 100 24' passed to constructor, and calls text('Hello world') on it
+     *
+     * @param {Object} ml JSON-like markup
+     * @returns collection of created elemens
+     * @type uki.view.Collection
+     */
     uki.build = function(ml) {
         if (ml.length === undefined) ml = [ml];
         return new uki.Collection(createMulti(ml));

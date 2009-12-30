@@ -45,7 +45,7 @@ include('view/observable.js');
          * Returns document.body if attached to window. Otherwise returns dom
          * uki.view.Base api
          *
-         * @return {Element}
+         * @type Element
          */
         domForChild: function() {
             return this._dom === root ? doc.body : this._dom;
@@ -54,7 +54,7 @@ include('view/observable.js');
         /**
          * uki.view.Base api
          *
-         * @return {uki.geometry.Rect}
+         * @type uki.geometry.Rect
          */
         rectForChild: function(child) {
             return this._getRect();
@@ -105,14 +105,16 @@ include('view/observable.js');
         },
         
         /**
-         * @return {Element} Container dom
+         * @return Container dom
+         * @type Element
          */
         dom: function() {
             return this._dom;
         },
         
         /**
-         * @return {Element} Child view
+         * @return Child view
+         * @type Element
          */
         view: function() {
             return this._view;
@@ -120,7 +122,8 @@ include('view/observable.js');
         
         /**
          * @private
-         * @return {uki.geometry.Rect} Size of the container
+         * @return Size of the container
+         * @type uki.geometry.Rect
          */
         _getRect: function() {
             var width = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientWidth, this._dom.offsetWidth || 0) : this._dom.offsetWidth,

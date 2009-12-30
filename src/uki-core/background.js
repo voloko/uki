@@ -15,7 +15,8 @@ include('uki.js');
      *   url(i.png) or #FFFFFF Creates Css background with single property
      *
      * @param {String} bg
-     * @return {uki.background.Base}
+     * @returns created background
+     * @type uki.background.Base
      */
     var self = uki.background = function(bg) {
         if (typeof(bg) === 'string') {
