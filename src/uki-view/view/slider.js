@@ -5,7 +5,7 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
     _setup: function() {
         Base._setup.call(this);
-        uki.extend({
+        uki.extend(this, {
             _min: 0,
             _max: 1,
             _value: 0,
