@@ -27,7 +27,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             _multiline: false,
             _placeholder: '',
             _backgroundPrefix: '',
-            defaultCss: Base.defaultCss + "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ")"
+            defaultCss: Base.defaultCss + "margin:0;border:none;outline:none;padding:0;font-size:11px;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ")"
         });
     };
     
