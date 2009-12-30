@@ -1,6 +1,15 @@
 include('uki.js');
 include('dom.js');
 
+/**
+ * Creates image element from url
+ *
+ * @param {string} url Image url
+ * @param {string=} dataUrl Data url representation of image, used if supported
+ * @param {boolean=} alpha If image has transparent parts
+ *
+ * @returns {Element}
+ */
 uki.image = function(url, dataUrl, alpha) {
     var result = new Image();
     if (uki.image.dataUrlSupported && dataUrl) {
@@ -22,21 +31,46 @@ uki.image = function(url, dataUrl, alpha) {
     return result;
 };
 
-uki.imageSrc = function(url, dataUrl, alpha) {
+/**
+ * Selects image src depending on browser
+ *
+ * @param {string} url Image url
+ * @param {string=} dataUrl Data url representation of image, used if supported
+ * @param {boolean=} alphaUrl Gif image url for IE6
+ *
+ * @returns {string}
+ */
+uki.imageSrc = function(url, dataUrl, alphaUrl) {
     if (uki.image.dataUrlSupported && dataUrl) return dataUrl;
-    if (alpha && uki.image.needAlphaFix) return alpha;
+    if (alphaUrl && uki.image.needAlphaFix) return alphaUrl;
     return url;
 };
 
-uki.imageHTML = function(url, dataUrl, alpha, html) {
-    if (uki.image.needAlphaFix && alpha) {
-        url = alpha;
+/**
+ * Image html representation: '<img src="">'
+ *
+ * @param {string} url Image url
+ * @param {string=} dataUrl Data url representation of image, used if supported
+ * @param {boolean=} alphaUrl Gif image url for IE6
+ * @param {string=} html Additional html
+ *
+ * @returns {string} html
+ */
+uki.imageHTML = function(url, dataUrl, alphaUrl, html) {
+    if (uki.image.needAlphaFix && alphaUrl) {
+        url = alphaUrl;
     } else if (uki.image.dataUrlSupported) {
         url = dataUrl;
     }
     return '<img' + (html || '') + ' src="' + url + '" />';
 };
 
+/**
+ * Loads given images, callbacks after all of them loads
+ *
+ * @param {Array.<Element>} images Images to load
+ * @param {function()} callback
+ */
 uki.image.load = function(images, callback) {
     var imagesToLoad = images.length;
     

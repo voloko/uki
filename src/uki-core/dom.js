@@ -13,9 +13,9 @@ uki.dom = {
      * Convinience wrapper around document.createElement
      * Creates dom element with given tagName, cssText and innerHTML
      *
-     * @param {String} tagName
-     * @param {String=} cssText
-     * @param {String=} innerHTML
+     * @param {string} tagName
+     * @param {string=} cssText
+     * @param {string=} innerHTML
      * @returns {Element} created element
      */
     createElement: function(tagName, cssText, innerHTML) {
@@ -30,7 +30,7 @@ uki.dom = {
      * Adds a probe element to page dom tree, callbacks, removes the element
      *
      * @param {Element} dom Probing dom element
-     * @param {Function} callback
+     * @param {function(Element)} callback
      */
     probe: function(dom, callback) {
         var target = doc.body;
@@ -43,8 +43,8 @@ uki.dom = {
      * Assigns layout style properties to an element
      *
      * @param {CSSStyleDeclaration} style Target declaration
-     * @param {Object} layout Properties to assign
-     * @param {Object=} prevLayout If given assigns only differenct between layout and prevLayout
+     * @param {object} layout Properties to assign
+     * @param {object=} prevLayout If given assigns only differenct between layout and prevLayout
      */
     layout: function(style, layout, prevLayout) {
         prevLayout = prevLayout || {};
@@ -76,7 +76,7 @@ uki.dom = {
      *
      * @param {Element} parent 
      * @param {Element} child 
-     * @type {Boolean}
+     * @return {Boolean}
      */
     contains: function(parent, child) {
         try {

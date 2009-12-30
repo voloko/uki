@@ -24,7 +24,7 @@ include('attachment.js');
     
     /**
      * Iterates trough all items within itself
-     * @param {Function} callback Callback to call for every item
+     * @param {function(this:uki.view.Base, number, uki.view.Base)} callback Callback to call for every item
      * @returns {uki.view.Collection} self
      */
     self.each = function( callback ) {
@@ -34,7 +34,7 @@ include('attachment.js');
     
     /**
      * Creates a new uki.Collection populated with found items
-     * @param {Function} callback Callback to call for every item
+     * @param {function(uki.view.Base, number):boolean} callback Callback to call for every item
      * @returns {uki.view.Collection} created collection
      */
     self.grep = function( callback ) {
@@ -47,8 +47,8 @@ include('attachment.js');
      *   c.attr('text', 'my text') // sets text to 'my text' on all collection views
      *   c.attr('name') // gets name attribute on the first view
      *
-     * @param {String} name Name of the attribute
-     * @param {Object=} value Value to set
+     * @param {string} name Name of the attribute
+     * @param {object=} value Value to set
      * @returns {uki.view.Collection|Object} Self or attribute value
      */
     self.attr = function( name, value ) {
@@ -67,7 +67,7 @@ include('attachment.js');
      * Example
      *   c.find('Button')
      *
-     * @param {String} selector 
+     * @param {string} selector 
      * @returns {uki.view.Collection} Collection of found items
      */
     self.find = function( selector ) {
