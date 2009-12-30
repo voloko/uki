@@ -2,9 +2,22 @@ include('const.js');
 include('uki.js');
 include('utils.js');
 
+/**
+ * Basic utils to work with the dom tree
+ * @author voloko
+ */
 uki.dom = {
     guid: 1,
     
+    /**
+     * Convinience wrapper around document.createElement
+     * Creates dom element with given tagName, cssText and innerHTML
+     *
+     * @param {String} tagName
+     * @param {String=} cssText
+     * @param {String=} innerHTML
+     * @returns {Element} created element
+     */
     createElement: function(tagName, cssText, innerHTML) {
         var e = doc.createElement(tagName);            
         if (cssText) e.style.cssText = cssText;
@@ -13,24 +26,43 @@ uki.dom = {
         return e;
     },
     
-    probe: function(div, callback) {
+    /**
+     * Adds a probe element to page dom tree, callbacks, removes the element
+     *
+     * @param {Element} dom Probing dom element
+     * @param {Function} callback
+     */
+    probe: function(dom, callback) {
         var target = doc.body;
-        target.appendChild(div);
-        callback(div);
-        target.removeChild(div);
+        target.appendChild(dom);
+        callback(dom);
+        target.removeChild(dom);
     },
     
+    /**
+     * Assigns layout style properties to an element
+     *
+     * @param {CSSStyleDeclaration} style Target declaration
+     * @param {Object} layout Properties to assign
+     * @param {Object=} prevLayout If given assigns only differenct between layout and prevLayout
+     */
     layout: function(style, layout, prevLayout) {
         prevLayout = prevLayout || {};
-        if (prevLayout.left   != layout.left)   style.left   = layout.left + 'px';
-        if (prevLayout.top    != layout.top)    style.top    = layout.top + 'px';
-        if (prevLayout.right  != layout.right)  style.right  = layout.right + 'px';
-        if (prevLayout.bottom != layout.bottom) style.bottom = layout.bottom + 'px';
-        if (prevLayout.width  != layout.width)  style.width  = layout.width + 'px';
-        if (prevLayout.height != layout.height) style.height = layout.height + 'px';
+        if (prevLayout.left   != layout.left)   style.left   = layout.left + PX;
+        if (prevLayout.top    != layout.top)    style.top    = layout.top + PX;
+        if (prevLayout.right  != layout.right)  style.right  = layout.right + PX;
+        if (prevLayout.bottom != layout.bottom) style.bottom = layout.bottom + PX;
+        if (prevLayout.width  != layout.width)  style.width  = layout.width + PX;
+        if (prevLayout.height != layout.height) style.height = layout.height + PX;
         return layout;
     },
     
+    /**
+     * Computed style for a give element
+     *
+     * @param {Element} el
+     * @returns {CSSStyleDeclaration} style declaratioin
+     */
     computedStyle: function(el) {
         if (doc && doc.defaultView && doc.defaultView.getComputedStyle) {
             return doc.defaultView.getComputedStyle( el, null );
@@ -39,6 +71,13 @@ uki.dom = {
         }
     },
     
+    /**
+     * Checks if parent contains child
+     *
+     * @param {Element} parent 
+     * @param {Element} child 
+     * @type {Boolean}
+     */
     contains: function(parent, child) {
         try {
             if (parent.contains) return parent.contains(child);

@@ -1,3 +1,6 @@
+/**
+ * Global uki constanst, for speed optimization and better merging
+ */
 var root = this,
     doc  = document,
     nav = navigator,
@@ -8,4 +11,6 @@ var root = this,
     MAX = Math.max,
     MIN = Math.min,
     FLOOR = Math.floor,
-    CEIL = Math.ceil;
+    CEIL = Math.ceil,
+    
+    PX = 'px';

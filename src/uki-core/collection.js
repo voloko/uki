@@ -48,7 +48,7 @@ include('attachment.js');
      *   c.attr('name') // gets name attribute on the first view
      *
      * @param {String} name Name of the attribute
-     * @param {Object} value [optional] Value to set
+     * @param {Object=} value Value to set
      * @returns {uki.view.Collection|Object} Self or attribute value
      */
     self.attr = function( name, value ) {
