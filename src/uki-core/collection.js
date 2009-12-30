@@ -3,6 +3,18 @@ include('attachment.js');
 
 
 (function() {
+    
+    /**
+     * Collection performs group operations on uki.view objects
+     * Behaves much like result jQuery(dom nodes).
+     * Most methods are chainable like .attr('text', 'somevalue').bind('click', function() { ... })
+     *
+     * Its easier to call uki([view1, view2]) or uki('selector') instead of creating collection directly
+     *
+     * @author voloko
+     * @constructor
+     * @class uki.Collection
+     */
     uki.Collection = function( elems ) {
         this.length = 0;
     	Array[PROTOTYPE].push.apply( this, elems );
@@ -10,15 +22,38 @@ include('attachment.js');
 
     var self = uki.fn = uki.Collection[PROTOTYPE] = {};
     
+    /**
+     * Iterates trough all items within itself
+     * @param {Function} callback Callback to call for every item
+     * @returns self
+     * @type uki.view.Collection
+     */
     self.each = function( callback ) {
         uki.each( this, callback );
         return this;
     };
     
+    /**
+     * Creates a new uki.Collection populated with found items
+     * @param {Function} callback Callback to call for every item
+     * @returns created collection
+     * @type uki.view.Collection
+     */
     self.grep = function( callback ) {
         return new uki.Collection( uki.grep(this, callback) );
     };
     
+    /**
+     * Sets an attribute on all views or gets the value of the attribute on the first view
+     * Example
+     *   c.attr('text', 'my text') // sets text to 'my text' on all collection views
+     *   c.attr('name') // gets name attribute on the first view
+     *
+     * @param {String} name Name of the attribute
+     * @param {Object} value [optional] Value to set
+     * @returns Self or attribute value
+     * @type uki.view.Collection|Object
+     */
     self.attr = function( name, value ) {
         if (value !== undefined) {
             this.each(function() {
@@ -30,6 +65,49 @@ include('attachment.js');
         }
     };
     
+    /**
+     * Finds views within collection context
+     * Example
+     *   c.find('Button')
+     *
+     * @param {String} selector 
+     * @returns Collection of found items
+     * @type uki.view.Collection
+     */
+    self.find = function( selector ) {
+        return uki.find( selector, this );
+    };
+    
+    /**
+     * Attaches all child views to dom container
+     *
+     * @param {Element} dom Container dom element
+     * @param {uki.geometry.Rect} rect Default size
+     * @returns self
+     * @type uki.view.Collection
+     */
+    self.attachTo = function( dom, rect ) {
+        this.each(function() {
+            new uki.Attachment( dom, this, rect );
+        });
+        return this;
+    };
+    
+    /**
+     * Appends views to the first item in collection
+     *
+     * @param {Array of uki.view.Base} views Views to append
+     * @returns self
+     * @type uki.view.Collection
+     */
+    self.append = function( views ) {
+        if (!this[0]) return this;
+        views = views.length !== undefined ? views : [views];
+        for (var i=0; i < views.length; i++) {
+            this[0].appendChild(views[i]);
+        };
+        return this;
+    };
     
     uki.each(['parent'], function(i, name) {
         self[name] = function() {
@@ -43,7 +121,7 @@ include('attachment.js');
         };
     });
     
-    uki.each(('layout,appendChild,removeChild,addRow,removeRow,' +
+    uki.each(('bind,unload,trigger,layout,appendChild,removeChild,addRow,removeRow,' +
         'resizeToContents,toggle').split(','), function(i, name) {
         self[name] = function() { 
             for (var i=0; i < this.length; i++) {
@@ -71,35 +149,5 @@ include('attachment.js');
     	    }
     		return this;
     	};
-    });
-    	    
-    
-    self.find = function( selector ) {
-        return uki.find( selector, this );
-    };
-    
-    self.attachTo = function( node, minSize, options ) {
-        this.each(function() {
-            new uki.Attachment( node, this, minSize, options );
-        });
-        return this;
-    };
-    
-    self.append = function( views ) {
-        if (!this[0]) return this;
-        views = views.length !== undefined ? views : [views];
-        for (var i=0; i < views.length; i++) {
-            this[0].appendChild(views[i]);
-        };
-        return this;
-    };
-    
-    uki.each(['bind', 'unbind', 'trigger'], function(i, name) {
-        self[name] = function() {
-            for (var i=0; i < this.length; i++) {
-                this[i][name].apply(this[i], arguments);
-            };
-            return this;
-        };
     });
 })();
