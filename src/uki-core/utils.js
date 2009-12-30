@@ -1,7 +1,5 @@
 include('uki.js');
 
-(function() {
-
 var toString = Object[PROTOTYPE].toString;
 	
 /**
@@ -334,5 +332,3 @@ var utils = uki.utils = {
 };
 
 utils.extend(uki, utils);
-
-})();
