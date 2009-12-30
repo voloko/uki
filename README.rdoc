@@ -1,78 +1,78 @@
-= UKI – simple UiKit for complex web apps
+= UKI – simple UiKit for complex Web apps
 Uki is a 
-javascript 
+JavaScript 
 user interface toolkit for desktop-like web applications.
 It comes with 
-rich view-component library 
-ranging from Slider to Grids and SplitPanes.
+a rich view-component library 
+ranging from Sliders to Grids and SplitPanes.
 
     uki({ view: 'Button', text: 'Click me', rect: '10 10 100 24' }).attachTo( window );
     
     uki('Button[text^=Click]').click(function() { alert(this.text()); });
     
 == Simple
-Web should be simple. 
+The Web should be simple. 
 Adding a new library to your app should not require 
-using specific build process or learning a new language.
+using a specific build process or learning a new language.
 It should be as simple as adding a <script> tag to your HTML. 
 That's exactly the way uki works. No frameworks to install,
 no dependencies to manage,
-no css to include.
+no CSS to include.
 Simple.
 
-== Cross browser
-I can imagine leaving
-in a fairy-tail world
-where any browser support HTML 5
-and there's no such a thing as IE6 :)
-Unfortunately reality is different.
-I have to support all the browser spices available. 
-Even the dinosaurs.
-Thats why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, Chrome. 
+== Cross-Browser
+I can imagine living
+in a fairy-tale world
+where any browser supports HTML 5
+and there's no such thing as IE6 :)
+Unfortunately, reality is different.
+I have to support all the browser flavors available,
+even the dinosaurs.
+That's why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, and Chrome.
 And it looks exactly the same on any of them.
 
 == Fast
 One of the reasons uki appeared 
-is that I had to create a 4000 rows, complex, 
-client side searchable table. 
-Just rendering the table made any IE busy for half a minute. 
-Uki uses progressive rendering and can render 30k+ lists and tables mostly instantly.
+is that I had to create a 4000-row complex
+client-side-searchable table. 
+Just rendering the table made any version of IE unresponsive for half a minute. 
+Uki uses progressive rendering and can render 30k+-row lists and tables mostly instantly.
 
 == Small
-With all the images packed into 
-(not supported in IE6 and IE7) 
-gziped uki build is under 30kb. 
-And it's a single HTTP request.
+With all the images packed into it
+(not supported in IE6 and IE7),
+a gzipped uki build is under 30kb,
+and it's a single HTTP request.
 
 == Extensible 
 Creating a new component requires only one function to redeclare.
 
 == Embedable
 It's great when you start building your whole app with uki. 
-But sometimes 
-you have to add desktop-like experience to a working site.
-Say adding a widget, or a table 
-to existing design. 
+But sometimes
+you have to add a desktop-like experience to a working site.
+Say, adding a widget or a table 
+to an existing design. 
 While uki can occupy the whole browser window 
-it feels perfectly OK in small <div> in 
+it works perfectly well in small <div> in 
 your sidebar. 
 Just use attachTo( myDiv ) for any widget you want to add.
 
 == You already know it
 Uki is written in plain JavaScript. 
-It leverages known DOM and JS idioms 
-such as css selectors, events or attributes. 
-If you ever used
-jQuery learning uki won't take long.
+It leverages well-known DOM and JS idioms 
+such as CSS selectors, events and attributes. 
+If you've ever used
+jQuery, learning uki won't take long.
 
 == Specific
 Uki doesn't want to be a Jack-of-all-trades. 
-It only does layout but it does it well.
-You won't find any ajax or data storage layer code here. 
+It only does layout, but it does it well.
+You won't find any AJAX or data-storage-layer code here. 
     
-== Programmable layout
-HTML and CSS are great technologies.
-Though you can't layout everything with them.
+== Programmable Layout
+HTML and CSS are great technologies,
+though you can't lay everything out with them.
 There are things that require programmable layout calculations.
 Think of a toolbar, 
 which should show a popup
@@ -82,8 +82,8 @@ Or moving a slider bar on window resize.
 That's the reason 
 uki calculates view positions and sizes 
 with JavaScript. 
-Unfortunately 
-resizing everything with JS only will make you layout slow as a turtle. 
+Unfortunately,
+resizing everything with pure JS will make your layout slow as a turtle. 
 So uki uses as much native browser layout as possible.
 
 == Longer example
@@ -150,5 +150,5 @@ results in http://ukijs.org/functional/splitPaneEx.html
     cd tests
     narwhal runner.js
     
-== PS
-And one more thing. Unobtrusive javascript is evil.
+== P.S.
+And one more thing. Unobtrusive JavaScript is evil.
