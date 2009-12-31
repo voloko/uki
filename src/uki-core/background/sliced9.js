@@ -37,8 +37,15 @@ uki.background.Sliced9 = uki.newClass(new function() {
         this._container.style.zIndex = this._zIndex;
     };
     
-    function makeDiv (name, style, inner) {
+    function makeDiv (name, style, setting, imgStyle, bgSettings) {
+        var inner = setting[3] ? img(setting, imgStyle) : '';
+        if (!setting[3]) style += bgStyle(setting, bgSettings);
+        console.log(style);
         return '<div class="' +  name + '" style="position:absolute;overflow:hidden;' + style + '">' + inner + '</div>';
+    }
+    
+    function bgStyle (setting, bgSettings) {
+        return ';background: url(' + uki.imageSrc(setting[0], setting[1], setting[2]) + ') ' + bgSettings;
     }
 
     function img (setting, style) {
@@ -65,57 +72,57 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (inset.top && inset.left) {
             html[html.length] = makeDiv('tl',
                 [LEFT + 0, TOP + 0, WIDTH + inset.left + PX, HEIGHT + inset.top + PX].join(';'),
-                (img(settings.c, [LEFT + 0, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                settings.c, [LEFT + 0, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'top left'
             );
         }
         if (inset.top) {
             html[html.length] = makeDiv('t',
                 [LEFT + inset.left + PX, TOP + 0, HEIGHT + inset.top + PX, RIGHT + inset.right + PX].join(';'),
-                img(settings.h, [LEFT + 0, TOP + 0, WIDTH + P100, HEIGHT + height + PX].join(';'))
+                settings.h, [LEFT + 0, TOP + 0, WIDTH + P100, HEIGHT + height + PX].join(';'), 'repeat-x top'
             );
         }
         if (inset.top && inset.right) {
             html[html.length] = makeDiv('tr',
                 [RIGHT + 0, TOP + 0, WIDTH + inset.right + PX, HEIGHT + inset.top + PX].join(';'),
-                (img(settings.c, [LEFT + '-' + inset.left + PX, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                settings.c, [LEFT + '-' + inset.left + PX, TOP + 0, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'top right'
             );
         }
         
         if (inset.left) {
             html[html.length] = makeDiv('l',
                 [LEFT + 0, TOP + inset.top + PX, WIDTH + inset.left + PX, BOTTOM + inset.bottom + PX].join(';'),
-                img(settings.v, [LEFT + 0, TOP + 0, HEIGHT + P100, WIDTH + width + PX].join(';'))
+                settings.v, [LEFT + 0, TOP + 0, HEIGHT + P100, WIDTH + width + PX].join(';'), 'repeat-y left'
             );
         }
         if (settings.m) {
             html[html.length] = makeDiv('m',
                 [LEFT + inset.left + PX, TOP + inset.top + PX, RIGHT + inset.left + PX, BOTTOM + inset.bottom + PX].join(';'),
-                img(settings.m, [LEFT + 0, TOP + 0, HEIGHT + P100, WIDTH + P100].join(';'))
+                settings.m, [LEFT + 0, TOP + 0, HEIGHT + P100, WIDTH + P100].join(';'), ''
             );
         }
         if (inset.right) {
             html[html.length] = makeDiv('r',
                 [RIGHT + 0, TOP + inset.top + PX, WIDTH + inset.right + PX, BOTTOM + inset.bottom + PX].join(';'),
-                img(settings.v, [LEFT + '-' + inset.left + PX, TOP + 0, HEIGHT + P100, WIDTH + width + PX].join(';'))
+                settings.v, [LEFT + '-' + inset.left + PX, TOP + 0, HEIGHT + P100, WIDTH + width + PX].join(';'), 'repeat-y right'
             );
         }
         
         if (inset.bottom && inset.left) {
             html[html.length] = makeDiv('bl',
                 [LEFT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.bottom + PX].join(';'),
-                (img(settings.c, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                settings.c, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'bottom left'
             );
         }
         if (inset.bottom) {
             html[html.length] = makeDiv('b',
                 [LEFT + inset.left + PX, BOTTOM + 0, HEIGHT + inset.bottom + PX, RIGHT + inset.right + PX].join(';'),
-                img(settings.h, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + P100, HEIGHT + height + PX].join(';'))
+                settings.h, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + P100, HEIGHT + height + PX].join(';'), 'repeat-x bottom'
             );
         }
         if (inset.bottom && inset.right) {
             html[html.length] = makeDiv('br',
                 [RIGHT + 0, BOTTOM + 0, WIDTH + inset.right + PX, HEIGHT + inset.bottom + PX].join(';'),
-                (img(settings.c, [LEFT + '-' + inset.left + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';')))
+                settings.c, [LEFT + '-' + inset.left + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'bottom right'
             );
         }
         return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));

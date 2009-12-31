@@ -6,30 +6,15 @@ include('dom.js');
  *
  * @param {string} url Image url
  * @param {string=} dataUrl Data url representation of image, used if supported
- * @param {boolean=} alpha If image has transparent parts
+ * @param {string=} alphaUrl Gif image url for IE6
  *
  * @namespace
  *
  * @returns {Element}
  */
-uki.image = function(url, dataUrl, alpha) {
+uki.image = function(url, dataUrl, alphaUrl) {
     var result = new Image();
-    if (uki.image.dataUrlSupported && dataUrl) {
-        result.src = dataUrl;
-    } else {
-        result.src = url;
-        if (alpha && uki.image.needAlphaFix) {
-            var dummy = uki.createElement('div', 'overflow:hidden;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + url + '",sizingMethod="scale")');
-            uki.image.load([result], function() {
-                dummy.style.width = result.width + 'px';
-                dummy.style.height = result.height + 'px';
-                dummy.width = result.width;
-                dummy.height = result.height;
-                if (dummy.onload) dummy.onload();
-            });
-            return dummy;
-        }
-    } 
+    result.src = uki.imageSrc(url, dataUrl, alphaUrl);
     return result;
 };
 
@@ -38,7 +23,7 @@ uki.image = function(url, dataUrl, alpha) {
  *
  * @param {string} url Image url
  * @param {string=} dataUrl Data url representation of image, used if supported
- * @param {boolean=} alphaUrl Gif image url for IE6
+ * @param {string=} alphaUrl Gif image url for IE6
  *
  * @returns {string}
  */
