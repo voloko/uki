@@ -8,9 +8,13 @@ include('collection.js');
     /**
      * Creates uki view tree from JSON-like markup
      *
-     * Example:
-     *    uki.build( {view: 'Button', rect: '100 100 100 24', text: 'Hello world' } )
-     * Creates uki.view.Button with '100 100 100 24' passed to constructor, and calls text('Hello world') on it
+     * @example
+     * uki.build( {view: 'Button', rect: '100 100 100 24', text: 'Hello world' } )
+     * // Creates uki.view.Button with '100 100 100 24' passed to constructor, 
+     * // and calls text('Hello world') on it
+     *
+     * @function
+     * @name uki.build
      *
      * @param {object} ml JSON-like markup
      * @returns {uki.view.Collection} collection of created elemens

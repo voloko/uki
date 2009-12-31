@@ -13,50 +13,60 @@ var ANCHOR_TOP    = 1,
     ANCHOR_WIDTH  = 16,
     ANCHOR_HEIGHT = 32;
 
-/**
- * Base class for all uki views
- *
- * View creates and layouts dom nodes. uki.view.Base defines basic API for other views.
- * It also defines common layout algorithms.
- *
- * Layout
- *
- * View layout is defined by rectangle and anchors.
- * Rectangle is passed to constructor, anchors are set through the #anchors attribute.
- * 
- * Rectangle defines initial position and size. Anchors specify how view will move and
- * resize when its parent is resized.
- *
- * Example:
- *   uki({ view: 'Base', rect: '10 20 100 50', anchors: 'left top right' })
- * Creates Base view with initial x = 10px, y = 20px, width = 100px, height = 50px.
- * When parent resizes x, y and height will stay the same. Width will resize with parent.
- *
- * @see uki.view.Base#anchors for more info on resize rules
- *
- *
- * 2 phases of layout
- *
- * Layout process has 2 phases. 
- * First views rectangles are recalculated. This may happen several times before dom 
- * is touched. This is done either explictly through #rect attribute or through
- * #parentResized callbacks. 
- * After rectangles are set #layout is called. This actually updates dom styles.
- */
 uki.view.Base = uki.newClass(uki.view.Observable, new function() {
-
+    
+    /** @exports proto as uki.view.Base# */
     var proto = this,
         layoutId = 1;
 
     proto.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
                      + 'font-family:Arial,Helvetica,sans-serif;';
     
+
+
+    /**
+     * Base class for all uki views.
+     *
+     * <p>View creates and layouts dom nodes. uki.view.Base defines basic API for other views.
+     * It also defines common layout algorithms.</p>
+     *
+     * Layout
+     *
+     * <p>View layout is defined by rectangle and anchors.
+     * Rectangle is passed to constructor, anchors are set through the #anchors attribute.</p>
+     * 
+     * <p>Rectangle defines initial position and size. Anchors specify how view will move and
+     * resize when its parent is resized.</p>
+     *
+     * 2 phases of layout
+     *
+     * <p>Layout process has 2 phases. 
+     * First views rectangles are recalculated. This may happen several times before dom 
+     * is touched. This is done either explictly through #rect attribute or through
+     * #parentResized callbacks. 
+     * After rectangles are set #layout is called. This actually updates dom styles.</p>
+     *
+     * @example
+     * uki({ view: 'Base', rect: '10 20 100 50', anchors: 'left top right' })
+     * // Creates Base view with initial x = 10px, y = 20px, width = 100px, height = 50px.
+     * // When parent resizes x, y and height will stay the same. Width will resize with parent.
+     *
+     *
+     * @see uki.view.Base#anchors
+     * @constructor
+     *
+     * @name uki.view.Base
+     * @implements uki.view.Observable
+     * @param {uki.geometry.Rect} rect initial position and size
+     */
     proto.init = function(rect) {
         this._parentRect = this._rect = Rect.create(rect);
         this._setup();
         uki.initNativeLayout();
         this._createDom();
     };
+    
+    /**#@+ @memberOf uki.view.Base# */
     
     proto._setup = function() {
         uki.extend(this, {
@@ -148,24 +158,28 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     /**
      * Accessor for background attribute. 
-     * @method #background
+     * @name background
+     * @function
      * @param {string|uki.background.Base=} background
      * @returns {uki.background.Base|uki.view.Base} current background or self
      */
     /**
      * Accessor for shadow background attribute. 
-     * @method #shadow
+     * @name shadow
+     * @function
      * @param {string|uki.background.Base=} background
      * @returns {uki.background.Base|uki.view.Base} current background or self
      */
     /**
      * Accessor for default background attribute. 
-     * @method #defaultBackground
+     * @name defaultBackground
+     * @function
      * @returns {uki.background.Base} default background if not overriden through attribute
      */
     /**
      * Accessor for default shadow background attribute. 
-     * @method #defaultShadow
+     * @name defaultShadow
+     * @function
      * @returns {uki.background.Base} default background if not overriden through attribute
      */
     uki.each(['background', 'shadow'], function(i, name) {
@@ -245,8 +259,10 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * If you set both "right" and "left" than "width" is assumed.
      *
      * Anchors are stored as a bitmask. Though its easier to set them using strings
-     * 
+     *
+     * @function
      * @param {string|number} anchors
+     * @returns {number|uki.view.Base} anchors or self
      */
     proto.anchors = uki.newProp('_anchors', function(anchors) {
         if (anchors.indexOf) {
@@ -457,4 +473,5 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
         return uki.view.Observable._bindToDom.call(this, name);
     };
     
+    /**#@-*/
 });

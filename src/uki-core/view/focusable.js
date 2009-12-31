@@ -1,6 +1,9 @@
 include('../view.js');
 include('observable.js');
 
+/**
+ * @class
+ */
 uki.view.Focusable = {
     // dom: function() {
     //     return null; // should implement

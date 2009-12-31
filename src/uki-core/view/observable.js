@@ -1,5 +1,8 @@
 include('../view.js');
 
+/**
+ * @class
+ */
 uki.view.Observable = {
     // dom: function() {
     //     return null; // should implement

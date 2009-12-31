@@ -117,12 +117,16 @@ include('collection.js');
 	    return result;
 	}
 	
-    self = uki.Selector = {
+    self = 
+    /**
+     * @namespace
+     */
+    uki.Selector = {
     	/**
-    	 * Finds views by CSS3 selectors in view tree.
-    	 * Can be called as uki(selector) instead of uki.Selector.find(selector)
+    	 * <p>Finds views by CSS3 selectors in view tree.</p>
+    	 * <p>Can be called as uki(selector) instead of uki.Selector.find(selector)</p>
     	 *
-    	 * Examples:
+    	 * @example
     	 *   uki('Label') find all labels on page
     	 *   uki('Box[name=main] > Label') find all imidiate descendant Labels in a box with name = "main"
     	 *   uki('> Slider', context) find all direct descendant Sliders within given context
@@ -158,6 +162,7 @@ include('collection.js');
             return skipFiltering ? result : new uki.Collection(removeDuplicates(result));
         },
         
+        /** @ignore */
         reduce: function(exprItem, context) {
             if (!context || !context.length) return [];
             
@@ -183,6 +188,7 @@ include('collection.js');
             return context;
         },
         
+        /** @ignore */
         tokenize: function(expr) {
         	var parts = [], match, extra;
 

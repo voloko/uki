@@ -5,25 +5,30 @@ include('attachment.js');
 (function() {
     
     /**
-     * Collection performs group operations on uki.view objects
-     * Behaves much like result jQuery(dom nodes).
-     * Most methods are chainable like .attr('text', 'somevalue').bind('click', function() { ... })
+     * <p>Collection performs group operations on uki.view objects.</p>
+     * <p>Behaves much like result jQuery(dom nodes).
+     * Most methods are chainable like .attr('text', 'somevalue').bind('click', function() { ... })</p>
      *
-     * Its easier to call uki([view1, view2]) or uki('selector') instead of creating collection directly
+     * <p>Its easier to call uki([view1, view2]) or uki('selector') instead of creating collection directly</p>
      *
      * @author voloko
      * @constructor
-     * @class uki.Collection
+     * @class
      */
     uki.Collection = function( elems ) {
         this.length = 0;
     	Array[PROTOTYPE].push.apply( this, elems );
     };
 
+    /** @type uki.Collection.prototype */
     var self = uki.fn = uki.Collection[PROTOTYPE] = {};
     
     /**
      * Iterates trough all items within itself
+     *
+     * @name uki.Collection#each
+     * @function
+     *
      * @param {function(this:uki.view.Base, number, uki.view.Base)} callback Callback to call for every item
      * @returns {uki.view.Collection} self
      */
@@ -34,6 +39,10 @@ include('attachment.js');
     
     /**
      * Creates a new uki.Collection populated with found items
+     *
+     * @name uki.Collection#grep
+     * @function
+     *
      * @param {function(uki.view.Base, number):boolean} callback Callback to call for every item
      * @returns {uki.view.Collection} created collection
      */
@@ -43,9 +52,13 @@ include('attachment.js');
     
     /**
      * Sets an attribute on all views or gets the value of the attribute on the first view
-     * Example
-     *   c.attr('text', 'my text') // sets text to 'my text' on all collection views
-     *   c.attr('name') // gets name attribute on the first view
+     *
+     * @example
+     * c.attr('text', 'my text') // sets text to 'my text' on all collection views
+     * c.attr('name') // gets name attribute on the first view
+     *
+     * @name uki.Collection#attr
+     * @function
      *
      * @param {string} name Name of the attribute
      * @param {object=} value Value to set
@@ -64,8 +77,11 @@ include('attachment.js');
     
     /**
      * Finds views within collection context
-     * Example
-     *   c.find('Button')
+     * @example
+     * c.find('Button')
+     *
+     * @name uki.Collection#find
+     * @function
      *
      * @param {string} selector 
      * @returns {uki.view.Collection} Collection of found items
@@ -76,6 +92,9 @@ include('attachment.js');
     
     /**
      * Attaches all child views to dom container
+     *
+     * @name uki.Collection#attachTo
+     * @function
      *
      * @param {Element} dom Container dom element
      * @param {uki.geometry.Rect} rect Default size
@@ -90,6 +109,9 @@ include('attachment.js');
     
     /**
      * Appends views to the first item in collection
+     *
+     * @name uki.Collection#append
+     * @function
      *
      * @param {Array.<uki.view.Base>} views Views to append
      * @returns {uki.view.Collection} self

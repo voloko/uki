@@ -1,6 +1,11 @@
 include('../background.js');
 include('../geometry.js');
 
+/**
+ * Adds a div with given cssText to dom()
+ *
+ * @class
+ */
 uki.background.CssBox = uki.newClass(new function() {
     
     var cache = {};

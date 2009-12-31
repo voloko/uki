@@ -1,4 +1,4 @@
-uki.extend(uki.dom, {
+uki.extend(uki.dom, /** @lends uki.dom */ {
     bound: {},
     handles: {},
     
@@ -46,6 +46,7 @@ uki.extend(uki.dom, {
         }
     },
     
+    /** @ignore */
     handler: function( e ) {
         e = uki.dom.fix( e || root.event );
 
@@ -67,6 +68,7 @@ uki.extend(uki.dom, {
     
     /**
      * Taken from jQuery
+     * @ignore
      */
     fix: function( event ) {
 		// Fix target property, if necessary

@@ -1,5 +1,8 @@
 include('uki.js');
 
+/**
+ * @class
+ */
 uki.theme = {
     themes: [],
     

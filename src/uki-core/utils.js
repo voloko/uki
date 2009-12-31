@@ -2,17 +2,19 @@ include('uki.js');
 
 var toString = Object[PROTOTYPE].toString;
 	
+var utils = 
 /**
  * Utility functions. Can be called both as uki.utils.function or uki.function
+ * @namespace
  */
-var utils = uki.utils = {
+uki.utils = {
     
     /**
-     * Sets or retrieves attribute on an object. 
-     * If target has function with attr it will be called target[attr](value=)
-     * If no function present attribute will be set/get directly: target[attr] = value or return target[attr]
+     * <p>Sets or retrieves attribute on an object. </p>
+     * <p>If target has function with attr it will be called target[attr](value=)
+     * If no function present attribute will be set/get directly: target[attr] = value or return target[attr]</p>
      *
-     * Example:
+     * @example
      *   uki.attr(view, 'name', 'funny') // sets name to funny on view
      *   uki.attr(view, 'id') // gets id attribute of view
      *
@@ -109,7 +111,7 @@ var utils = uki.utils = {
     },
     
     /**
-     * Checks if elem is in array
+     * <p>Checks if elem is in array</p>
      *
      * @param {object} elem
      * @param {object} array
@@ -124,7 +126,7 @@ var utils = uki.utils = {
     },
 
     /**
-     * Returns unique elements in array
+     * <p>Returns unique elements in array</p>
      *
      * @param {Array} array
      * @returns {Array}
@@ -151,7 +153,7 @@ var utils = uki.utils = {
     },
 
     /**
-     * Searches for all items matchign given criteria
+     * <p>Searches for all items matchign given criteria</p>
      *
      * @param {Array} elems Element to search through
      * @param {function(object, number)} callback Returns true for every matched element
@@ -168,8 +170,8 @@ var utils = uki.utils = {
     },
     
     /**
-     * Maps elements passing them to callback
-     * Example
+     * <p>Maps elements passing them to callback</p>
+     * @example
      *   x = uki.map([1, 2, 3], function(item) { return -item }); 
      *
      * @param {Array} elems Elements to map
@@ -193,8 +195,8 @@ var utils = uki.utils = {
     },
     
     /**
-     * Reduces array
-     * Example
+     * <p>Reduces array</p>
+     * @example
      *   x = uki.reduce(1, [1, 2, 3], function(p, x) { return p * x}) // calculates product
      *
      * @param {object} initial Initial value
@@ -212,8 +214,8 @@ var utils = uki.utils = {
     },
 
     /**
-     * Copies properties from one object to another
-     * Example
+     * <p>Copies properties from one object to another</p>
+     * @example
      *   uki.extend(x, { width: 13, height: 14 }) // sets x.width = 13, x.height = 14
      *   options = uki.extend({}, defaultOptions, options)
      *
@@ -242,8 +244,8 @@ var utils = uki.utils = {
     },
     
     /**
-     * Creates a new class inherited from base classes. Init function is used as constructor
-     * Example
+     * <p>Creates a new class inherited from base classes. Init function is used as constructor</p>
+     * @example
      *   baseClass = uki.newClass({
      *      init: function() { this.x = 3 }
      *   });
@@ -261,11 +263,13 @@ var utils = uki.utils = {
     newClass: function(/* [[superClass], mixin1, mixin2, ..] */ methods) {
         var klass = function() {
                 this.init.apply(this, arguments);
-            }, 
-            inheritance, i, startFrom = 0;
+            };
+            
+        var inheritance, i, startFrom = 0;
             
         if (arguments.length > 1) {
             if (arguments[0][PROTOTYPE]) { // real inheritance
+                /** @ignore */
                 inheritance = function() {};
                 inheritance[PROTOTYPE] = arguments[0][PROTOTYPE];
                 klass[PROTOTYPE] = new inheritance();
@@ -279,16 +283,16 @@ var utils = uki.utils = {
     },
     
     /**
-     * Creates default uki property function
-     * If value is given to this function it sets property to value
-     * If no arguments given than function returns current property value
+     * <p>Creates default uki property function</p>
+     * <p>If value is given to this function it sets property to value
+     * If no arguments given than function returns current property value</p>
      *
-     * Optional setter can be given. In this case setter will be called instead
-     * of simple this[field] = value
+     * <p>Optional setter can be given. In this case setter will be called instead
+     * of simple this[field] = value</p>
      *
-     * If used as setter function returns self
+     * <p>If used as setter function returns self</p>
      *   
-     * Example
+     * @example
      *   x.width = uki.newProperty('_width');
      *   x.width(12); // x._width = 12
      *   x.width();   // return 12
@@ -306,10 +310,10 @@ var utils = uki.utils = {
     },
     
     /**
-     * Adds several properties (uki.newProp) to a given object.
-     * Field name equals to '_' + property name
+     * <p>Adds several properties (uki.newProp) to a given object.</p>
+     * <p>Field name equals to '_' + property name</p>
      *
-     * Example
+     * @example
      *   uki.addProps(x, ['width', 'height'])
      *
      * @param {object} proto Object to add properties to
@@ -328,7 +332,6 @@ var utils = uki.utils = {
             return this;
         };
     }
-    
 };
 
 utils.extend(uki, utils);

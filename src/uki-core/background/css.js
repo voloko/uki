@@ -1,6 +1,11 @@
 include('../background.js');
 include('../image.js');
 
+/**
+ * Writes css properties to targets dom()
+ *
+ * @class
+ */
 uki.background.Css = uki.newClass(new function() {
     
     this.init = function(options) {

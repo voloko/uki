@@ -1,6 +1,11 @@
 include('../background.js');
 include('../image.js');
 
+/**
+ * Adds a div with 9 sliced images in the corners, sides and center
+ *
+ * @class
+ */
 uki.background.Sliced9 = uki.newClass(new function() {
     var nativeCss = ['MozBorderImage', 'WebkitBorderImage', 'borderImage'],
         dom = uki.dom;

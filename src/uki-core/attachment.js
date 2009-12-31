@@ -6,7 +6,7 @@ include('view/observable.js');
 
 (function() {
     
-    var self = uki.Attachment = uki.newClass(uki.view.Observable, {
+    var self = uki.Attachment = uki.newClass(uki.view.Observable, /** @lends uki.Attachment.prototype */ {
         /**
          * Attachment serves as a connection between a uki view and a dom container.
          * It notifies its view with parentResized on window resize. 
@@ -17,7 +17,7 @@ include('view/observable.js');
          * @param {uki.geometry.Rect} rect Initial size
          *
          * @see uki.view.Base#parentResized
-         * @class uki.Attachment
+         * @name uki.Attachment
          * @base uki.view.Observable
          * @constructor
          */

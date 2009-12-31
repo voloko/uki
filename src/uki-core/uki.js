@@ -4,6 +4,8 @@
  *
  * @param {String|uki.view.Base|Object|Array.<uki.view.Base>} val
  * @param {Array.<uki.view.Base>=} optional context for selector
+ * @class
+ * @name uki
  * @return {uki.Collection}
  */
 root.uki = function(val, context) {
@@ -21,12 +23,14 @@ root.uki = function(val, context) {
 };
 
 /**
- * @type {string}
+ * @type string
+ * @field
  */
 uki.version = '0.0.4';
 
 /**
- * @type {function():boolean}
+ * Empty function
+ * @type function():boolean
  */
 uki.F = function() { return false; };
 uki._ids = {};

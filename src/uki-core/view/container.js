@@ -2,9 +2,16 @@ include('base.js');
 
 uki.view.Container = uki.newClass(uki.view.Base, new function() {
     var Base = uki.view.Base[PROTOTYPE],
+        /**
+         * @class
+         * @name uki.view.Container
+         */
         proto = this;
         
-        
+    /** @exports proto as uki.view.Container# */
+    
+    /**#@+ @memberOf uki.view.Container# */
+    
     proto._setup = function() {
         this._childViews = [];
         Base._setup.call(this);
@@ -53,7 +60,6 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     
     /**
      * Remove particular child
-     * Also removes from _dom if available
      */
     proto.removeChild = function(child) {
         child.parent(null);
@@ -66,7 +72,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     };
     
     /**
-     * Adds a child
+     * Adds a child.
      */
     proto.appendChild = function(child) {
         child._viewIndex = this._childViews.length;
@@ -127,6 +133,5 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         };
     };
     
-    
-    
+   /**#@-*/ 
 });

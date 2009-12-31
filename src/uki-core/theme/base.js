@@ -1,5 +1,8 @@
 include('../theme.js');
 
+/**
+ * @class
+ */
 uki.theme.Base = {
     images: [],
     backgrounds: [],

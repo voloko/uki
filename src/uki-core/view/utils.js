@@ -1,7 +1,13 @@
 include('../view.js');
 
+/**
+ * @class
+ */
 uki.view.utils = new function() {
     var proto = this;
+    
+    /** @exports proto as uki.view.utils */
+    /**#@+ @memberOf uki.view.utils */
     
     proto.visibleRect = function (from, upTo) {
         var queue = [],
@@ -55,9 +61,11 @@ uki.view.utils = new function() {
         return null;
     };
     
+    /** @inner */
     function visibleRect (c) {
         return c.visibleRect ? c.visibleRect() : c.rect().clone();
     }
+    /**#@-*/ 
 };
 
 uki.extend(uki.view, uki.view.utils);

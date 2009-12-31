@@ -1,5 +1,10 @@
 include('../background.js');
 
+/**
+ * Adds a div with colored rows to dom
+ *
+ * @class
+ */
 uki.background.Rows = uki.newClass(new function() {
     var proto = this,
         cache = [],

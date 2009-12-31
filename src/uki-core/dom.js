@@ -4,6 +4,7 @@ include('utils.js');
 
 /**
  * Basic utils to work with the dom tree
+ * @namespace
  * @author voloko
  */
 uki.dom = {
