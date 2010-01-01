@@ -54,10 +54,10 @@
                 
                 var prefix = "button/focusRing-";
                 return new uki.background.Sliced9({
-                    c: [u(prefix + "c.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAhklEQVQYlWNgQABGBof9LNqhq9hAGMQGi6GA0FXMKp7b2NX9jvCqJB4SBWEwGygGkoObBBJQSNgvoJN4UFYn7oQeGAPZIDGwYrDJQCtAukESuvEnjHUTT/iDMZANEgPJgZ0Bcg/IKpApIAV6CSerQBjEBomB5MBuJloh0VYT7xkSgoeoAAcAxGdrJQ8c5mIAAAAASUVORK5CYII="],
-                    v: [u(prefix + "v.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAWCAYAAAD5Jg1dAAAAm0lEQVQoU2OQCT3GqR13RE43/qidXsKJLAYoALFBYiA5kBoG8did3JoJJ1R14k966yScrIcpBLFBYiA5kBoGdb8jvDqxxzX1Ek+E6CYe74MpBLFBYiA5kBoGpdDd/JqxR3X0Ek9GAvE0mEIQGyQGkgOpASvUiTuhpxt/PFo38cQMhIknZoDEQHKjCkcV4lZIVDIjOuESnRWIzVwAIp4VOOXTSVIAAAAASUVORK5CYII="],
-                    h: [u(prefix + "h.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIMAAAAKCAYAAACXIu12AAAAtElEQVRYR+2YMQoCMRBF04qIpY1YCCLBSY7gBQQrtxDJJmm9hDfYUryK2O6a5FbuaCPkCPM/vCrl+zCZUcvmPVm453R77Gfr5jUHsmDv7J97oHZtv9Ihb8glrd1A1GYLZPD1zd5H/9wDZfywJ18ONuaTjeVsfLoAGbBv9s7+uQfKhnylUG4mpm58vJuYH0AGP9+pY//cA4UgCFIHY0Iu1ZjAB1Iu1QcSq6VcqtUSRyfZ/B+dPnYNgLXrgMj6AAAAAElFTkSuQmCC"]
-                }, "5 5 5 5", { inset: '-4 -4 -3 -4', zIndex: 2 });
+                    c: [u(prefix + "c.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAtUlEQVQokWNgQABGBof9LNqhq9hkQo9xgjCIDRIDy6GA0FXMKp7b2NX9jvCqJB4S1Y47IgfCIDZYDCgHUgM3GSSgkLBfQCfxoKxO3Ak93fijdiAMYoPEQHJgTWCbgFaCTAFJ6MafMNZNPOGvl3AiC4RBbJAYSA6kBuw8kDtBVoNNBis+WQWzGsQGiYHkwE4F+QnsOaB7QU4AmcqABsA2AeVAakBqSddAspNI9jTpwUpGxJGUNADqMZr1BXNgDAAAAABJRU5ErkJggg=="],
+                    v: [u(prefix + "v.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAUCAYAAAC58NwRAAAAf0lEQVQoU2MQj93JrZlwQlUn/qS3TsLJegY0ABIDyYHUgNQyqPsd4dWJPa6pl3giRDfxeB+6BpAYSA6kBqSWQSl0N79m7FEdvcSTkUA8DV0DSAwkB1IDUgvWoBN3Qk83/ni0buKJGegaQGIgOZCaUQ2jGgZeA0nJm+QMRGoWBQCeEP1BW4HCpgAAAABJRU5ErkJggg=="],
+                    h: [u(prefix + "h.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIEAAAAMCAYAAABFjt5WAAAAlElEQVRYw+2YMQoCMRBFpxextBcWCUxykQUrLUTibk7iDbYUryK2SpJbubN7jLwHr0n7msmXfXxvjqfv9nD57LAtrbv1FzeWTmN2Lv5U7yVgGy69rfvcX3SofUjlHFK9+iHfsA2tt3W3/qJjffiUp/nx6VN5YRuuvfNk/QUAAADA4DDkMOSLyBexZyxiLOqE2ZjZ+A+dZWjNi3C4GwAAAABJRU5ErkJggg=="]
+                }, "6 6 6 6", { inset: '-4 -4 -3 -4', zIndex: 2 });
             },
             
             'toolbar-button-normal': function() {
