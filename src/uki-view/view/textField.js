@@ -24,6 +24,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     proto._setup = function() {
         Base._setup.apply(this, arguments);
         uki.extend(this, {
+            _value: '',
             _multiline: false,
             _placeholder: '',
             _backgroundPrefix: '',

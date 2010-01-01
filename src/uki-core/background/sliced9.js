@@ -40,7 +40,6 @@ uki.background.Sliced9 = uki.newClass(new function() {
     function makeDiv (name, style, setting, imgStyle, bgSettings) {
         var inner = setting[3] ? img(setting, imgStyle) : '';
         if (!setting[3]) style += bgStyle(setting, bgSettings);
-        console.log(style);
         return '<div class="' +  name + '" style="position:absolute;overflow:hidden;' + style + '">' + inner + '</div>';
     }
     

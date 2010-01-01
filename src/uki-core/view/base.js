@@ -310,7 +310,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     proto.minSize = uki.newProp('_minSize', function(s) {
         this._minSize = Size.create(s);
-        this.rect(this._normalizeRect(this._rect));
+        this.rect(this._parentRect);
         if (this._minSize.width) this._dom.style.minWidth = this._minSize.width + 'px';
         if (this._minSize.height) this._dom.style.minHeight = this._minSize.height + 'px';
     });
