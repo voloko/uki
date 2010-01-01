@@ -95,6 +95,6 @@ uki('#splitRight').bind('handleMove', function(e) {
 });
 
 uki('#splitRight').handlePosition(400).layout();
-uki('#contactsList').data(contacts).parent().resizeToContents('height').layout();
-uki('#waveList').data(waves).parent().resizeToContents('height').layout();
+uki('#contactsList').data(contacts).parent().layout();
+uki('#waveList').data(waves).parent().layout();
 uki('#message').html( document.getElementById('message').innerHTML );

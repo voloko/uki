@@ -5,14 +5,14 @@ uki([
     { view: 'SplitPane', rect: '0 30 1000 600', anchors: 'left top right bottom', 
         handlePosition: 300, autogrowLeft: false, autogrowRight: true, autogrowLeft: false, handleWidth: 1, rightMin: 400, leftMin: 150,
         leftChildViews:
-            { view: 'ScrollPane', rect: '0 0 300 600', anchors: 'top left right bottom', background: '#0F0',
+            { view: 'ScrollPane', rect: '0 0 300 600', anchors: 'top left right bottom', background: '#0F0', name: 'pane_1',
                 childViews: { view: 'Base', rect: '10 10 280 300', anchors: 'top left right', background: '#F00' }
             },
         rightPane: {
             background: '#D0D7E2',
             childViews: { view: 'ScrollPane', rect: '0 0 699 600', anchors: 'top left right bottom',
-                scrollableH: true, scrollableV: true,
-                childViews: { view: 'Box', rect: '10 10 480 300', anchors: 'top left right', background: '#F00' }
+                scrollableH: true, scrollableV: true, name: 'pane_2',
+                childViews: { view: 'Box', rect: '10 10 480 300', anchors: 'top left', background: '#F00' }
             }
         }
     }
