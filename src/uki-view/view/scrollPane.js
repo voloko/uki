@@ -135,16 +135,22 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     proto._layoutDom = function(rect) {
         this._updateClientRects();
         
+        Base._layoutDom.call(this, rect);
+        
+        var changed = false;
         if (this._layoutScrollH !== this._scrollH) {
             this._dom.style.overflowX = this._scrollH ? 'scroll' : 'hidden';
             this._layoutScrollH = this._scrollH;
+            changed = true;
         }
 
         if (this._layoutScrollV !== this._scrollV) {
             this._dom.style.overflowY = this._scrollV ? 'scroll' : 'hidden';
             this._layoutScrollV = this._scrollV;
+            changed = true;
         }
         
-        Base._layoutDom.call(this, rect);
+        // force redraw in ie
+        if (this._dom.attachEvent) this._dom.className += '';
     };
 });

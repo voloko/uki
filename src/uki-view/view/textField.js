@@ -5,7 +5,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
 
     function getEmptyInputHeight (fontSize) {
         if (!emptyInputHeight[fontSize]) {
-            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;overflow:hidden;font-size:"+fontSize+";left:-999em;top:0");
+            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;border:0;overflow:hidden;font-size:"+fontSize+";left:-999em;top:0");
             uki.dom.probe(
                 node,
                 function(probe) {
@@ -109,7 +109,6 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             padding = '2px 0';
         } else {
             var o = (this._rect.height - getEmptyInputHeight(this.fontSize())) / 2;
-            
             padding = FLOOR(o) + 'px 0 ' + CEIL(o) + 'px 0';
             this._input.style.padding = padding;
         }
