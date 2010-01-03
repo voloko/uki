@@ -71,7 +71,6 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         });
         uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height');
         this._popup.resizeToContents('width height').toggle();
-        // uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height').layout();
     };
     
     proto._updateMoreVisible = function() {

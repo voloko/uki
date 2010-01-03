@@ -7,39 +7,21 @@ uki({ view: 'Box', rect: '1000 400', anchors: 'left top', childViews: [
         { view: 'Button', rect: '70 310 100 24', anchors: 'left top', text: 'Left Bottom', id: 'h_left_bottom' },
         { view: 'Button', rect: '200 310 100 24', anchors: 'left top', text: 'Right Bottom', id: 'h_right_bottom' },
         { view: 'Button', rect: '70 70 100 24', anchors: 'left top', text: 'Left Top', id: 'h_left_top' },
-        { view: 'Button', rect: '200 70 100 24', anchors: 'left top', text: 'Rigth Top', id: 'h_right_top' },
+        { view: 'Button', rect: '200 70 100 24', anchors: 'left top', text: 'Rigth Top', id: 'h_right_top' }
     ] }
 ] }).attachTo( document.getElementById('test'), '1000 400' );
 
-var p;
-
-// uki('Button').click(function() {
-//     p = p || uki(
-//         { view: 'Popup', rect: '50 10 200 200', anchors: 'left top', childViews: [
-//             { view: 'Label', rect: '200 200', anchors: 'left top', multiline: true, text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' }
-//         ]}
-//     );
-//     p.rect(p.rect().clone().offset(100,0));
-//     uki('Box').append(p).layout();
-//     this.unbind('click', arguments.callee);
-// }).focus();
-
 uki('Button').click(function() {
     var button = this;
-    uki('Popup').grep(function(e) { return e.relativeTo() == button }).toggle();
-})
-
-
-// uki({ view: }).popup( component );
-
+    uki('Popup').grep(function(e) { return e.relativeTo() == button; }).toggle();
+});
 
 uki({ view: 'Popup', rect: '120 120', anchors: 'left bottom', shadow: 'theme(shadow-big)', relativeTo: uki('#left_bottom')[0] })[0].show();
-uki({ view: 'Popup', rect: '120 120', anchors: 'left top', visible: true, relativeTo: uki('#left_top')[0] }).attachTo( document.body );
-uki({ view: 'Popup', rect: '120 120', anchors: 'right bottom', relativeTo: uki('#right_bottom')[0] }).attachTo( document.body );
-uki({ view: 'Popup', rect: '120 120', anchors: 'right top', relativeTo: uki('#right_top')[0] }).attachTo( document.body );
-// 
-uki({ view: 'Popup', rect: '120 120', anchors: 'left bottom', horizontal: true, relativeTo: uki('#h_left_bottom')[0] }).attachTo( document.body );
-uki({ view: 'Popup', rect: '120 120', anchors: 'left top', horizontal: true, relativeTo: uki('#h_left_top')[0] }).attachTo( document.body );
-uki({ view: 'Popup', rect: '120 120', anchors: 'right bottom', horizontal: true, relativeTo: uki('#h_right_bottom')[0] }).attachTo( document.body );
-uki({ view: 'Popup', rect: '120 120', anchors: 'right top', horizontal: true, relativeTo: uki('#h_right_top')[0] }).attachTo( document.body );
+uki({ view: 'Popup', rect: '120 120', anchors: 'left top', visible: true, relativeTo: uki('#left_top')[0] }).attachTo( window );
+uki({ view: 'Popup', rect: '120 120', anchors: 'right bottom', relativeTo: uki('#right_bottom')[0] }).show();
+uki({ view: 'Popup', rect: '120 120', anchors: 'right top', relativeTo: uki('#right_top')[0] }).show();
 
+uki({ view: 'Popup', rect: '120 120', anchors: 'left bottom', horizontal: true, relativeTo: uki('#h_left_bottom')[0] }).show();
+uki({ view: 'Popup', rect: '120 120', anchors: 'left top', horizontal: true, relativeTo: uki('#h_left_top')[0] }).show();
+uki({ view: 'Popup', rect: '120 120', anchors: 'right bottom', horizontal: true, relativeTo: uki('#h_right_bottom')[0] }).show();
+uki({ view: 'Popup', rect: '120 120', anchors: 'right top', horizontal: true, relativeTo: uki('#h_right_top')[0] }).show();

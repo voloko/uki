@@ -5,11 +5,13 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
     
     proto._setup = function() {
         Base._setup.call(this);
-        this._horizontal = false;
-        this._dimension = 'height';
-        this._containers = [];
-        this._containerSizes = [];
-        this.defaultCss = this.defaultCss + 'overflow:hidden;'
+        uki.extend(this, {
+            _horizontal: false,
+            _dimension: 'height',
+            _containers: [],
+            _containerSizes: [],
+            defaultCss: this.defaultCss + 'overflow:hidden;'
+        });
     };
     
     proto.typeName = function() {

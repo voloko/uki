@@ -33,12 +33,15 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
                     if (uki.dom.contains(_this.dom(), e.target)) return;
                     _this.hide();
                 };
-                uki.dom.bind(root, 'resize mousedown', this._clickHandler);
+                uki.dom.bind(doc.body, 'mousedown', this._clickHandler);
+                uki.dom.bind(root, 'resize', this._clickHandler);
             } else {
-                uki.dom.unbind(root, 'resize mousedown', this._clickHandler);
+                uki.dom.unbind(doc.body, 'mousedown', this._clickHandler);
+                uki.dom.unbind(root, 'resize', this._clickHandler);
                 this._clickHandler = false;
             }
         }
+        return this;
     };
     
     proto.typeName = function() {
@@ -81,7 +84,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._recalculateRect = function() {
-        if (!this.visible()) return;
+        if (!this.visible()) return this._rect;
         var relativeOffset = uki.dom.offset(this._relativeTo.dom()),
             relativeRect = this._relativeTo.rect(),
             rect = this.rect().clone(),
@@ -91,7 +94,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
             position = new Point(),
             hOffset = this._horizontal ? this._offset : 0,
             vOffset = this._horizontal ? 0 : this._offset;
-            
+
         relativeOffset.offset(-attachmentOffset.x, -attachmentOffset.y);
 
         if (this._anchors & ANCHOR_RIGHT) {
@@ -105,13 +108,13 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         } else {
             position.y = relativeOffset.y + (this._horizontal ? 0 : relativeRect.height) + vOffset;
         }
-
+        
         return new Rect(position.x, position.y, rect.width, rect.height);
     };
 });
 
 uki.each(['show', 'hide', 'toggle'], function(i, name) {
     uki.fn[name] = function() {
-        this.each(function() { this[name]() });
+        this.each(function() { this[name](); });
     };
-})
+});

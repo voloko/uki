@@ -9,7 +9,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         uki.extend(this, {
             _inset: new Inset(0, 4),
             _backgroundPrefix: '',
-            defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;background:url(" + uki.theme.imageSrc('x') + ")" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
+            defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
         });
     };
     
@@ -49,8 +49,12 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         // dom
         this._dom = uki.createElement('div', this.defaultCss);
         this._label = uki.createElement('div', Base.defaultCss + 
-            "font-size:12px;line-height:12px;white-space:nowrap;text-align:center;font-weight:bold;color:#333"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+            "font-size:12px;line-height:12px;white-space:nowrap;text-align:center;font-weight:bold;color:#333;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
+        if (this._dom.attachEvent) {
+            // click handler for ie
+            this._dom.appendChild(uki.createElement('div', 'width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
+        }
         
         // events
         this._down = false;
@@ -58,7 +62,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         var _this = this;
         
         this._mouseup = function(e) {
-            _this._backgroundByName('normal');
+            _this._backgroundByName(_this._over ? 'hover' : 'normal');
             _this._down = false;
         };
         
@@ -71,7 +75,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         
         this._mouseover = function(e) {
             if (!supportMouseEnter && uki.dom.contains(_this._dom, e.relatedTarget) || _this._over) return;
-            _this._backgroundByName((_this._down) ? 'down' : 'hover');
+            _this._backgroundByName(_this._down ? 'down' : 'hover');
             _this._over = true;
         };
         

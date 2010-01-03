@@ -1,4 +1,5 @@
-var html = '<img src="/app/functional/i/icon.png" width="24" height="24" style="position: absolute; top: 3px; left: -26px;" /> Icon'
+var html = '<img src="/app/functional/i/icon.png" width="24" height="24" style="position: absolute; top: 3px; left: -26px;" /> Icon';
+
 uki( 
     { view: 'HorizontalSplitPane', rect: '1000 600', anchors: 'left top right bottom',
         handlePosition: 400,
@@ -23,14 +24,14 @@ uki(
                 { text: 'Shorter 5', size: '24 24', name: 'shorter 5'}
             ]}
         ]},
-        rightChildViews: { view: 'Button', rect: '0 0 100 100', anchors: 'left top', text: 'hello world', id: 'button' }
+        rightChildViews: { view: 'Button', rect: '0 0 100 100', anchors: 'left top', text: 'hello world', id: 'button', focusable: false }
     }
-).attachTo( window, '1000 600' )
+).attachTo( window, '1000 600' );
 
 uki({ view: 'Popup', rect: '0 0 100 100', anchors: 'left top', relativeTo: uki('#button')[0], id: 'test' }).show();
 
 uki('#button').click(function() {
     uki('#test').toggle();
-})
+});
 
 // uki('Button').resizeToContents().layout();

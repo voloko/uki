@@ -52,14 +52,14 @@ uki.background.CssBox = uki.newClass(new function() {
             _this.layout(e.rect);
         };
         this._comp.bind('layout', this._layoutHandler);
-        if (this._comp.rect()) this.layout(this._comp.rect());
+        this.layout(this._comp.rect());
     };
     
     this.layout = function(size) {
-        uki.dom.layout(this._container.style, {
+        this._prevLayout = uki.dom.layout(this._container.style, {
             width: size.width - this._insetWidth,
             height: size.height - this._insetHeight
-        });
+        }, this._prevLayout);
     };
     
     this.detach = function() {

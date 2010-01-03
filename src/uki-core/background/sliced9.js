@@ -109,19 +109,19 @@ uki.background.Sliced9 = uki.newClass(new function() {
         if (inset.bottom && inset.left) {
             html[html.length] = makeDiv('bl',
                 [LEFT + 0, BOTTOM + 0, WIDTH + inset.left + PX, HEIGHT + inset.bottom + PX].join(';'),
-                settings.c, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'bottom left'
+                settings.c, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'left -' + inset.top + PX
             );
         }
         if (inset.bottom) {
             html[html.length] = makeDiv('b',
                 [LEFT + inset.left + PX, BOTTOM + 0, HEIGHT + inset.bottom + PX, RIGHT + inset.right + PX].join(';'),
-                settings.h, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + P100, HEIGHT + height + PX].join(';'), 'repeat-x bottom'
+                settings.h, [LEFT + 0, TOP + '-' + inset.top + PX, WIDTH + P100, HEIGHT + height + PX].join(';'), 'repeat-x 0 -' + inset.top + PX
             );
         }
         if (inset.bottom && inset.right) {
             html[html.length] = makeDiv('br',
                 [RIGHT + 0, BOTTOM + 0, WIDTH + inset.right + PX, HEIGHT + inset.bottom + PX].join(';'),
-                settings.c, [LEFT + '-' + inset.left + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'bottom right'
+                settings.c, [LEFT + '-' + inset.left + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'right -' + inset.top + PX
             );
         }
         return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));
@@ -136,6 +136,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
     proto.attachTo = function(comp) {
         this._comp = comp;
         
+        this._container.style.visibility = 'visible';
         this._comp.dom().appendChild(this._container);
         
         if (!uki.supportNativeLayout) {
@@ -152,7 +153,8 @@ uki.background.Sliced9 = uki.newClass(new function() {
     
     proto.detach = function() {
         if (this._comp) {
-            this._comp.dom().removeChild(this._container);
+            // this._comp.dom().removeChild(this._container);
+            this._container.style.visibility = 'hidden';
             if (!uki.supportNativeLayout) this._comp.unbind('layout', this._layoutHandler);
             this._size = this._comp = null;
             this._attached = this._inited = false;

@@ -53,8 +53,8 @@ uki.dom = {
         if (prevLayout.top    != layout.top)    style.top    = layout.top + PX;
         if (prevLayout.right  != layout.right)  style.right  = layout.right + PX;
         if (prevLayout.bottom != layout.bottom) style.bottom = layout.bottom + PX;
-        if (prevLayout.width  != layout.width)  style.width  = layout.width + PX;
-        if (prevLayout.height != layout.height) style.height = layout.height + PX;
+        if (prevLayout.width  != layout.width)  style.width  = MAX(layout.width, 0) + PX;
+        if (prevLayout.height != layout.height) style.height = MAX(layout.height, 0) + PX;
         return layout;
     },
     
