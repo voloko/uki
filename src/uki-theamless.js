@@ -33,6 +33,7 @@ include('uki-core/background/rows.js');
 
 include('uki-core/theme.js');
 include('uki-core/theme/base.js');
+include('uki-core/theme/template.js');
 
 include('uki-core/view/utils.js');
 include('uki-core/view/observable.js');
