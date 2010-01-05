@@ -3,13 +3,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
      * Scroll pane. Pane with scrollbars with content overflowing the borders.
      * Works consisently across all supported browsers.
      */
-    
-    // Opera >= 9.5 fails to produce scrollbars if inner absolutly position div is set as l:0,r:0,t:0,b:0
-    // it needs explict height and width for the div. Hence requirePaneResize and less smooth animation
-    // Opera < 9.5 does not support separate overflowX and overflowY. Thus we have to set overflow to auto
-    // and inflict scrollbars with inner pane
-    
-    // Ie 6 lives happily with w:100%,h:100% and overflowed content
     var Base = uki.view.Container[PROTOTYPE],
         proto = this,
         scrollWidth,
@@ -51,8 +44,8 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     
     uki.addProps(proto, ['scrollableV', 'scrollableH']);
     
-    this.rectForChild = function() { return this._rectForChild };
-    this.clientRect = function() { return this._clientRect };
+    this.rectForChild = function() { return this._rectForChild; };
+    this.clientRect = function() { return this._clientRect; };
     
     this.scroll = function(dx, dy) {
         if (dx) this.scrollTop(this.scrollLeft() + dy);
