@@ -1,5 +1,11 @@
 include('../theme.js');
 
+/**
+ * Simple and fast (2x–15x faster than regexp) html template
+ * @example
+ *   var t = new uki.theme.Template('<p class="${className}">${value}</p>')
+ *   t.render({className: 'myClass', value: 'some html'})
+ */
 uki.theme.Template = function(code) {
     var parts = code.split('${'), i, l, tmp;
     this.parts = [parts[0]];
