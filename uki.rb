@@ -65,6 +65,10 @@ class Uki < Sinatra::Base
     response.header['Content-type'] = 'image/jpeg' if path.match(/\.jpg$/)
     response.header['Content-type'] = 'text/javascript;charset=utf-8' if path.match(/\.js$/)
     response.header['Content-Encoding'] = 'gzip' if path.match(/\.gz/)
+    if path.match(/.zip$/)
+      response.header['Content-Type'] = 'application/x-zip-compressed'
+      response.header['Content-Disposition'] = 'attachment; filename=tmp.zip'
+    end
     
     File.read File.join(File.dirname(__FILE__), path)
   end
@@ -96,12 +100,6 @@ class Uki < Sinatra::Base
     FileUtils.mv 'tmp.zip', 'tmp/tmp.zip'
     response.header['Content-Type'] = 'application/x-javascript'
     { 'url' => '/tmp/tmp.zip', 'optimized' => optimized }.to_json
-  end
-  
-  get %r{^/tmp/.*\.zip} do
-    response.header['Content-Type'] = 'application/x-zip-compressed'
-    response.header['Content-Disposition'] = 'attachment; filename=tmp.zip'
-    File.read(request.path.sub(%r{^/}, ''))
   end
   
   get %r{^/.*$} do

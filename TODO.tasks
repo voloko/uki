@@ -7,8 +7,9 @@ Core
     ✓ split TextField into MultilineTextField
     ✓ split SplitPane into VerticalSplitPane and HorizontalSplitPane
     ✓ simplify parent()
-- view.Stylable
-- resizeToContents
+- view.TextCssable
+✓ resizeToContents
+- split image and imageSrc
 
 - micro-optimize JS + profile
     ✓ do not call autolayoutSupport

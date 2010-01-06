@@ -5,6 +5,7 @@ include('../theme.js');
  */
 uki.theme.Base = {
     images: [],
+    imageSrcs: [],
     backgrounds: [],
     doms: [],
     styles: [],
@@ -15,11 +16,13 @@ uki.theme.Base = {
     },
 
     image: function(name, params) {
-        return this.images[name] && uki.image.apply(uki, this.images[name](params));
+        if (this.images[name]) return this.images[name](params);
+        return this.imageSrcs[name] && uki.image.apply(uki, this.imageSrcs[name](params));
     },
     
     imageSrc: function(name, params) {
-        return this.images[name] && uki.imageSrc.apply(uki, this.images[name](params));
+        if (this.imageSrcs[name]) return this.imageSrcs[name](params);
+        return this.images[name] && this.images[name](params).src;
     },
     
     dom: function(name, params) {

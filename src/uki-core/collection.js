@@ -148,7 +148,7 @@ include('attachment.js');
     });
     
     uki.each(('html,text,background,value,rect,checked,selectedIndex,' +
-        'childViews,typeName,id,name,visible').split(','), function(i, name) {
+        'childViews,typeName,id,name,visible,disabled,focusable').split(','), function(i, name) {
         self[name] = function( value ) { return this.attr( name, value ); };
     });
     

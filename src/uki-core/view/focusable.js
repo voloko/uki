@@ -11,7 +11,10 @@ uki.view.Focusable = {
     
     _focusable: true, // default value
     
-    focusable: uki.newProp('_focusable'),
+    focusable: uki.newProp('_focusable', function(v) {
+        this._focusable = v;
+        if (this._focusableInput) this._focusableInput.style.display = v ? '' : 'none';
+    }),
     
     _initFocusable: function(preCreatedInput) {
         if (!this._focusable) return;
@@ -64,6 +67,10 @@ uki.view.Focusable = {
     
     focus: function() {
         this._focusableInput.focus();
+    },
+    
+    blur: function() {
+        this._focusableInput.blur()
     },
     
     hasFocus: function() {
