@@ -21,7 +21,7 @@ uki.theme.Base = {
     },
     
     imageSrc: function(name, params) {
-        if (this.imageSrcs[name]) return this.imageSrcs[name](params);
+        if (this.imageSrcs[name]) return uki.imageSrc.apply(uki, this.imageSrcs[name](params));
         return this.images[name] && this.images[name](params).src;
     },
     
