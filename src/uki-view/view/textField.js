@@ -32,6 +32,12 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         });
     };
     
+    proto.disabled = uki.newProp('_disabled', function(d) {
+        this._disabled = d;
+        if (d) this.blur();
+        this._input.disabled = d; 
+    });
+    
     proto.value = function(value) {
         if (value === undefined) return this._input.value;
 
