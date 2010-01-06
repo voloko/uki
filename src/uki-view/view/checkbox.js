@@ -49,7 +49,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._image.style.position = 'absolute';
         this._image.style.WebkitUserDrag = 'none';
         this._focusImage = uki.theme.image('checkbox-focus');
-        this._focusImage.style.cssText += 'display:block;-webkit-user-drag:none;position:absolute;z-index:-1;left:-50%;top:-50%;margin-left:' + hw + ';margin-top:' + hw;
+        this._focusImage.style.cssText += 'display:block;-webkit-user-drag:none;position:absolute;z-index:-1;left:50%;top:50%;';
         
         this._dom.appendChild(this._box);
         this._box.appendChild(this._image);
@@ -69,6 +69,9 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         uki.dom.bind(this._box, 'mouseout', function() {
             _this._over = false;
             _this._updateBg();
+        });
+        uki.image.load([this._focusImage], function() {
+            _this._focusImage.style.cssText += ';margin-left:-' + _this._focusImage.width/2 + PX + ';margin-top:-' + _this._focusImage.height/2 + PX 
         });
         this._initFocusable();
         this.disabled(this.disabled());
