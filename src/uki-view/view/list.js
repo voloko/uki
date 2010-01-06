@@ -238,6 +238,14 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._packs[1] = tmp;
     };
     
+    proto._normalizeRect = function(rect) {
+        rect = Base._normalizeRect.call(this, rect);
+        if (rect.height < this._rowHeight * this._data.length) {
+            rect = new Rect(rect.x, rect.y, rect.width, this._rowHeight * this._data.length);
+        }
+        return rect;
+    };
+    
     proto._layoutDom = function(rect) {
         if (this._firstLayout) {
             var _this = this;
