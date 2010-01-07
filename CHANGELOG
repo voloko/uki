@@ -1,3 +1,10 @@
+v0.0.5
+- Faster backgrounds
+- List bugfixes
+- More robust scroll pane
+- Disabled input, checkbox
+- IE6 focus rings
+
 v0.0.4
 - Bugfixes
 
