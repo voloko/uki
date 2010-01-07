@@ -195,7 +195,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._renderPack = function(pack, itemFrom, itemTo) {
-        var html = [],
+        var html = [], position,
             rect = new Rect(0, itemFrom*this._rowHeight, this.rect().width, this._rowHeight);
         for (i=itemFrom; i < itemTo; i++) {
             html[html.length] = [
@@ -209,6 +209,10 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         pack.itemFrom = itemFrom;
         pack.itemTo   = itemTo;
         pack.dom.style.top = itemFrom*this._rowHeight + 'px';
+        if (this._selectedIndex > pack.itemFrom && this._selectedIndex < pack.itemTo) {
+            position = this._selectedIndex - pack.itemFrom;
+            this._render.setSelected(this._itemAt(position), this._data[position], true, this.hasFocus());
+        }
     };
     
     proto._addToPack = function (pack, position, data) {
