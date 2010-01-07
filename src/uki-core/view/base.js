@@ -105,9 +105,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * @returns {string|uki.view.Base} current id or self
      */
     proto.id = function(id) {
-        if (id === undefined) return this._id;
-        if (this._id) uki.unregisterId(this);
-        this._id = id;
+        if (id === undefined) return this._dom.id;
+        if (this._dom.id) uki.unregisterId(this);
+        this._dom.id = id;
         uki.registerId(this);
         return this;
     };
