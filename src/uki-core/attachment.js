@@ -26,7 +26,7 @@ include('view/observable.js');
             
             this._dom     = dom = dom || root;
             this._view    = view;
-            this._rect = Rect.create(rect) || new Rect(1000, 1000);
+            this._rect = Rect.create(rect) || this.rect();
             
             uki.dom.offset.initialize();
             
