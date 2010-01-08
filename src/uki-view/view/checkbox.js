@@ -19,18 +19,15 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         });
     },
     
-    disabled: uki.newProp('_disabled', function(d) {
-        this._disabled = d;
-        if (d) this.blur();
-        this._focusableInput.disabled = d; 
+    checked: uki.newProp('_checked', function(state) {
+        this._checked = !!state;
         this._updateBg();
     }),
     
-    checked: function(state) {
-        if (state === undefined) return this._checked;
-        this._checked = !!state;
-        this._updateBg();
-        return this;
+    _click: function() {
+        if (this._disabled) return;
+        this.checked(!this._checked);
+        this.trigger('change', {checked: this._checked, source: this});
     },
     
     _updateBg: function() {
@@ -38,30 +35,30 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         position += this._disabled ? this._imageSize*4 : this._over ? this._imageSize*2 : 0; 
         this._image.style.top = - position + PX;
     },
-
+    
+    _createImages: function() {
+        this._image = uki.theme.image('checkbox');
+        this._focusImage = uki.theme.image('checkbox-focus');
+    },
+    
     _createDom: function() {
+        this._createImages();
+        
         var w = this._imageSize + PX,
             hw = this._imageSize / 2 + PX;
             
-        this._image = uki.theme.image('checkbox');
         this._dom = uki.createElement('div', Base.defaultCss + 'overflow:visible');
-        this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-9px;margin-top:-9px;width:' + w + ';height:' + w);
-        this._image.style.position = 'absolute';
-        this._image.style.WebkitUserDrag = 'none';
-        this._focusImage = uki.theme.image('checkbox-focus');
+        this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-' + hw + ';margin-top:-' + hw + ';width:' + w + ';height:' + w);
+        this._image.style.cssText += ';position:absolute;-webkit-user-drag:none;';
         this._focusImage.style.cssText += 'display:block;-webkit-user-drag:none;position:absolute;z-index:-1;left:50%;top:50%;';
         
         this._dom.appendChild(this._box);
         this._box.appendChild(this._image);
-
-        var _this = this;
-        this._click = function() {
-            if (_this._disabled) return;
-            _this.checked(!_this._checked);
-            _this.trigger('change', {checked: _this._checked, source: _this});
-        };
         
-        uki.dom.bind(this._box, 'click', this._click);
+        var _this = this;
+        this._clickHandler = function() { _this._click() };
+        
+        uki.dom.bind(this._box, 'click', this._clickHandler);
         uki.dom.bind(this._box, 'mouseover', function() {
             _this._over = true;
             _this._updateBg();
@@ -74,7 +71,8 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
             _this._focusImage.style.cssText += ';margin-left:-' + _this._focusImage.width/2 + PX + ';margin-top:-' + _this._focusImage.height/2 + PX 
         });
         this._initFocusable();
-        this.disabled(this.disabled());
+        this.selectable(this.selectable());
+        this.checked(this.checked());
     },
     
     _focus: function() {

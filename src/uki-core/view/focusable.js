@@ -16,6 +16,13 @@ uki.view.Focusable = {
         if (this._focusableInput) this._focusableInput.style.display = v ? '' : 'none';
     }),
     
+    disabled: uki.newProp('_disabled', function(d) {
+        this._disabled = d;
+        if (d) this.blur();
+        this._focusableInput.disabled = d;
+        if (this._updateBg) this._updateBg();
+    }),    
+    
     _initFocusable: function(preCreatedInput) {
         if (!this._focusable) return;
         

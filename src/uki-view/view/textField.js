@@ -32,11 +32,9 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         });
     };
     
-    proto.disabled = uki.newProp('_disabled', function(d) {
-        this._disabled = d;
-        if (d) this.blur();
-        this._input.disabled = d; 
-    });
+    proto._updateBg = function() {
+        this._input.style.color = this._disabled ? '#999' : '#000';
+    };
     
     proto.value = function(value) {
         if (value === undefined) return this._input.value;

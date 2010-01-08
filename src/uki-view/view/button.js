@@ -18,12 +18,6 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     };
     
     uki.addProps(proto, ['backgroundPrefix']);
-    proto.disabled = uki.newProp('_disabled', function(d) {
-        this._disabled = d;
-        if (d) this.blur();
-        this._focusableInput.disabled = d;
-        this._updateBg();
-    })
     
     uki.each(['normal', 'hover', 'down', 'focus', 'disabled'], function(i, name) {
         var property = name + '-background';
