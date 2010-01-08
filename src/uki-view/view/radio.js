@@ -5,6 +5,8 @@ include('checkbox.js');
 (function() {
     var self = uki.view.Radio = uki.newClass(uki.view.Checkbox, new function() {
         var proto = this;
+        
+        proto.typeName = function() { return 'uki.view.Radio' };
 
         proto._createImages = function() {
             this._image = uki.theme.image('radio');

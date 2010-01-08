@@ -78,7 +78,7 @@
             
               .feature
                 %h2 Small
-                %p With all the images packed into (not supported in IE6 and IE7) gziped uki build is <em>under 30kb</em>. And it’s a single HTTP request.
+                %p= "With all the images packed into (not supported in IE6 and IE7) gziped uki build is <em>under #{(compressed_size / 1024.0).ceil}KB</em>. And it’s a single HTTP request."
             
               .feature
                 %h2 Pluggable
@@ -91,7 +91,6 @@
             %li Refine component visual design
             %li Write docs
             %li Write unit tests
-            %li Complete missing features (disabled, drag and drop)
       .copy
         &copy; 2010 Vladimir Kolesnikov
         %a.mail{ :href => 'mailto:voloko@gmail.com?subject=Uki' } send feedback
