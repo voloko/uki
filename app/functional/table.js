@@ -19,5 +19,5 @@ uki({ view: 'SplitPane', rect: '1000 1000', anchors: 'left top right bottom', ha
             { view: 'table.NumberColumn', label: 'Play Count', width: 30 }
         ] }
     }
-).attachTo( window );        
+).attachTo( window, '1000 1000' );        
 

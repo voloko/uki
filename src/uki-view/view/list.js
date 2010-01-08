@@ -244,7 +244,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._normalizeRect = function(rect) {
         rect = Base._normalizeRect.call(this, rect);
-        if (rect.height < this._rowHeight * this._data.length) {
+        if (rect.height != this._rowHeight * this._data.length) {
             rect = new Rect(rect.x, rect.y, rect.width, this._rowHeight * this._data.length);
         }
         return rect;
@@ -272,12 +272,21 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         }
         
         
-        this._visibleRect = uki.view.visibleRect(this, this._scrollableParent);
-        Base._layoutDom.call(this, rect);
         
         var totalHeight = this._rowHeight * this._data.length,
-            prefferedPackSize = CEIL((this._visibleRect.height + this._visibleRectExt*2) / this._rowHeight),
+            scrollableParent = this._scrollableParent;
 
+        this._visibleRect = uki.view.visibleRect(this, scrollableParent);
+        
+        // if (this._visibleRect.maxY() > totalHeight && scrollableParent.scrollTop()) {
+        //     var offset = MIN(this._visibleRect.maxY() - totalHeight, scrollableParent.scrollTop());
+        //     
+        //     scrollableParent.scrollTop(scrollableParent.scrollTop() - offset);
+        //     this._visibleRect = uki.view.visibleRect(this, scrollableParent);
+        // }
+            
+        var prefferedPackSize = CEIL((this._visibleRect.height + this._visibleRectExt*2) / this._rowHeight),
+        
             minVisibleY  = MAX(0, this._visibleRect.y - this._visibleRectExt),
             maxVisibleY  = MIN(totalHeight, this._visibleRect.maxY() + this._visibleRectExt),
             minRenderedY = this._packs[0].itemFrom * this._rowHeight,
@@ -285,6 +294,8 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             
             itemFrom, itemTo, startAt;
 
+        Base._layoutDom.call(this, rect);
+        
         if (
             maxVisibleY <= minRenderedY || minVisibleY >= maxRenderedY || // both packs below/above visible area
             (maxVisibleY > maxRenderedY && this._packs[1].itemFrom * this._rowHeight > this._visibleRect.y) || // need to render below, and pack 2 is not enough to cover
