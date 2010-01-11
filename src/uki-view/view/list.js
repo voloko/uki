@@ -1,3 +1,5 @@
+include('scrollPane.js');
+
 uki.view.list = {};
 
 uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
@@ -136,9 +138,12 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
                 p = FLOOR(y / this._rowHeight);
             this.selectedIndex(p);
         });
+        
+        this._initFocusable();
     };
     
     proto._setSelected = function(position, state) {
+        if (!this._focusable) return;
         var item = this._itemAt(position);
         if (!item) return;
         if (state) this._scrollToPosition(position);
@@ -267,8 +272,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
                     _this.layout();
                 }
             });
-            
-            this._initFocusable();
         }
         
         
@@ -339,5 +342,22 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
 
 uki.fn.data = function( value ) { return this.attr( 'data', value ); };
 
+uki.view.ScrollableList = uki.newClass(uki.view.ScrollPane, new function() {
+    var Base = uki.view.ScrollPane.prototype,
+        proto = this;
+        
+    proto.typeName = function() { return 'uki.view.ScrollableList'; };
+
+    proto._createDom = function() {
+        Base._createDom.call(this);
+        this._list = uki({ view: 'List', rect: this.rect().clone().normalize(), anchors: 'left top right bottom' })[0];
+        this.appendChild(this._list);
+    };
+    
+    uki.each(['data', 'rowHeight', 'render', 'packSize', 'visibleRectExt', 'throttle', 'focusable'], function() {
+        uki.delegateProp(proto, this, '_list');
+    });
+    
+});
 
 include('list/render.js');

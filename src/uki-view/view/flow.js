@@ -1,4 +1,4 @@
-uki.view.Flow = uki.newClass(uki.view.Container, new function() {
+uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
     var Base = uki.view.Container[PROTOTYPE],
         proto = this;
 
@@ -15,7 +15,7 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
     };
     
     proto.typeName = function() {
-        return 'uki.view.Flow';
+        return 'uki.view.VerticalFlow';
     };
     
     proto.horizontal = uki.newProp('_horizontal', function(h) {
@@ -107,10 +107,9 @@ uki.view.Flow = uki.newClass(uki.view.Container, new function() {
     };
 });
 
-uki.view.VerticalFlow = uki.view.Flow;
-uki.view.HorizontalFlow = uki.newClass(uki.view.Flow, {
+uki.view.HorizontalFlow = uki.newClass(uki.view.VerticalFlow, {
     _setup: function() {
-        uki.view.Flow[PROTOTYPE]._setup.call(this);
+        uki.view.VerticalFlow[PROTOTYPE]._setup.call(this);
         this._horizontal = true;
     }
 });

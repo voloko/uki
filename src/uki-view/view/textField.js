@@ -50,7 +50,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             this._input.placeholder = v;
         } else {
             if (!this._placeholderDom) {
-                this._placeholderDom = uki.createElement('div', this.defaultCss + 'z-input:101;color:#999;cursor:text', v);
+                this._placeholderDom = uki.createElement('div', this.defaultCss + 'z-input:103;color:#999;cursor:text', v);
                 this._dom.appendChild(this._placeholderDom);
                 this._updatePlaceholderVis();
                 uki.each(['fontSize', 'fontFamily', 'fontWeight'], function(i, name) {
@@ -58,7 +58,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
                 }, this)
                 
                 var _this = this;
-                uki.dom.bind(this._placeholderDom, 'mousedown', function() { _this.focus() });
+                uki.dom.bind(this._placeholderDom, 'mousedown', function(e) { _this.focus(); uki.dom.preventDefault(e); });
             } else {
                 this._placeholderDom.innerHTML = v;
             }

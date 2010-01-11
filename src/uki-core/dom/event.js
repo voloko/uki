@@ -63,6 +63,7 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     },
     
     preventDefault: function(e) {
+        if (!e) return;
         e.preventDefault ? e.preventDefault() : e.returnValue = false;
     },
     
