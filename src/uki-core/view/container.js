@@ -24,7 +24,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     function maxProp (c, prop) {
         var val = 0, i, l;
         for (i = c._childViews.length - 1; i >= 0; i--){
-            val = MAX(c._childViews[i].rect()[prop]());
+            val = MAX(val, c._childViews[i].rect()[prop]());
         };
         return val;
     }

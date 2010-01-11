@@ -18,7 +18,7 @@ var lastStatusId = null;
 
 var widget = uki({ 
     view: 'Box', rect: '200 300', minSize: '200 300', 
-    anchors: 'left top right bottom', 
+    anchors: 'left top right bottom', background: '#FFF',
     childViews: [
         { view: 'Box', rect: '200 50', anchors: 'left top right', background: '#CCF', 
             childViews: [
@@ -35,10 +35,10 @@ var widget = uki({
     ]
 });
 
-function renderRow (dataRow) {
+function renderRow (dataRow, flow) {
     dataRow.screen_name = dataRow.user.screen_name;
     dataRow.tweet = uki.escapeHTML(dataRow.text);
-    return uki({ 
+    var row = uki({ 
         view: 'Box', 
         rect: '200 80', anchors: 'left top right',
         childViews: [
@@ -48,17 +48,18 @@ function renderRow (dataRow) {
                 multiline: true, html: template.render(dataRow), fontSize: '11px' }
         ]
     });
+    row.rect( new uki.geometry.Rect(flow.rect().width, row.rect().height) );
+    row.find('Label').resizeToContents('height');
+    row.resizeToContents('height');
+    row.rect().height += 20;
+    return row;
 }
 
 function appendRows (data) {
     var flow = widget.find('VerticalFlow');
     lastStatusId = data && data[data.length - 1].id;
     uki.each(data, function(i, dataRow) {
-        var row = renderRow(dataRow);
-        row.find('Label').resizeToContents('height');
-        row.resizeToContents('height');
-        row.rect( new uki.geometry.Rect(flow.rect().width, row.rect().height) );
-        row.rect().height += 5;
+        var row = renderRow(dataRow, flow);
         flow.appendChild(row[0]);
     });
     flow.resizeToContents('height');
