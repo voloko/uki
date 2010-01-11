@@ -145,6 +145,8 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
 });
 
 uki.view.MultilineTextField = uki.newClass(uki.view.TextField, {
+    typeName: function() { return 'uki.component.MultilineTextField'; },
+    
     _setup: function() {
         uki.view.TextField[PROTOTYPE]._setup.call(this);
         this._multiline = true;

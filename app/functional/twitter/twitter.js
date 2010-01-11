@@ -68,6 +68,16 @@ function appendRows (data) {
 widget.find('Button').click(function() {
     if (this.disabled()) return;
     this.disabled(true);
+    var form = uki.createElement('form', 'position:absolute;left:-999em', '<input type="text" name="status" value="' + uki.escapeHTML(widget.find('MultilineTextField').value()) + '">'),
+        iframe = uki.createElement('iframe', 'position:absolute;left:-999em');
+    
+    iframe.name = 'target_' + +new Date();
+    form.target = iframe.name;
+    form.method = 'POST';
+    form.action = 'http://twitter.com/statuses/update.xml';
+    document.body.appendChild(form);
+    document.body.appendChild(iframe);
+    form.submit();
 });
 
 widget.find('ScrollPane').scroll(function() {
