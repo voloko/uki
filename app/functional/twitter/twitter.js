@@ -17,12 +17,8 @@ var template = new uki.theme.Template(
 var tweets = [],
     loading = false;
     
-function u (x) {
-    return x;
-}
-
 function bubbleBg () {
-    var prefix = "bubble-"; 
+    var prefix = "i/bubble-"; 
     return new uki.background.Sliced9({ 
         c: [prefix + "c.png", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAB3UlEQVQ4jZ2Uy6rCQAyG01rvqAtBV25U8P2XbnwPQXeCuFDwhnd7+kUzTCucek4gjLb5v0lnkgRxYpLYe9H18Xjo6jsWBEHKC4WCrvYOiwyCP59PheH3+9399oFA8CiKNJ7fYRi695GBcCC3202u16uuOM94hyEEVCwW1Uulkq484x0eJMExWQC5XC5yPp/leDxKo9GQdrutwb6xwXq9lv1+L/V6XSqVipTLZYXrESQBMZkYaLfbyWAw0J1/MzTz+VyazaYDownt3Mhuu91Kv9/XrLKXknViiEWDFgYsBbIbn1Cr1XIz841YNGhhOCD0zWYjnU4nN7Oso0FrGUZ2u4fDQQ/WSuRbQ4PWqkGBQDiHv8LMTKtAv9Kn0+m/gD5DgRQkNcTB8gl/MerXuuXNesEozsVi8dGveY4GrUEVyPW3Wi1ZLpda4N8asWjQalEDtGanzXq9nkwmEz3kvMyIIRYNWjc0LEN6dzgc6q7j8Vjbj/+0VDar2WymbTcajTQGrWUYJAUZW7cQTOMTjGi1WsnpdEpNm2q1Kt1uV0FsSnaujwEyYP05yK0xJGyisBHPMT7JvgYQQ8GmjLvp+GWpIWvD1TbKDlirDJuDqfONvfbI9ql1UbaIPyDvwsZ+AJRx0QDY+a16AAAAAElFTkSuQmCC"], 
         v: [prefix + "v.png", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAABDCAYAAACcAiVCAAAAeUlEQVRYw+2Ruw0AMQhDg/efh5EYgC6Vr6W5BiX3UYzkkifMQ2YyIujunHO24u6MCGYmMcqQbKUOKqg7dX/9hV3IXfb8cBtwxfys8oFAWZZlWZYUAWVZQFmWFEmRZUmR5dcrm1krz/3wwAsPqWxmA8AA0AbW/e9XvgByjcbOwf9hEQAAAABJRU5ErkJggg==", false, true], 
