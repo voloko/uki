@@ -69,7 +69,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
             })
             return _this._createButton(descr);
         });
-        uki('Flow', this._popup).childViews(newButtons).resizeToContents('width height');
+        uki('VerticalFlow', this._popup).childViews(newButtons).resizeToContents('width height');
         this._popup.resizeToContents('width height').toggle();
     };
     
