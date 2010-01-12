@@ -69,7 +69,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     proto._css = function(name, value) {
         if (value === undefined) return this._input.style[name];
         this._input.style[name] = value;
-        if (this._placeholderDom) this._placeholderDom.style[name] = v;
+        if (this._placeholderDom) this._placeholderDom.style[name] = value;
         return this;
     };
 

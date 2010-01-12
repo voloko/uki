@@ -116,14 +116,14 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this.selectedIndex(p);
         });
         
-        var _this = this,
-            useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
-        uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
+        var useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
+        this.bind(useKeyPress ? 'keypress' : 'keydown', function(e) {
+            e = e.domEvent;
             if (e.which == 38 || e.keyCode == 38) { // UP
-                _this.selectedIndex(MAX(0, _this.selectedIndex() - 1));
+                this.selectedIndex(MAX(0, this.selectedIndex() - 1));
                 uki.dom.preventDefault(e);
             } else if (e.which == 40 || e.keyCode == 40) { // DOWN
-                _this.selectedIndex(MIN(_this._data.length-1, _this.selectedIndex() + 1));
+                this.selectedIndex(MIN(this._data.length-1, this.selectedIndex() + 1));
                 uki.dom.preventDefault(e);
             }
         });
