@@ -41,7 +41,7 @@ var widget = uki({
             ] },
         { view: 'ScrollPane', rect: '0 50 200 250',
             anchors: 'left top right bottom', childViews: [
-                { view: 'VerticalFlow',  rect: '5 5 190 245', anchors: 'left top right bottom' }
+                { view: 'VerticalFlow',  rect: '5 5 190 250', anchors: 'left top right bottom' }
             ] }
     ]
 });
