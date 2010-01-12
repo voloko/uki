@@ -5,6 +5,7 @@ include('../builder.js');
 include('../dom.js');
 include('../dom/nativeLayout.js');
 include('observable.js');
+include('cssable.js');
 
 var ANCHOR_TOP    = 1,
     ANCHOR_RIGHT  = 2,
@@ -13,7 +14,7 @@ var ANCHOR_TOP    = 1,
     ANCHOR_WIDTH  = 16,
     ANCHOR_HEIGHT = 32;
 
-uki.view.Base = uki.newClass(uki.view.Observable, new function() {
+uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Cssable, new function() {
     
     /** @exports proto as uki.view.Base# */
     var proto = this,
@@ -134,26 +135,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
     
     proto.toggle = function() {
         this.visible(!this.visible());
-    };
-    
-    /**
-     * @todo move to a separate interface
-     * Sets wherether text of the view can be selected.
-     *
-     * @param {boolean=} state 
-     * @returns {boolean|uki.view.Base} current textSelectable state of self
-     */
-    proto.textSelectable = function(state) {
-        if (state === undefined) return this._textSelectable;
-        
-        this._textSelectable = state;
-        this._dom.unselectable = state ? '' : 'on';
-        var style = this._dom.style;
-        style.userSelect = state ? 'text' : 'none';
-        style.MozUserSelect = state ? 'text' : '-moz-none';
-        style.WebkitUserSelect = state ? 'text' : 'none';
-        style.cursor = state ? 'text' : 'default';
-        return this;
     };
     
     /**

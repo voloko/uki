@@ -65,18 +65,14 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         }
     });
     
-    var cssProps = ['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight'];
-    uki.each(cssProps, function(i, name) {
-        proto[name] = function(v) {
-            if (v === undefined) return this._input.style[name];
-            this._input.style[name] = v;
-            if (this._placeholderDom) {
-                this._placeholderDom.style[name] = v;
-            }
-            return this;
-        };
-    });
-    
+
+    proto._css = function(name, value) {
+        if (value === undefined) return this._input.style[name];
+        this._input.style[name] = value;
+        if (this._placeholderDom) this._placeholderDom.style[name] = v;
+        return this;
+    };
+
     uki.addProps(proto, ['backgroundPrefix']);
     
     proto.defaultBackground = function() {

@@ -18,18 +18,17 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         return 'uki.view.Label';
     };
     
+    proto._css = function(name, value) {
+        if (value === undefined) return this._label.style[name];
+        this._label.style[name] = value;
+        return this;
+    };
+    
     proto.textSelectable = function(state) {
-        if (state !== undefined) {
+        if (state !== undefined && !this._textSelectProp) {
             this._label.unselectable = state ? '' : 'on';
         }
         return Base.textSelectable.call(this, state);
-    };
-    
-    proto.fontSize = function(size) {
-        if (size === undefined) return this._label.style.fontSize;
-        
-        this._label.style.fontSize = this._label.style.lineHeight = size + 'px';
-        return this;
     };
     
     /**
@@ -54,18 +53,6 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         this._label.innerHTML = html;
         return this;
     };
-    
-    proto._css = function(name, value) {
-        if (value === undefined) return this._label.style[name];
-        this._label.style[name] = value;
-        return this;
-    };
-    
-    uki.each(['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight', 'lineHeight'], function(i, name) {
-        proto[name] = function(value) {
-            return this._css(name, value);
-        };
-    });
     
     proto.inset = uki.newProp('_inset', function(inset) {
         this._inset = Inset.create(inset);
