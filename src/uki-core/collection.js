@@ -137,7 +137,7 @@ include('attachment.js');
         };
     });
     
-    uki.each(('bind,unload,trigger,layout,appendChild,removeChild,addRow,removeRow,' +
+    uki.each(('bind,unload,trigger,layout,appendChild,removeChild,insertBefore,addRow,removeRow,' +
         'resizeToContents,toggle').split(','), function(i, name) {
         self[name] = function() { 
             for (var i=0; i < this.length; i++) {

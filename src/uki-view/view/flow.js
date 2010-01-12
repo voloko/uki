@@ -24,21 +24,26 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
     
     proto.appendChild = function(view) {
         var container = this._createContainer(view),
-            v = view.rect()[this._dimension],
             viewIndex = this._childViews.length;
+            
         this._containers[viewIndex] = container;
-        this._containerSizes[viewIndex] = 0;
-        this._initContainer(container);
-        container.style[this._dimension] = v + 'px';
+        this._containerSizes[viewIndex] = view.rect()[this._dimension];
         this._dom.appendChild(container);
-        this._containerSizes[viewIndex] = v;
-        // this._updateSize(v);
 
         Base.appendChild.call(this, view);
     };
     
+    proto.insertBefore = function(view, beforeView) {
+        var container = this._createContainer(view),
+            viewIndex = beforeView._viewIndex;
+            
+        this._dom.insertBefore(container, this._containers[viewIndex]);
+        this._containers.splice(viewIndex, 0, container);
+        this._containerSizes.splice(viewIndex, 0, view.rect()[this._dimension]);
+        Base.insertBefore.call(this, view, beforeView);
+    };
+    
     proto.removeChild = function(view) {
-        // this._updateSize(-view.rect()[this._dimension]);
         var container = this._containers[view._viewIndex];
         Base.removeChild.call(this, view);
         
@@ -103,7 +108,10 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._createContainer = function(view) {
-        return uki.createElement('div', 'position:relative;top:0;left:0;width:100%;padding:0;');
+        var container = uki.createElement('div', 'position:relative;top:0;left:0;width:100%;padding:0;');
+        container.style[this._dimension] = view.rect()[this._dimension] + PX;
+        this._initContainer(container);
+        return container;
     };
 });
 

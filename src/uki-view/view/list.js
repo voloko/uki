@@ -42,6 +42,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         if (d === undefined) return this._data;
         this.selectedIndex(-1);
         this._data = d;
+        this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
         this._updateRectOnDataChnage();
         return this;
     };
@@ -99,16 +100,8 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     
     proto._updateRectOnDataChnage = function() {
-        if (this.rect()) {
-            var newRect = this.rect().clone(),
-                oldRect = this.rect(),
-                h = this._data.length * this._rowHeight;
-                
-            if (!this._minSize || h > this._minSize.height) {
-                newRect.height = h;
-                this.rect(newRect);
-            }
-        }
+        if (this._scrollableParent) this._scrollableParent._needsLayout = true;
+        this.rect(this.rect())
     };
     
     proto._createDom = function() {
@@ -176,8 +169,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._setSelected(this._selectedIndex, true);
         if (this._firstFocus) {
             var _this = this,
-                userAgent = navigator.userAgent.toLowerCase(),
-                useKeyPress = /mozilla/.test( userAgent ) && !(/(compatible|webkit)/).test( userAgent );
+                useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
             uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
                 if (e.which == 38 || e.keyCode == 38) { // UP
                     _this.selectedIndex(MAX(0, _this.selectedIndex() - 1));

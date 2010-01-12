@@ -30,11 +30,11 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     }
     
     proto.contentsWidth = function() {
-        return maxProp(this, 'maxX') - maxProp(this, 'minX');
+        return maxProp(this, 'maxX');
     };
     
     proto.contentsHeight = function() {
-        return maxProp(this, 'maxY') - maxProp(this, 'minY');
+        return maxProp(this, 'maxY');
     };
     
     proto.contentsSize = function() {
@@ -77,6 +77,21 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     proto.appendChild = function(child) {
         child._viewIndex = this._childViews.length;
         this._childViews.push(child);
+        child.parent(this);
+    };
+    
+    /**
+     * Insert child before target beforeChild
+     * @param {uki.view.Base} child Child to insert
+     * @param {uki.view.Base} beforeChild Existend child before which we should insert
+     */
+    proto.insertBefore = function(child, beforeChild) {
+        var i, l;
+        child._viewIndex = beforeChild._viewIndex;
+        for (i=beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
+            this._childViews[i]._viewIndex++;
+        };
+        this._childViews.splice(beforeChild._viewIndex, 0, child);
         child.parent(this);
     };
     

@@ -25,6 +25,7 @@ uki.utils = {
      */
     attr: function(target, attr, value) {
         if (value !== undefined) {
+            // if (target[attr].apply) {
             if (utils.isFunction(target[attr])) {
                 target[attr](value);
             } else {
@@ -32,6 +33,7 @@ uki.utils = {
             }
             return target;
         } else {
+            // if (target[attr].apply) {
             if (utils.isFunction(target[attr])) {
                 return target[attr]();
             } else {

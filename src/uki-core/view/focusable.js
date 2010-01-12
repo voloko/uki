@@ -57,12 +57,14 @@ uki.view.Focusable = {
         });
         
         if (!preCreatedInput) this.bind('mousedown', function(e) {
-            if (!_this.hasFocus()) {
-                _this._focusableInput.focus();
-            } else {
-                needsRefocus && setTimeout(function() {_this._focusableInput.focus();}, 1);
-            }
-            e.domEvent.preventDefault ? e.domEvent.preventDefault() : e.domEvent.returnValue = false;
+            // if (!_this.hasFocus()) {
+                setTimeout(function() {_this._focusableInput.focus();}, 1);
+                // _this._focusableInput.focus();
+            // } else {
+                // needsRefocus && setTimeout(function() {_this._focusableInput.focus();}, 1);
+            // }
+            // e.stopPropagation();
+            // e.domEvent.preventDefault ? e.domEvent.preventDefault() : e.domEvent.returnValue = false;
         });
     },
     

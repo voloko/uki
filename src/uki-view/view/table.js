@@ -5,7 +5,7 @@ uki.view.table = {};
 uki.view.Table = uki.newClass(uki.view.Container, new function() {
     var proto = this,
         Base = uki.view.Container[PROTOTYPE],
-        propertiesToDelegate = ['rowHeight', 'data', 'packSize', 'visibleRectExt'];
+        propertiesToDelegate = ['rowHeight', 'data', 'packSize', 'visibleRectExt', 'render', 'selectedIndex'];
     
     proto.typeName = function() { return 'uki.view.Table'; };
     proto._rowHeight = 17;
