@@ -14,7 +14,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         Base._setup.call(this);
         uki.extend(this, {
             _checked: false,
-            _selectable: false,
+            _textSelectable: false,
             _disabled: false
         });
     },
@@ -71,7 +71,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
             _this._focusImage.style.cssText += ';margin-left:-' + _this._focusImage.width/2 + PX + ';margin-top:-' + _this._focusImage.height/2 + PX 
         });
         this._initFocusable();
-        this.selectable(this.selectable());
+        this.textSelectable(this.textSelectable());
         this.checked(this.checked());
     },
     

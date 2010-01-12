@@ -236,7 +236,7 @@ tools.imageCutter.build = function() {
                     ]
                 },
                 { view: 'Label', rect: '20 90 360 290', anchors: 'top left right bottom', 
-                    name: 'result', scrollable: true, selectable: true, multiline: true, 
+                    name: 'result', scrollable: true, textSelectable: true, multiline: true, 
                     background: 'cssBox(background:white;border:1px solid #CCC)', inset: '1 1 0 1' }
             ]
         }

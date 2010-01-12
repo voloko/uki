@@ -74,7 +74,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
            _parent: null,
            _visible: true,
            _needsLayout: true,
-           _selectable: false,
+           _textSelectable: false,
            _styleH: 'left',
            _styleV: 'top',
            _firstLayout: true
@@ -141,12 +141,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, new function() {
      * Sets wherether text of the view can be selected.
      *
      * @param {boolean=} state 
-     * @returns {boolean|uki.view.Base} current selectable state of self
+     * @returns {boolean|uki.view.Base} current textSelectable state of self
      */
-    proto.selectable = function(state) {
-        if (state === undefined) return this._selectable;
+    proto.textSelectable = function(state) {
+        if (state === undefined) return this._textSelectable;
         
-        this._selectable = state;
+        this._textSelectable = state;
         this._dom.unselectable = state ? '' : 'on';
         var style = this._dom.style;
         style.userSelect = state ? 'text' : 'none';

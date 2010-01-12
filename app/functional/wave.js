@@ -41,7 +41,7 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', minSize: '800 4
         bottomChildViews: panel('Contacts', { rect: '166 714', childViews: [
             { view: 'Box', rect: '0 23 166 70', background: 'theme(box-lblue-top)', anchors: 'left top right', childViews: [
                 { view: 'Image', rect: '7 6 27 27', anchors: 'left top', src: '/app/functional/wave/voloko.jpg', background: 'theme(thumb)' },
-                { view: 'Label', rect: '40 8 100 13', anchors: 'left top', text: 'Volodya', fontWeight: 'bold', fontSize: '13px', selectable: true },
+                { view: 'Label', rect: '40 8 100 13', anchors: 'left top', text: 'Volodya', fontWeight: 'bold', fontSize: '13px', textSelectable: true },
                 { view: 'TextField', rect: '16 41 120 24', anchors: 'left top right', fontSize: '12px', backgroundPrefix: 'search-', value: '', placeholder: 'Search contacts' },
                 { view: 'Button', rect: '139 46 13 13', anchors: 'right top', backgroundPrefix: 'search-', focusable: false }
             ] },
@@ -79,7 +79,7 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', minSize: '800 4
             { view: 'Toolbar', rect: '0 79 470 24', anchors: 'left top right', background: 'theme(toolbar-normal)', buttons: [
                 toolbarButton('Reply', '-128px 0'), toolbarButton('Playback', '-144px 0'), toolbarButton('Unfollow', '-16px 0'), toolbarButton('Archive', '-32px 0'), toolbarButton('Spam', '-48px 0'), toolbarButton('Read', '-64px 0'), toolbarButton('Unread', '-80px 0'), toolbarButton('Trash', '-96px 0'), toolbarButton('Move to', '-112px 0')
             ] },
-            { view: 'Label', id: 'message', rect: '0 103 470 791', anchors: 'left top right bottom', multiline: true, scrollable: true, inset: '2 2', selectable: true },
+            { view: 'Label', id: 'message', rect: '0 103 470 791', anchors: 'left top right bottom', multiline: true, scrollable: true, inset: '2 2', textSelectable: true },
             { view: 'Box', rect: '0 894 470 32', background: 'theme(box-lblue-bottom)', anchors: 'left bottom right', childViews: [
                 { view: 'Label', rect: '7 13 30 12', anchors: 'left top', fontSize: '12px', text: 'Tags:' },
                 { view: 'Button', rect: '45 10 24 18', backgroundPrefix: 'plus-', anchors: 'left bottom', focusable: false },

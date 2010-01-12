@@ -11,8 +11,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._throttle = 5; // do not try to render more often than every 5ms
-    proto._visibleRectExt = 300;
-    proto._packSize = 20;
+    proto._visibleRectExt = 300; // extend visible rect by 300 px overflow
     proto._defaultBackground = 'list';
     
     proto._setup = function() {
@@ -40,7 +39,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto.data = function(d) {
         if (d === undefined) return this._data;
-        this.selectedIndex(-1);
+        this.clearSelection();
         this._data = d;
         this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
         this._updateRectOnDataChnage();
@@ -49,7 +48,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     // data api
     proto.addRow = function(position, data) {
-        this.selectedIndex(-1);
+        this.clearSelection();
         this._data.splice(position, 0, data);
         if (position < this._packs[0].itemFrom) {
             this._movePack(this._packs[0], 1);
@@ -65,7 +64,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto.removeRow = function(position) {
-        this.selectedIndex(-1);
+        this.clearSelection();
         this._data.splice(position, 1);
         if (position < this._packs[0].itemFrom) {
             this._movePack(this._packs[0], -1);
@@ -90,6 +89,11 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return this;
     };
     
+    proto.clearSelection = function() {
+        if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
+        this._selectedIndex = -1;
+    };
+    
     proto.layout = function() {
         this._layoutDom(this._rect);
         this._needsLayout = false;
@@ -102,6 +106,27 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     proto._updateRectOnDataChnage = function() {
         if (this._scrollableParent) this._scrollableParent._needsLayout = true;
         this.rect(this.rect())
+    };
+    
+    proto._bindSelectionEvents = function() {
+        this.bind('mousedown', function(e) {
+            var o = uki.dom.offset(this._dom),
+                y = e.domEvent.pageY - o.y,
+                p = FLOOR(y / this._rowHeight);
+            this.selectedIndex(p);
+        });
+        
+        var _this = this,
+            useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
+        uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
+            if (e.which == 38 || e.keyCode == 38) { // UP
+                _this.selectedIndex(MAX(0, _this.selectedIndex() - 1));
+                uki.dom.preventDefault(e);
+            } else if (e.which == 40 || e.keyCode == 40) { // DOWN
+                _this.selectedIndex(MIN(_this._data.length-1, _this.selectedIndex() + 1));
+                uki.dom.preventDefault(e);
+            }
+        });
     };
     
     proto._createDom = function() {
@@ -124,19 +149,11 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._dom.appendChild(this._packs[1].dom);
         
         var _this = this;
-        
-        this.bind('mousedown', function(e) {
-            var o = uki.dom.offset(this._dom),
-                y = e.domEvent.pageY - o.y,
-                p = FLOOR(y / this._rowHeight);
-            this.selectedIndex(p);
-        });
-        
         this._initFocusable();
+        this._bindSelectionEvents();
     };
     
     proto._setSelected = function(position, state) {
-        if (!this._focusable) return;
         var item = this._itemAt(position);
         if (!item) return;
         if (state) this._scrollToPosition(position);
@@ -167,20 +184,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     proto._focus = function() {
         this._selectedIndex = this._selectedIndex > -1 ? this._selectedIndex : 0;
         this._setSelected(this._selectedIndex, true);
-        if (this._firstFocus) {
-            var _this = this,
-                useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
-            uki.dom.bind(this._focusableInput, useKeyPress ? 'keypress' : 'keydown', function(e) {
-                if (e.which == 38 || e.keyCode == 38) { // UP
-                    _this.selectedIndex(MAX(0, _this.selectedIndex() - 1));
-                    uki.dom.preventDefault(e);
-                } else if (e.which == 40 || e.keyCode == 40) { // DOWN
-                    _this.selectedIndex(MIN(_this._data.length-1, _this.selectedIndex() + 1));
-                    uki.dom.preventDefault(e);
-                }
-            });
-        }
-        
     };
     
     proto._blur = function() {
@@ -273,13 +276,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
 
         this._visibleRect = uki.view.visibleRect(this, scrollableParent);
         
-        // if (this._visibleRect.maxY() > totalHeight && scrollableParent.scrollTop()) {
-        //     var offset = MIN(this._visibleRect.maxY() - totalHeight, scrollableParent.scrollTop());
-        //     
-        //     scrollableParent.scrollTop(scrollableParent.scrollTop() - offset);
-        //     this._visibleRect = uki.view.visibleRect(this, scrollableParent);
-        // }
-            
         var prefferedPackSize = CEIL((this._visibleRect.height + this._visibleRectExt*2) / this._rowHeight),
         
             minVisibleY  = MAX(0, this._visibleRect.y - this._visibleRectExt),

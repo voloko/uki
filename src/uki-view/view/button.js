@@ -91,7 +91,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         uki.dom.bind(this._dom, 'mousedown', this._mousedown);
         uki.dom.bind(this._dom, supportMouseEnter ? 'mouseenter' : 'mouseover', this._mouseover);
         uki.dom.bind(this._dom, supportMouseEnter ? 'mouseleave' : 'mouseout', this._mouseout);
-        this.selectable(this.selectable());
+        this.textSelectable(this.textSelectable());
         this._initFocusable();
     };
     
