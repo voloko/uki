@@ -1,4 +1,4 @@
-uki.view.table.Column = uki.newClass(new function() {
+uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     var proto = this;
     
     proto._width = 100;
@@ -18,7 +18,10 @@ uki.view.table.Column = uki.newClass(new function() {
             var rules = this._stylesheet.styleSheet ? this._stylesheet.styleSheet.rules : this._stylesheet.sheet.cssRules;
             rules[0].style.width = this._clientWidth() + PX;
         }
+        this.trigger('resize', {source: this});
     });
+    
+    proto._bindToDom = uki.F;
     
     proto._normailizeWidth = function(w) {
         if (this._maxWidth) w = MIN(this._maxWidth, w);

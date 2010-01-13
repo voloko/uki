@@ -15,7 +15,21 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(proto, name, '_list'); });
     
     proto.columns = uki.newProp('_columns', function(c) {
+        var i = 0, _this = this;
         this._columns = uki.build(c);
+        this._totalWidth = 0;
+        for (; i < this._columns.length; i++) {
+            this._columns[i].position(i);
+            this._columns[i].bind('resize', function() {
+                _this._updateTotalWidth();
+                _this._scrollPane.layout();
+            });
+        };
+        this._updateTotalWidth();
+        this._header.columns(this._columns);
+    });
+    
+    proto._updateTotalWidth = function() {
         this._totalWidth = 0;
         for (var i=0; i < this._columns.length; i++) {
             this._columns[i].position(i);
@@ -23,8 +37,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         };
         this._list.minSize(new Size(this._totalWidth, 0));
         this._header.minSize(new Size(this._totalWidth, 0));
-        this._header.columns(this._columns);
-    });
+    };
     
     proto._createDom = function() {
         Base._createDom.call(this);
