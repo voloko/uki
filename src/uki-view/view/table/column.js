@@ -17,7 +17,7 @@ uki.view.table.Column = uki.newClass(new function() {
     
     proto.render = function(row, rect, i) {
         if (!this._template) this._template = this._buildTemplate(rect);
-        this._template[1] = this._formatter ? this._formatter(row[this._position]) : row[this._position];
+        this._template[1] = this._formatter ? this._formatter(row[this._position], row) : row[this._position];
         return this._template.join('')
     };
     

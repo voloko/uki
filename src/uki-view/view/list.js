@@ -209,9 +209,12 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         pack.itemFrom = itemFrom;
         pack.itemTo   = itemTo;
         pack.dom.style.top = itemFrom*this._rowHeight + 'px';
+        this._restorePackSelection(pack, itemFrom, itemTo);
+    };
+    
+    proto._restorePackSelection = function(pack) {
         if (this._selectedIndex > pack.itemFrom && this._selectedIndex < pack.itemTo) {
-            position = this._selectedIndex - pack.itemFrom;
-            this._render.setSelected(this._itemAt(position), this._data[position], true, this.hasFocus());
+            this._render.setSelected(this._itemAt(this._selectedIndex), this._data[position], true, this.hasFocus());
         }
     };
     
