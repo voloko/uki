@@ -141,7 +141,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         
         if (!uki.supportNativeLayout) {
             var _this = this;
-            this._layoutHandler = function(e) {
+            this._layoutHandler = this._layoutHandler || function(e) {
                 if (_this._size && _this._size.eq(e.rect)) return;
                 _this._size = e.rect;
                 _this.layout();
@@ -161,7 +161,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
     };
     
-    proto.layout = function() {
+    proto.layout = function(e) {
         var size = this._comp.rect(),
             parts = this._parts,
             inset = this._inset,
