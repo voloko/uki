@@ -57,14 +57,7 @@ uki.view.Focusable = {
         });
         
         if (!preCreatedInput) this.bind('mousedown', function(e) {
-            // if (!_this.hasFocus()) {
-                setTimeout(function() {_this._focusableInput.focus();}, 1);
-                // _this._focusableInput.focus();
-            // } else {
-                // needsRefocus && setTimeout(function() {_this._focusableInput.focus();}, 1);
-            // }
-            // e.stopPropagation();
-            // e.domEvent.preventDefault ? e.domEvent.preventDefault() : e.domEvent.returnValue = false;
+            setTimeout(function() {_this._focusableInput.disabled || _this._focusableInput.focus();}, 1);
         });
     },
     
@@ -87,7 +80,7 @@ uki.view.Focusable = {
     },
     
     _bindToDom: function(name) {
-        if (!this._focusableInput || 'keyup keydown keypress'.indexOf(name) == -1) return false;
+        if (!this._focusableInput || 'keyup keydown keypress focus blur'.indexOf(name) == -1) return false;
         
         return uki.view.Observable._bindToDom.call(this, name, this._focusableInput);
     }
