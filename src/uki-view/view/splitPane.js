@@ -70,13 +70,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         }
         if (!handle.style.cursor || window.opera) handle.style.cursor = this._vertical ? 'n-resize' : 'e-resize';
         
-        uki.dom.bind(handle, 'dragstart', function(e) { e.returnValue = false; });
-        
-        uki.dom.bind(handle, 'mousedown', function(e) {
-            var offset = uki.dom.offset(_this.dom());
-            _this._posWithinHandle = (e[_this._vertical ? 'pageY' : 'pageX'] - offset[_this._vertical ? 'y' : 'x']) - _this._handlePosition;
-            uki.dom.drag.start(_this, e);
-        });
+        uki.dom.drag.watch(handle, this);
         
         return handle;
     };
@@ -123,6 +117,12 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
                 this._handlePosition = MAX(this._leftMin, newRect.width - this._rightMin);
             }
         }
+        return true;
+    };
+    
+    proto._acceptDrag = function(e) {
+        var offset = uki.dom.offset(this.dom());
+        this._posWithinHandle = (e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x']) - this._handlePosition;
         return true;
     };
     

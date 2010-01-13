@@ -55,13 +55,9 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._handle.style.cssText += ';margin-left:-' + (this._bg.width / 2) + 'px;width:' +this._bg.width + 'px;height:' + (this._bg.height / 2) + 'px;';
         this._dom.appendChild(this._handle);
         var _this = this;
-        uki.dom.bind(this._handle, 'dragstart', function(e) { e.returnValue = false; });
         
-        uki.dom.bind(this._handle, 'mousedown', function(e) {
-            _this._dragging = true;
-            _this._initialPosition = new Point(parseInt(_this._handle.style.left, 10), parseInt(_this._handle.style.top, 10));
-            uki.dom.drag.start(_this, e);
-        });
+        uki.dom.drag.watch(this._handle, this);
+        uki.dom.bind(this._handle, 'dragstart', function(e) { e.returnValue = false; });
         
         uki.dom.bind(this._handle, 'mouseover', function() {
             _this._over = true;
@@ -82,6 +78,12 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     _moveHandle: function() {
         // this._focusBg.style.left = this._handle.style.left = 100.0*this._position/this._rect.width + '%';
         this._focusBg.style.left = this._handle.style.left = this._position + 'px';
+    },
+    
+    _acceptDrag: function() {
+        this._dragging = true;
+        this._initialPosition = new Point(parseInt(this._handle.style.left, 10), parseInt(this._handle.style.top, 10));
+        return true;
     },
     
     _drag: function(e, offset) {

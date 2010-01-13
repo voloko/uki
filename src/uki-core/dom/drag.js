@@ -9,6 +9,16 @@ include('../dom.js');
             this.draggable = draggable;
             this.pos = new Point(e.pageX, e.pageY);
             bind();
+        },
+        
+        watch: function(element, draggable) {
+            uki.dom.bind(element, 'dragstart', function(e) { e.returnValue = false; });
+            
+            uki.dom.bind(element, 'mousedown', function(e) {
+                if (!draggable._acceptDrag || draggable._acceptDrag(e)) {
+                    uki.dom.drag.start(draggable, e);
+                }
+            });
         }
     };
     var doc = document;
