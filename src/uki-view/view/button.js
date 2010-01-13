@@ -46,7 +46,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._updateBg = function() {
         var name = this._disabled ? 'disabled' : this._down ? 'down' : this._over ? 'hover' : 'normal';
-        this._label.style.opacity = this._disabled ? '0.5' : '1';
+        this.color(this._disabled ? '#999' : '#333');
         this._backgroundByName(name);
     };
         
