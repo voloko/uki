@@ -9,7 +9,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     
     proto.typeName = function() { return 'uki.view.Table'; };
     proto._rowHeight = 17;
-    proto._headerHeight = 21;
+    proto._headerHeight = 17;
     proto.defaultCss = Base.defaultCss + 'overflow:hidden;';
     
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(proto, name, '_list'); });
@@ -50,6 +50,10 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
             // this is kinda wrong but faster than colling rect() + layout()
             _this._header.dom().style.left = -_this._scrollPane.scrollLeft() + 'px'; 
         });
+    };
+    
+    proto._createResizers = function() {
+        this._resizers = [];
     };
     
     

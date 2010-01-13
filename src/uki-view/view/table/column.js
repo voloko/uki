@@ -9,7 +9,15 @@ uki.view.table.Column = uki.newClass(new function() {
 
     proto.init = function() {};
     
-    uki.addProps(proto, ['width', 'position', 'css', 'formatter', 'label']);
+    uki.addProps(proto, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth']);
+    
+    proto.width = uki.newProp('_width', function(v) {
+        this._width = v;
+        if (this._stylesheet) {
+            var rules = this._stylesheet.styleSheet ? this._stylesheet.styleSheet.rules : this._stylesheet.sheet.cssRules;
+            rules[0].style.width = this._clientWidth() + PX;
+        }
+    });
     
     proto.inset = uki.newProp('_inset', function(i) {
         this._inset = Inset.create(i);
@@ -28,27 +36,37 @@ uki.view.table.Column = uki.newClass(new function() {
         return template.join('');
     };
     
-    proto._buildHeaderTemplate = function(headerHeight) {
+    proto._clientWidth = function() {
+        return this._width - (uki.dom.offset.boxModel ? this._inset.width() + 1 : 0);
+    };
+    
+    proto._initStylesheet = function() {
         uki.dom.offset.initializeBoxModel();
+        if (!this._className) {
+            this._className = 'uki-table-column-' + (++uki.dom.guid);
+            var css = '.' + this._className + ' {width:' + this._clientWidth() + 'px;}';
+            this._stylesheet = uki.dom.createStylesheet(css);
+        }
+    };
+    
+    proto._buildHeaderTemplate = function(headerHeight) {
+        this._initStylesheet();
         var border = 'border:1px solid #CCC;border-top: none;border-left:none;',
             inset  = this._inset,
             padding = ['padding:', inset.top, 'px ', inset.right, 'px ', inset.bottom, 'px ', inset.left, 'px;'].join(''),
             height = 'height:' + (headerHeight - (uki.dom.offset.boxModel ? inset.height() + 1 : 0)) + 'px;',
-            width = 'width:' + (this._width - (uki.dom.offset.boxModel ? inset.width() + 1 : 0)) + 'px;',
-            tagOpening = ['<div style="', width, border, padding, height, this._css, '">'].join('');
+            tagOpening = ['<div style="', border, padding, height, this._css, '" class="',this._className,'">'].join('');
         
         return [tagOpening, '', '</div>'];
     };
     
     proto._buildTemplate = function(rect) {
-        uki.dom.offset.initializeBoxModel();
-        var border = 'border-right:1px solid #CCC;',
-            inset = this._inset,
+        this._initStylesheet();
+        var inset = this._inset,
+            border = 'border-right:1px solid #CCC;',
             padding = ['padding:', inset.top, 'px ', inset.right, 'px ', inset.bottom, 'px ', inset.left, 'px;'].join(''),
             height = 'height:' + (rect.height - (uki.dom.offset.boxModel ? inset.height() : 0)) + 'px;',
-            width = 'width:' + (this._width - (uki.dom.offset.boxModel ? inset.width() + 1 : 0)) + 'px;',
-            // left = 'left:' + this._offset + 'px;',
-            tagOpening = ['<div style="', width, border, padding, height, this._css, '">'].join('');
+            tagOpening = ['<div style="', border, padding, height, this._css, '" class="',this._className,'">'].join('');
         return [tagOpening, '', '</div>'];
     };
 });

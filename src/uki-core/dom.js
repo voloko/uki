@@ -88,6 +88,17 @@ uki.dom = {
             try { child = child.parentNode } catch(e) { child = null };
         }
         return parent == child;
+    },
+    
+    createStylesheet: function(code) {
+        var style = doc.createElement('style');
+        doc.getElementsByTagName('head')[0].appendChild(style);
+        if (style.styleSheet) { //IE
+            style.styleSheet.cssText = code;
+        } else {
+            style.appendChild(document.createTextNode(code));
+        }
+        return style;
     }
     
 };
