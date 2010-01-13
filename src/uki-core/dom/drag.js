@@ -37,13 +37,13 @@ include('../dom.js');
     }
 
     function dragging(e) {
-        if (controller.draggable) controller.draggable._drag(e, offset(e));
+        if (controller.draggable && controller.draggable._drag) controller.draggable._drag(e, offset(e));
     }
 
     function drop(e) {
-        if (controller.draggable) controller.draggable._drop(e, offset(e));
         controller.draggable = null;
         unbind();
+        if (controller.draggable && controller.draggable._drop) controller.draggable._drop(e, offset(e));
     }
 
     function preventSelectionHandler(e) { 

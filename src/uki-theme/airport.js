@@ -159,10 +159,16 @@
         },
         
         doms: {
+            'resizer': function(params) {
+                var template = new uki.theme.Template('position:absolute;width:5px;top:0;height:${height}px;cursor:col-resize;cursor:ew-resize;z-index:101;background:url(' + uki.theme.imageSrc('x') + ')'),
+                    node = uki.createElement('div', template.render(params));
+                    
+                if (!node.style.cursor || window.opera) node.style.cursor = 'e-resize';
+                return node;
+            },
             'splitPane-vertical': function(params) {
-                var commonVerticalStyle = 'cursor:row-resize;cursor:ns-resize;z-index:200;overflow:hidden;';
-                
-                return params.handleWidth == 1 ?
+                var commonVerticalStyle = 'cursor:row-resize;cursor:ns-resize;z-index:200;overflow:hidden;',
+                    handle = params.handleWidth == 1 ?
                     uki.createElement('div', 
                         defaultCss + 'width:100%;height:5px;margin-top:-2px;' + 
                         commonVerticalStyle + 'background: url(' + uki.theme.imageSrc('x') + ')',
@@ -173,13 +179,13 @@
                         defaultCss + 'width:100%;height:' + (params.handleWidth - 2) + 'px;' +
                         'border: 1px solid #CCC;border-width: 1px 0;' + commonVerticalStyle +
                         'background: url(' + uki.theme.imageSrc('splitPane-vertical') + ') 50% 50% no-repeat;');
-                
+                if (!handle.style.cursor || window.opera) handle.style.cursor = 'n-resize';
+                return handle;
             },
             
             'splitPane-horizontal': function(params) {
-                var commonHorizontalStyle = 'cursor:col-resize;cursor:ew-resize;z-index:200;overflow:hidden;';
-                
-                return params.handleWidth == 1 ?
+                var commonHorizontalStyle = 'cursor:col-resize;cursor:ew-resize;z-index:200;overflow:hidden;',
+                    handle = params.handleWidth == 1 ?
                     uki.createElement('div', 
                         defaultCss + 'height:100%;width:5px;margin-left:-2px;' + 
                         commonHorizontalStyle + 'background: url(' + uki.theme.imageSrc('x') + ')',
@@ -190,6 +196,8 @@
                         defaultCss + 'height:100%;width:' + (params.handleWidth - 2) + 'px;' +
                         'border: 1px solid #CCC;border-width: 0 1px;' + commonHorizontalStyle + 
                         'background: url(' + uki.theme.imageSrc('splitPane-horizontal') + ') 50% 50% no-repeat;');
+                if (!handle.style.cursor || window.opera) handle.style.cursor = 'e-resize';
+                return handle;
                 
             }
         }

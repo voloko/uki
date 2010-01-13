@@ -50,13 +50,8 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
             // this is kinda wrong but faster than colling rect() + layout()
             _this._header.dom().style.left = -_this._scrollPane.scrollLeft() + 'px'; 
         });
+        
     };
-    
-    proto._createResizers = function() {
-        this._resizers = [];
-    };
-    
-    
 });
 
 include('table/render.js');

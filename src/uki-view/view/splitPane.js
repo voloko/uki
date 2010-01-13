@@ -68,7 +68,6 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
             handle = uki.theme.dom('splitPane-horizontal', {handleWidth: this._handleWidth});
             handle.style.left = this._handlePosition + 'px';
         }
-        if (!handle.style.cursor || window.opera) handle.style.cursor = this._vertical ? 'n-resize' : 'e-resize';
         
         uki.dom.drag.watch(handle, this);
         

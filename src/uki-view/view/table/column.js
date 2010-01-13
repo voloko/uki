@@ -4,6 +4,7 @@ uki.view.table.Column = uki.newClass(new function() {
     proto._width = 100;
     proto._offset = 0;
     proto._position = 0;
+    proto._minWidth = 40;
     proto._css = 'overflow:hidden;float:left;font-size:11px;line-height:11px;white-space:nowrap;text-overflow:ellipsis;';
     proto._inset = new Inset(3, 5);
 
@@ -11,13 +12,19 @@ uki.view.table.Column = uki.newClass(new function() {
     
     uki.addProps(proto, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth']);
     
-    proto.width = uki.newProp('_width', function(v) {
-        this._width = v;
+    proto.width = uki.newProp('_width', function(w) {
+        this._width = this._normailizeWidth(w);
         if (this._stylesheet) {
             var rules = this._stylesheet.styleSheet ? this._stylesheet.styleSheet.rules : this._stylesheet.sheet.cssRules;
             rules[0].style.width = this._clientWidth() + PX;
         }
     });
+    
+    proto._normailizeWidth = function(w) {
+        if (this._maxWidth) w = MIN(this._maxWidth, w);
+        if (this._minWidth) w = MAX(this._minWidth, w);
+        return w;
+    };
     
     proto.inset = uki.newProp('_inset', function(i) {
         this._inset = Inset.create(i);
@@ -55,7 +62,7 @@ uki.view.table.Column = uki.newClass(new function() {
             inset  = this._inset,
             padding = ['padding:', inset.top, 'px ', inset.right, 'px ', inset.bottom, 'px ', inset.left, 'px;'].join(''),
             height = 'height:' + (headerHeight - (uki.dom.offset.boxModel ? inset.height() + 1 : 0)) + 'px;',
-            tagOpening = ['<div style="', border, padding, height, this._css, '" class="',this._className,'">'].join('');
+            tagOpening = ['<div style="position:relative;', border, padding, height, this._css, '" class="',this._className,'">'].join('');
         
         return [tagOpening, '', '</div>'];
     };
