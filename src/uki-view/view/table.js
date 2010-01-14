@@ -11,6 +11,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     proto._rowHeight = 17;
     proto._headerHeight = 17;
     proto.defaultCss = Base.defaultCss + 'overflow:hidden;';
+    proto._listImpl = 'uki.view.List';
     
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(proto, name, '_list'); });
     
@@ -44,7 +45,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         var scrollPaneRect = new Rect(0, this._headerHeight, this.rect().width, this.rect().height - this._headerHeight),
             listRect = scrollPaneRect.clone().normalize(),
             headerRect = new Rect(0, 0, this.rect().width, this._headerHeight),
-            listML = { view: 'List', rect: listRect, anchors: 'left top bottom', render: new uki.view.table.Render(this), className: 'table-list' },
+            listML = { view: this._listImpl, rect: listRect, anchors: 'left top bottom', render: new uki.view.table.Render(this), className: 'table-list' },
             paneML = { view: 'ScrollPane', rect: scrollPaneRect, anchors: 'left top right bottom', scrollableH: true, childViews: [listML], className: 'table-scroll-pane'},
             headerML = { view: 'table.Header', rect: headerRect, anchors: 'top left right', className: 'table-header' };
             
@@ -58,10 +59,10 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this.appendChild(this._header);
         this.appendChild(this._scrollPane);
         
-        this._scrollPane.bind('scroll', function() {
+        this._scrollPane.bind('scroll', uki.proxy(function() {
             // this is kinda wrong but faster than colling rect() + layout()
-            _this._header.dom().style.left = -_this._scrollPane.scrollLeft() + 'px'; 
-        });
+            this._header.dom().style.left = -this._scrollPane.scrollLeft() + 'px'; 
+        }, this));
         
     };
 });

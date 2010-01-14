@@ -260,10 +260,10 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
                 if (this._throttle) {
                     if (this._throttleStarted) return;
                     this._throttleStarted = true;
-                    setTimeout(function() {
+                    setTimeout(uki.proxy(function() {
                         this._throttleStarted = false;
                         this.layout();
-                    }, this._throttle);
+                    }, this), this._throttle);
                 } else {
                     this.layout();
                 }
