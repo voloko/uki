@@ -27,12 +27,11 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         if (state === undefined) return this._clickHandler;
         if (state != !!this._clickHandler) {
             if (state) {
-                var _this = this;
-                this._clickHandler = function(e) {
-                    if (uki.dom.contains(_this._relativeTo.dom(), e.target)) return;
-                    if (uki.dom.contains(_this.dom(), e.target)) return;
-                    _this.hide();
-                };
+                this._clickHandler = this._clickHandler || uki.proxy(function(e) {
+                    if (uki.dom.contains(this._relativeTo.dom(), e.target)) return;
+                    if (uki.dom.contains(this.dom(), e.target)) return;
+                    this.hide();
+                }, this);
                 uki.dom.bind(doc.body, 'mousedown', this._clickHandler);
                 uki.dom.bind(root, 'resize', this._clickHandler);
             } else {

@@ -44,35 +44,41 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._focusBg.style.cssText += this._bg.style.cssText += Base.defaultCss + 'top:0;left:0;z-index:-1;position:absolute;'; 
         this._handle.appendChild(this._bg);
         
-        var _this = this;
-        uki.image.load([this._bg, this._focusBg], function() { _this._afterHandleLoad(); });
+        uki.image.load([this._bg, this._focusBg], uki.proxy(this._afterHandleLoad, this) );
         
         uki.theme.background('slider-bar').attachTo(this);
+        this._initFocusable();
     },
     
     _afterHandleLoad: function() {
         this._focusBg.style.cssText += ';z-index:10;margin-left:-' + (this._focusBg.width) / 2 + 'px;margin-top:-' + (this._focusBg.height-(this._bg.height/2)+1)/2 + 'px;';
         this._handle.style.cssText += ';margin-left:-' + (this._bg.width / 2) + 'px;width:' +this._bg.width + 'px;height:' + (this._bg.height / 2) + 'px;';
         this._dom.appendChild(this._handle);
-        var _this = this;
         
         uki.dom.drag.watch(this._handle, this);
-        uki.dom.bind(this._handle, 'dragstart', function(e) { e.returnValue = false; });
         
-        uki.dom.bind(this._handle, 'mouseover', function() {
-            _this._over = true;
-            _this._bg.style.top = - _this._bg.height / 2 + 'px';
-        });
+        uki.dom.bind(this._handle, 'mouseover', uki.proxy(function() {
+            this._over = true;
+            this._bg.style.top = - this._bg.height / 2 + 'px';
+        }, this));
         
-        uki.dom.bind(this._handle, 'mouseout', function() {
-            _this._over = false;
-            _this._bg.style.top = _this._dragging ? (- _this._bg.height / 2 + 'px') : 0;
-        });
+        uki.dom.bind(this._handle, 'mouseout', uki.proxy(function() {
+            this._over = false;
+            this._bg.style.top = this._dragging ? (- this._bg.height / 2 + 'px') : 0;
+        }, this));
         
-        uki.dom.bind(this._dom, 'click', function(e) {
-            var x = e.pageX - uki.dom.offset(_this._dom).x;
-            _this.value(_this._pos2val(x));
-        });
+        uki.dom.bind(this._dom, 'click', uki.proxy(function(e) {
+            var x = e.pageX - uki.dom.offset(this._dom).x;
+            this.value(this._pos2val(x));
+        }, this));
+        
+        uki.dom.bind(this._focusableInput, 'keydown', uki.proxy(function(e) {
+            if (e.which == 39) {
+                this.value(this.value() + this._keyStep * (this._max - this._min));
+            } else if (e.which == 37) {
+                this.value(this.value() - this._keyStep * (this._max - this._min));
+            }
+        }, this));
     },
     
     _moveHandle: function() {
@@ -103,16 +109,6 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     _focus: function() {
         this._dom.appendChild(this._focusBg);
         this._focusBg.style.left = this._handle.style.left;
-        if (this._firstFocus) {
-            var _this = this;
-            uki.dom.bind(this._focusableInput, 'keydown', function(e) {
-                if (e.which == 39) {
-                    _this.value(_this.value() + _this._keyStep * (_this._max - _this._min));
-                } else if (e.which == 37) {
-                    _this.value(_this.value() - _this._keyStep * (_this._max - _this._min));
-                }
-            });
-        }
     },
     
     _blur: function() {
@@ -125,7 +121,6 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         Base._layoutDom.call(this, fixedRect);
         this._position = this._val2pos(this._value);
         this._moveHandle();
-        if (this._firstLayout) this._initFocusable();
         return true;
     },
 

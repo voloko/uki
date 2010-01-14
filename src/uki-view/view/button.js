@@ -50,6 +50,8 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         this._backgroundByName(name);
     };
         
+    var supportMouseEnter = root.attachEvent && !root.opera;
+    
     proto._createDom = function() {
         // dom
         this._dom = uki.createElement('div', this.defaultCss);
@@ -61,38 +63,34 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
             this._dom.appendChild(uki.createElement('div', 'width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
         }
         
-        var _this = this;
-        
-        this._mouseup = function(e) {
-            _this._down = false;
-            _this._updateBg();
-        };
-        
-        this._mousedown = function(e) {
-            _this._down = true;
-            _this._updateBg();
-        };
-        
-        var supportMouseEnter = this._dom.attachEvent && !root.opera;
-        
-        this._mouseover = function(e) {
-            if (!supportMouseEnter && uki.dom.contains(_this._dom, e.relatedTarget) || _this._over) return;
-            _this._over = true;
-            _this._updateBg();
-        };
-        
-        this._mouseout = function(e) {
-            if (!supportMouseEnter && uki.dom.contains(_this._dom, e.relatedTarget) || !_this._over) return;
-            _this._over = false;
-            _this._updateBg();
-        };
-        
-        uki.dom.bind(document, 'mouseup', this._mouseup);
-        uki.dom.bind(this._dom, 'mousedown', this._mousedown);
-        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseenter' : 'mouseover', this._mouseover);
-        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseleave' : 'mouseout', this._mouseout);
+        uki.dom.bind(document, 'mouseup', uki.proxy(this._mouseup, this));
+        uki.dom.bind(this._dom, 'mousedown', uki.proxy(this._mousedown, this));
+        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseenter' : 'mouseover', uki.proxy(this._mouseover, this));
+        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseleave' : 'mouseout', uki.proxy(this._mouseout, this));
         this.textSelectable(this.textSelectable());
         this._initFocusable();
+    };
+    
+    proto._mouseup = function(e) {
+        this._down = false;
+        this._updateBg();
+    };
+    
+    proto._mousedown = function(e) {
+        this._down = true;
+        this._updateBg();
+    };
+    
+    proto._mouseover = function(e) {
+        if (!supportMouseEnter && uki.dom.contains(this._dom, e.relatedTarget) || this._over) return;
+        this._over = true;
+        this._updateBg();
+    };
+    
+    proto._mouseout = function(e) {
+        if (!supportMouseEnter && uki.dom.contains(this._dom, e.relatedTarget) || !this._over) return;
+        this._over = false;
+        this._updateBg();
     };
     
     proto._focus = function() {

@@ -15,15 +15,14 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(proto, name, '_list'); });
     
     proto.columns = uki.newProp('_columns', function(c) {
-        var i = 0, _this = this;
         this._columns = uki.build(c);
         this._totalWidth = 0;
-        for (; i < this._columns.length; i++) {
+        for (var i = 0; i < this._columns.length; i++) {
             this._columns[i].position(i);
-            this._columns[i].bind('beforeResize', function() {
-                _this._updateTotalWidth();
-                _this._scrollPane.layout();
-            });
+            this._columns[i].bind('beforeResize', uki.proxy(function() {
+                this._updateTotalWidth();
+                this._scrollPane.layout();
+            }, this));
         };
         this._updateTotalWidth();
         this._header.columns(this._columns);
@@ -59,7 +58,6 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this.appendChild(this._header);
         this.appendChild(this._scrollPane);
         
-        var _this = this;
         this._scrollPane.bind('scroll', function() {
             // this is kinda wrong but faster than colling rect() + layout()
             _this._header.dom().style.left = -_this._scrollPane.scrollLeft() + 'px'; 

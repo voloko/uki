@@ -148,7 +148,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._dom.appendChild(this._packs[0].dom);
         this._dom.appendChild(this._packs[1].dom);
         
-        var _this = this;
         this._initFocusable();
         this._bindSelectionEvents();
     };
@@ -255,21 +254,20 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._layoutDom = function(rect) {
         if (this._firstLayout) {
-            var _this = this;
             this._scrollableParent = uki.view.scrollableParent(this);
 
-            this._scrollableParent.bind('scroll', function() {
-                if (_this._throttle) {
-                    if (_this._throttleStarted) return;
-                    _this._throttleStarted = true;
+            this._scrollableParent.bind('scroll', uki.proxy(function() {
+                if (this._throttle) {
+                    if (this._throttleStarted) return;
+                    this._throttleStarted = true;
                     setTimeout(function() {
-                        _this._throttleStarted = false;
-                        _this.layout();
-                    }, _this._throttle);
+                        this._throttleStarted = false;
+                        this.layout();
+                    }, this._throttle);
                 } else {
-                    _this.layout();
+                    this.layout();
                 }
-            });
+            }, this));
         }
         
         

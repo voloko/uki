@@ -48,16 +48,13 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         popupML.relativeTo = this._more;
         this._popup = uki.build(popupML)[0];
         
-        var _this = this;
-        this._more.bind('click', function() {
-            _this._showMissingButtons();
-        });
+        this._more.bind('click', uki.proxy(this._showMissingButtons, this));
     };
     
     proto._showMissingButtons = function() {
         var maxWith = this._flow.rect().width,
             currentWidth = 0,
-            missing = [], _this = this;
+            missing = [];
         for (var i=0, childViews = this._flow.childViews(), l = childViews.length; i < l; i++) {
             currentWidth += childViews[i].rect().width;
             if (currentWidth > maxWith) missing.push(i);
@@ -66,9 +63,9 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
             var descr = { html: childViews[i].html(), backgroundPrefix: 'toolbar-popup-' };
             uki.each(['fontSize', 'fontWeight', 'color', 'textAlign', 'inset'], function(j, name) {
                 descr[name] = uki.attr(childViews[i], name);
-            })
-            return _this._createButton(descr);
-        });
+            });
+            return this._createButton(descr);
+        }, this);
         uki('VerticalFlow', this._popup).childViews(newButtons).resizeToContents('width height');
         this._popup.resizeToContents('width height').toggle();
     };

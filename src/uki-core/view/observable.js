@@ -39,10 +39,9 @@ uki.view.Observable = {
     },
     
     _bindToDom: function(name, target) {
-        var _this = this;
-        this._domHander = this._domHander || function(e) {
-            _this.trigger(e.type, {domEvent: e, source: _this});
-        };
+        this._domHander = this._domHander || uki.proxy(function(e) {
+            this.trigger(e.type, {domEvent: e, source: this});
+        }, this);
         this._eventTargets = this._eventTargets || {};
         this._eventTargets[name] = target || this.dom();
         uki.dom.bind(this._eventTargets[name], name, this._domHander);

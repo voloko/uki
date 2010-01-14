@@ -43,6 +43,18 @@ uki.utils = {
     },
     
     /**
+     * Runs a function in a given context
+     *
+     * @param {function}
+     * @param {object} context
+     */
+    proxy: function(fn, context) {
+        return function() {
+            return fn.apply(context, arguments);
+        }
+    },
+    
+    /**
      * Checks if obj is a function
      *
      * @param {object} object Object to check

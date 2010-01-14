@@ -33,7 +33,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
             this._handleWidth = val;
             var handle = this._createHandle();
             this._dom.insertBefore(handle, this._handle);
-            this._removeHandle()
+            this._removeHandle();
             this._handle = handle;
             this._resizeChildViews();
         }
@@ -60,7 +60,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
     };
     
     proto._createHandle = function() {
-        var handle, _this = this;
+        var handle;
         if (this._vertical) {
             handle = uki.theme.dom('splitPane-vertical', {handleWidth: this._handleWidth});
             handle.style.top = this._handlePosition + PX;

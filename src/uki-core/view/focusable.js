@@ -38,26 +38,27 @@ uki.view.Focusable = {
         this._focusableInput = input;
         this._hasFocus = false;
         this._firstFocus = true;
-        var _this = this,
-            needsRefocus = doc.attachEvent;
+        var needsRefocus = doc.attachEvent;
             
-        uki.dom.bind(input, 'focus', function(e) {
-            if (_this._hasFocus) return;
-            _this._hasFocus = true;
-            _this._focus(e);
-            _this._firstFocus = false;
-            _this.trigger('focus', {domEvent: e, source: _this});
-        });
+        uki.dom.bind(input, 'focus', uki.proxy(function(e) {
+            if (this._hasFocus) return;
+            this._hasFocus = true;
+            this._focus(e);
+            this._firstFocus = false;
+            this.trigger('focus', {domEvent: e, source: this});
+        }, this));
         
-        uki.dom.bind(input, 'blur', function(e) {
-            if (!_this._hasFocus) return;
-            _this._hasFocus = false;
-            _this._blur(e);
-            _this.trigger('blur', {domEvent: e, source: this});
-        });
+        uki.dom.bind(input, 'blur', uki.proxy(function(e) {
+            if (!this._hasFocus) return;
+            this._hasFocus = false;
+            this._blur(e);
+            this.trigger('blur', {domEvent: e, source: this});
+        }, this));
         
         if (!preCreatedInput) this.bind('mousedown', function(e) {
-            setTimeout(function() {_this._focusableInput.disabled || _this._focusableInput.focus();}, 1);
+            setTimeout(uki.proxy(function() {
+                this._focusableInput.disabled || this._focusableInput.focus();
+            }, this), 1);
         });
     },
     

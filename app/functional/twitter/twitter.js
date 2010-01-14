@@ -1,6 +1,6 @@
 var tweets = [],     // loaded tweets
     loading = false; // are we loading now
-    
+
 // custom background for a tweet
 function bubbleBg () {
     var prefix = "i/bubble-"; 

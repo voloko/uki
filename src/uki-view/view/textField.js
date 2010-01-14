@@ -55,10 +55,12 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
                 this._updatePlaceholderVis();
                 uki.each(['fontSize', 'fontFamily', 'fontWeight'], function(i, name) {
                     this._placeholderDom.style[name] = this[name]();
-                }, this)
+                }, this);
                 
-                var _this = this;
-                uki.dom.bind(this._placeholderDom, 'mousedown', function(e) { _this.focus(); uki.dom.preventDefault(e); });
+                uki.dom.bind(this._placeholderDom, 'mousedown', uki.proxy(function(e) { 
+                    this.focus(); 
+                    uki.dom.preventDefault(e); 
+                }, this));
             } else {
                 this._placeholderDom.innerHTML = v;
             }
@@ -104,8 +106,8 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         });
         var padding;
         if (this._multiline) {
-            this._input.style.height = this._rect.height - 4 + 'px';
-            this._input.style.top = 2 + 'px'
+            this._input.style.height = this._rect.height - 4 + PX;
+            this._input.style.top = 2 + PX;
             padding = '2px 0';
         } else {
             var o = (this._rect.height - getEmptyInputHeight(this.fontSize())) / 2;

@@ -37,17 +37,16 @@ uki.view.table.Header = uki.newClass(uki.view.Label, new function() {
     };
     
     proto._bindResizerDrag = function(resizer, columnIndex) {
-        var _this = this;
         uki.dom.drag.watch(resizer, {
-            _drag: function(e) {
-                var headerOffset = uki.dom.offset(_this.dom()),
+            _drag: uki.proxy(function(e) {
+                var headerOffset = uki.dom.offset(this.dom()),
                     offsetWithinHeader = e.pageX - headerOffset.x,
-                    columnOffset = 0, i, column = _this._columns[columnIndex];
+                    columnOffset = 0, i, column = this._columns[columnIndex];
                 for (i=0; i < columnIndex; i++) {
-                    columnOffset += _this._columns[i].width();
+                    columnOffset += this._columns[i].width();
                 };
                 column.width(offsetWithinHeader - columnOffset);
-            }
+            }, this)
         });
     };
     

@@ -55,37 +55,36 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._dom.appendChild(this._box);
         this._box.appendChild(this._image);
         
-        var _this = this;
-        this._clickHandler = function() { _this._click() };
-        
-        uki.dom.bind(this._box, 'click', this._clickHandler);
-        uki.dom.bind(this._box, 'mouseover', function() {
-            _this._over = true;
-            _this._updateBg();
-        });
-        uki.dom.bind(this._box, 'mouseout', function() {
-            _this._over = false;
-            _this._updateBg();
-        });
-        uki.image.load([this._focusImage], function() {
-            _this._focusImage.style.cssText += ';margin-left:-' + _this._focusImage.width/2 + PX + ';margin-top:-' + _this._focusImage.height/2 + PX 
-        });
         this._initFocusable();
         this.textSelectable(this.textSelectable());
         this.checked(this.checked());
+        
+        uki.dom.bind(this._box, 'click', uki.proxy(this._click, this));
+        uki.dom.bind(this._box, 'mouseover', uki.proxy(function() {
+            this._over = true;
+            this._updateBg();
+        }, this));
+        
+        uki.dom.bind(this._box, 'mouseout', uki.proxy(function() {
+            this._over = false;
+            this._updateBg();
+        }, this));
+        
+        uki.image.load([this._focusImage], uki.proxy(function() {
+            this._focusImage.style.cssText += ';margin-left:-' + this._focusImage.width/2 + PX + ';margin-top:-' + this._focusImage.height/2 + PX;
+        }, this));
+        
+        uki.dom.bind(this._focusableInput, 'keyup', uki.proxy(function(e) {
+            if (e.which == 32 || e.which == 13) {
+                this._click();
+                this.trigger('click', {domEvent: e, source: this});
+            }
+        }, this));
+        
     },
     
     _focus: function() {
         this._dom.appendChild(this._focusImage);
-        if (this._firstFocus) {
-            var _this = this;
-            uki.dom.bind(this._focusableInput, 'keyup', function(e) {
-                if (e.which == 32 || e.which == 13) {
-                    _this._click();
-                    _this.trigger('click', {domEvent: e, source: _this});
-                }
-            });
-        }
     },
     
     _blur: function() {

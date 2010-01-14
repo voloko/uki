@@ -140,12 +140,11 @@ uki.background.Sliced9 = uki.newClass(new function() {
         this._comp.dom().appendChild(this._container);
         
         if (!uki.supportNativeLayout) {
-            var _this = this;
-            this._layoutHandler = this._layoutHandler || function(e) {
-                if (_this._size && _this._size.eq(e.rect)) return;
-                _this._size = e.rect;
-                _this.layout();
-            };
+            this._layoutHandler = this._layoutHandler || uki.proxy(function(e) {
+                if (this._size && this._size.eq(e.rect)) return;
+                this._size = e.rect;
+                this.layout();
+            }, this);
             this._comp.bind('layout', this._layoutHandler);
             this.layout();
         }

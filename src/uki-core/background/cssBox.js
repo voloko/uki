@@ -12,7 +12,6 @@ uki.background.CssBox = uki.newClass(new function() {
     
     function getInsets(options) {
         if (!cache[options]) {
-            var _this = this;
             uki.dom.probe(
                 uki.createElement('div', options + ';position:absolute;overflow:hidden;left:-999em;width:10px;height:10px;'), 
                 function(c) {
@@ -42,15 +41,12 @@ uki.background.CssBox = uki.newClass(new function() {
     };
     
     this.attachTo = function(comp) {
-        var _this = this;
         this._comp = comp;
         this._comp.dom().appendChild(this._container);
 
         if (uki.supportNativeLayout) return;
         
-        this._layoutHandler = function(e) {
-            _this.layout(e.rect);
-        };
+        this._layoutHandler = this._layoutHandler || uki.proxy(function(e) { this.layout(e.rect); }, this);
         this._comp.bind('layout', this._layoutHandler);
         this.layout(this._comp.rect());
     };
