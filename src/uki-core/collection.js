@@ -147,7 +147,7 @@ include('attachment.js');
         };
     });
     
-    uki.each(('html,text,background,value,rect,checked,selectedIndex,' +
+    uki.each(('html,text,background,value,rect,checked,anchors,selectedIndex,' +
         'childViews,typeName,id,name,visible,disabled,focusable').split(','), function(i, name) {
         self[name] = function( value ) { return this.attr( name, value ); };
     });
