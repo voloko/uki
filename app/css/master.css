@@ -86,6 +86,25 @@ p.download {
     p.download a {
         font-size: 16px;
     }
+    
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 60px;
+    left: 510px;
+    font-size: 14px;
+}
+    .menu li
+    {
+        float: left;
+        margin: 0;
+        padding: 0 10px;
+        border-left: 1px solid #CCC;
+    }
+    
+
 
 .links {
     float: right;

@@ -18,12 +18,18 @@
         UKI
         %span.small Simple UI Kit for complex web apps
         %span.version= "(#{version})"
+      %ul.menu
+        %li{:style => 'border-left: none'} <a href="/docs/">Api docs</a>
+        %li <a href="http://github.com/voloko/uki/tree/master/app/functional/">Code examples</a>
+        %li <a href="http://github.com/voloko/uki/">Source</a>
+        %li <a href="http://wiki.github.com/voloko/uki/">Wiki</a>
+        
       .links
         %h3 Links
         %ul
+          %li Play with simple <a href="http://jsbin.com/iqite/edit">twitter widget</a> code 
           %li Draft <a href="/docs/">API docs</a> for uki-core
           %li Google wave <a href="http://ukijs.org/functional/wave.html" target="_blank">layout</a> in <a href="http://github.com/voloko/uki/blob/master/app/functional/wave.js" target="_blank">100 lines</a> of uki code
-          %li Public <a href="http://github.com/voloko/uki/tree/v0.0.1b">release 0.0.1</a> on github.
       %p.slogan
         Uki is a <em>fast</em> and <em>simple</em> JavaScript user interface toolkit for desktop-like web applications.<br />
         It comes with a rich view-component library ranging from 
@@ -59,7 +65,7 @@
                 %p Web should be simple. Adding a new library to your app should not require using a specific build process or learning a new language.
                 %p It should be as <em>simple as adding a &lt;script&gt; tag</em> to your HTML. That’s exactly the way uki works. No builders to install, no dependencies to manage, no css to include. Simple.
                 %p
-                  %code= "&lt;script src=&#x27;http://static.ukijs.org/pkg/#{version}/uki.gz.js&#x27;&gt;&lt;/script&gt;"
+                  %code= "&lt;script src=&#x27;http://static.ukijs.org<wbr/>/pkg/#{version}/uki.gz.js&#x27;&gt;&lt;/script&gt;"
               
               .feature{:valign => 'top'}
                 %h2 Cross browser
