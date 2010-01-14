@@ -10,6 +10,11 @@ ranging from Sliders to Grids and SplitPanes.
     
     uki('Button[text^=Click]').click(function() { alert(this.text()); });
     
+== Links
+ * API docs at http://ukijs.org/docs/
+ * Code examples at http://github.com/voloko/uki/tree/master/app/functional/
+ * Development docs and tutorial at http://wiki.github.com/voloko/uki/
+    
 == Simple
 The Web should be simple. 
 Adding a new library to your app should not require 
