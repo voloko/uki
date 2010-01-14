@@ -9,7 +9,7 @@ uki.view.Cssable = new function() {
         return this;
     };
     
-    uki.each(['fontSize', 'textAlign', 'color', 'fontFamily', 'fontWeight', 'lineHeight'], function(i, name) {
+    uki.each('fontSize,textAlign,color,fontFamily,fontWeight,lineHeight,zIndex'.split(','), function(i, name) {
         proto[name] = function(value) {
             return this._css(name, value);
         };
