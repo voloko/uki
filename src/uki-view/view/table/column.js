@@ -14,6 +14,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     
     proto.width = uki.newProp('_width', function(w) {
         this._width = this._normailizeWidth(w);
+        this.trigger('beforeResize', {source: this});
         if (this._stylesheet) {
             var rules = this._stylesheet.styleSheet ? this._stylesheet.styleSheet.rules : this._stylesheet.sheet.cssRules;
             rules[0].style.width = this._clientWidth() + PX;
