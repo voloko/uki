@@ -1,22 +1,7 @@
-/**
- * JSONP request
- */
-function jsonp (url, callback) {
-    var name = 'jsonp' +  +new Date,
-        script = document.createElement('script'),
-        head = document.getElementsByTagName('head')[0];
-    window[name] = callback;
-    script.src = url.replace(/=\?/, '=' + name);
-    head.insertBefore(script, head.firstChild);
-}
-
-var template = new uki.theme.Template(
-    '<a href="http://twitter.com/${screen_name}">${screen_name}</a> ${tweet}'
-);
-
-var tweets = [],
-    loading = false;
+var tweets = [],     // loaded tweets
+    loading = false; // are we loading now
     
+// custom background for a tweet
 function bubbleBg () {
     var prefix = "i/bubble-"; 
     return new uki.background.Sliced9({ 
@@ -27,100 +12,137 @@ function bubbleBg () {
     }, "10 10 10 10", {inset: '0 0 7 0'});
 }
 
+// widget layout
 var widget = uki({ 
-    view: 'Box', rect: '200 300', minSize: '200 300', visible: true, 
-    anchors: 'left top right bottom', background: '#FFF',
+    view: 'Box', rect: '200 300', minSize: '200 300', visible: true, // widget parent view with white background
+    anchors: 'left top right bottom', background: '#FFF',            // grow with the the container dom
     childViews: [
-        { view: 'Box', rect: '200 51', anchors: 'left top right', background: 'theme(panel)', 
+        { view: 'Box', rect: '200 51',                               // top panel, with default uki panel bg
+            anchors: 'left top right', background: 'theme(panel)',   // width grows, height fixed to 51 
             childViews: [
-            { view: 'MultilineTextField', rect: '5 5 130 42', 
-                anchors: 'left top right', 
-                placeholder: "What's happening?", fontSize: '12px' },
-            { view: 'Button', rect: '140 5 55 24', anchors: 'right top', 
-                text: 'Update' }
+                { view: 'MultilineTextField', rect: '5 5 130 42',    // Tweet input field
+                    anchors: 'left top right', 
+                    placeholder: "What's happening?", fontSize: '12px' },
+                { view: 'Button', rect: '140 5 55 24', anchors: 'right top',  // Update button
+                    text: 'Update' }
             ] },
-        { view: 'ScrollPane', rect: '0 50 200 250',
+        { view: 'ScrollPane', rect: '0 50 200 250',                  // Scrollable tweet container
             anchors: 'left top right bottom', childViews: [
-                { view: 'VerticalFlow',  rect: '5 5 190 250', anchors: 'left top right bottom' }
+                { view: 'VerticalFlow',  rect: '5 5 190 250',        // Flow of tweet views
+                    anchors: 'left top right bottom' }
             ] }
     ]
 });
 
-function renderRow (dataRow, flow) {
-    dataRow.screen_name = dataRow.user.screen_name;
-    dataRow.tweet = uki.escapeHTML(dataRow.text)
-        .replace(/([\w]+:\/\/[a-z0-9$_.+()*,;\/?:@&~=-]+[a-z0-9\/])/ig, '<a href="$1">$1</a>')
-        .replace(/(\@(\w+))/g, '<a href="http://twitter.com/$2">$1</a>');
+// Tweet contents template
+var tweetTemplate = new uki.theme.Template(
+    '<a href="http://twitter.com/${screen_name}">${screen_name}</a> ${text}'
+);
+
+// layout for a particular tweet
+function layoutTweet (tweet, flow) {
+    var data = {
+        screen_name: tweet.user.screen_name,
+        text: uki.escapeHTML(tweet.text)
+            .replace(/([\w]+:\/\/[a-z0-9$_.+()*,;\/?:@&~=-]+[a-z0-9\/])/ig, '<a href="$1">$1</a>')
+            .replace(/(\@(\w+))/g, '<a href="http://twitter.com/$2">$1</a>')
+    };
         
     var row = uki({ 
-        view: 'Box', 
-        rect: '200 80', anchors: 'left top right', background: bubbleBg(),
+        view: 'Box', background: bubbleBg(),        // box container with a custom bg
+        rect: '200 80', anchors: 'left top right',  // grow with container
         childViews: [
-            { view: 'Image', rect: '10 10 50 50', anchors: 'left top', 
-                src: dataRow.user.profile_image_url },
-            { view: 'Label', rect: '65 10 120 40', anchors: 'left top right', 
-                multiline: true, html: template.render(dataRow), fontSize: '11px', lineHeight: '13px' }
+            { view: 'Image', rect: '10 10 50 50', anchors: 'left top',  // author profile image
+                src: tweet.user.profile_image_url },
+            { view: 'Label', rect: '65 10 120 40', anchors: 'left top right', // tweet text
+                multiline: true, html: tweetTemplate.render(data), 
+                fontSize: '11px', lineHeight: '13px' }
         ]
     });
+    
+    // resize tweet and children to container width
     row.rect( new uki.geometry.Rect(flow.rect().width, row.rect().height) );
-    row.find('Label').resizeToContents('height');
-    row.resizeToContents('height');
-    row.rect().height += 20;
+    
+    // resize height to tweet contents
+    row.find('Label').resizeToContents('height'); // label first ...
+    row.resizeToContents('height');               // ... then row to match label
+    row.rect().height += 20;                      // ... add 20px space below
     return row[0];
 }
 
-function updateRows (data) {
-    var flow = widget.find('VerticalFlow');
-    var i = 0, firstRow = flow.childViews()[0], firstTweet = tweets[0] || {id:-1};
-    while (data[i] && data[i].id != firstTweet.id) {
-        flow.insertBefore(renderRow(data[i], flow), firstRow);
-        tweets.unshift(data[i]);
-        i++;
+// update tweet list when new tweets loaded
+function updateTweets (data) {
+    var flow = widget.find('VerticalFlow'), // get the container
+        i = 0, 
+        firstRow = flow.childViews()[0],    // store current first rendered view
+        firstTweet = tweets[0] || {id:-1};  // and current first tweet data
+        
+    while (data[i] && data[i].id != firstTweet.id) { // while new tweets
+        flow.insertBefore(layoutTweet(data[i], flow), firstRow); // insert new tweet view
+        tweets.unshift(data[i++]);                               // ... add tweet to loaded tweets
     }
-    flow.resizeToContents('height');
-    widget.find('ScrollPane').layout();
+    flow.resizeToContents('height'); // resize list to contents
+    flow.parent().layout();          // update dom
 }
 
-function appendRows (data) {
-    var flow = widget.find('VerticalFlow');
+// append tweets to the end of the list
+function appendTweets (data) {
+    var flow = widget.find('VerticalFlow'); // get the container
     loading = false;
-    uki.each(data, function(i, dataRow) {
-        flow.appendChild(renderRow(dataRow, flow));
+    uki.each(data, function(i, tweet) {
+        flow.appendChild(layoutTweet(tweet, flow));
     });
-    flow.resizeToContents('height');
-    widget.find('ScrollPane').layout();
-    tweets = tweets.concat(data);
+
+    flow.resizeToContents('height'); // resize list to contents
+    flow.parent().layout();          // update dom
 }
 
-widget.find('Button').click(function() {
-    if (this.disabled()) return;
-    this.disabled(true);
+// post to twitter on update button click
+widget.find('Button[text=Update]').click(function() {
+    // create artificial form and iframe target
     var form = uki.createElement('form', 'position:absolute;left:-999em', '<input type="text" name="status" value="' + uki.escapeHTML(widget.find('MultilineTextField').value()) + '">'),
         iframe = uki.createElement('iframe', 'position:absolute;left:-999em');
-    
     iframe.name = 'target_' + +new Date();
     form.target = iframe.name;
     form.method = 'POST';
     form.action = 'http://twitter.com/statuses/update.xml';
+    
+    // append them to body
     document.body.appendChild(form);
     document.body.appendChild(iframe);
+    
+    // submit form    
     form.submit();
 });
 
+// simplest JSONP request implementation
+function jsonp (url, callback) {
+    var name = 'jsonp' +  +new Date,
+        script = document.createElement('script'),
+        head = document.getElementsByTagName('head')[0];
+    window[name] = callback;
+    script.src = url.replace(/=\?/, '=' + name);
+    head.insertBefore(script, head.firstChild);
+}
+
+// when we scroll tweet list, load more tweets if less than 50px available
 widget.find('ScrollPane').scroll(function() {
     if (this.contentsSize().height - this.scrollTop() - this.rect().height < 50) {
         if (!loading && tweets.length) {
-            jsonp('http://api.twitter.com/1/statuses/home_timeline.json?callback=?&since_id=' + tweets[tweets.length - 1].id, appendRows);
+            jsonp('http://api.twitter.com/1/statuses/home_timeline.json?callback=?&since_id=' + tweets[tweets.length - 1].id, appendTweets);
             loading = true;
         }
     }
 }); 
 
+// update tweet list every 5 minutes
 setTimeout(function() {
     if (loading) return; 
-    jsonp('http://api.twitter.com/1/statuses/home_timeline.json?callback=?', updateRows);
+    jsonp('http://api.twitter.com/1/statuses/home_timeline.json?callback=?', updateTweets);
 }, 5 * 60 * 1000);
 
-jsonp('http://api.twitter.com/1/statuses/home_timeline.json?callback=?', appendRows);
+// load first portion of tweets
+jsonp('http://api.twitter.com/1/statuses/home_timeline.json?callback=?', appendTweets);
 
+// attach created widget to dom tree
 widget.attachTo( document.getElementById('container'), '200 300' );
