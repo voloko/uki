@@ -3,6 +3,15 @@ include('../view.js');
 uki.view.Cssable = new function() {
     var proto = this;
     
+    proto.style = function(name, value) {
+        if (typeof name == 'string') return this._css(name, value);
+        
+        uki.each(name, function(name, value) {
+            this._css(name, value);
+        }, this);
+        return this;
+    };
+    
     proto._css = function(name, value) {
         if (value === undefined) return this._dom.style[name];
         this._dom.style[name] = value;
