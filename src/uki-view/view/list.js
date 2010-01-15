@@ -329,7 +329,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
 });
 
-uki.fn.data = function( value ) { return this.attr( 'data', value ); };
+uki.Collection.addAttrs('data,selectedIndex');
 
 uki.view.ScrollableList = uki.newClass(uki.view.ScrollPane, new function() {
     var Base = uki.view.ScrollPane.prototype,

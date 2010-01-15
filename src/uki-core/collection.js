@@ -125,6 +125,15 @@ include('attachment.js');
         return this;
     };
     
+    uki.Collection.addAttrs = function(attrNames) {
+        uki.each(attrNames.split(','), function(i, name) {
+            self[name] = function( value ) { return this.attr( name, value ); };
+        });
+    };
+    
+    uki.Collection.addAttrs('html,text,background,value,rect,checked,anchors,' +
+        'childViews,typeName,id,name,visible,disabled,focusable,style');
+    
     uki.each(['parent'], function(i, name) {
         self[name] = function() {
             return new uki.Collection( uki.map(this, name) );
@@ -145,11 +154,6 @@ include('attachment.js');
             };
             return this;
         };
-    });
-    
-    uki.each(('html,text,background,value,rect,checked,anchors,selectedIndex,' +
-        'childViews,typeName,id,name,visible,disabled,focusable').split(','), function(i, name) {
-        self[name] = function( value ) { return this.attr( name, value ); };
     });
     
     uki.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +

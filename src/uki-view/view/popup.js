@@ -112,6 +112,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
     };
 });
 
+
 uki.each(['show', 'hide', 'toggle'], function(i, name) {
     uki.fn[name] = function() {
         this.each(function() { this[name](); });

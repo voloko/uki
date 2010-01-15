@@ -18,6 +18,7 @@ uki.view.Cssable = new function() {
         return this;
     };
     
+    // TODO: is this realy needed?
     uki.each('fontSize,textAlign,color,fontFamily,fontWeight,lineHeight,zIndex'.split(','), function(i, name) {
         proto[name] = function(value) {
             return this._css(name, value);

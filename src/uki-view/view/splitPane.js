@@ -210,4 +210,4 @@ uki.view.VerticalSplitPane = uki.newClass(uki.view.SplitPane, {
     }
 });
 
-uki.fn.handlePosition = function( value ) { return this.attr( 'handlePosition', value ); };
+uki.Collection.addAttrs('handlePosition');
