@@ -1,5 +1,5 @@
 /*!
- * uki JavaScript Library v0.0.1
+ * uki JavaScript Library
  * Licensed under the MIT license
  *
  * Copyright (c) 2009 Vladimir Kolesnikov
