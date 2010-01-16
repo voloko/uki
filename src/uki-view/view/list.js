@@ -46,40 +46,52 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return this;
     };
     
-    // data api
     proto.addRow = function(position, data) {
         this.clearSelection();
         this._data.splice(position, 0, data);
-        if (position < this._packs[0].itemFrom) {
-            this._movePack(this._packs[0], 1);
-            this._movePack(this._packs[1], 1);
-        } else if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
-            this._addToPack(this._packs[1], position, data);
-        } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
-            this._addToPack(this._packs[0], position, data);
-            this._movePack(this._packs[1], 1);
-            this._packs[1].itemTo++;
-        }
-        this._updateRectOnDataChnage();
+        this.data(this._data);
     };
     
-    proto.removeRow = function(position) {
+    proto.removeRow = function(position, data) {
         this.clearSelection();
         this._data.splice(position, 1);
-        if (position < this._packs[0].itemFrom) {
-            this._movePack(this._packs[0], -1);
-            this._movePack(this._packs[1], -1);
-        } else if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
-            this._removeFromPack(this._packs[1], position);
-            this._layoutDom(this.rect());
-        } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
-            this._removeFromPack(this._packs[0], position);
-            this._movePack(this._packs[1], -1);
-            this._packs[1].itemTo--;
-            this._layoutDom(this.rect());
-        }
-        this._updateRectOnDataChnage();
-    };    
+        this.data(this._data);
+    };
+    
+    // data api
+    // proto.addRow = function(position, data) {
+    //     this.clearSelection();
+    //     this._data.splice(position, 0, data);
+    //     if (position < this._packs[0].itemFrom) {
+    //         this._movePack(this._packs[0], 1);
+    //         this._movePack(this._packs[1], 1);
+    //     } else if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
+    //         this._addToPack(this._packs[1], position, data);
+    //     } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
+    //         this._addToPack(this._packs[0], position, data);
+    //         this._movePack(this._packs[1], 1);
+    //         this._packs[1].itemTo++;
+    //     }
+    //     this._updateRectOnDataChnage();
+    // };
+    // 
+    // proto.removeRow = function(position) {
+    //     this.clearSelection();
+    //     this._data.splice(position, 1);
+    //     if (position < this._packs[0].itemFrom) {
+    //         this._movePack(this._packs[0], -1);
+    //         this._movePack(this._packs[1], -1);
+    //     } else if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
+    //         this._removeFromPack(this._packs[1], position);
+    //         this._layoutDom(this.rect());
+    //     } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
+    //         this._removeFromPack(this._packs[0], position);
+    //         this._movePack(this._packs[1], -1);
+    //         this._packs[1].itemTo--;
+    //         this._layoutDom(this.rect());
+    //     }
+    //     this._updateRectOnDataChnage();
+    // };    
     
     proto.selectedIndex = function(position) {
         if (position === undefined) return this._selectedIndex;
