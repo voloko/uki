@@ -186,9 +186,8 @@
         },
         doms: {
             'splitPane-vertical': function(params) {
-                var commonVerticalStyle = 'cursor:row-resize;cursor:ns-resize;z-index:200;overflow:hidden;';
-                
-                return params.handleWidth == 1 ?
+                var commonVerticalStyle = 'cursor:row-resize;cursor:ns-resize;z-index:200;overflow:hidden;',
+                    handle = params.handleWidth == 1 ?
                     uki.createElement('div', 
                         defaultCss + 'width:100%;height:5px;margin-top:-2px;' + 
                         commonVerticalStyle + 'background: url(' + uki.theme.imageSrc('x') + ')',
@@ -199,12 +198,13 @@
                         defaultCss + 'width:100%;height:' + (params.handleWidth) + 'px;' + commonVerticalStyle +
                         'background: url(' + uki.theme.imageSrc('x') + ')');
                 
+                if (!handle.style.cursor || window.opera) handle.style.cursor = 'n-resize';
+                return handle;
             },
             
             'splitPane-horizontal': function(params) {
-                var commonHorizontalStyle = 'cursor:col-resize;cursor:ew-resize;z-index:200;overflow:hidden;';
-                
-                return params.handleWidth == 1 ?
+                var commonHorizontalStyle = 'cursor:col-resize;cursor:ew-resize;z-index:200;overflow:hidden;',
+                    handle = params.handleWidth == 1 ?
                     uki.createElement('div', 
                         defaultCss + 'height:100%;width:5px;margin-left:-2px;' + 
                         commonHorizontalStyle + 'background: url(' + uki.theme.imageSrc('x') + ')',
@@ -214,6 +214,8 @@
                     uki.createElement('div', 
                         defaultCss + 'height:100%;width:' + (params.handleWidth) + 'px;' + commonHorizontalStyle + 
                         'background: url(' + uki.theme.imageSrc('x') + ');');
+                if (!handle.style.cursor || window.opera) handle.style.cursor = 'e-resize';
+                return handle;
             }
         },
         templates: {
