@@ -128,8 +128,6 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
     proto._layoutDom = function(rect) {
         this._updateClientRects();
         
-        Base._layoutDom.call(this, rect);
-        
         if (this._layoutScrollH !== this._scrollH) {
             this._dom.style.overflowX = this._scrollH ? 'scroll' : 'hidden';
             this._layoutScrollH = this._scrollH;
@@ -139,6 +137,8 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
             this._dom.style.overflowY = this._scrollV ? 'scroll' : 'hidden';
             this._layoutScrollV = this._scrollV;
         }
+        
+        Base._layoutDom.call(this, rect);
         
         // force redraw in ie
         if (this._dom.attachEvent) this._dom.className += '';
