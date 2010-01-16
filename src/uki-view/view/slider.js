@@ -44,10 +44,11 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._focusBg.style.cssText += this._bg.style.cssText += Base.defaultCss + 'top:0;left:0;z-index:-1;position:absolute;'; 
         this._handle.appendChild(this._bg);
         
-        uki.image.load([this._bg, this._focusBg], uki.proxy(this._afterHandleLoad, this) );
         
         uki.theme.background('slider-bar').attachTo(this);
         this._initFocusable();
+        
+        uki.image.load([this._bg, this._focusBg], uki.proxy(this._afterHandleLoad, this) );
     },
     
     _afterHandleLoad: function() {
