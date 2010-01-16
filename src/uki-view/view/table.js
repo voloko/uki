@@ -67,6 +67,8 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
     };
 });
 
+uki.Collection.addAttrs('columns');
+
 include('table/render.js');
 include('table/column.js');
 include('table/header.js');
