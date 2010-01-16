@@ -41,10 +41,12 @@ var p = uki(
 
 uki('#add', p).click(function() { 
     uki('#list')[0].addRow(uki('#add-n').value() || 0, uki('#add-text').value() || 'sample')
+    uki('#list')[0].layout()
 });
 
 uki('#remove', p).click(function() {
     uki('#list')[0].removeRow(uki('#remove-n').value());
+    uki('#list')[0].layout()
 });
 
 uki('#selectedIndex').click(function() {
