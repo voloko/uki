@@ -198,9 +198,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Cssable, new function
     proto.parent = function(parent) {
         if (parent === undefined) return this._parent;
         
-        if (this._parent) this._dom.parentNode.removeChild(this._dom);
+        // if (this._parent) this._dom.parentNode.removeChild(this._dom);
         this._parent = parent;
-        if (this._parent) this._parent.domForChild(this).appendChild(this._dom);
+        // if (this._parent) this._parent.domForChild(this).appendChild(this._dom);
         return this;
     };
     

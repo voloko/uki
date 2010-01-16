@@ -31,6 +31,7 @@ include('view/observable.js');
             uki.dom.offset.initialize();
             
             view.parent(this);
+            this.domForChild().appendChild(view.dom());
             
             if (dom != root && dom.tagName != 'BODY') {
                 var computedStyle = dom.runtimeStyle || dom.ownerDocument.defaultView.getComputedStyle(dom, null);

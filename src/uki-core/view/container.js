@@ -63,6 +63,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
      */
     proto.removeChild = function(child) {
         child.parent(null);
+        this.domForChild(child).removeChild(child.dom());
         var index = child._viewIndex,
             i, l;
         for (i=index+1, l = this._childViews.length; i < l; i++) {
@@ -78,6 +79,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         child._viewIndex = this._childViews.length;
         this._childViews.push(child);
         child.parent(this);
+        this.domForChild(child).appendChild(child.dom());
     };
     
     /**
@@ -93,6 +95,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         };
         this._childViews.splice(beforeChild._viewIndex, 0, child);
         child.parent(this);
+        this.domForChild(child).insertBefore(child.dom(), beforeChild.dom());
     };
     
     /**
@@ -102,7 +105,6 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     proto.domForChild = function(child) {
         return this._dom;
     };
-    
     
     
     proto._layoutDom = function(rect) {
