@@ -53,10 +53,10 @@ uki('#selectedIndex').click(function() {
 
 uki('#add-s').click(function() {
     uki('#list2').addRow(0, 'text');
-    uki('#list2').layout();
+    uki('#list2').parent().layout();
 });
 
 uki('#remove-s').click(function() {
     uki('#list2').removeRow(0);
-    uki('#list2').layout();
+    uki('#list2').parent().layout();
 });
