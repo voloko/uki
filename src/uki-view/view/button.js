@@ -72,6 +72,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     };
     
     proto._mouseup = function(e) {
+        if (!this._down) return;
         this._down = false;
         this._updateBg();
     };
