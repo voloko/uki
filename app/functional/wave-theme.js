@@ -97,8 +97,11 @@
             'link-button-normal': function() {
                 return new uki.background.Css({color:'#003EA8', textShadow: 'none', textDecoration: 'underline', cursor: 'pointer', textIndent: '2px'});
             },
+            'toolbar-popup-button-normal': function() {
+                return new uki.background.Css({ textAlign: 'left', fontWeight: 'normal', fontSize: '11px' });
+            },
             'toolbar-popup-button-hover': function() {
-                return new uki.background.Css({ background: '#4086FF', color: '#FFF' });
+                return new uki.background.Css({ textAlign: 'left', fontWeight: 'normal', fontSize: '11px', background: '#4086FF', color: '#FFF' });
             },
             
             
@@ -249,6 +252,7 @@
     uki.theme.wave.backgrounds['search-button-down'] = uki.theme.wave.backgrounds['search-button-hover'] = uki.theme.wave.backgrounds['search-button-normal'];
     uki.theme.wave.backgrounds['link-button-down'] = uki.theme.wave.backgrounds['link-button-hover'] = uki.theme.wave.backgrounds['link-button-normal'];
     uki.theme.wave.backgrounds['toolbar-popup'] = uki.theme.wave.backgrounds['popup-normal'];
+    uki.theme.wave.backgrounds['toolbar-popup-button-down'] = uki.theme.wave.backgrounds['toolbar-popup-button-hover'];
     
     uki.theme.register(uki.theme.wave);
 })();

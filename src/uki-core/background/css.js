@@ -15,19 +15,19 @@ uki.background.Css = uki.newClass(new function() {
     this.attachTo = function(comp) {
         this._comp = comp;
         this._originalValues = {};
-        var dom = comp.dom();
         
         uki.each(this._options, function(name, value) {
-            this._originalValues[name] = dom.style[name];
-            dom.style[name] = value;
+            // this._originalValues[name] = dom.style[name];
+            // dom.style[name] = value;
+            this._originalValues[name] = comp.style(name);
+            comp.style(name, value);
         }, this);
     };
     
     this.detach = function() {
         if (this._comp) {
-            var dom = this._comp.dom();
             uki.each(this._options, function(name, value) {
-                dom.style[name] = this._originalValues[name];
+                this._comp.style(name, this._originalValues[name]);
             }, this);
         }
         

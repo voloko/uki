@@ -30,7 +30,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._createLabelClone = function(autosize) {
         var clone = Base._createLabelClone.call(this, autosize);
-        clone.style.fontWeight = 'bold';
+        clone.style.fontWeight = this.style('fontWeight');
         return clone;
     };
     
@@ -54,9 +54,9 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._createDom = function() {
         // dom
-        this._dom = uki.createElement('div', this.defaultCss + 'color:#333');
+        this._dom = uki.createElement('div', this.defaultCss + 'color:#333;text-align:center;font-weight:bold;');
         this._label = uki.createElement('div', Base.defaultCss + 
-            "font-size:12px;line-height:12px;white-space:nowrap;text-align:center;font-weight:bold;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+            "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
         if (this._dom.attachEvent) {
             // click handler for ie

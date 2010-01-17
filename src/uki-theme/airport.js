@@ -76,6 +76,10 @@
                 return new uki.background.Css('#CCC');
             },
             
+            'toolbar-popup-button-hover': function() {
+                return new uki.background.Css({ background: '#4086FF', color: '#FFF' });
+            },
+            
             'panel': function() {
                 var prefix = "panel/dark-";
                 return new uki.background.Sliced9({
