@@ -116,6 +116,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._relayoutParent = function() {
+        if (this._firstLayout) return;
         if (this._scrollableParent) {
             this._scrollableParent.layout();
         }
