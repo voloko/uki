@@ -46,7 +46,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._updateBg = function() {
         var name = this._disabled ? 'disabled' : this._down ? 'down' : this._over ? 'hover' : 'normal';
-        this.color(this._disabled ? '#999' : '#333');
+        this._dom.style.color = this._disabled ? '#999' : '#333'; // do not redefine explict style
         this._backgroundByName(name);
     };
         
@@ -54,9 +54,9 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._createDom = function() {
         // dom
-        this._dom = uki.createElement('div', this.defaultCss);
+        this._dom = uki.createElement('div', this.defaultCss + 'color:#333');
         this._label = uki.createElement('div', Base.defaultCss + 
-            "font-size:12px;line-height:12px;white-space:nowrap;text-align:center;font-weight:bold;color:#333;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+            "font-size:12px;line-height:12px;white-space:nowrap;text-align:center;font-weight:bold;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
         if (this._dom.attachEvent) {
             // click handler for ie

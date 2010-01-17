@@ -5,7 +5,7 @@ include('../builder.js');
 include('../dom.js');
 include('../dom/nativeLayout.js');
 include('observable.js');
-include('cssable.js');
+include('stylable.js');
 
 var ANCHOR_TOP    = 1,
     ANCHOR_RIGHT  = 2,
@@ -14,7 +14,7 @@ var ANCHOR_TOP    = 1,
     ANCHOR_WIDTH  = 16,
     ANCHOR_HEIGHT = 32;
 
-uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Cssable, new function() {
+uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new function() {
     
     /** @exports proto as uki.view.Base# */
     var proto = this,

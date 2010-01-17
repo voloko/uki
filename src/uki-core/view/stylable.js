@@ -1,29 +1,29 @@
 include('../view.js');
 
-uki.view.Cssable = new function() {
+uki.view.Stylable = new function() {
     var proto = this;
     
     proto.style = function(name, value) {
-        if (typeof name == 'string') return this._css(name, value);
+        if (typeof name == 'string') return this._style(name, value);
         
         uki.each(name, function(name, value) {
-            this._css(name, value);
+            this._style(name, value);
         }, this);
         return this;
     };
     
-    proto._css = function(name, value) {
+    proto._style = function(name, value) {
         if (value === undefined) return this._dom.style[name];
         this._dom.style[name] = value;
         return this;
     };
     
     // TODO: is this realy needed?
-    uki.each('fontSize,textAlign,color,fontFamily,fontWeight,lineHeight,zIndex'.split(','), function(i, name) {
-        proto[name] = function(value) {
-            return this._css(name, value);
-        };
-    });
+    // uki.each('fontSize,textAlign,color,fontFamily,fontWeight,lineHeight,zIndex'.split(','), function(i, name) {
+    //     proto[name] = function(value) {
+    //         return this._style(name, value);
+    //     };
+    // });
     
     var probe = uki.createElement('div').style;
     uki.each(['userSelect', 'MozUserSelect', 'WebkitUserSelect'], function() {

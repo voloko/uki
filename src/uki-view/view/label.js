@@ -18,7 +18,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         return 'uki.view.Label';
     };
     
-    proto._css = function(name, value) {
+    proto._style = function(name, value) {
         if (value === undefined) return this._label.style[name];
         this._label.style[name] = value;
         return this;
@@ -92,7 +92,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     proto._createDom = function() {
         Base._createDom.call(this);
         this._label = uki.createElement('div', Base.defaultCss + 
-            "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+            "font-size:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
         this.textSelectable(this.textSelectable());
     };
@@ -102,7 +102,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         
         var inset = this._inset;
         if (!this.multiline()) {
-            var fz = parseInt(this._css('fontSize'), 10) || 12;
+            var fz = parseInt(this.style('fontSize'), 10) || 12;
             this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
             // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
         }

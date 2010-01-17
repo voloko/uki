@@ -68,7 +68,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     });
     
 
-    proto._css = function(name, value) {
+    proto._style = function(name, value) {
         if (value === undefined) return this._input.style[name];
         this._input.style[name] = value;
         if (this._placeholderDom) this._placeholderDom.style[name] = value;
@@ -110,7 +110,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             this._input.style.top = 2 + PX;
             padding = '2px 0';
         } else {
-            var o = (this._rect.height - getEmptyInputHeight(this.fontSize())) / 2;
+            var o = (this._rect.height - getEmptyInputHeight(this.style('fontSize'))) / 2;
             padding = FLOOR(o) + 'px 0 ' + CEIL(o) + 'px 0';
             this._input.style.padding = padding;
         }

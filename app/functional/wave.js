@@ -17,15 +17,15 @@ var WaveRender = uki.extend({}, ContactsRender, {
 
 function toolbarButton (label, offset) {
     var html = uki.extend(uki.theme.template('toolbar-button', {height: 24, size: new uki.geometry.Size(16, 16)}), [label, undefined, 'url('+uki.theme.imageSrc('icons-sprite')+') ' + offset]);
-    return { html: html.join(''), inset: '0 8 0 28', fontWeight: 'normal', fontSize: '11px', textAlign: 'left', color: '' };
+    return { html: html.join(''), inset: '0 8 0 28', style: { fontWeight: 'normal', fontSize: '11px', textAlign: 'left', color: '' } };
 }
 
 function menuButton (label, offset, rect) {
-    return uki.extend(toolbarButton(label, offset), { view: 'Button', textAlign: 'left', fontSize: '13px', rect: rect, backgroundPrefix: 'link-', focusable: 'false', anchors: 'left top right', color: '', inset: '0 8 0 30', focusable: false });
+    return uki.extend(toolbarButton(label, offset), { view: 'Button', style: { textAlign: 'left', fontSize: '13px', fontWeight: 'normal', color: '' }, rect: rect, backgroundPrefix: 'link-', focusable: 'false', anchors: 'left top right', inset: '0 8 0 30', focusable: false });
 }
 
 function panel (label, args) {
-    args.childViews = (args.childViews || []).concat({ view: 'Label', rect: '7 6 100 13', anchors: 'left top right', text: label, color: '#FFF', fontSize: '13px' });
+    args.childViews = (args.childViews || []).concat({ view: 'Label', rect: '7 6 100 13', anchors: 'left top right', text: label, style: { color: '#FFF', fontSize: '13px' } });
     return uki.extend({}, { view: 'Box', name: 'panel', background: 'theme(panel-blue)', rect: '100 100', anchors: 'left top right bottom' }, args);
 }
 
@@ -41,15 +41,15 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', minSize: '800 4
         bottomChildViews: panel('Contacts', { rect: '166 714', childViews: [
             { view: 'Box', rect: '0 23 166 70', background: 'theme(box-lblue-top)', anchors: 'left top right', childViews: [
                 { view: 'Image', rect: '7 6 27 27', anchors: 'left top', src: '/app/functional/wave/voloko.jpg', background: 'theme(thumb)' },
-                { view: 'Label', rect: '40 8 100 13', anchors: 'left top', text: 'Volodya', fontWeight: 'bold', fontSize: '13px', textSelectable: true },
-                { view: 'TextField', rect: '16 41 120 24', anchors: 'left top right', fontSize: '12px', backgroundPrefix: 'search-', value: '', placeholder: 'Search contacts' },
+                { view: 'Label', rect: '40 8 100 13', anchors: 'left top', text: 'Volodya', style: { fontWeight: 'bold', fontSize: '13px' }, textSelectable: true },
+                { view: 'TextField', rect: '16 41 120 24', anchors: 'left top right', style: { fontSize: '12px' }, backgroundPrefix: 'search-', value: '', placeholder: 'Search contacts' },
                 { view: 'Button', rect: '139 46 13 13', anchors: 'right top', backgroundPrefix: 'search-', focusable: false }
             ] },
             { view: 'ScrollPane', rect: '0 93 166 586', anchors: 'left top right bottom', childViews: [
                 { view: 'List', id: "contactsList", rect: '166 586', anchors: 'left top right bottom', minSize: '0 100', rowHeight: 34, render: ContactsRender }
             ] },
             { view: 'Box', rect: '0 678 166 32', background: 'theme(box-lblue-bottom)', anchors: 'left bottom right', childViews: [
-                { view: 'Label', rect: '7 13 90 12', anchors: 'left top', fontSize: '12px', html: '<u>Manage contacts</u>', background: 'theme(link)' },
+                { view: 'Label', rect: '7 13 90 12', anchors: 'left top', style: { fontSize: '12px' }, html: '<u>Manage contacts</u>', background: 'theme(link)' },
                 { view: 'Button', rect: '136 10 24 18', backgroundPrefix: 'plus-', anchors: 'right bottom', focusable: false }
             ] }
         ] })
@@ -57,18 +57,18 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', minSize: '800 4
     rightChildViews: { view: 'SplitPane', id: 'splitRight', rect: '795 950', anchors: 'left top right bottom', handleWidth: 15, handlePosition: 300, leftMin: 300, rightMin: 300,
         leftChildViews: panel('Inbox 1 - 4 of 4', { rect: '300 930', childViews: [
             { view: 'Box', rect: '0 23 300 56', background: 'theme(box-lblue)', anchors: 'left top right', childViews: [
-                { view: 'Button', rect: '7 16 70 24', anchors: 'left top', text: 'New wave', fontWeight: 'normal', fontSize: '11px', focusable: false },
-                { view: 'TextField', rect: '90 16 180 24', anchors: 'left top right', fontSize: '12px', backgroundPrefix: 'search-', value: 'in:inbox', placeholder: 'Search waves' },
+                { view: 'Button', rect: '7 16 70 24', anchors: 'left top', text: 'New wave', style: { fontWeight: 'normal', fontSize: '11px' }, focusable: false },
+                { view: 'TextField', rect: '90 16 180 24', anchors: 'left top right', style: { fontSize: '12px' }, backgroundPrefix: 'search-', value: 'in:inbox', placeholder: 'Search waves' },
                 { view: 'Button', rect: '274 21 13 13', anchors: 'right top', backgroundPrefix: 'search-', focusable: false }
             ] },
             { view: 'Toolbar', rect: '0 79 300 24', anchors: 'left top right', background: 'theme(toolbar-normal)', buttons: [
                 toolbarButton('Follow', '0 0'), toolbarButton('Unfollow', '-16px 0'), toolbarButton('Archive', '-32px 0'), toolbarButton('Inbox', '0 0'), toolbarButton('Spam', '-48px 0'), toolbarButton('Read', '-64px 0'), toolbarButton('Unread', '-80px 0'), toolbarButton('Trash', '-96px 0'), toolbarButton('Move to', '-112px 0')
             ] },
             { view: 'ScrollPane', rect: '0 103 300 791', anchors: 'left top right bottom', childViews: [
-                { view: 'List', id: "waveList", rect: '300 791', anchors: 'left top right bottom', background: 'none', minSize: '0 100', rowHeight: 38, render: WaveRender }
+                { view: 'List', id: "waveList", rect: '300 791', anchors: 'left top right bottom', background: 'none', textSelectable: false, rowHeight: 38, render: WaveRender }
             ] },
             { view: 'Box', rect: '0 894 300 32', background: 'theme(box-lblue-bottom)', anchors: 'left bottom right', childViews: [
-                { view: 'Button', rect: '213 7 80 24', anchors: 'right bottom', text: 'Save search', fontWeight: 'normal', fontSize: '11px', focusable: false }
+                { view: 'Button', rect: '213 7 80 24', anchors: 'right bottom', text: 'Save search', style: { fontWeight: 'normal', fontSize: '11px' }, focusable: false }
             ] }
         ] }),
         rightChildViews: panel('Simplicity is the key', { rect: '470 930', background: 'theme(panel-blue)', childViews: [
@@ -83,8 +83,8 @@ uki({ view: 'SplitPane', id: 'splitMain', rect: '15 50 975 950', minSize: '800 4
             { view: 'Box', rect: '0 894 470 32', background: 'theme(box-lblue-bottom)', anchors: 'left bottom right', childViews: [
                 { view: 'Label', rect: '7 13 30 12', anchors: 'left top', fontSize: '12px', text: 'Tags:' },
                 { view: 'Button', rect: '45 10 24 18', backgroundPrefix: 'plus-', anchors: 'left bottom', focusable: false },
-                { view: 'Button', rect: '343 7 65 24', anchors: 'right bottom', text: 'Images', backgroundPrefix: 'a-', inset: '0 16 0 2', fontWeight: 'normal', fontSize: '11px', focusable: false },
-                { view: 'Button', rect: '413 7 50 24', anchors: 'right bottom', text: 'Files', backgroundPrefix: 'a-', inset: '0 16 0 2', fontWeight: 'normal', fontSize: '11px', focusable: false }
+                { view: 'Button', rect: '343 7 65 24', anchors: 'right bottom', text: 'Images', backgroundPrefix: 'a-', inset: '0 16 0 2', style: { fontWeight: 'normal', fontSize: '11px' }, focusable: false },
+                { view: 'Button', rect: '413 7 50 24', anchors: 'right bottom', text: 'Files', backgroundPrefix: 'a-', inset: '0 16 0 2', style: { fontWeight: 'normal', fontSize: '11px' }, focusable: false }
             ] }
         ] })
     }
