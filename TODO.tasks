@@ -1,7 +1,13 @@
-- instruments
-- fix list normalizeRect (only minSize)
-- fix table header (should occupy full width)
+- uki-instruments
+- uki-doc
+- uki-more
+
+✓ fix list normalizeRect (only minSize)
 - jspec tests for views
+
+- fix table header and columsn (should occupy full width and hight)
+- fix table column resize (should be centered over border)
+
 
 Core
 ✓ repackage

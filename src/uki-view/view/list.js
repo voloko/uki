@@ -43,6 +43,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._data = d;
         this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
         this._updateRectOnDataChnage();
+        this._relayoutParent();
         return this;
     };
     
@@ -114,10 +115,17 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._firstLayout = false;
     };
     
+    proto._relayoutParent = function() {
+        if (this._scrollableParent) {
+            this._scrollableParent.layout();
+        }
+        if (this._needsLayout) this.layout();
+    };
+    
     
     proto._updateRectOnDataChnage = function() {
-        if (this._scrollableParent) this._scrollableParent._needsLayout = true;
-        this.rect(this._parentRect)
+        this.rect(this._parentRect);
+        // if (this._scrollableParent) this._scrollableParent._needsLayout = true;
     };
     
     proto._bindSelectionEvents = function() {
