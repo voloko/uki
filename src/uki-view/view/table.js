@@ -36,7 +36,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
             this._totalWidth += this._columns[i].width();
         };
         this._list.minSize(new Size(this._totalWidth, 0));
-        this._list.rect(new Rect(this._totalWidth, 0));
+        this._list.rect(new Rect(this._totalWidth, this._list.height()));
         this._header.minSize(new Size(this._totalWidth, 0));
     };
     

@@ -117,7 +117,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._updateRectOnDataChnage = function() {
         if (this._scrollableParent) this._scrollableParent._needsLayout = true;
-        this.rect(this.rect())
+        this.rect(this._parentRect)
     };
     
     proto._bindSelectionEvents = function() {
@@ -258,7 +258,10 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._normalizeRect = function(rect) {
         rect = Base._normalizeRect.call(this, rect);
-        if (rect.height != this._rowHeight * this._data.length) {
+        // if (rect.height != this._rowHeight * this._data.length) {
+        //     rect = new Rect(rect.x, rect.y, rect.width, this._rowHeight * this._data.length);
+        // }
+        if (rect.height < this._rowHeight * this._data.length) {
             rect = new Rect(rect.x, rect.y, rect.width, this._rowHeight * this._data.length);
         }
         return rect;

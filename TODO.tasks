@@ -1,3 +1,8 @@
+- instruments
+- fix list normalizeRect (only minSize)
+- fix table header (should occupy full width)
+- jspec tests for views
+
 Core
 ✓ repackage
     ✓ app/uki-* -> src/uki-*

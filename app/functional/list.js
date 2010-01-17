@@ -32,7 +32,7 @@ var p = uki(
             { view: 'Button', rect: '350 70 100 24', anchors: 'left top', id: 'add-s', text: 'add to list 2' },
             { view: 'Button', rect: '550 70 100 24', anchors: 'left top', id: 'remove-s', text: 'remove list 2' },
             { view: 'ScrollPane', rect: '350 100 300 270', anchors: 'left top', childViews: [
-                { view: 'List', rect: '0 0 300 270', anchors: 'left top rigth', minSize: '0 300', data: ['sample #1', 'sample #2', 'sample #3', 'sample #4'], id: 'list2' }
+                { view: 'List', rect: '0 0 300 270', anchors: 'left top rigth', minSize: '0 270', data: ['sample #1', 'sample #2', 'sample #3', 'sample #4'], id: 'list2' }
             ]}
             
         ]

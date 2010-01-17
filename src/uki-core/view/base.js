@@ -226,7 +226,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Cssable, new function
 
         newRect = Rect.create(newRect);
         this._parentRect = newRect;
-        // if (newRect.eq(this._rect)) return false;
         this._rect = this._normalizeRect(newRect);
         this._needsLayout = this._needsLayout || layoutId++;
         return this;
@@ -410,9 +409,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Cssable, new function
     };
     
     uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'], function(index, attr) {
-        proto[attr] = function() {
-            var rect = this.rect();
-            return rect[attr].apply(rect, arguments);
+        proto[attr] = function(value) {
+            return uki.attr(this.rect(), attr, value);
         };
     });
     
