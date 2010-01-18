@@ -54,7 +54,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
                 this._dom.appendChild(this._placeholderDom);
                 this._updatePlaceholderVis();
                 uki.each(['fontSize', 'fontFamily', 'fontWeight'], function(i, name) {
-                    this._placeholderDom.style[name] = this[name]();
+                    this._placeholderDom.style[name] = this.style(name);
                 }, this);
                 
                 uki.dom.bind(this._placeholderDom, 'mousedown', uki.proxy(function(e) { 

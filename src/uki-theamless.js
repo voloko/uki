@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2009 Vladimir Kolesnikov
  *
- * Parts of code derived from jQuery JavaScript Library v1.3.2
+ * Parts of code derived from jQuery JavaScript Library
  * Copyright (c) 2009 John Resig
  */
 (function() {
