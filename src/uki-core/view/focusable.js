@@ -57,7 +57,7 @@ uki.view.Focusable = {
         
         if (!preCreatedInput) this.bind('mousedown', function(e) {
             setTimeout(uki.proxy(function() {
-                try { this._focusableInput.disabled || this._focusableInput.focus(); } catch (e) {};
+                try { this._hasFocus || this._focusableInput.focus(); } catch (e) {};
             }, this), 1);
         });
     },
