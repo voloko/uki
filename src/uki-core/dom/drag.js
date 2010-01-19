@@ -41,9 +41,9 @@ include('../dom.js');
     }
 
     function drop(e) {
-        controller.draggable = null;
         unbind();
         if (controller.draggable && controller.draggable._drop) controller.draggable._drop(e, offset(e));
+        controller.draggable = null;
     }
 
     function preventSelectionHandler(e) { 
