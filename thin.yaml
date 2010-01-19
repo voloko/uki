@@ -1,7 +1,7 @@
 ---
   environment: development
   # address: 127.0.0.1
-  port: 4867
+  port: 21119 # 21 u 11 k 9 i
   pid: thin.pid
   rackup: uki.ru
   log: thin.log

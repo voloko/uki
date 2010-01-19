@@ -1,43 +1,6 @@
 require 'sinatra/base'
-require 'haml'
-require 'json'
-require 'base64'
-require 'fileutils'
-require 'tempfile'
 
 class Uki < Sinatra::Base
-  def optimize_png(data)
-    f = Tempfile.new(['opt_png', '.png'])
-    f.write(data)
-    f.close()
-    p = f.path
-    variants = ['.opti', '.crush', '.crush.opti', '.opti.crush']
-
-    `optipng -q -nc -o7 #{p} -out #{p}.opti`
-  	`pngcrush -q -rem alla -brute #{p} #{p}.crush`
-  	`optipng -q -nc -o7 -i0 #{p}.crush -out #{p}.crush.opti`
-  	`pngcrush -q -rem alla -brute #{p}.opti #{p}.opti.crush`
-    suffix = variants.max { |a, b| File.size(p + a) <=> File.size(p + b) }
-    FileUtils.rm(p)
-    FileUtils.mv(p + suffix, p)
-    variants.each { |v| FileUtils.rm(p + v) rescue nil }
-    return File.read(p)
-  end
-  
-  def optimize_gif(data)
-    f = Tempfile.new(['opt_gif', '.png'])
-    f.write(data)
-    f.close()
-    p = f.path
-    
-    `convert #{p} #{p}.gif`
-    return File.read("#{p}.gif")
-  end
-  
-  def encode64(str)
-    Base64.encode64(str).gsub("\n", '')
-  end
-  
   def process_path(path, included = {})
     code = File.read(path)
     base = File.dirname(path)
@@ -52,13 +15,13 @@ class Uki < Sinatra::Base
     }
   end
   
-  get %r{^/(app|src)/.*\.cjs$} do
+  get %r{^/(src)/.*\.cjs$} do
     path = request.path.sub(/\.cjs$/, '.js')
     response.header['Content-type'] = 'application/x-javascript; charset=UTF-8'
     process_path(File.join(File.dirname(__FILE__), path))
   end
   
-  get %r{^/(app|src|tmp)/.*} do
+  get %r{^/(src|tmp)/.*} do
     path = request.path
     response.header['Content-type'] = 'image/png' if path.match(/\.png$/)
     response.header['Content-type'] = 'text/css' if path.match(/\.css$/)
@@ -71,43 +34,5 @@ class Uki < Sinatra::Base
     end
     
     File.read File.join(File.dirname(__FILE__), path)
-  end
-  
-  # Expects json: [ 
-  #   { name: 'file-name.png', data: 'png data' },
-  #   { name: 'file-name.gif', data: 'gif data' },
-  #   ...
-  # ]
-  # returns json: {
-  #   optimized: [
-  #     { name: 'file-name.png', data: 'png data' },
-  #     { name: 'file-name.gif', data: 'gif data' },
-  #     ...
-  #   ],
-  #   url: 'path-to-zip-file'
-  # }
-  post '/imageCutter' do
-    items = JSON.load(params['json'])
-    optimized = []
-    FileUtils.rm_r Dir.glob('tmp/*')
-    items.each do |row|
-      data = Base64.decode64(row['data'])
-      data = row['name'].match(/\.gif$/) ? optimize_gif(data) : optimize_png(data)
-      File.open(File.join('tmp', row['name']), 'w') { |f| f.write(data) }
-      optimized << { 'name' => row['name'], 'data' => encode64(data) }
-    end
-    `zip tmp.zip tmp/*`
-    FileUtils.mv 'tmp.zip', 'tmp/tmp.zip'
-    response.header['Content-Type'] = 'application/x-javascript'
-    { 'url' => '/tmp/tmp.zip', 'optimized' => optimized }.to_json
-  end
-  
-  get %r{^/.*$} do
-    response.header['Content-type'] = 'text/html; charset=UTF-8'
-    haml request.path.sub(%r{^/}, '').to_sym
-  end
-  
-  get '/' do
-    haml :index
   end
 end

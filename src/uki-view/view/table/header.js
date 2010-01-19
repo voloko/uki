@@ -9,6 +9,8 @@ uki.view.table.Header = uki.newClass(uki.view.Label, new function() {
         this._multiline = true;
     };
     
+    proto.typeName = function() { return 'uki.view.table.Header'; };
+    
     proto.columns = uki.newProp('_columns', function(v) {
         this._columns = v;
         this.html(this._createColumns());

@@ -133,10 +133,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
         return this;
     };
     
-    proto.toggle = function() {
-        this.visible(!this.visible());
-    };
-    
     /**
      * Accessor for background attribute. 
      * @name background
@@ -210,6 +206,14 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      */
     proto.childViews = function() {
         return [];
+    };
+    
+    proto.prevView = function() {
+        return this.parent().childViews()[this._viewIndex - 1] || null;
+    };
+    
+    proto.nextView = function() {
+        return this.parent().childViews()[this._viewIndex + 1] || null;
     };
     
     
