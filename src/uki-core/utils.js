@@ -45,7 +45,7 @@ uki.utils = {
     /**
      * Runs a function in a given context
      *
-     * @param {function}
+     * @param {function} fn
      * @param {object} context
      */
     proxy: function(fn, context) {

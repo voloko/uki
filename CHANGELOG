@@ -1,5 +1,6 @@
 v0.0.7
-- List autolayout
+- Stylable mixin
+- List auto-layout
 - Separate uki into several projects
 
 v0.0.6
