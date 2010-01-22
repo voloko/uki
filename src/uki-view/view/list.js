@@ -106,24 +106,27 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._bindSelectionEvents = function() {
-        this.bind('mousedown', function(e) {
-            var o = uki.dom.offset(this._dom),
-                y = e.domEvent.pageY - o.y,
-                p = FLOOR(y / this._rowHeight);
-            this.selectedIndex(p);
-        });
-        
+        this.bind('mousedown', this._mousedown);
         var useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
-        this.bind(useKeyPress ? 'keypress' : 'keydown', function(e) {
-            e = e.domEvent;
-            if (e.which == 38 || e.keyCode == 38) { // UP
-                this.selectedIndex(MAX(0, this.selectedIndex() - 1));
-                uki.dom.preventDefault(e);
-            } else if (e.which == 40 || e.keyCode == 40) { // DOWN
-                this.selectedIndex(MIN(this._data.length-1, this.selectedIndex() + 1));
-                uki.dom.preventDefault(e);
-            }
-        });
+        this.bind(useKeyPress ? 'keypress' : 'keydown', this._keypress);
+    };
+    
+    proto._mousedown = function(e) {
+        var o = uki.dom.offset(this._dom),
+            y = e.domEvent.pageY - o.y,
+            p = FLOOR(y / this._rowHeight);
+        this.selectedIndex(p);
+    };
+    
+    proto._keypress = function(e) {
+        e = e.domEvent;
+        if (e.which == 38 || e.keyCode == 38) { // UP
+            this.selectedIndex(MAX(0, this.selectedIndex() - 1));
+            uki.dom.preventDefault(e);
+        } else if (e.which == 40 || e.keyCode == 40) { // DOWN
+            this.selectedIndex(MIN(this._data.length-1, this.selectedIndex() + 1));
+            uki.dom.preventDefault(e);
+        }
     };
     
     proto._createDom = function() {
