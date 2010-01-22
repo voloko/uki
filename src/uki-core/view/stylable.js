@@ -1,5 +1,8 @@
 include('../view.js');
 
+/**
+ * @class
+ */
 uki.view.Stylable = new function() {
     var proto = this;
     
