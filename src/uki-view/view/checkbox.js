@@ -50,6 +50,7 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this._dom = uki.createElement('div', Base.defaultCss + 'overflow:visible');
         this._box = uki.createElement('div', Base.defaultCss + 'overflow:hidden;left:50%;top:50%;margin-left:-' + hw + ';margin-top:-' + hw + ';width:' + w + ';height:' + w);
         this._image.style.cssText += ';position:absolute;-webkit-user-drag:none;';
+        this._image.ondragstart = uki.F; // prevent drag in FF
         this._focusImage.style.cssText += 'display:block;-webkit-user-drag:none;position:absolute;z-index:-1;left:50%;top:50%;';
         
         this._dom.appendChild(this._box);
