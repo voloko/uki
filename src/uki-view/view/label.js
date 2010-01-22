@@ -19,7 +19,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     };
     
     proto._style = function(name, value) {
-        var target = "fontSize textDecoration".indexOf(name) > -1 ? this._label : this._dom;
+        var target = "fontSize textDecoration color".indexOf(name) > -1 ? this._label : this._dom;
         if (value === undefined) return target.style[name];
         target.style[name] = value;
         return this;
