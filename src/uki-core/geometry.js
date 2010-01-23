@@ -1,5 +1,6 @@
 include('uki.js');
 
+(function() {
 /**
  * @namespace
  * @name uki.geometry
@@ -659,4 +660,4 @@ function unitsToPx (units, relative) {
     if (v < 0 && relative) v = relative + v;
     return v;
 }
-
+})();

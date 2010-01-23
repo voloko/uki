@@ -1,6 +1,7 @@
 /**
  * Global uki constanst, for speed optimization and better merging
  */
+/** @ignore */
 var root = this,
     doc  = document,
     nav = navigator,

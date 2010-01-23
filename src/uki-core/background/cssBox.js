@@ -25,6 +25,8 @@ uki.background.CssBox = uki.newClass(new function() {
         return cache[options];
     }
     
+    /**#@+ @memberOf uki.background.CssBox# */
+    
     this.init = function(options, ext) {
         this._options = options;
         ext = ext || {};
@@ -65,4 +67,6 @@ uki.background.CssBox = uki.newClass(new function() {
             this._attached = false;
         }
     };
+    
+    /**#@-*/
 });
