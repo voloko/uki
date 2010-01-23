@@ -1,6 +1,5 @@
 include('uki.js');
 
-(function() {
 /**
  * @namespace
  * @name uki.geometry
@@ -648,6 +647,7 @@ Inset.create = function(a1, a2, a3, a4) {
 };
 
 
+/** @ignore */
 function unitsToPx (units, relative) {
     var m = (units + '').match(/([-0-9\.]+)(\S*)/),
         v = parseFloat(m[1], 10),
@@ -660,4 +660,3 @@ function unitsToPx (units, relative) {
     if (v < 0 && relative) v = relative + v;
     return v;
 }
-})();
