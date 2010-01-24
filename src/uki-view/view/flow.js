@@ -1,5 +1,5 @@
 uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container[PROTOTYPE],
+    var Base = uki.view.Container.prototype,
         proto = this;
 
     
@@ -117,7 +117,7 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
 
 uki.view.HorizontalFlow = uki.newClass(uki.view.VerticalFlow, {
     _setup: function() {
-        uki.view.VerticalFlow[PROTOTYPE]._setup.call(this);
+        uki.view.VerticalFlow.prototype._setup.call(this);
         this._horizontal = true;
     },
     typeName: function() { return 'uki.view.HorizontalFlow'; }

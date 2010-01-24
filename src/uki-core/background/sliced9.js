@@ -19,10 +19,11 @@ uki.background.Sliced9 = uki.newClass(new function() {
         PX = 'px',
         P100 = '100%';
         
-    var cache = {},
-        proto = this;
+    var cache = {};
     
-    proto.init = function(partSettings, inset, options) {
+    /**#@+ @memberOf uki.background.Sliced9.prototype */
+    
+    this.init = function(partSettings, inset, options) {
         this._settings  = uki.extend({}, partSettings);
         this._inset     = Inset.create(inset);
         this._size      = null;
@@ -37,21 +38,25 @@ uki.background.Sliced9 = uki.newClass(new function() {
         this._container.style.zIndex = this._zIndex;
     };
     
+    /** @ignore */
     function makeDiv (name, style, setting, imgStyle, bgSettings) {
         var inner = setting[3] ? img(setting, imgStyle) : '';
         if (!setting[3]) style += bgStyle(setting, bgSettings);
         return '<div class="' +  name + '" style="position:absolute;overflow:hidden;' + style + '">' + inner + '</div>';
     }
     
+    /** @ignore */
     function bgStyle (setting, bgSettings) {
         return ';background: url(' + uki.imageSrc(setting[0], setting[1], setting[2]) + ') ' + bgSettings;
     }
 
+    /** @ignore */
     function img (setting, style) {
         return uki.imageHTML(setting[0], setting[1], setting[2], ' galleryimg="no" style="-webkit-user-drag:none;position:absolute;' + style + '"');
     }
     
-    proto._getContainer = function() {
+    /** @ignore */
+    this._getContainer = function() {
         var key = this._getKey();
         if (!cache[key]) {
             return cache[key] = this._createContainer();
@@ -59,7 +64,8 @@ uki.background.Sliced9 = uki.newClass(new function() {
         return cache[key].cloneNode(true);
     };
     
-    proto._createContainer = function() {
+    /** @ignore */
+    this._createContainer = function() {
         var inset = this._inset,
             bgInset = this._bgInset,
             settings = this._settings,
@@ -127,13 +133,14 @@ uki.background.Sliced9 = uki.newClass(new function() {
         return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));
     };
     
-    proto._getKey = function() {
+    /** @ignore */
+    this._getKey = function() {
         return uki.map(['v', 'h', 'm', 'c'], function(x) {
             return this._settings[x] && this._settings[x][0] || '';
         }, this).concat([this._inset, this._bgInset, this._fixedSize]).join(',');
     };
     
-    proto.attachTo = function(comp) {
+    this.attachTo = function(comp) {
         this._comp = comp;
         
         this._container.style.visibility = 'visible';
@@ -150,7 +157,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
     };
     
-    proto.detach = function() {
+    this.detach = function() {
         if (this._comp) {
             // this._comp.dom().removeChild(this._container);
             this._container.style.visibility = 'hidden';
@@ -160,7 +167,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
     };
     
-    proto.layout = function(e) {
+    this.layout = function(e) {
         var size = this._comp.rect(),
             parts = this._parts,
             inset = this._inset,
@@ -194,4 +201,6 @@ uki.background.Sliced9 = uki.newClass(new function() {
             height: height
         });
     };
+    
+    /**#@-*/    
 });

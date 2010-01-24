@@ -5,6 +5,7 @@
  * @param {String|uki.view.Base|Object|Array.<uki.view.Base>} val
  * @param {Array.<uki.view.Base>=} optional context for selector
  * @class
+ * @namespace
  * @name uki
  * @return {uki.Collection}
  */

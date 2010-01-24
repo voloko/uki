@@ -3,7 +3,7 @@ uki.view.ScrollPane = uki.newClass(uki.view.Container, new function() {
      * Scroll pane. Pane with scrollbars with content overflowing the borders.
      * Works consisently across all supported browsers.
      */
-    var Base = uki.view.Container[PROTOTYPE],
+    var Base = uki.view.Container.prototype,
         proto = this,
         scrollWidth,
         widthIncludesScrollBar;

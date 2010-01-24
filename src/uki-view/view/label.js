@@ -1,7 +1,7 @@
 include('../../uki-core/const.js');
 
 uki.view.Label = uki.newClass(uki.view.Base, new function() {
-    var Base = uki.view.Base[PROTOTYPE],
+    var Base = uki.view.Base.prototype,
         proto = this;
     
     

@@ -3,6 +3,7 @@ include('collection.js');
 
 /* Ideas and code parts borrowed from Sizzle (http://sizzlejs.com/) */
 (function() {
+    /**#@+ @ignore */
     var self,
         marked = '__selector_marked',
         attr = uki.attr,
@@ -116,6 +117,7 @@ include('collection.js');
 	    for (i = 0; i < result.length; i++) { result[i][marked] = undefined; };
 	    return result;
 	}
+	/**#@-*/
 	
     self = 
     /**

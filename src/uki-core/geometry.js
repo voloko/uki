@@ -1,10 +1,11 @@
 include('uki.js');
 
-/**
+/** 
+ * Geometry 
+ * 
  * @namespace
- * @name uki.geometry
  */
-var geometry = uki.geometry = {};
+uki.geometry = {};
 
 
 /**
@@ -17,12 +18,12 @@ var geometry = uki.geometry = {};
  * @param {Integer=} x defaults to 0
  * @param {Integer=} y defaults to 0
  */
-var Point = geometry.Point = function(x, y) {
+var Point = uki.geometry.Point = function(x, y) {
     this.x = x || 0.0;
     this.y = y || 0.0;
 };
 
-Point[PROTOTYPE] = /** @lends uki.geometry.Point.prototype */ {
+Point.prototype = /** @lends uki.geometry.Point.prototype */ {
     
     /**
      * Converts to "100 50" string
@@ -74,7 +75,8 @@ Point[PROTOTYPE] = /** @lends uki.geometry.Point.prototype */ {
  * Creates point from "x y" string
  * x and y may have optional units=px specified: Point.fromString("20% 10px")
  *
- * @name uki.geometry.Point.fromString
+ * @memberOf uki.geometry.Point
+ * @name fromString
  * @function
  *
  * @param {string} string String representation of point
@@ -96,12 +98,12 @@ Point.fromString = function(string, relative) {
  * @name uki.geometry.Size
  * @constructor
  */
-var Size = geometry.Size = function(width, height) {
+var Size = uki.geometry.Size = function(width, height) {
     this.width  = width ||  0.0;
     this.height = height || 0.0;
 };
 
-Size[PROTOTYPE] = /** @lends uki.geometry.Size.prototype */ {
+Size.prototype = /** @lends uki.geometry.Size.prototype */ {
     /**
      * Converts size to "300 100" string
      *
@@ -150,7 +152,8 @@ Size[PROTOTYPE] = /** @lends uki.geometry.Size.prototype */ {
  * Creates size from "width height" string
  * x and y may have optional units=px specified: Size.fromString("20% 10px")
  *
- * @name uki.geometry.Size.fromString
+ * @memberOf uki.geometry.Size
+ * @name fromString
  * @function
  *
  * @param {string} string String representation of size
@@ -170,7 +173,8 @@ Size.fromString = function(string, relative) {
  * - if "200 300" string converts it to size
  * - if two params given creates size from them
  *
- * @name uki.geometry.Size.create
+ * @memberOf uki.geometry.Size
+ * @name create
  * @function
  *
  * @param {...string|number|uki.geometry.Size} var_args Size representation
@@ -195,9 +199,11 @@ Size.create = function(a1, a2) {
  *
  * @param {...number|uki.geometry.Point|uki.geometry.Size} var_args
  * @name uki.geometry.Rect
+ * @augments uki.geometry.Size
+ * @augments uki.geometry.Point
  * @constructor
  */
-var Rect = geometry.Rect = function(a1, a2, a3, a4) {
+var Rect = uki.geometry.Rect = function(a1, a2, a3, a4) {
     if (a3 !== undefined) {
         this.x      = a1;
         this.y      = a2;
@@ -216,7 +222,7 @@ var Rect = geometry.Rect = function(a1, a2, a3, a4) {
     }
 };
 
-Rect[PROTOTYPE] = /** @lends uki.geometry.Rect.prototype */ {
+Rect.prototype = /** @lends uki.geometry.Rect.prototype */ {
     /**
      * Converts Rect to "x y width height" string
      *
@@ -322,9 +328,10 @@ Rect[PROTOTYPE] = /** @lends uki.geometry.Rect.prototype */ {
      * Checks if this rect has non-positive width or height
      *
      * @this {uki.geometry.Rect}
+     * @function
      * @return {boolean}
      */
-    empty: Size[PROTOTYPE].empty,
+    empty: Size.prototype.empty,
     
     /**
      * Checks if this equals to another Rect
@@ -357,9 +364,10 @@ Rect[PROTOTYPE] = /** @lends uki.geometry.Rect.prototype */ {
      * Moves origin point by x, y
      *
      * @this {uki.geometry.Rect}
+     * @function
      * @return {uki.geometry.Rect} self
      */
-    offset: Point[PROTOTYPE].offset,
+    offset: Point.prototype.offset,
     
     /**
      * Intersects this with given rect
@@ -424,13 +432,14 @@ Rect[PROTOTYPE] = /** @lends uki.geometry.Rect.prototype */ {
     constructor: Rect
 };
 
-Rect[PROTOTYPE].left = Rect[PROTOTYPE].minX;
-Rect[PROTOTYPE].top  = Rect[PROTOTYPE].minY;
+Rect.prototype.left = Rect.prototype.minX;
+Rect.prototype.top  = Rect.prototype.minY;
 
 /**
  * Creates Rect from minX, minY, maxX, maxY
  *
- * @name uki.geometry.Rect.fromCoords
+ * @memberOf uki.geometry.Rect
+ * @name fromCoords
  * @function
  *
  * @param {number} minX
@@ -454,7 +463,8 @@ Rect.fromCoords = function(minX, minY, maxX, maxY) {
 /**
  * Creates Rect from "minX minY maxX maxY" string
  *
- * @name uki.geometry.Rect.fromCoordsString
+ * @memberOf uki.geometry.Rect
+ * @name fromCoordsString
  * @function
  *
  * @param {string} string
@@ -474,7 +484,8 @@ Rect.fromCoordsString = function(string, relative) {
 /**
  * Creates Rect from "x y width height" or "width height" string
  *
- * @name uki.geometry.Rect.fromString
+ * @memberOf uki.geometry.Rect
+ * @name fromString
  * @function
  *
  * @param {string} string
@@ -503,7 +514,8 @@ Rect.fromString = function(string, relative) {
  * - if "200 300" or "0 10 200 300" string converts it to rect
  * - if two or four params given creates rect from them
  *
- * @name uki.geometry.Rect.create
+ * @memberOf uki.geometry.Rect
+ * @name creates
  * @function
  *
  * @param {...string|number|uki.geometry.Rect} var_args Rect representation
@@ -532,14 +544,14 @@ Rect.create = function(a1, a2, a3, a4) {
  * @name uki.geometry.Inset
  * @constructor
  */
-var Inset = geometry.Inset = function(top, right, bottom, left) {
+var Inset = uki.geometry.Inset = function(top, right, bottom, left) {
     this.top    = top   || 0;
     this.right  = right || 0;
     this.bottom = bottom === undefined ? this.top : bottom;
     this.left   = left === undefined ? this.right : left;
 };
 
-Inset[PROTOTYPE] = /** @lends uki.geometry.Inset.prototype */ {
+Inset.prototype = /** @lends uki.geometry.Inset.prototype */ {
     
     /**
      * Converts Inset to "top right bottom left" string
@@ -604,7 +616,8 @@ Inset[PROTOTYPE] = /** @lends uki.geometry.Inset.prototype */ {
 /**
  * Creates Rect from "top right bottom left" or "top right" string
  *
- * @name uki.geometry.Inset.fromString
+ * @memberOf uki.geometry.Inset
+ * @name fromString
  * @function
  *
  * @param {string} string
@@ -631,7 +644,8 @@ Inset.fromString = function(string, relative) {
  * - if "200 300" or "0 10 200 300" string converts it to inset
  * - if two or four params given creates inset from them
  *
- * @name uki.geometry.Inset.create
+ * @memberOf uki.geometry.Inset
+ * @name create
  * @function
  *
  * @param {...string|number|uki.geometry.Inset} var_args Rect representation

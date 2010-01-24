@@ -8,7 +8,6 @@ var root = this,
     ua  = nav.userAgent,
     expando = 'uki' + (+new Date),
     
-    PROTOTYPE = 'prototype',
     MAX = Math.max,
     MIN = Math.min,
     FLOOR = Math.floor,

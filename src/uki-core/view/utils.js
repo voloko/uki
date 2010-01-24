@@ -1,15 +1,10 @@
 include('../view.js');
 
 /**
- * @class
+ * @namespace
  */
 uki.view.utils = new function() {
-    var proto = this;
-    
-    /** @exports proto as uki.view.utils */
-    /**#@+ @memberOf uki.view.utils */
-    
-    proto.visibleRect = function (from, upTo) {
+    this.visibleRect = function (from, upTo) {
         var queue = [],
             rect, i, tmpRect, c = from;
             
@@ -31,12 +26,12 @@ uki.view.utils = new function() {
         return rect;
     };
     
-    proto.top = function(c) {
+    this.top = function(c) {
         while (c.parent()) c = c.parent();
         return c;
     };
     
-    proto.offset = function(c, upTo) {
+    this.offset = function(c, upTo) {
         var offset = new Point(),
             rect;
         
@@ -53,7 +48,7 @@ uki.view.utils = new function() {
         return offset;
     };
     
-    proto.scrollableParent = function(c) {
+    this.scrollableParent = function(c) {
         do {
             if (uki.isFunction(c.scrollTop)) return c;
             c = c.parent();

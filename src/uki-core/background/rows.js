@@ -10,6 +10,8 @@ uki.background.Rows = uki.newClass(new function() {
         cache = [],
         packSize = 100;
     
+    /**#@+ @memberOf uki.background.Rows.prototype */
+    
     proto.init = function(height, colors) {
         this._height = height || 20;
         this._colors = uki.isArray(colors) ? colors : colors.split(' ');
@@ -51,6 +53,8 @@ uki.background.Rows = uki.newClass(new function() {
         this._comp.unbind('layout', this._layoutHandler);
         this._comp = null;
     };
+    
+    /**#@-*/
     
     function getPackHTML (height, colors) {
         var key = height + ' ' + colors.join(' '),

@@ -1,6 +1,6 @@
 include('uki.js');
 
-var toString = Object[PROTOTYPE].toString;
+var toString = Object.prototype.toString;
 	
 var utils = 
 /**
@@ -282,16 +282,16 @@ uki.utils = {
         var inheritance, i, startFrom = 0;
             
         if (arguments.length > 1) {
-            if (arguments[0][PROTOTYPE]) { // real inheritance
+            if (arguments[0].prototype) { // real inheritance
                 /** @ignore */
                 inheritance = function() {};
-                inheritance[PROTOTYPE] = arguments[0][PROTOTYPE];
-                klass[PROTOTYPE] = new inheritance();
+                inheritance.prototype = arguments[0].prototype;
+                klass.prototype = new inheritance();
                 startFrom = 1;
             }
         }
         for (i=startFrom; i < arguments.length; i++) {
-            utils.extend(klass[PROTOTYPE], arguments[i]);
+            utils.extend(klass.prototype, arguments[i]);
         };
         return klass;
     },

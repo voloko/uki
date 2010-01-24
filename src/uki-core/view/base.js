@@ -15,12 +15,11 @@ var ANCHOR_TOP    = 1,
     ANCHOR_HEIGHT = 32;
 
 uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new function() {
-    
-    /** @exports proto as uki.view.Base# */
-    var proto = this,
-        layoutId = 1;
 
-    proto.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
+    var layoutId = 1,
+        proto = this;
+
+    this.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
                      + 'font-family:Arial,Helvetica,sans-serif;';
     
 
@@ -55,12 +54,14 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      *
      * @see uki.view.Base#anchors
      * @constructor
+     * @augments uki.view.Observable
+     * @augments uki.view.Stylable
      *
      * @name uki.view.Base
      * @implements uki.view.Observable
      * @param {uki.geometry.Rect} rect initial position and size
      */
-    proto.init = function(rect) {
+    this.init = function(rect) {
         this._parentRect = this._rect = Rect.create(rect);
         this._setup();
         uki.initNativeLayout();
@@ -69,7 +70,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     
     /**#@+ @memberOf uki.view.Base# */
     
-    proto._setup = function() {
+    /** @private */
+    this._setup = function() {
         uki.extend(this, {
            _anchors: 0,
            _parent: null,
@@ -86,7 +88,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * Get views container dom node.
      * @returns {Element} dom
      */
-    proto.dom = function() {
+    this.dom = function() {
         return this._dom;
     };
     
@@ -95,7 +97,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * Full type name of a view. Used by uki.Selector
      * @return {String}
      */
-    proto.typeName = function() {
+    this.typeName = function() {
         return 'uki.view.Base';
     };
     
@@ -105,7 +107,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {string=} id New id value
      * @returns {string|uki.view.Base} current id or self
      */
-    proto.id = function(id) {
+    this.id = function(id) {
         if (id === undefined) return this._dom.id;
         if (this._dom.id) uki.unregisterId(this);
         this._dom.id = id;
@@ -116,9 +118,10 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     /**
      * Accessor for dom().className
      * @param {string=} className
+     *
      * @returns {string|uki.view.Base} className or self
      */
-    uki.delegateProp(proto, 'className', '_dom');
+    uki.delegateProp(this, 'className', '_dom');
     
     /**
      * Accessor for view visibility. 
@@ -126,7 +129,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {boolean=} state 
      * @returns {boolean|uki.view.Base} current visibility state of self
      */
-    proto.visible = function(state) {
+    this.visible = function(state) {
         if (state === undefined) return this._dom.style.display != 'none';
         
         this._dom.style.display = state ? 'block' : 'none';
@@ -135,8 +138,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     
     /**
      * Accessor for background attribute. 
-     * @name background
-     * @function
      * @param {string|uki.background.Base=} background
      * @returns {uki.background.Base|uki.view.Base} current background or self
      */
@@ -191,7 +192,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {?uki.view.Base=} parent
      * @returns {uki.view.Base} parent or self
      */
-    proto.parent = function(parent) {
+    this.parent = function(parent) {
         if (parent === undefined) return this._parent;
         
         // if (this._parent) this._dom.parentNode.removeChild(this._dom);
@@ -204,15 +205,23 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * Accessor for childViews. @see uki.view.Container for implementation
      * @returns {Array.<uki.view.Base>}
      */
-    proto.childViews = function() {
+    this.childViews = function() {
         return [];
     };
     
-    proto.prevView = function() {
+    /**
+     * Reader for previous view
+     * @returns {uki.view.Base}
+     */
+    this.prevView = function() {
         return this.parent().childViews()[this._viewIndex - 1] || null;
     };
     
-    proto.nextView = function() {
+    /**
+     * Reader for next view
+     * @returns {uki.view.Base}
+     */
+    this.nextView = function() {
         return this.parent().childViews()[this._viewIndex + 1] || null;
     };
     
@@ -225,7 +234,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {string|uki.geometry.Rect} newRect
      * @returns {uki.view.Base} self
      */
-    proto.rect = function(newRect) {
+    this.rect = function(newRect) {
         if (newRect === undefined) return this._rect;
 
         newRect = Rect.create(newRect);
@@ -248,7 +257,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {string|number} anchors
      * @returns {number|uki.view.Base} anchors or self
      */
-    proto.anchors = uki.newProp('_anchors', function(anchors) {
+    this.anchors = uki.newProp('_anchors', function(anchors) {
         if (anchors.indexOf) {
             var tmp = 0;
             if (anchors.indexOf('right'  ) > -1) tmp |= ANCHOR_RIGHT; 
@@ -271,7 +280,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {uki.view.Base} child 
      * @returns {uki.geometry.Rect}
      */
-    proto.rectForChild = function(child) {
+    this.rectForChild = function(child) {
         return this.rect();
     };
     
@@ -283,16 +292,20 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * both style.right and style.left are used. Otherwise style.width will be updated
      * manualy on each resize. 
      *
+     * @fires event:layout
      * @see uki.dom.initNativeLayout
      */
-    proto.layout = function() {
+    this.layout = function() {
         this._layoutDom(this._rect);
         this._needsLayout = false;
         this.trigger('layout', {rect: this._rect, source: this});
         this._firstLayout = false;
     };
     
-    proto.minSize = uki.newProp('_minSize', function(s) {
+    /**
+     * @function
+     */
+    this.minSize = uki.newProp('_minSize', function(s) {
         this._minSize = Size.create(s);
         this.rect(this._parentRect);
         if (this._minSize.width) this._dom.style.minWidth = this._minSize.width + 'px';
@@ -306,7 +319,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {uki.geometry.Rect} oldSize
      * @param {uki.geometry.Rect} newSize
      */
-    proto.parentResized = function(oldSize, newSize) {
+    this.parentResized = function(oldSize, newSize) {
         var newRect = this._parentRect.clone(),
             dX = (newSize.width - oldSize.width) /
                 ((this._anchors & ANCHOR_LEFT ^ ANCHOR_LEFT ? 1 : 0) +   // flexible left
@@ -334,7 +347,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {autosizeStr} autosize 
      * @returns {uki.view.Base} self
      */
-    proto.resizeToContents = function(autosizeStr) {
+    this.resizeToContents = function(autosizeStr) {
         var autosize = decodeAutosize(autosizeStr);
         if (0 == autosize) return this;
         
@@ -353,11 +366,12 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {number} autosize Bitmask
      * @returns {uki.geometry.Rect}
      */
-    proto.contentsSize = function(autosize) {
+    this.contentsSize = function(autosize) {
         return this.rect();
     };
     
-    proto._normalizeRect = function(rect) {
+    /** @private */
+    this._normalizeRect = function(rect) {
         if (this._minSize) {
             rect = new Rect(rect.x, rect.y, MAX(this._minSize.width, rect.width), MAX(this._minSize.height, rect.height));
         }
@@ -366,6 +380,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     
     
     
+    /** @ignore */
     function decodeAutosize (autosizeStr) {
         if (!autosizeStr) return 0;
         var autosize = 0;
@@ -375,12 +390,14 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     }
     
 
-    proto._initBackgrounds = function() {
+    /** @private */
+    this._initBackgrounds = function() {
         if (this.background()) this.background().attachTo(this);
         if (this.shadow()) this.shadow().attachTo(this);
     };
     
-    proto._calcRectOnContentResize = function(autosize) {
+    /** @private */
+    this._calcRectOnContentResize = function(autosize) {
         var newSize = this.contentsSize( autosize ),
             oldSize = this.rect();
 
@@ -421,15 +438,17 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     /* ---------------------------------- Dom --------------------------------*/
     /**
      * Called through a second layout pass when _dom should be created
+     * @private
      */
-    proto._createDom = function() {
+    this._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
     };
     
     /**
      * Called through a second layout pass when _dom is allready created
+     * @private
      */
-    proto._layoutDom = function(rect) {
+    this._layoutDom = function(rect) {
         var l = {}, s = uki.supportNativeLayout, relativeRect = this.parent().rectForChild(this);
         if (s && this._anchors & ANCHOR_LEFT && this._anchors & ANCHOR_RIGHT) {
             l.left = rect.x;
@@ -451,7 +470,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
         return true;
     };
     
-    proto._bindToDom = function(name) {
+    /** @private */
+    this._bindToDom = function(name) {
         if ('resize layout'.indexOf(name) > -1) return true;
         return uki.view.Observable._bindToDom.call(this, name);
     };

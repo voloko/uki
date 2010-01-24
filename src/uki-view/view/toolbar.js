@@ -4,7 +4,7 @@ include('flow.js');
 uki.view.toolbar = {};
 
 uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container[PROTOTYPE],
+    var Base = uki.view.Container.prototype,
         proto = this;
         
     proto.typeName = function() { return 'uki.view.Toolbar'; };

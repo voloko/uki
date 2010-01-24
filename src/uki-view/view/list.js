@@ -3,7 +3,7 @@ include('scrollPane.js');
 uki.view.list = {};
 
 uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
-    var Base = uki.view.Base[PROTOTYPE],
+    var Base = uki.view.Base.prototype,
         proto = this;
         
     proto.typeName = function() {
@@ -95,14 +95,17 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._relayoutParent = function() {
         if (!this._scrollableParent) return;
-        this._scrollableParent.layout();
-        if (this._needsLayout) this.layout();
+        var c = this;
+        while ( c && c != this._scrollableParent) {
+            c._needsLayout = true;
+            c = c.parent();
+        }
+        c.layout();
     };
     
     
     proto._updateRectOnDataChnage = function() {
         this.rect(this._parentRect);
-        // if (this._scrollableParent) this._scrollableParent._needsLayout = true;
     };
     
     proto._bindSelectionEvents = function() {

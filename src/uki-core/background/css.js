@@ -8,6 +8,7 @@ include('../image.js');
  */
 uki.background.Css = uki.newClass(new function() {
     
+    /**#@+ @memberOf uki.background.Css.prototype */
     this.init = function(options) {
         this._options = typeof options == 'string' ? {background: options} : options;
     };
@@ -32,4 +33,5 @@ uki.background.Css = uki.newClass(new function() {
         }
         
     };
+    /**#@-*/
 });

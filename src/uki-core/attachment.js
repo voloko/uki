@@ -5,7 +5,6 @@ include('geometry.js');
 include('view/observable.js');
 
 (function() {
-    
     var self = uki.Attachment = uki.newClass(uki.view.Observable, /** @lends uki.Attachment.prototype */ {
         /**
          * Attachment serves as a connection between a uki view and a dom container.
@@ -18,7 +17,7 @@ include('view/observable.js');
          *
          * @see uki.view.Base#parentResized
          * @name uki.Attachment
-         * @base uki.view.Observable
+         * @augments uki.view.Observable
          * @constructor
          */
         init: function( dom, view, rect ) {
@@ -93,6 +92,7 @@ include('view/observable.js');
         
         /**
          * On window resize resizes and laysout its child view
+         * @fires event:layout
          */
         layout: function() {
             var oldRect = this._rect;
@@ -124,8 +124,12 @@ include('view/observable.js');
          * @return {uki.geometry.Rect} Size of the container
          */
         rect: function() {
-            var width = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientWidth, this._dom.offsetWidth || 0) : this._dom.offsetWidth,
-                height = this._dom === root || this._dom === doc.body ? MAX(getRootElement().clientHeight, this._dom.offsetHeight || 0) : this._dom.offsetHeight;
+            var width = this._dom === root || this._dom === doc.body ? 
+                    MAX(getRootElement().clientWidth, this._dom.offsetWidth || 0) : 
+                    this._dom.offsetWidth,
+                height = this._dom === root || this._dom === doc.body ? 
+                    MAX(getRootElement().clientHeight, this._dom.offsetHeight || 0) : 
+                    this._dom.offsetHeight;
             
             return new Rect(width, height);
         }
@@ -137,6 +141,9 @@ include('view/observable.js');
     
     self.instances = [];
     
+    /**
+     * @memberOf uki.Attachment
+     */
     self.register = function(a) {
         if (self.instances.length == 0) {
             uki.dom.bind(root, 'resize', function() {
@@ -146,10 +153,16 @@ include('view/observable.js');
         self.instances.push(a);
     };
     
+    /**
+     * @memberOf uki.Attachment
+     */
     self.childViews = function() {
         return uki.map(self.instances, 'view');
     };
     
+    /**
+     * @memberOf uki.Attachment
+     */
     uki.top = function() {
         return [self];
     };

@@ -1,26 +1,26 @@
 include('base.js');
 
+/**
+ * @class
+ * @augments uki.view.Base
+ * @name uki.view.Container
+ */
 uki.view.Container = uki.newClass(uki.view.Base, new function() {
-    var Base = uki.view.Base[PROTOTYPE],
-        /**
-         * @class
-         * @name uki.view.Container
-         */
-        proto = this;
+    var Base = uki.view.Base.prototype;
         
-    /** @exports proto as uki.view.Container# */
-    
     /**#@+ @memberOf uki.view.Container# */
     
-    proto._setup = function() {
+    /** @private */
+    this._setup = function() {
         this._childViews = [];
         Base._setup.call(this);
     };
     
-    proto.typeName = function() {
+    this.typeName = function() {
         return 'uki.view.Container';
     };
     
+    /** @ignore */
     function maxProp (c, prop) {
         var val = 0, i, l;
         for (i = c._childViews.length - 1; i >= 0; i--){
@@ -29,15 +29,15 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         return val;
     }
     
-    proto.contentsWidth = function() {
+    this.contentsWidth = function() {
         return maxProp(this, 'maxX');
     };
     
-    proto.contentsHeight = function() {
+    this.contentsHeight = function() {
         return maxProp(this, 'maxY');
     };
     
-    proto.contentsSize = function() {
+    this.contentsSize = function() {
         return new Size(this.contentsWidth(), this.contentsHeight());
     };
     
@@ -47,7 +47,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
      *
      * Note: if setting on view with child views, all child view will be removed
      */
-    proto.childViews = function(val) {
+    this.childViews = function(val) {
         if (val === undefined) return this._childViews;
         uki.each(this._childViews, function(i, child) {
             this.removeChild(child);
@@ -61,7 +61,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     /**
      * Remove particular child
      */
-    proto.removeChild = function(child) {
+    this.removeChild = function(child) {
         child.parent(null);
         this.domForChild(child).removeChild(child.dom());
         var index = child._viewIndex,
@@ -75,7 +75,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     /**
      * Adds a child.
      */
-    proto.appendChild = function(child) {
+    this.appendChild = function(child) {
         child._viewIndex = this._childViews.length;
         this._childViews.push(child);
         child.parent(this);
@@ -87,7 +87,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
      * @param {uki.view.Base} child Child to insert
      * @param {uki.view.Base} beforeChild Existend child before which we should insert
      */
-    proto.insertBefore = function(child, beforeChild) {
+    this.insertBefore = function(child, beforeChild) {
         var i, l;
         child._viewIndex = beforeChild._viewIndex;
         for (i=beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
@@ -102,17 +102,19 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
      * Should return a dom node for a child.
      * Child should append itself to this dom node
      */
-    proto.domForChild = function(child) {
+    this.domForChild = function(child) {
         return this._dom;
     };
     
     
-    proto._layoutDom = function(rect) {
+    /** @private */
+    this._layoutDom = function(rect) {
         Base._layoutDom.call(this, rect);
         this._layoutChildViews(rect);
     };
 
-    proto._layoutChildViews = function() {
+    /** @private */
+    this._layoutChildViews = function() {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             if (childViews[i]._needsLayout && childViews[i].visible()) {
                 childViews[i].layout(this._rect);
@@ -120,8 +122,10 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         };
     };
     
-
-    proto.rect = function(newRect) {
+    /**
+     * @fires event:resize
+     */
+    this.rect = function(newRect) {
         if (newRect === undefined) return this._rect;
 
         newRect = Rect.create(newRect);
@@ -135,7 +139,8 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         return this;
     };
     
-    proto._resizeSelf = function(newRect) {
+    /** @private */
+    this._resizeSelf = function(newRect) {
         // if (newRect.eq(this._rect)) return false;
         this._rect = this._normalizeRect(newRect);
         return true;
@@ -143,8 +148,9 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     
     /**
      * Called to notify all intersted parties: childViews and observers
+     * @private
      */
-    proto._resizeChildViews = function(oldRect) {
+    this._resizeChildViews = function(oldRect) {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             childViews[i].parentResized(oldRect, this._rect);
         };

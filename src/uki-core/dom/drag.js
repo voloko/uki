@@ -1,16 +1,30 @@
 include('../dom.js');
 
 (function() {
-    var controller = uki.dom.drag = {
+    var controller = 
+    /**
+     * @namespace
+     */
+    uki.dom.drag = {
         draggable: null,
         pos: null,
 
+        /**
+         * Initate dragg for a draggable
+         * @function
+         */
         start: function(draggable, e) {
             this.draggable = draggable;
             this.pos = new Point(e.pageX, e.pageY);
             bind();
         },
         
+        /**
+         * Watch element for dragging.
+         * On drag start dragging
+         *
+         * @function
+         */
         watch: function(element, draggable) {
             uki.dom.bind(element, 'dragstart', function(e) { e.returnValue = false; });
             

@@ -12,6 +12,10 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     
     uki.addProps(proto, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth']);
     
+    /**
+     * @fires event:beforeResize
+     * @fires event:resize
+     */
     proto.width = uki.newProp('_width', function(w) {
         this._width = this._normailizeWidth(w);
         this.trigger('beforeResize', {source: this});
@@ -83,7 +87,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
 });
 
 uki.view.table.NumberColumn = uki.newClass(uki.view.table.Column, new function() {
-    var Base = uki.view.table.Column[PROTOTYPE],
+    var Base = uki.view.table.Column.prototype,
         proto = this;
 
     proto._css = Base._css + 'text-align:right;';

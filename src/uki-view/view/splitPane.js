@@ -1,5 +1,5 @@
 uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container[PROTOTYPE],
+    var Base = uki.view.Container.prototype,
         proto = this;
         
     proto.typeName = function() {
@@ -22,6 +22,9 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
         });
     };
     
+    /**
+     * @fires event:handleMove
+     */
     proto.handlePosition = uki.newProp('_handlePosition', function(val) {
         this._handlePosition = this._normalizePosition(val);
         this.trigger('handleMove', {source: this, handlePosition: this._handlePosition, dragValue: val });
@@ -205,7 +208,7 @@ uki.view.SplitPane = uki.newClass(uki.view.Container, new function() {
 uki.view.HorizontalSplitPane = uki.view.SplitPane;
 uki.view.VerticalSplitPane = uki.newClass(uki.view.SplitPane, {
     _setup: function() {
-        uki.view.SplitPane[PROTOTYPE]._setup.call(this);
+        uki.view.SplitPane.prototype._setup.call(this);
         this._vertical = true;
     }
 });

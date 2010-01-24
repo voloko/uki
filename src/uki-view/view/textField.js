@@ -1,5 +1,5 @@
 uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
-    var Base = uki.view.Base[PROTOTYPE],
+    var Base = uki.view.Base.prototype,
         emptyInputHeight = {},
         proto = this;
 
@@ -146,7 +146,7 @@ uki.view.MultilineTextField = uki.newClass(uki.view.TextField, {
     typeName: function() { return 'uki.component.MultilineTextField'; },
     
     _setup: function() {
-        uki.view.TextField[PROTOTYPE]._setup.call(this);
+        uki.view.TextField.prototype._setup.call(this);
         this._multiline = true;
     }
 });

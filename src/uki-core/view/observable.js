@@ -3,7 +3,7 @@ include('../view.js');
 /**
  * @class
  */
-uki.view.Observable = {
+uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     // dom: function() {
     //     return null; // should implement
     // },
@@ -27,7 +27,7 @@ uki.view.Observable = {
     },
     
     trigger: function(name/*, data1, data2*/) {
-        var attrs = Array[PROTOTYPE].slice.call(arguments, 1);
+        var attrs = Array.prototype.slice.call(arguments, 1);
         uki.each(this._observersFor(name, true), function(i, callback) {
             callback.apply(this, attrs);
         }, this);

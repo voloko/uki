@@ -1,7 +1,7 @@
 include('../label.js');
 
 uki.view.table.Header = uki.newClass(uki.view.Label, new function() {
-    var Base = uki.view.Label[PROTOTYPE],
+    var Base = uki.view.Label.prototype,
         proto = this;
         
     proto._setup = function() {

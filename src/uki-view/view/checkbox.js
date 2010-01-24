@@ -1,6 +1,6 @@
 (function() {
 
-var Base = uki.view.Base[PROTOTYPE],
+var Base = uki.view.Base.prototype,
 self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
     _bindToDom: function(name) {

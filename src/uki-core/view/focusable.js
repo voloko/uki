@@ -4,7 +4,7 @@ include('observable.js');
 /**
  * @class
  */
-uki.view.Focusable = {
+uki.view.Focusable = /** @lends uki.view.Focusable.prototype */ {
     // dom: function() {
     //     return null; // should implement
     // },
@@ -30,7 +30,7 @@ uki.view.Focusable = {
         if (!input) {
             input = uki.createElement(
                 'input', 
-                uki.view.Base[PROTOTYPE].defaultCss + "border:none;padding:0;overflow:hidden;width:1px;height:1px;padding:1px;" + 
+                uki.view.Base.prototype.defaultCss + "border:none;padding:0;overflow:hidden;width:1px;height:1px;padding:1px;" + 
                 "font-size:1px;left:-9999em;top:50%;background:transparent;outline:none;opacity:0;"
             );
             this.dom().appendChild(input);

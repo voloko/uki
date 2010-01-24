@@ -9,7 +9,7 @@ include('../geometry.js');
 uki.background.CssBox = uki.newClass(new function() {
     
     var cache = {};
-    
+    /** @ignore */
     function getInsets(options) {
         if (!cache[options]) {
             uki.dom.probe(
@@ -25,7 +25,7 @@ uki.background.CssBox = uki.newClass(new function() {
         return cache[options];
     }
     
-    /**#@+ @memberOf uki.background.CssBox# */
+    /**#@+ @memberOf uki.background.CssBox.prototype */
     
     this.init = function(options, ext) {
         this._options = options;

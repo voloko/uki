@@ -1,6 +1,6 @@
 (function() {
 
-var Base = uki.view.Base[PROTOTYPE],
+var Base = uki.view.Base.prototype,
 self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
     _setup: function() {
@@ -19,6 +19,9 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
     values: uki.newProp('_values'),
     keyStep: uki.newProp('_keyStep'),
     
+    /**
+     * @fires event:change
+     */
     value: function(val) {
         if (val === undefined) return this._value;
         this._value = MAX(this._min, MIN(this._max, val));
@@ -93,6 +96,9 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         return true;
     },
     
+    /**
+     * @fires event:change
+     */
     _drag: function(e, offset) {
         this._position = MAX(0, MIN(this._rect.width, this._initialPosition.x - offset.x));
         this._value = this._pos2val(this._position);

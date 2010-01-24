@@ -4,7 +4,7 @@ uki.view.table = {};
 
 uki.view.Table = uki.newClass(uki.view.Container, new function() {
     var proto = this,
-        Base = uki.view.Container[PROTOTYPE],
+        Base = uki.view.Container.prototype,
         propertiesToDelegate = ['rowHeight', 'data', 'packSize', 'visibleRectExt', 'render', 'selectedIndex', 'focusable', 'textSelectable'];
     
     proto.typeName = function() { return 'uki.view.Table'; };

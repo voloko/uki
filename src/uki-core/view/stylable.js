@@ -4,9 +4,14 @@ include('../view.js');
  * @class
  */
 uki.view.Stylable = new function() {
-    var proto = this;
+    /** @scope uki.view.Stylable.prototype */
     
-    proto.style = function(name, value) {
+    /**
+     * @name style
+     * @memberOf uki.view.Stylable#
+     * @function
+     */
+    this.style = function(name, value) {
         if (typeof name == 'string') return this._style(name, value);
         
         uki.each(name, function(name, value) {
@@ -15,7 +20,7 @@ uki.view.Stylable = new function() {
         return this;
     };
     
-    proto._style = function(name, value) {
+    this._style = function(name, value) {
         if (value === undefined) return this._dom.style[name];
         this._dom.style[name] = value;
         return this;
@@ -28,7 +33,8 @@ uki.view.Stylable = new function() {
     //     };
     // });
     
-    var probe = uki.createElement('div').style;
+    var probe = uki.createElement('div').style,
+        proto = this;
     uki.each(['userSelect', 'MozUserSelect', 'WebkitUserSelect'], function() {
         if (typeof probe[this] == 'string') proto._textSelectProp = this;
     });
@@ -36,10 +42,13 @@ uki.view.Stylable = new function() {
     /**
      * Sets wherether text of the view can be selected.
      *
+     * @memberOf uki.view.Stylable#
+     * @name textSelectable
+     * @function
      * @param {boolean=} state 
      * @returns {boolean|uki.view.Base} current textSelectable state of self
      */
-    proto.textSelectable = function(state) {
+    this.textSelectable = function(state) {
         if (state === undefined) return this._textSelectable;
         
         this._textSelectable = state;
@@ -51,4 +60,6 @@ uki.view.Stylable = new function() {
         this._dom.style.cursor = state ? 'text' : 'default';
         return this;
     };
+    
+    /**#@-*/ 
 };

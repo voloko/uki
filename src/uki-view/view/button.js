@@ -2,7 +2,7 @@ include('label.js');
 
 uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function() {
     var proto = this,
-        Base = uki.view.Label[PROTOTYPE];
+        Base = uki.view.Label.prototype;
     
     proto._setup = function() {
         Base._setup.call(this);
@@ -127,6 +127,6 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     };
 
     proto._bindToDom = function(name) {
-        return uki.view.Focusable._bindToDom.call(this, name) || uki.view.Label[PROTOTYPE]._bindToDom.call(this, name);
+        return uki.view.Focusable._bindToDom.call(this, name) || uki.view.Label.prototype._bindToDom.call(this, name);
     };
 });
