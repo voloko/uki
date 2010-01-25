@@ -63,12 +63,15 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
             this._dom.appendChild(uki.createElement('div', 'width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
         }
         
-        uki.dom.bind(document, 'mouseup', uki.proxy(this._mouseup, this));
-        uki.dom.bind(this._dom, 'mousedown', uki.proxy(this._mousedown, this));
-        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseenter' : 'mouseover', uki.proxy(this._mouseover, this));
-        uki.dom.bind(this._dom, supportMouseEnter ? 'mouseleave' : 'mouseout', uki.proxy(this._mouseout, this));
         this.textSelectable(this.textSelectable());
         this._initFocusable();
+        
+        uki.dom.bind(document, 'mouseup', uki.proxy(this._mouseup, this));
+        this.bind('mousedown', this._mousedown);
+        this.bind(supportMouseEnter ? 'mouseenter' : 'mouseover', this._mouseover);
+        this.bind(supportMouseEnter ? 'mouseleave' : 'mouseout', this._mouseout);
+        this.bind('keyup', this._keyup);
+        this.bind('keydown', this._keydown);
     };
     
     proto._mouseup = function(e) {
@@ -96,20 +99,21 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._focus = function() {
         this['focus-background']().attachTo(this);
-        if (this._firstFocus) {
-            var _this = this;
-            uki.dom.bind(this._focusableInput, 'keydown', function(e) {
-                if ((e.which == 32 || e.which == 13) && !_this._down) _this._mousedown();
-            });
-            uki.dom.bind(this._focusableInput, 'keyup', function(e) {
-                if ((e.which == 32 || e.which == 13) && _this._down) {
-                    _this._mouseup();
-                    _this.trigger('click', {domEvent: e, source: _this});
-                }
-                if (e.which == 27 && _this._down) {
-                    _this._mouseup();
-                }
-            });
+    };
+    
+    proto._keydown = function(e) {
+        e = e.domEvent;
+        if ((e.which == 32 || e.which == 13) && !this._down) this._mousedown();
+    };
+    
+    proto._keyup = function(e) {
+        e = e.domEvent;
+        if ((e.which == 32 || e.which == 13) && this._down) {
+            this._mouseup();
+            this.trigger('click', {domEvent: e, source: this});
+        }
+        if (e.which == 27 && this._down) {
+            this._mouseup();
         }
     };
     
