@@ -61,28 +61,36 @@ self = uki.view.Slider = uki.newClass(uki.view.Base, uki.view.Focusable, {
         
         uki.dom.drag.watch(this._handle, this);
         
-        uki.dom.bind(this._handle, 'mouseover', uki.proxy(function() {
-            this._over = true;
-            this._bg.style.top = - this._bg.height / 2 + 'px';
-        }, this));
+        uki.dom.bind(this._handle, 'mouseover', uki.proxy(this._mouseover, this));
+        uki.dom.bind(this._handle, 'mouseout', uki.proxy(this._mouseout, this));
         
-        uki.dom.bind(this._handle, 'mouseout', uki.proxy(function() {
-            this._over = false;
-            this._bg.style.top = this._dragging ? (- this._bg.height / 2 + 'px') : 0;
-        }, this));
-        
-        uki.dom.bind(this._dom, 'click', uki.proxy(function(e) {
-            var x = e.pageX - uki.dom.offset(this._dom).x;
-            this.value(this._pos2val(x));
-        }, this));
-        
-        uki.dom.bind(this._focusableInput, 'keydown', uki.proxy(function(e) {
-            if (e.which == 39) {
-                this.value(this.value() + this._keyStep * (this._max - this._min));
-            } else if (e.which == 37) {
-                this.value(this.value() - this._keyStep * (this._max - this._min));
-            }
-        }, this));
+        this.bind('click', this._click);
+        this.bind('keydown', this._keydown);
+    },
+    
+    _mouseover: function() {
+        this._over = true;
+        this._bg.style.top = - this._bg.height / 2 + 'px';
+    },
+    
+    _mouseout: function() {
+        this._over = false;
+        this._bg.style.top = this._dragging ? (- this._bg.height / 2 + 'px') : 0;
+    },
+    
+    _click: function(e) {
+        e = e.domEvent;
+        var x = e.pageX - uki.dom.offset(this._dom).x;
+        this.value(this._pos2val(x));
+    },
+    
+    _keydown: function(e) {
+        e = e.domEvent;
+        if (e.which == 39) {
+            this.value(this.value() + this._keyStep * (this._max - this._min));
+        } else if (e.which == 37) {
+            this.value(this.value() - this._keyStep * (this._max - this._min));
+        }
     },
     
     _moveHandle: function() {
