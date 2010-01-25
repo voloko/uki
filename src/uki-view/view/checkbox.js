@@ -61,27 +61,33 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         this.checked(this.checked());
         
         uki.dom.bind(this._box, 'click', uki.proxy(this._click, this));
-        uki.dom.bind(this._box, 'mouseover', uki.proxy(function() {
-            this._over = true;
-            this._updateBg();
-        }, this));
-        
-        uki.dom.bind(this._box, 'mouseout', uki.proxy(function() {
-            this._over = false;
-            this._updateBg();
-        }, this));
+        uki.dom.bind(this._box, 'mouseover', uki.proxy(this._mousover, this));
+        uki.dom.bind(this._box, 'mouseout', uki.proxy(this._mouseout, this));
         
         uki.image.load([this._focusImage], uki.proxy(function() {
             this._focusImage.style.cssText += ';margin-left:-' + this._focusImage.width/2 + PX + ';margin-top:-' + this._focusImage.height/2 + PX;
         }, this));
         
-        uki.dom.bind(this._focusableInput, 'keyup', uki.proxy(function(e) {
-            if (e.which == 32 || e.which == 13) {
-                this._click();
-                this.trigger('click', {domEvent: e, source: this});
-            }
-        }, this));
+        this.bind('keyup', this._keyup);
         
+    },
+    
+    _keyup: function(e) {
+        e = e.domEvent;
+        if (e.which == 32 || e.which == 13) {
+            this._click();
+            this.trigger('click', {domEvent: e, source: this});
+        }
+    },
+    
+    _mousover: function(e) {
+        this._over = true;
+        this._updateBg();
+    },
+    
+    _mouseout: function(e) {
+        this._over = false;
+        this._updateBg();
     },
     
     _focus: function() {
