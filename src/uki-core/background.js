@@ -7,7 +7,7 @@ include('uki.js');
         cssBoxRegexp = /cssBox\s*\(\s*([^)]*\s*)\)/;
         
     /**
-     * <p>Transforms a bg string into a background object</p>
+     * Transforms a bg string into a background object
      * <p>Supported strings:<br />
      *   theme(bg-name) Takes background with bg-name from uki.theme<br />
      *   rows(30, #CCFFFF, #FFCCFF, #FFFFCC) Creates Rows background with 30px rowHeight and 3 colors<br />

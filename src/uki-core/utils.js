@@ -10,7 +10,7 @@ var utils =
 uki.utils = {
     
     /**
-     * <p>Sets or retrieves attribute on an object. </p>
+     * Sets or retrieves attribute on an object. 
      * <p>If target has function with attr it will be called target[attr](value=)
      * If no function present attribute will be set/get directly: target[attr] = value or return target[attr]</p>
      *
@@ -125,7 +125,7 @@ uki.utils = {
     },
     
     /**
-     * <p>Checks if elem is in array</p>
+     * Checks if elem is in array
      *
      * @param {object} elem
      * @param {object} array
@@ -140,7 +140,7 @@ uki.utils = {
     },
 
     /**
-     * <p>Returns unique elements in array</p>
+     * Returns unique elements in array
      *
      * @param {Array} array
      * @returns {Array}
@@ -167,7 +167,7 @@ uki.utils = {
     },
 
     /**
-     * <p>Searches for all items matchign given criteria</p>
+     * Searches for all items matchign given criteria
      *
      * @param {Array} elems Element to search through
      * @param {function(object, number)} callback Returns true for every matched element
@@ -184,7 +184,7 @@ uki.utils = {
     },
     
     /**
-     * <p>Maps elements passing them to callback</p>
+     * Maps elements passing them to callback
      * @example
      *   x = uki.map([1, 2, 3], function(item) { return -item }); 
      *
@@ -209,7 +209,7 @@ uki.utils = {
     },
     
     /**
-     * <p>Reduces array</p>
+     * Reduces array
      * @example
      *   x = uki.reduce(1, [1, 2, 3], function(p, x) { return p * x}) // calculates product
      *
@@ -228,7 +228,7 @@ uki.utils = {
     },
 
     /**
-     * <p>Copies properties from one object to another</p>
+     * Copies properties from one object to another
      * @example
      *   uki.extend(x, { width: 13, height: 14 }) // sets x.width = 13, x.height = 14
      *   options = uki.extend({}, defaultOptions, options)
@@ -258,7 +258,7 @@ uki.utils = {
     },
     
     /**
-     * <p>Creates a new class inherited from base classes. Init function is used as constructor</p>
+     * Creates a new class inherited from base classes. Init function is used as constructor
      * @example
      *   baseClass = uki.newClass({
      *      init: function() { this.x = 3 }
@@ -297,7 +297,7 @@ uki.utils = {
     },
     
     /**
-     * <p>Creates default uki property function</p>
+     * Creates default uki property function
      * <p>If value is given to this function it sets property to value
      * If no arguments given than function returns current property value</p>
      *
@@ -324,7 +324,7 @@ uki.utils = {
     },
     
     /**
-     * <p>Adds several properties (uki.newProp) to a given object.</p>
+     * Adds several properties (uki.newProp) to a given object.
      * <p>Field name equals to '_' + property name</p>
      *
      * @example

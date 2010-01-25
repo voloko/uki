@@ -9,6 +9,7 @@ include('dom.js');
  * @param {string=} alphaUrl Gif image url for IE6
  *
  * @namespace
+ * @function
  *
  * @returns {Element}
  */

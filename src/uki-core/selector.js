@@ -125,7 +125,7 @@ include('collection.js');
      */
     uki.Selector = {
     	/**
-    	 * <p>Finds views by CSS3 selectors in view tree.</p>
+    	 * Finds views by CSS3 selectors in view tree.
     	 * <p>Can be called as uki(selector) instead of uki.Selector.find(selector)</p>
     	 *
     	 * @example

@@ -3,7 +3,7 @@ include('attachment.js');
 
 
 /**
- * <p>Collection performs group operations on uki.view objects.</p>
+ * Collection performs group operations on uki.view objects.
  * <p>Behaves much like result jQuery(dom nodes).
  * Most methods are chainable like .attr('text', 'somevalue').bind('click', function() { ... })</p>
  *
