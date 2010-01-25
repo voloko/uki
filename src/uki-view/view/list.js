@@ -192,19 +192,16 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
     };
     
-    proto._rowCss = function() {
-        return ['width:100%;height:', this._rowHeight, 'px;overflow:hidden'].join('');
-    };
+    proto._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden">${text}</div>')
     
     proto._renderPack = function(pack, itemFrom, itemTo) {
         var html = [], position,
             rect = new Rect(0, itemFrom*this._rowHeight, this.rect().width, this._rowHeight);
         for (i=itemFrom; i < itemTo; i++) {
-            html[html.length] = [
-                '<div style="', this._rowCss(), '">', 
-                this._render.render(this._data[i], rect, i),
-                '</div>'
-            ].join('');
+            html[html.length] = this._rowTemplate.render({ 
+                height: this._rowHeight, 
+                text: this._render.render(this._data[i], rect, i) 
+            });
             rect.y += this._rowHeight;
         };
         pack.dom.innerHTML = html.join('');
@@ -218,27 +215,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         if (this._selectedIndex > pack.itemFrom && this._selectedIndex < pack.itemTo) {
             this._render.setSelected(this._itemAt(this._selectedIndex), this._data[position], true, this.hasFocus());
         }
-    };
-    
-    proto._addToPack = function (pack, position, data) {
-        var row = this._createRow(data),
-            nextChild = pack.dom.childNodes[position - pack.itemFrom];
-        nextChild ? pack.dom.insertBefore(row, nextChild) : pack.dom.appendChild(row);
-        pack.itemTo++;
-    };
-    
-    proto._removeFromPack = function(pack, position) {
-        pack.dom.removeChild(pack.dom.childNodes[position - pack.itemFrom]);
-        pack.itemTo--;
-    };
-    
-    proto._movePack = function(pack, offset) {
-        pack.itemFrom += offset;
-        pack.dom.style.top = pack.itemFrom * this._rowHeight + 'px';
-    };
-    
-    proto._createRow = function(data) {
-        return uki.createElement('div', this._rowCss(), this._render.render(data));
     };
     
     proto._swapPacks = function() {
