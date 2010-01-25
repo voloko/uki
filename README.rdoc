@@ -12,6 +12,7 @@ ranging from Sliders to Grids and SplitPanes.
     
 == Links
  * API docs at http://ukijs.org/docs/
+ * Google group http://groups.google.com/group/ukijs
  * Code examples at http://github.com/voloko/uki/tree/master/app/functional/
  * Development docs and tutorial at http://wiki.github.com/voloko/uki/
     
