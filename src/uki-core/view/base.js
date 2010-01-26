@@ -429,6 +429,22 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
         return newRect;
     };
     
+    /** @function
+    @name uki.view.Base#width */
+    /** @function
+    @name uki.view.Base#height */
+    /** @function
+    @name uki.view.Base#minX */
+    /** @function
+    @name uki.view.Base#maxX */
+    /** @function
+    @name uki.view.Base#minY */
+    /** @function
+    @name uki.view.Base#maxY */
+    /** @function
+    @name uki.view.Base#left */
+    /** @function
+    @name uki.view.Base#top */
     uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'], function(index, attr) {
         proto[attr] = function(value) {
             return uki.attr(this.rect(), attr, value);

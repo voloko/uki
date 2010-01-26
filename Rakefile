@@ -91,6 +91,10 @@ task :push_version do
       :access => :public_read, 'Cache-Control' => 'max-age=315360000'
     )
   end
-  
-  
 end
+
+# ['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'].each { |name|
+#     print "/** @function
+#     @name uki.view.Base##{name} */
+#     "
+# }

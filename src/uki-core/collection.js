@@ -129,21 +129,77 @@ uki.fn = uki.Collection.prototype = new function() {
         });
     };
 
+    /** @function
+    @name uki.Collection#html */
+    /** @function
+    @name uki.Collection#text */
+    /** @function
+    @name uki.Collection#background */
+    /** @function
+    @name uki.Collection#value */
+    /** @function
+    @name uki.Collection#rect */
+    /** @function
+    @name uki.Collection#checked */
+    /** @function
+    @name uki.Collection#anchors */
+    /** @function
+    @name uki.Collection#childViews */
+    /** @function
+    @name uki.Collection#typeName */
+    /** @function
+    @name uki.Collection#id */
+    /** @function
+    @name uki.Collection#name */
+    /** @function
+    @name uki.Collection#visible */
+    /** @function
+    @name uki.Collection#disabled */
+    /** @function
+    @name uki.Collection#focusable */
+    /** @function
+    @name uki.Collection#style */
     uki.Collection.addAttrs('html,text,background,value,rect,checked,anchors,' +
         'childViews,typeName,id,name,visible,disabled,focusable,style');
 
+    /** @function
+    @name uki.Collection#parent */
     uki.each(['parent'], function(i, name) {
         proto[name] = function() {
             return new uki.Collection( uki.map(this, name) );
         };
     });
 
+    /** @function
+    @name uki.Collection#scrollableParent */
     uki.each(['scrollableParent'], function(i, name) {
        proto[name] = function() {
             return new uki.Collection( uki.map(this, function(c) { return uki.view[name](c); }) );
         };
     });
 
+    /** @function
+    @name uki.Collection#bind */
+    /** @function
+    @name uki.Collection#unload */
+    /** @function
+    @name uki.Collection#trigger */
+    /** @function
+    @name uki.Collection#layout */
+    /** @function
+    @name uki.Collection#appendChild */
+    /** @function
+    @name uki.Collection#removeChild */
+    /** @function
+    @name uki.Collection#insertBefore */
+    /** @function
+    @name uki.Collection#addRow */
+    /** @function
+    @name uki.Collection#removeRow */
+    /** @function
+    @name uki.Collection#resizeToContents */
+    /** @function
+    @name uki.Collection#toggle */
     uki.each(('bind,unload,trigger,layout,appendChild,removeChild,insertBefore,addRow,removeRow,' +
         'resizeToContents,toggle').split(','), function(i, name) {
         proto[name] = function() { 
@@ -154,6 +210,50 @@ uki.fn = uki.Collection.prototype = new function() {
         };
     });
 
+     /** @function
+    @name uki.Collection#blur */
+    /** @function
+    @name uki.Collection#focus */
+    /** @function
+    @name uki.Collection#load */
+    /** @function
+    @name uki.Collection#resize */
+    /** @function
+    @name uki.Collection#scroll */
+    /** @function
+    @name uki.Collection#unload */
+    /** @function
+    @name uki.Collection#click */
+    /** @function
+    @name uki.Collection#dblclick */
+    /** @function
+    @name uki.Collection#mousedown */
+    /** @function
+    @name uki.Collection#mouseup */
+    /** @function
+    @name uki.Collection#mousemove */
+    /** @function
+    @name uki.Collection#mouseover */
+    /** @function
+    @name uki.Collection#mouseout */
+    /** @function
+    @name uki.Collection#mouseenter */
+    /** @function
+    @name uki.Collection#mouseleave */
+    /** @function
+    @name uki.Collection#change */
+    /** @function
+    @name uki.Collection#select */
+    /** @function
+    @name uki.Collection#submit */
+    /** @function
+    @name uki.Collection#keydown */
+    /** @function
+    @name uki.Collection#keypress */
+    /** @function
+    @name uki.Collection#keyup */
+    /** @function
+    @name uki.Collection#error */
     uki.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
     	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +
     	"change,select,submit,keydown,keypress,keyup,error").split(","), function(i, name){
