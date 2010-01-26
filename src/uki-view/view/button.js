@@ -60,7 +60,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         this._dom.appendChild(this._label);
         if (this._dom.attachEvent) {
             // click handler for ie
-            this._dom.appendChild(uki.createElement('div', 'width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
+            this._dom.appendChild(uki.createElement('div', 'left:0;top:0;width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
         }
         
         this.textSelectable(this.textSelectable());
