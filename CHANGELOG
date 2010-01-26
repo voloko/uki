@@ -1,3 +1,8 @@
+v0.0.8
+- Simpler inheritance for event handlers
+- Window dev server
+- Install instructions
+
 v0.0.7
 - Stylable mixin
 - List auto-layout
