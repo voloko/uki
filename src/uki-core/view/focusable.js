@@ -59,7 +59,6 @@ uki.view.Focusable = /** @lends uki.view.Focusable.prototype */ {
             setTimeout(uki.proxy(function() {
                 try { this._hasFocus || this._focusableInput.focus(); } catch (e) {};
             }, this), 1);
-            if (this._focusable && !this._disabled) uki.dom.preventDefault(e.domEvent);
         });
     },
     
