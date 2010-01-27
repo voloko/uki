@@ -32,6 +32,7 @@ To work server-side with tests
 1. Install narwhal http://narwhaljs.org/
 2. Open termimal and run
     tusk install qunit
+    tusk install browserjs
     cd PATH_TO_UKI
     narwhal runner.js
     
