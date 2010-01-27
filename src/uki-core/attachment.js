@@ -98,11 +98,10 @@ include('view/observable.js');
             var oldRect = this._rect;
                 
             // if (rect.eq(this._rect)) return;
-            this._rect = this.rect();
-
-            this._view.parentResized(oldRect, this._rect);
+            var newRect = this._rect = this.rect();
+            this._view.parentResized(oldRect, newRect);
             if (this._view._needsLayout) this._view.layout();
-            this.trigger('layout', {source: this, rect: this._rect});
+            this.trigger('layout', {source: this, rect: newRect});
         },
         
         /**
@@ -146,8 +145,15 @@ include('view/observable.js');
      */
     self.register = function(a) {
         if (self.instances.length == 0) {
+            var timeout = false;
             uki.dom.bind(root, 'resize', function() {
-                uki.each(self.instances, function() { this.layout(); });
+                if (!timeout) {
+                    timeout = true;
+                    setTimeout(function() {
+                        timeout = false;
+                        uki.each(self.instances, function() { this.layout(); });
+                    }, 1)
+                }
             });
         }
         self.instances.push(a);
