@@ -30,6 +30,7 @@ include('uki-core/background/sliced9.js');
 include('uki-core/background/css.js');
 include('uki-core/background/cssBox.js');
 include('uki-core/background/rows.js');
+include('uki-core/background/multi.js');
 
 include('uki-core/theme.js');
 include('uki-core/theme/base.js');
