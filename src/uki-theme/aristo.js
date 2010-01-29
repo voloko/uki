@@ -82,7 +82,10 @@
                 }, "2 0 2 0");
             },
             'input': function() {
-                return new uki.background.CssBox('background:white;border: 1px solid #787878;border-top-color:#555;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;');
+                return new uki.background.CssBox(
+                   'background:white;border: 1px solid #787878;border-top-color:#555;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;',
+                   { inset: '0 0 0 0' }
+               );
             },
             'slider-bar': function() {
                 var prefix = "slider/bar-"; 

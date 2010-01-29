@@ -82,12 +82,12 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     };
     
     proto.typeName = function() {
-        return 'uki.component.TextField';
+        return 'uki.view.TextField';
     };
     
     proto._createDom = function() {
         var tagName = this._multiline ? 'textarea' : 'input';
-        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
+        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible');
         this._input = uki.createElement(tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
         this._inputStyle = this._input.style;
         
@@ -111,8 +111,8 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             padding = '2px 0';
         } else {
             var o = (this._rect.height - getEmptyInputHeight(this.style('fontSize'))) / 2;
-            padding = FLOOR(o) + 'px 0 ' + CEIL(o) + 'px 0';
-            this._input.style.padding = padding;
+            padding = CEIL(o) + 'px 0 ' + FLOOR(o) + 'px 0';
+            this._input.style.margin = padding;
         }
         if (this._placeholderDom) this._placeholderDom.style.padding = padding;
         if (this._firstLayout) this._initFocusable(this._input);
@@ -143,7 +143,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
 });
 
 uki.view.MultilineTextField = uki.newClass(uki.view.TextField, {
-    typeName: function() { return 'uki.component.MultilineTextField'; },
+    typeName: function() { return 'uki.view.MultilineTextField'; },
     
     _setup: function() {
         uki.view.TextField.prototype._setup.call(this);
