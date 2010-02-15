@@ -118,10 +118,6 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         if (this._firstLayout) this._initFocusable(this._input);
     };
     
-    proto._recalcOffset = function() {
-        if (this._multiline) return;
-    };
-    
     proto._updatePlaceholderVis = function() {
         if (this._placeholderDom) this._placeholderDom.style.display = this.value() ? 'none' : 'block';
     };
