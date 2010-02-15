@@ -64,6 +64,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         var nextIndex = MAX(0, MIN((this._data || []).length - 1, position));
         if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
         if (nextIndex == position) this._setSelected(this._selectedIndex = nextIndex, true);
+        this._scrollToPosition(position);
         return this;
     };
     
@@ -158,7 +159,6 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     proto._setSelected = function(position, state) {
         var item = this._itemAt(position);
         if (!item) return;
-        if (state) this._scrollToPosition(position);
         this._render.setSelected(item, this._data[position], state, this.hasFocus());
     };
     
@@ -213,7 +213,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._restorePackSelection = function(pack) {
         if (this._selectedIndex > pack.itemFrom && this._selectedIndex < pack.itemTo) {
-            this._render.setSelected(this._itemAt(this._selectedIndex), this._data[position], true, this.hasFocus());
+            this._render.setSelected(this._itemAt(this._selectedIndex), this._data[this._selectedIndex - pack.itemFrom], true, this.hasFocus());
         }
     };
     
