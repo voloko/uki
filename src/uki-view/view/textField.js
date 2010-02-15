@@ -104,17 +104,17 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         uki.dom.layout(this._input.style, {
             width: this._rect.width - 4
         });
-        var padding;
+        var margin;
         if (this._multiline) {
             this._input.style.height = this._rect.height - 4 + PX;
             this._input.style.top = 2 + PX;
-            padding = '2px 0';
+            margin = '2px 0';
         } else {
             var o = (this._rect.height - getEmptyInputHeight(this.style('fontSize'))) / 2;
-            padding = CEIL(o) + 'px 0 ' + FLOOR(o) + 'px 0';
-            this._input.style.margin = padding;
+            margin = CEIL(o) + 'px 0 ' + FLOOR(o) + 'px 0';
+            this._input.style.margin = margin;
         }
-        if (this._placeholderDom) this._placeholderDom.style.padding = padding;
+        if (this._placeholderDom) this._placeholderDom.style.margin = margin;
         if (this._firstLayout) this._initFocusable(this._input);
     };
     
