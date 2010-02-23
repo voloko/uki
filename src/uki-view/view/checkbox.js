@@ -108,4 +108,6 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
     
 });
 
+self.prototype.value = self.prototype.checked;
+
 })();
