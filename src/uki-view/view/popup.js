@@ -10,9 +10,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
             _relativeTo: null,
             _horizontal: false,
             _flipOnResize: true,
-            _shadow: null,
-            _defaultBackground: 'popup-normal',
-            _defaultShadow: 'popup-shadow'
+            _defaultBackground: 'popup-normal'
         });
     };
     

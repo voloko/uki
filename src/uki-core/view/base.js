@@ -141,47 +141,28 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {string|uki.background.Base=} background
      * @returns {uki.background.Base|uki.view.Base} current background or self
      */
-    /**
-     * Accessor for shadow background attribute. 
-     * @name shadow
-     * @function
-     * @param {string|uki.background.Base=} background
-     * @returns {uki.background.Base|uki.view.Base} current background or self
-     */
+    proto.background = function(val) {
+        if (val === undefined && !this._background && this.defaultBackground) this._background = this.defaultBackground();
+        if (val === undefined) return this._background;
+        val = uki.background(val);
+        
+        if (val == this._background) return this;
+        if (this._background) this._background.detach(this);
+        val.attachTo(this);
+        
+        this._background = val;
+        return this;
+    };
+    
     /**
      * Accessor for default background attribute. 
      * @name defaultBackground
      * @function
      * @returns {uki.background.Base} default background if not overriden through attribute
      */
-    /**
-     * Accessor for default shadow background attribute. 
-     * @name defaultShadow
-     * @function
-     * @returns {uki.background.Base} default background if not overriden through attribute
-     */
-    uki.each(['background', 'shadow'], function(i, name) {
-        var field = '_' + name,
-            defaultAttr = 'default' + name.substr(0, 1).toUpperCase() + name.substr(1),
-            defaultField = '_' + defaultAttr;
-
-        proto[name] = function(val) {
-            if (val === undefined && !this[field] && this[defaultAttr]) this[field] = this[defaultAttr]();
-            if (val === undefined) return this[field];
-            val = uki.background(val);
-            
-            if (val == this[field]) return this;
-            if (this[field]) this[field].detach(this);
-            val.attachTo(this);
-            
-            this[field] = val;
-            return this;
-        };
-        
-        proto[defaultAttr] = function() {
-            return this[defaultField] && uki.theme.background(this[defaultField]);
-        };
-    });
+    proto.defaultBackground = function() {
+        return this._defaultBackground && uki.theme.background(this._defaultBackground);
+    };
     
     /* ----------------------------- Container api ------------------------------*/
     
@@ -393,7 +374,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     /** @private */
     this._initBackgrounds = function() {
         if (this.background()) this.background().attachTo(this);
-        if (this.shadow()) this.shadow().attachTo(this);
     };
     
     /** @private */

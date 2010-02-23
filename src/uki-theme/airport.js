@@ -104,7 +104,10 @@
                 return new uki.background.Rows(rowHeight, '#EDF3FE');
             },
             'popup-normal': function() {
-                return new uki.background.CssBox('opacity:0.95;background:#ECEDEE;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;border:1px solid #CCC');
+                return new uki.background.Multi(
+                    new uki.background.CssBox('opacity:0.95;background:#ECEDEE;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;border:1px solid #CCC'),
+                    uki.theme.background('shadow-medium')
+                );
             },
             'shadow-big': function() {
                 return new uki.background.Sliced9(shadowData(), "23 23 23 23", {zIndex: -2, inset: '-4 -10 -12 -10'});
@@ -209,9 +212,7 @@
 
     uki.theme.airport.backgrounds['button-disabled'] = uki.theme.airport.backgrounds['button-normal'];
     uki.theme.airport.backgrounds['input-focus'] = uki.theme.airport.backgrounds['button-focus'];
-    uki.theme.airport.backgrounds['popup-shadow'] = uki.theme.airport.backgrounds['shadow-medium'];
     uki.theme.airport.backgrounds['toolbar-popup'] = uki.theme.airport.backgrounds['popup-normal'];
-    uki.theme.airport.backgrounds['toolbar-popup-shadow'] = uki.theme.airport.backgrounds['shadow-medium'];
 
     uki.theme.register(uki.theme.airport);
 })();
