@@ -289,8 +289,18 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     this.minSize = uki.newProp('_minSize', function(s) {
         this._minSize = Size.create(s);
         this.rect(this._parentRect);
-        if (this._minSize.width) this._dom.style.minWidth = this._minSize.width + 'px';
-        if (this._minSize.height) this._dom.style.minHeight = this._minSize.height + 'px';
+        if (this._minSize.width) this._dom.style.minWidth = this._minSize.width + PX;
+        if (this._minSize.height) this._dom.style.minHeight = this._minSize.height + PX;
+    });
+    
+    /**
+     * @function
+     */
+    this.maxSize = uki.newProp('_maxSize', function(s) {
+        this._maxSize = Size.create(s);
+        this._rect(this._parentRect);
+        if (this._maxSize.width) this._dom.style.maxWidth = this._maxSize.width + PX;
+        if (this._maxSize.height) this._dom.style.maxHeight = this._maxSize.height + PX;
     });
     
     /**
@@ -355,6 +365,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     this._normalizeRect = function(rect) {
         if (this._minSize) {
             rect = new Rect(rect.x, rect.y, MAX(this._minSize.width, rect.width), MAX(this._minSize.height, rect.height));
+        }
+        if (this._maxSize) {
+            rect = new Rect(rect.x, rect.y, MIN(this._maxSize.width, rect.width), MIN(this._maxSize.height, rect.height));
         }
         return rect;
     };
