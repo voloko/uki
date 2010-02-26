@@ -70,10 +70,12 @@ uki.view.Focusable = /** @lends uki.view.Focusable.prototype */ {
     
     focus: function() {
         this._focusableInput.focus();
+        return this;
     },
     
     blur: function() {
         this._focusableInput.blur();
+        return this;
     },
     
     hasFocus: function() {

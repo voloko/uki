@@ -13,6 +13,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
             if (!this._bound(name)) this._bindToDom(name);
             this._observersFor(name).push(callback);
         }, this);
+        return this;
     },
     
     unbind: function(name, callback) {
@@ -24,6 +25,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
                 this._unbindFromDom(name);
             }
         }, this);
+        return this;
     },
     
     trigger: function(name/*, data1, data2*/) {
@@ -31,6 +33,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
         uki.each(this._observersFor(name, true), function(i, callback) {
             callback.apply(this, attrs);
         }, this);
+        return this;
     },
     
     _unbindFromDom: function(name, target) {
@@ -39,6 +42,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     },
     
     _bindToDom: function(name, target) {
+        if (!target && !this.dom) return;
         this._domHander = this._domHander || uki.proxy(function(e) {
             this.trigger(e.type, {domEvent: e, source: this});
         }, this);
