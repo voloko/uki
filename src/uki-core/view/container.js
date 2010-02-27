@@ -93,7 +93,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
         for (i=beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
             this._childViews[i]._viewIndex++;
         };
-        this._childViews.splice(beforeChild._viewIndex, 0, child);
+        this._childViews.splice(beforeChild._viewIndex-1, 0, child);
         child.parent(this);
         this.domForChild(child).insertBefore(child.dom(), beforeChild.dom());
     };

@@ -195,6 +195,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @returns {uki.view.Base}
      */
     this.prevView = function() {
+        if (!this.parent()) return null;
         return this.parent().childViews()[this._viewIndex - 1] || null;
     };
     
@@ -203,6 +204,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @returns {uki.view.Base}
      */
     this.nextView = function() {
+        if (!this.parent()) return null;
         return this.parent().childViews()[this._viewIndex + 1] || null;
     };
     

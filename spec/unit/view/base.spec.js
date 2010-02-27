@@ -78,4 +78,9 @@ describe 'uki.view.Base'
         v.maxSize('200 50')
         v.rect().height.should.be 50
     end
+    
+    it 'should return null for next/prev views'
+        v.nextView().should.be_null
+        v.prevView().should.be_null
+    end
 end
