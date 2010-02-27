@@ -12,9 +12,9 @@ uki.theme.Template = function(code) {
     this.names = [];
     for (i=1, l = parts.length; i < l; i++) {
         tmp = parts[i].split('}');
-        this.names.push(tmp[0]);
+        this.names.push(tmp.shift());
         this.parts.push('');
-        this.parts.push(tmp[1]);
+        this.parts.push(tmp.join('}'));
     };
 };
 

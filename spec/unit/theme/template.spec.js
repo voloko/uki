@@ -23,4 +23,9 @@ describe 'uki.theme.Template'
         var t = new uki.theme.Template('<code>${a}${b}</code>');
         t.render({a: '111', b: '222'}).should.be '<code>111222</code>'
     end
+    
+    it 'should work with brackets'
+        var t = new uki.theme.Template('<code>${a} {something} ${b} .css { some code }</code>');
+        t.render({a: '111', b: '222'}).should.be '<code>111 {something} 222 .css { some code }</code>'
+    end
 end
