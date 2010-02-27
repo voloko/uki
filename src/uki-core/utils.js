@@ -279,7 +279,7 @@ uki.utils = {
                 this.init.apply(this, arguments);
             };
             
-        var inheritance, i, startFrom = 0;
+        var inheritance, i, startFrom = 0, tmp, baseClasses = [];
             
         if (arguments.length > 1) {
             if (arguments[0].prototype) { // real inheritance
@@ -288,9 +288,13 @@ uki.utils = {
                 inheritance.prototype = arguments[0].prototype;
                 klass.prototype = new inheritance();
                 startFrom = 1;
+                baseClasses = [inheritance.prototype];
             }
         }
         for (i=startFrom; i < arguments.length; i++) {
+            tmp = arguments[i];
+            if (this.isFunction(tmp)) tmp = tmp.apply(tmp, baseClasses);
+            baseClasses.push(tmp);
             utils.extend(klass.prototype, arguments[i]);
         };
         return klass;
@@ -335,6 +339,10 @@ uki.utils = {
      */
     addProps: function(proto, props) {
         utils.each(props, function() { proto[this] = utils.newProp('_' + this); });
+    },
+    
+    toArray: function(arr) {
+        return Array.prototype.slice.call(arr, 0);
     },
     
     delegateProp: function(proto, name, target) {

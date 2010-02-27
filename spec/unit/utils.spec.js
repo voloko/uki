@@ -112,4 +112,51 @@ describe 'uki.utils'
             uki[this].should.not.be_null
         });
     end
+    
+    it 'should extend new class with base class'
+        base = function() {};
+        called = {};
+        base.prototype = {
+            a: function() {
+                called.a = true;
+            }
+        }
+        var sub = uki.newClass(base, { init: uki.F });
+        (new sub()).a();
+        called.a.should.be_true
+    end
+    
+    it 'should extend new class with mixins'
+        base = function() {};
+        called = {};
+        base.prototype = {
+            a: function() {
+                called.a = true;
+            }
+        }
+        var sub = uki.newClass(base, { b: function() { called.b = true} }, { init: uki.F });
+        (new sub()).a();
+        (new sub()).b();
+        called.a.should.be_true
+        called.b.should.be_true
+    end
+    
+    it 'should use function as a last parameter passing base classes to it'
+        base = function() {};
+        called = false;
+        base.prototype = {
+            a: function() {
+                called.a = true;
+            }
+        }
+        var sub = uki.newClass(base, { b: function() { called.b = true} }, function(b, mixin) {
+            called = true;
+            b.should.be base.prototype
+            mixin.b.should.not.be_null
+            this.init = uki.F;
+            this.b = uki.F;
+        });
+        (new sub()).b.should.not.be_null
+        called.should.be_true
+    end
 end
