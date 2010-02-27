@@ -82,7 +82,7 @@ uki.dom = {
     contains: function(parent, child) {
         try {
             if (parent.contains) return parent.contains(child);
-            if (parent.compareDocumentPosition) return parent.compareDocumentPosition(child) & 16;
+            if (parent.compareDocumentPosition) return !!(parent.compareDocumentPosition(child) & 16);
         } catch (e) {}
         while ( child && child != parent ) {
             try { child = child.parentNode } catch(e) { child = null };
