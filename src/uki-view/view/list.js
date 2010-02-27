@@ -12,7 +12,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     
     proto._throttle = 5; // do not try to render more often than every 5ms
     proto._visibleRectExt = 300; // extend visible rect by 300 px overflow
-    proto._defaultBackground = 'list';
+    proto._defaultBackground = 'theme(list)';
     
     proto._setup = function() {
         Base._setup.call(this);

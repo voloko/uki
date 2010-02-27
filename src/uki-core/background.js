@@ -25,7 +25,7 @@ include('uki.js');
             /*jsl:ignore*/
             if ( match = bg.match(nullRegexp) ) return new self.Null();
             if ( match = bg.match(themeRegexp) ) return uki.theme.background( match[1] );
-            if ( match = bg.match(rowsRegexp) ) return new self.Rows( match[1].split(',')[0], match[1].split(',').slice(1) );
+            if ( match = bg.match(rowsRegexp) ) return new self.Rows( match[1].split(',')[0], match[1].split(/\s*,\s*/).slice(1) );
             if ( match = bg.match(cssBoxRegexp) ) return new self.CssBox( match[1] );
             /*jsl:end*/
             return new self.Css(bg);

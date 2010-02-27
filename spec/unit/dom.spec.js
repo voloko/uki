@@ -21,6 +21,5 @@ describe 'uki.dom'
         uki.dom.probe(x, function() {
             uki.dom.contains(document.body, x).should.be_true
         })
-        
     end
 end

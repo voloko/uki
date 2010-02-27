@@ -161,7 +161,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @returns {uki.background.Base} default background if not overriden through attribute
      */
     proto.defaultBackground = function() {
-        return this._defaultBackground && uki.theme.background(this._defaultBackground);
+        return this._defaultBackground && uki.background(this._defaultBackground);
     };
     
     /* ----------------------------- Container api ------------------------------*/
@@ -298,7 +298,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      */
     this.maxSize = uki.newProp('_maxSize', function(s) {
         this._maxSize = Size.create(s);
-        this._rect(this._parentRect);
+        this.rect(this._parentRect);
         if (this._maxSize.width) this._dom.style.maxWidth = this._maxSize.width + PX;
         if (this._maxSize.height) this._dom.style.maxHeight = this._maxSize.height + PX;
     });
