@@ -5,7 +5,7 @@ uki.view.declare('uki.more.view.ToggleButton', uki.view.Button, function(Base) {
         this._focusable = false;
     };
     
-    this.checked = uki.newProp('_checked', function(state) {
+    this.value = this.checked = uki.newProp('_checked', function(state) {
         this._checked = !!state;
         this._updateBg();
     });
@@ -18,7 +18,7 @@ uki.view.declare('uki.more.view.ToggleButton', uki.view.Button, function(Base) {
     this._mouseup = function(e) {
         if (!this._down) return;
         this._down = false;
-        this.checked(!this.checked())
+        if (!this._disabled) this.checked(!this.checked())
     };
     
 });
