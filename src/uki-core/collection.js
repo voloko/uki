@@ -117,6 +117,14 @@ uki.fn = uki.Collection.prototype = new function() {
         };
         return this;
     };
+    
+    this.appendTo = function( target ) {
+        target = uki(target)[0];
+        this.each(function() {
+            target.appendChild(this);
+        });
+        return this;
+    };
 
     /**#@-*/
 
