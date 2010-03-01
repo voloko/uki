@@ -60,7 +60,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this.appendChild(this._scrollPane);
         
         this._scrollPane.bind('scroll', uki.proxy(function() {
-            // this is kinda wrong but faster than colling rect() + layout()
+            // this is kinda wrong but faster than calling rect() + layout()
             this._header.dom().style.left = -this._scrollPane.scrollLeft() + 'px'; 
         }, this));
         
