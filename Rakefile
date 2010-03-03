@@ -45,7 +45,7 @@ task :build_scripts do
   FileUtils.rm_rf('pkg')
   FileUtils.mkdir('pkg')
   
-  ['uki.js', 'uki-theamless.js', 'airport.js'].each do |name|
+  ['uki.js', 'uki-theamless.js', 'uki-more.js', 'airport.js'].each do |name|
     src = File.join(base, 'src', name)
     target = File.join(base, 'pkg', name).sub(/.js$/, '.dev.js')
     File.open(target, 'w') { |f| f.write process_path(src).sub('/src/uki-theme/airport/i/', "http://static.ukijs.org/pkg/#{version}/uki-theme/airport/i/") }
