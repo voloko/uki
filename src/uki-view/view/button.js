@@ -30,7 +30,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._createLabelClone = function(autosize) {
         var clone = Base._createLabelClone.call(this, autosize);
-        clone.style.fontWeight = this.style('fontWeight');
+        // clone.style.fontWeight = this.style('fontWeight');
         return clone;
     };
     
@@ -54,14 +54,16 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
     
     proto._createDom = function() {
         // dom
-        this._dom = uki.createElement('div', this.defaultCss + 'color:#333;text-align:center;font-weight:bold;');
+        this._dom = uki.createElement('div', this.defaultCss + 'color:#333;text-align:center;');
         this._label = uki.createElement('div', Base.defaultCss + 
             "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
-        if (this._dom.attachEvent) {
+        this.style('fontWeight', 'bold');
+        
+        // if (this._dom.attachEvent) {
             // click handler for ie
             this._dom.appendChild(uki.createElement('div', 'left:0;top:0;width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
-        }
+        // }
         
         this.textSelectable(this.textSelectable());
         this._initFocusable();
