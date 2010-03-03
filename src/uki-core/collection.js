@@ -177,6 +177,15 @@ uki.fn = uki.Collection.prototype = new function() {
             return new uki.Collection( uki.map(this, name) );
         };
     });
+    
+    proto.next = function() {
+        return new uki.Collection( uki.map(this, 'nextView') );
+    };
+    
+    proto.prev = function() {
+        return new uki.Collection( uki.map(this, 'prevView') );
+    };
+    
 
     /** @function
     @name uki.Collection#scrollableParent */
