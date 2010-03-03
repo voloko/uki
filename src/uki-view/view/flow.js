@@ -55,6 +55,10 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
         return this._containers[child._viewIndex];
     };
     
+    proto.rectForChild = function(child) {
+        return new Rect(this.rect().width, this._containerSizes[child._viewIndex]);
+    };
+    
     proto.contentsSize = function() {
         var d = this._dimension,
             value = uki.reduce(0, this._childViews, function(sum, e) { return sum + e.rect()[d]; } );
@@ -128,6 +132,8 @@ uki.view.HorizontalFlow = uki.newClass(uki.view.VerticalFlow, {
         container.style[this._dimension] = view.rect()[this._dimension] + PX;
         // this._initContainer(container);
         return container;
+    },
+    rectForChild: function(child) {
+        return new Rect(this._containerSizes[child._viewIndex], this.rect().height);
     }
-    
 });
