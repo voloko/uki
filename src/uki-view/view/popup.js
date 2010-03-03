@@ -61,10 +61,12 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
             this.rect(this._recalculateRect());
             this.layout(this._rect);
         }
+        this.trigger('toggle', { source: this });
     };
     
     proto.hide = function() {
         this.visible(false);
+        this.trigger('toggle', { source: this });
     };
     
     proto.parentResized = function() {
