@@ -37,7 +37,8 @@ uki.background.CssBox = uki.newClass(new function() {
         this._container = uki.createElement(
             'div', 
             options + ';position:absolute;overflow:hidden;z-index:' + (ext.zIndex || '-1') + ';' + 
-            'left:' + inset.left + ';top:' + inset.top + 'px;right:' + inset.right + 'px;bottom:' + inset.bottom + 'px'
+            'left:' + inset.left + ';top:' + inset.top + 'px;right:' + inset.right + 'px;bottom:' + inset.bottom + 'px',
+            ext.innerHTML
         );
         this._attached = false;
     };

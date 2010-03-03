@@ -82,17 +82,17 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
     proto._createDom = function() {
         Base._createDom.call(this);
         for (var i=0; i < this._containers.length; i++) {
-            this._initContainer(this._containers[i]);
+            // this._initContainer(this._containers[i]);
             this._dom.appendChild(this._containers[i]);
         };
     };
     
-    proto._initContainer = function(c) {
-        if (this._horizontal) {
-            c.style.cssText += ';float:left';
-            c.style.height = this.rect().height + 'px';
-        }
-    };
+    // proto._initContainer = function(c) {
+    //     if (this._horizontal) {
+    //         c.style.cssText += ';float:left';
+    //         c.style.height = this.rect().height + 'px';
+    //     }
+    // };
     
     proto._layoutDom = function(rect) {
         Base._layoutDom.call(this, rect);
@@ -110,7 +110,7 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
     proto._createContainer = function(view) {
         var container = uki.createElement('div', 'position:relative;top:0;left:0;width:100%;padding:0;');
         container.style[this._dimension] = view.rect()[this._dimension] + PX;
-        this._initContainer(container);
+        // this._initContainer(container);
         return container;
     };
 });
@@ -119,6 +119,15 @@ uki.view.HorizontalFlow = uki.newClass(uki.view.VerticalFlow, {
     _setup: function() {
         uki.view.VerticalFlow.prototype._setup.call(this);
         this._horizontal = true;
+        this._dimension = 'width';
     },
-    typeName: function() { return 'uki.view.HorizontalFlow'; }
+    typeName: function() { return 'uki.view.HorizontalFlow'; },
+    
+    _createContainer: function(view) {
+        var container = uki.createElement('div', 'position:relative;top:0;left:0;float:left;padding:0;height:100%;');
+        container.style[this._dimension] = view.rect()[this._dimension] + PX;
+        // this._initContainer(container);
+        return container;
+    }
+    
 });
