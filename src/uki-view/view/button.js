@@ -8,7 +8,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         Base._setup.call(this);
         uki.extend(this, {
             _inset: new Inset(0, 4),
-            _backgroundPrefix: '',
+            _backgroundPrefix: 'button-',
             defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
         });
     };
@@ -24,7 +24,7 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
         proto[property] = function(bg) {
             if (bg) this['_' + property] = bg;
             return this['_' + property] = this['_' + property] || 
-                uki.theme.background(this._backgroundPrefix + 'button-' + name, {height: this.rect().height, view: this});
+                uki.theme.background(this._backgroundPrefix + name, {height: this.rect().height, view: this});
         };
     });
     

@@ -89,7 +89,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
     proto._createButton = function(descr) {
         return uki.extend({ 
                 view: 'Button', rect: new Rect(100, this.rect().height), focusable: false, align: 'left',
-                anchors: 'left top', backgroundPrefix: 'toolbar-', autosizeToContents: 'width', focusable: false
+                anchors: 'left top', backgroundPrefix: 'toolbar-button-', autosizeToContents: 'width', focusable: false
             }, descr);
     };    
 });
