@@ -348,9 +348,15 @@ uki.utils = {
     delegateProp: function(proto, name, target) {
         var propName = '_' + name;
         proto[name] = function(value) {
-            if (this[target]) return utils.attr(this[target], name, value);
-            if (value === undefined) return this[propName];
-            this[propName] = value;
+            if (value === undefined) {
+                if (this[target]) return utils.attr(this[target], name, value);
+                return this[propName];
+            }
+            if (this[target]) {
+                utils.attr(this[target], name, value);
+            } else {
+                this[propName] = value;
+            }
             return this;
         };
     }
