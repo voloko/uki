@@ -109,10 +109,14 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this.rect(this._parentRect);
     };
     
+    proto.keyPressEvent = function() {
+        var useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
+        return useKeyPress ? 'keypress' : 'keydown';
+    };
+    
     proto._bindSelectionEvents = function() {
         this.bind('mousedown', this._mousedown);
-        var useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
-        this.bind(useKeyPress ? 'keypress' : 'keydown', this._keypress);
+        this.bind(this.keyPressEvent(), this._keypress);
     };
     
     proto._mousedown = function(e) {
@@ -163,6 +167,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._scrollToPosition = function(position) {
+        if (!this._visibleRect) return;
         var maxY, minY;
         maxY = (position+1)*this._rowHeight;
         minY = position*this._rowHeight;
@@ -212,7 +217,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._restorePackSelection = function(pack) {
-        if (this._selectedIndex > pack.itemFrom && this._selectedIndex < pack.itemTo) {
+        if (this._selectedIndex >= pack.itemFrom && this._selectedIndex < pack.itemTo) {
             this._render.setSelected(this._itemAt(this._selectedIndex), this._data[this._selectedIndex - pack.itemFrom], true, this.hasFocus());
         }
     };
