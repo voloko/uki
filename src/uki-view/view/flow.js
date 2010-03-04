@@ -103,7 +103,7 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
         var i, l, c, v;
         for (i=0, l = this._containers.length; i < l; i++) {
             c = this._containers[i];
-            v = this._childViews[i].rect()[this._dimension];
+            v = this._childViews[i].visible() ? this._childViews[i].rect()[this._dimension] : 0;
             if (v != this._containerSizes[i]) {
                 c.style[this._dimension] = v + 'px';
                 this._containerSizes[i] = v;
