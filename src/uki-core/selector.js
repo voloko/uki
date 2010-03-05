@@ -5,7 +5,6 @@ include('collection.js');
 (function() {
     /**#@+ @ignore */
     var self,
-        marked = '__selector_marked',
         attr = uki.attr,
         chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
         regexps = [ // enforce order
@@ -78,14 +77,15 @@ include('collection.js');
 	    },
 	    mappers = {
     		"+": function(context){
+    		    return uki.unique( uki.map(context, 'nextView') );
     		},
     		
     		">": function(context){
-    		    return flatten(uki.map(context, 'childViews'));
+    		    return uki.unique( flatten(uki.map(context, 'childViews')) );
     		},
     		
     		"": function(context) {
-    		    return recChildren(flatten(uki.map(context, 'childViews')));
+    		    return uki.unique( recChildren(flatten(uki.map(context, 'childViews'))) );
     		},
     		
     		"~": function(context){
@@ -104,18 +104,6 @@ include('collection.js');
 	    
 	function reduceFlatten (x, e) {
 	   return x.concat(e);
-	}
-	
-	function removeDuplicates (array) {
-	    var result = [],
-	        i;
-	        
-	    for (i = 0; i < array.length; i++) { 
-	        if (!array[i][marked]) { result[result.length] = array[i]; }
-	        array[i][marked] = true;
-	    };
-	    for (i = 0; i < result.length; i++) { result[i][marked] = undefined; };
-	    return result;
 	}
 	/**#@-*/
 	
@@ -161,7 +149,7 @@ include('collection.js');
                 result = result.concat(self.find(extra, context, true));
             }
             
-            return skipFiltering ? result : new uki.Collection(removeDuplicates(result));
+            return skipFiltering ? result : new uki.Collection(uki.unique(result));
         },
         
         /** @ignore */

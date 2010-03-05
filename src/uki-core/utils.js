@@ -1,6 +1,7 @@
 include('uki.js');
 
 var toString = Object.prototype.toString;
+var marked = '__uki_marked';
 	
 var utils = 
 /**
@@ -146,9 +147,23 @@ uki.utils = {
      * @returns {Array}
      */
     unique: function( array ) {
-        var ret = [], done = {};
+        if (array.length && (typeof array[0] == 'object' || typeof array[0] == 'function')) {
+    	    var result = [],
+    	        i;
 
-        try {
+    	    for (i = 0; i < array.length; i++) { 
+    	        if (!array[i][marked]) { result[result.length] = array[i]; }
+    	        array[i][marked] = true;
+    	    };
+    	    for (i = 0; i < result.length; i++) { 
+    	        delete result[i][marked] 
+    	    };
+    	    return result;
+        	
+        } else {
+        
+            var ret = [], 
+                done = {};
 
             for ( var i = 0, length = array.length; i < length; i++ ) {
                 var id = array[ i ];
@@ -159,13 +174,10 @@ uki.utils = {
                 }
             }
 
-        } catch( e ) {
-            ret = array;
+            return ret;
         }
-
-        return ret;
     },
-
+    
     /**
      * Searches for all items matchign given criteria
      *

@@ -172,28 +172,20 @@ uki.fn = uki.Collection.prototype = new function() {
 
     /** @function
     @name uki.Collection#parent */
-    uki.each(['parent'], function(i, name) {
-        proto[name] = function() {
-            return new uki.Collection( uki.map(this, name) );
-        };
-    });
-    
-    proto.next = function() {
-        return new uki.Collection( uki.map(this, 'nextView') );
-    };
-    
-    proto.prev = function() {
-        return new uki.Collection( uki.map(this, 'prevView') );
-    };
-    
-
     /** @function
-    @name uki.Collection#scrollableParent */
-    uki.each(['scrollableParent'], function(i, name) {
-       proto[name] = function() {
-            return new uki.Collection( uki.map(this, function(c) { return uki.view[name](c); }) );
+    @name uki.Collection#next */
+    /** @function
+    @name uki.Collection#prev */
+    uki.each([
+        ['parent', 'parent'],
+        ['next', 'nextView'],
+        ['prev', 'prevView']
+    ], function(i, desc) {
+        proto[desc[0]] = function() {
+            return new uki.Collection( uki.unique( uki.map(this, desc[1]) ) );
         };
     });
+    
 
     /** @function
     @name uki.Collection#bind */

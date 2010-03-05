@@ -13,8 +13,8 @@ describe 'uki.Selector'
             tree = uki.build([
                 { view: 'Box', rect: '0 0 1000 1000', name: 'top', childViews: [
                     { view: 'Box', rect: '0 0 1000 1000', name: 'second', childViews: [
-                        { view: 'Box', rect: '10 10 100 100', name: 'third', childViews: [
-                            { view: 'Label', rect: '10 10 100 100', name: 'label1' }
+                        { view: 'Box', rect: '10 10 100 100', name: 'third', someAttribute: true, childViews: [
+                            { view: 'Label', rect: '10 10 100 100', name: 'label1', someAttribute: false }
                         ]},
                         { view: 'Label', rect: '200 10 100 100', name: 'label2' }
                     ]}
@@ -92,6 +92,12 @@ describe 'uki.Selector'
             uki.attr(elements[1], 'name').should.be 'label2'
         end
         
+        it 'by attribute presence'
+            elements = uki.Selector.find('*[someAttribute]', tree);
+            elements.length.should.be 1
+            uki.attr(elements[0], 'name').should.be 'third'
+        end
+        
         it 'direct children with >'
             elements = uki.Selector.find('>', [tree[0].childViews()[0]]);
             elements.length.should.be 2
@@ -104,6 +110,12 @@ describe 'uki.Selector'
             elements.length.should.be 2
             uki.attr(elements[0], 'name').should.be 'third'
             uki.attr(elements[1], 'name').should.be 'label2'
+        end
+        
+        it 'right after with +'
+            elements = uki.Selector.find('Box + Label', tree);
+            elements.length.should.be 1
+            uki.attr(elements[0], 'name').should.be 'label2'
         end
         
         it 'direct children within container >'

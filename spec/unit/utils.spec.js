@@ -159,4 +159,18 @@ describe 'uki.utils'
         (new sub()).b.should.not.be_null
         called.should.be_true
     end
+    
+    it 'should filter unique elements in array'
+        a = [1, 2, 3, 1, 4]
+        uki.unique(a).should.eql [1, 2, 3, 4]
+    end
+    
+    it 'should filter unique elements in array of objects'
+        x = {a: 1}
+        y = {b: 1}
+        z = {c: 1}
+        a = [x, y, x, y, z]
+        uki.unique(a).should.eql [x, y, z]
+    end
+    
 end
