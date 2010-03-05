@@ -61,7 +61,9 @@ uki.view.VerticalFlow = uki.newClass(uki.view.Container, new function() {
     
     proto.contentsSize = function() {
         var d = this._dimension,
-            value = uki.reduce(0, this._childViews, function(sum, e) { return sum + e.rect()[d]; } );
+            value = uki.reduce(0, this._childViews, function(sum, e) { 
+                return sum + (e.visible() ? e.rect()[d] : 0); 
+            } );
         if (this._horizontal) {
             return new Size( value, this.contentsHeight() );
         } else {
