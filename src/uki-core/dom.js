@@ -11,7 +11,7 @@ uki.dom = {
     guid: 1,
     
     /**
-     * Convinience wrapper around document.createElement
+     * Convenience wrapper around document.createElement
      * Creates dom element with given tagName, cssText and innerHTML
      *
      * @param {string} tagName
@@ -46,7 +46,7 @@ uki.dom = {
      *
      * @param {CSSStyleDeclaration} style Target declaration
      * @param {object} layout Properties to assign
-     * @param {object=} prevLayout If given assigns only differenct between layout and prevLayout
+     * @param {object=} prevLayout If given assigns only difference between layout and prevLayout
      */
     layout: function(style, layout, prevLayout) {
         prevLayout = prevLayout || {};
@@ -63,7 +63,7 @@ uki.dom = {
      * Computed style for a give element
      *
      * @param {Element} el
-     * @returns {CSSStyleDeclaration} style declaratioin
+     * @returns {CSSStyleDeclaration} style declaration
      */
     computedStyle: function(el) {
         if (doc && doc.defaultView && doc.defaultView.getComputedStyle) {

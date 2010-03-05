@@ -22,8 +22,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     this.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
                      + 'font-family:Arial,Helvetica,sans-serif;';
     
-
-
     /**
      * Base class for all uki views.
      *
@@ -42,7 +40,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      *
      * <p>Layout process has 2 phases. 
      * First views rectangles are recalculated. This may happen several times before dom 
-     * is touched. This is done either explictly through #rect attribute or through
+     * is touched. This is done either explicitly through #rect attribute or through
      * #parentResized callbacks. 
      * After rectangles are set #layout is called. This actually updates dom styles.</p>
      *
@@ -158,7 +156,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * Accessor for default background attribute. 
      * @name defaultBackground
      * @function
-     * @returns {uki.background.Base} default background if not overriden through attribute
+     * @returns {uki.background.Base} default background if not overridden through attribute
      */
     proto.defaultBackground = function() {
         return this._defaultBackground && uki.background(this._defaultBackground);
@@ -167,7 +165,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     /* ----------------------------- Container api ------------------------------*/
     
     /**
-     * Accessor attibute for parent view. When parent is set view appends its #dom
+     * Accessor attribute for parent view. When parent is set view appends its #dom
      * to parents #domForChild
      *
      * @param {?uki.view.Base=} parent
@@ -234,7 +232,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * "top", "right", "bottom", "left", "width" and "height". 
      * If you set both "right" and "left" than "width" is assumed.
      *
-     * Anchors are stored as a bitmask. Though its easier to set them using strings
+     * Anchors are stored as a bit mask. Though its easier to set them using strings
      *
      * @function
      * @param {string|number} anchors
@@ -257,7 +255,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     });
     
     /**
-     * Returns rectangle for child layout. Usualy equals to #rect. Though in some cases,
+     * Returns rectangle for child layout. Usually equals to #rect. Though in some cases,
      * client rectangle my differ from #rect. Example uki.view.ScrollPane.
      *
      * @param {uki.view.Base} child 
@@ -273,7 +271,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * Layout is designed to minimize dom writes. If view is anchored to the right then
      * style.right is used, style.left for left anchor, etc. If browser supports this
      * both style.right and style.left are used. Otherwise style.width will be updated
-     * manualy on each resize. 
+     * manually on each resize. 
      *
      * @fires event:layout
      * @see uki.dom.initNativeLayout
@@ -306,8 +304,8 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     });
     
     /**
-     * Resizes view when parent changes size acording to anchors.
-     * Called from parent view. Usualy after parent's #rect is called.
+     * Resizes view when parent changes size according to anchors.
+     * Called from parent view. Usually after parent's #rect is called.
      *
      * @param {uki.geometry.Rect} oldSize
      * @param {uki.geometry.Rect} newSize
@@ -333,9 +331,9 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     
     /**
      * Resizes view to its contents. Contents size is determined by view.
-     * View can be resized by width, height or both. This is specified throght
+     * View can be resized by width, height or both. This is specified through
      * autosizeStr param.
-     * View will grow shrink acording to its #anchors.
+     * View will grow shrink according to its #anchors.
      *
      * @param {autosizeStr} autosize 
      * @returns {uki.view.Base} self
@@ -456,7 +454,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     };
     
     /**
-     * Called through a second layout pass when _dom is allready created
+     * Called through a second layout pass when _dom is already created
      * @private
      */
     this._layoutDom = function(rect) {

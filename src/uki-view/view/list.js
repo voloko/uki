@@ -265,7 +265,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             maxVisibleY <= minRenderedY || minVisibleY >= maxRenderedY || // both packs below/above visible area
             (maxVisibleY > maxRenderedY && this._packs[1].itemFrom * this._rowHeight > this._visibleRect.y && this._packs[1].itemTo > this._packs[1].itemFrom) || // need to render below, and pack 2 is not enough to cover
             (minVisibleY < minRenderedY && this._packs[0].itemTo * this._rowHeight < this._visibleRect.maxY()) // need to render above, and pack 1 is not enough to cover the area
-            // || prefferedPackSize is not enougth to cover the area above/below, can this actualy happen?
+            // || prefferedPackSize is not enough to cover the area above/below, can this actually happen?
         ) { 
             // this happens a) on first render b) on scroll jumps c) on container resize
             // render both packs, move them to be at the center of visible area
@@ -279,7 +279,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             // this._renderPack(this._packs[1], itemTo, MIN(this._data.length, itemTo + prefferedPackSize));
         } else if (maxVisibleY > maxRenderedY && this._packs[1].itemTo > this._packs[1].itemFrom) { // we need to render below current area
             // this happens on normal scroll down
-            // rerender bottom, swap
+            // re-render bottom, swap
             itemFrom = this._packs[1].itemTo;
             itemTo   = MIN(this._data.length, this._packs[1].itemTo + prefferedPackSize);
             
@@ -292,7 +292,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             this._renderPack(this._packs[1], itemFrom, itemTo);
         } else if (minVisibleY < minRenderedY) { // we need to render above current area
             // this happens on normal scroll up
-            // rerender top, swap
+            // re-render top, swap
             itemFrom = MAX(this._packs[0].itemFrom - prefferedPackSize, 0);
             itemTo   = this._packs[0].itemFrom;
             

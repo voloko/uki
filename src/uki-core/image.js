@@ -69,7 +69,7 @@ uki.image.load = function(images, callback) {
         }
 
         var handler = function() {
-                img.onload = img.onerror = img.onabort = null; // prevent mem leaks
+                img.onload = img.onerror = img.onabort = null; // prevent memory leaks
                 if (!--imagesToLoad) callback();
             };
 		img.onload  = handler;

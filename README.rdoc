@@ -19,7 +19,7 @@ ranging from Sliders to Grids and SplitPanes.
 == Contribute
 To install development server
 1. Install ruby http://ruby-lang.org
-2. Open termimal and run
+2. Open terminal and run
     gem install rake sinatra
     cd PATH_TO_UKI
 3. On windows run
@@ -30,7 +30,7 @@ On *nix
 
 To work server-side with tests
 1. Install narwhal http://narwhaljs.org/
-2. Open termimal and run
+2. Open terminal and run
     tusk install qunit
     tusk install browserjs
     cd PATH_TO_UKI

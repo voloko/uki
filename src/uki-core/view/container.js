@@ -43,7 +43,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     };
     
     /**
-     * Sets or retrievs view child view.
+     * Sets or retrieves view child view.
      * @param anything uki.build can parse
      *
      * Note: if setting on view with child views, all child view will be removed
@@ -86,7 +86,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     /**
      * Insert child before target beforeChild
      * @param {uki.view.Base} child Child to insert
-     * @param {uki.view.Base} beforeChild Existend child before which we should insert
+     * @param {uki.view.Base} beforeChild Existent child before which we should insert
      */
     this.insertBefore = function(child, beforeChild) {
         var i, l;
@@ -148,7 +148,7 @@ uki.view.Container = uki.newClass(uki.view.Base, new function() {
     };
     
     /**
-     * Called to notify all intersted parties: childViews and observers
+     * Called to notify all interested parties: childViews and observers
      * @private
      */
     this._resizeChildViews = function(oldRect) {

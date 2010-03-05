@@ -36,7 +36,7 @@ Point.prototype = /** @lends uki.geometry.Point.prototype */ {
     },
     
     /**
-     * Creates a new Point with the same properites
+     * Creates a new Point with the same properties
      *
      * @this {uki.geometry.Point}
      * @return {uki.geometry.Point}

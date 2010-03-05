@@ -10,7 +10,7 @@ include('../dom.js');
         pos: null,
 
         /**
-         * Initate dragg for a draggable
+         * Imitate drag for a draggable
          * @function
          */
         start: function(draggable, e) {
