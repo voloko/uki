@@ -36,8 +36,9 @@ uki.dom = {
     probe: function(dom, callback) {
         var target = doc.body;
         target.appendChild(dom);
-        callback(dom);
+        var result = callback(dom);
         target.removeChild(dom);
+        return result;
     },
     
     /**
