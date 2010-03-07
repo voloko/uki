@@ -1,7 +1,10 @@
 describe 'uki.dom'
     it 'should create elements with style'
         x = uki.createElement('div', 'margin: 2px;border: 1px solid red');
-        x.style.border.should.be '1px solid red'
+        // IE reorders elements
+        x.style.border.should.include 'solid'
+        x.style.border.should.include '1px'
+        x.style.border.should.include 'red'
     end
 
     it 'should create stylesheets'

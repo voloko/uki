@@ -5,19 +5,13 @@ include('base.js');
  * @augments uki.view.Base
  * @name uki.view.Container
  */
-uki.view.Container = uki.newClass(uki.view.Base, new function() {
-    var Base = uki.view.Base.prototype;
-        
+uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
     /**#@+ @memberOf uki.view.Container# */
     
     /** @private */
     this._setup = function() {
         this._childViews = [];
         Base._setup.call(this);
-    };
-    
-    this.typeName = function() {
-        return 'uki.view.Container';
     };
     
     /** @ignore */

@@ -8,7 +8,10 @@ describe 'uki.background'
     it 'should unserialize cssBox backgrounds'
         b = uki.background('cssBox(border: 1px solid red;background:#CCCCCC)')
         b.should.be_an_instance_of uki.background.CssBox
-        b._container.style.border.should.be '1px solid red'
+        // IE reorders elements
+        b._container.style.border.should.include 'solid'
+        b._container.style.border.should.include '1px'
+        b._container.style.border.should.include 'red'
     end
     
     it 'should unserialize rows backgrounds'

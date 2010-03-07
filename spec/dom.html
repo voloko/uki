@@ -1,22 +1,24 @@
 <html>
 	<head>
 	    <title>UKI specs</title>
-		<link type="text/css" rel="stylesheet" href="/opt/local/lib/ruby/gems/1.8/gems/jspec-3.1.3/lib/jspec.css" />
-		<script src="/opt/local/lib/ruby/gems/1.8/gems/jspec-3.1.3/lib/jspec.js"></script>
-		<script src="/opt/local/lib/ruby/gems/1.8/gems/jspec-3.1.3/lib/jspec.xhr.js"></script>
+		<link type="text/css" rel="stylesheet" href="support/jspec.css" />
+		<script src="support/jspec.js"></script>
+		<script src="support/jspec.xhr.js"></script>
 		<!-- <script src="../pkg/uki.dev.js"></script> -->
-		<script src="http://127.0.0.1:21119/src/uki.cjs"></script>
+        <!-- <script src="http://127.0.0.1:21119/src/uki.cjs"></script> -->
+		<script src="http://10.211.55.2:21119/src/uki.cjs"></script>
 		<script src="support/spec.helper.js"></script>
 		<script>
 			function runSuites() {
 				JSpec
-				.exec('unit/selector.spec.js')
+                .exec('unit/selector.spec.js')
                 .exec('unit/geometry.spec.js')
                 .exec('unit/utils.spec.js')
                 .exec('unit/builder.spec.js')
                 .exec('unit/dom.spec.js')
+                .exec('unit/dom/event.spec.js')
                 .exec('unit/background.spec.js')
-                
+                                
                 .exec('unit/view.spec.js')
                 .exec('unit/view/base.spec.js')
                 .exec('unit/view/container.spec.js')

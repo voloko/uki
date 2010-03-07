@@ -1,10 +1,19 @@
+uki.dom.Event = function( originalEvent ) {
+    this.originalEvent = originalEvent;
+
+	for ( var i = uki.dom.props.length, prop; i; ){
+		prop = uki.dom.props.props[ --i ];
+		this[ prop ] = originalEvent[ prop ];
+	}
+};
+
 uki.extend(uki.dom, /** @lends uki.dom */ {
     bound: {},
     handles: {},
     
-    events: ("blur,focus,load,resize,scroll,unload,click,dblclick," +
-    	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +
-    	"change,select,submit,keydown,keypress,keyup,error").split(","),
+    props: "type altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
+    
+    events: "blur focus load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error".split(" "),
 
     bind: function(el, types, handler) {
 		if ( el.setInterval && el != window )
