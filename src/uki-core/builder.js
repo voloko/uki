@@ -17,7 +17,7 @@ include('collection.js');
      * @name uki.build
      *
      * @param {object} ml JSON-like markup
-     * @returns {uki.view.Collection} collection of created elemens
+     * @returns {uki.view.Collection} collection of created elements
      */
     uki.build = function(ml) {
         if (ml.length === undefined) ml = [ml];

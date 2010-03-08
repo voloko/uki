@@ -91,7 +91,7 @@ include('view/observable.js');
         },
         
         /**
-         * On window resize resizes and laysout its child view
+         * On window resize resizes and layout its child view
          * @fires event:layout
          */
         layout: function() {

@@ -1,5 +1,5 @@
 /**
- * Global uki constanst, for speed optimization and better merging
+ * Global uki constants, for speed optimization and better merging
  */
 /** @ignore */
 var root = this,

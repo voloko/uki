@@ -26,7 +26,7 @@ uki.view.Stylable = new function() {
         return this;
     };
     
-    // TODO: is this realy needed?
+    // TODO: is this really needed?
     // uki.each('fontSize,textAlign,color,fontFamily,fontWeight,lineHeight,zIndex'.split(','), function(i, name) {
     //     proto[name] = function(value) {
     //         return this._style(name, value);
@@ -40,7 +40,7 @@ uki.view.Stylable = new function() {
     });
     
     /**
-     * Sets wherether text of the view can be selected.
+     * Sets whether text of the view can be selected.
      *
      * @memberOf uki.view.Stylable#
      * @name textSelectable

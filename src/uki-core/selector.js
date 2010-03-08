@@ -118,7 +118,7 @@ include('collection.js');
     	 *
     	 * @example
     	 *   uki('Label') find all labels on page
-    	 *   uki('Box[name=main] > Label') find all imidiate descendant Labels in a box with name = "main"
+    	 *   uki('Box[name=main] > Label') find all immediate descendant Labels in a box with name = "main"
     	 *   uki('> Slider', context) find all direct descendant Sliders within given context
     	 *   uki('Slider,Checkbox') find all Sliders and Checkboxes
     	 *   uki('Slider:eq(3)') find 3-d slider

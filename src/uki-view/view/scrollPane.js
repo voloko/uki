@@ -20,7 +20,7 @@
         
     /**
      * Scroll pane. Pane with scrollbars with content overflowing the borders.
-     * Works consisently across all supported browsers.
+     * Works consistently across all supported browsers.
      */
     uki.view.declare('uki.view.ScrollPane', uki.view.Container, function(Base) {
         this.typeName = function() {

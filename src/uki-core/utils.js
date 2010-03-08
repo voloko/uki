@@ -179,7 +179,7 @@ uki.utils = {
     },
     
     /**
-     * Searches for all items matchign given criteria
+     * Searches for all items matching given criteria
      *
      * @param {Array} elems Element to search through
      * @param {function(object, number)} callback Returns true for every matched element
@@ -280,8 +280,8 @@ uki.utils = {
      *      getSqrt: function() { return this.x*this.x }
      *   });
      *
-     * @param {object=} superClass If superClass has prototype "real" protototype base inheritance is used,
-     *                             otherwise superClass properties ar simply copied to newClass prototype
+     * @param {object=} superClass If superClass has prototype "real" prototype base inheritance is used,
+     *                             otherwise superClass properties are simply copied to newClass prototype
      * @param {Array.<object>=} mixins
      * @param {object} methods
      * @returns Describe what it returns
