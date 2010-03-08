@@ -11,8 +11,7 @@ if (document.createEventObject) {
     };
 } else {
     triggerEvent = function(el, type, params) {
-        var event = document.createEvent('MouseEvents');
-        
+        var event = document.createEvent('MouseEvents');   
         event.initMouseEvent(
             type,
             true,
@@ -30,6 +29,7 @@ if (document.createEventObject) {
             params.button    || 0,
             null
         );
+        
         el.dispatchEvent(event);
     };
 }
