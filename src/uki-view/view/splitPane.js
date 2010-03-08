@@ -126,7 +126,7 @@ uki.view.declare('uki.view.HorizontalSplitPane', uki.view.Container, function(Ba
     proto._drag = function(e) {
         var offset = uki.dom.offset(this.dom());
         this.handlePosition(e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x'] - this._posWithinHandle);
-        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+        e.preventDefault();
         this.layout();
     };
     

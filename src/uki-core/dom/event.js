@@ -1,11 +1,35 @@
-uki.dom.Event = function( originalEvent ) {
-    this.originalEvent = originalEvent;
+uki.dom.Event = function( domEvent ) {
+    this.domEvent = domEvent;
 
 	for ( var i = uki.dom.props.length, prop; i; ){
-		prop = uki.dom.props.props[ --i ];
-		this[ prop ] = originalEvent[ prop ];
+		prop = uki.dom.props[ --i ];
+		this[ prop ] = domEvent[ prop ];
 	}
 };
+
+uki.dom.Event.prototype = new function() {
+    function returnTrue () {
+        return true;
+    }
+    
+    this.preventDefault = function() {
+        var domEvent = this.domEvent;
+        domEvent.preventDefault && domEvent.preventDefault();
+        domEvent.returnValue = false;
+        
+        this.isDefaultPrevented = returnTrue;
+    }
+    
+    this.stopPropagation = function() {
+		var domEvent = this.domEvent;
+		domEvent.stopPropagation && domEvent.stopPropagation();
+		domEvent.cancelBubble = true;
+		
+		this.isPropagationStopped = returnTrue;
+    }
+    
+    this.isDefaultPrevented = this.isPropagationStopped = uki.F;
+}
 
 uki.extend(uki.dom, /** @lends uki.dom */ {
     bound: {},
@@ -57,6 +81,7 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     
     /** @ignore */
     handler: function( e ) {
+        e = new uki.dom.Event(e);
         e = uki.dom.fix( e || root.event );
 
         var type = e.type,

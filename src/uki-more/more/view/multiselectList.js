@@ -95,7 +95,6 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
     };
     
     proto._keypress = function(e) {
-        e = e.domEvent;
         var indexes = this._selectedIndexes,
             nextIndex = -1;
         if (e.which == 38 || e.keyCode == 38) { // UP
@@ -114,7 +113,7 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
                 this.selectedIndex(nextIndex);
             }
             this._lastClickIndex = nextIndex;
-            uki.dom.preventDefault(e);
+            e.preventDefault();
         }
     };
     

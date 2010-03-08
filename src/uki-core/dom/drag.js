@@ -61,7 +61,7 @@ include('../dom.js');
     }
 
     function preventSelectionHandler(e) { 
-		e.preventDefault ? e.preventDefault() : e.returnValue = false;
+        e.preventDefault();
     }
     
     function offset (e) {

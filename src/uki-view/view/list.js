@@ -127,13 +127,12 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     proto._keypress = function(e) {
-        e = e.domEvent;
         if (e.which == 38 || e.keyCode == 38) { // UP
             this.selectedIndex(MAX(0, this.selectedIndex() - 1));
-            uki.dom.preventDefault(e);
+            e.preventDefault();
         } else if (e.which == 40 || e.keyCode == 40) { // DOWN
             this.selectedIndex(MIN(this._data.length-1, this.selectedIndex() + 1));
-            uki.dom.preventDefault(e);
+            e.preventDefault();
         }
     };
     

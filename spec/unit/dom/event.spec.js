@@ -27,5 +27,29 @@ describe 'uki.dom.Event'
             called.should.eql ['click', 'mouseup']
         });
     end
+    
+    it 'should support preventDefault in all browsers'
+        uki.dom.probe(dom, function() { // safari won't bubble unless dom attached to document
+            called = false
+            uki.dom.bind(dom, 'click', function(e) {
+                called = true; 
+                e.preventDefault.should.not.be_null
+            });
+            triggerEvent(u, 'click', {});
+            called.should.be_true
+        });
+    end
+    
+    it 'should support stopPropagation in all browsers'
+        uki.dom.probe(dom, function() { // safari won't bubble unless dom attached to document
+            called = false
+            uki.dom.bind(dom, 'click', function(e) {
+                called = true; 
+                e.stopPropagation.should.not.be_null
+            });
+            triggerEvent(u, 'click', {});
+            called.should.be_true
+        });
+    end
       
 end

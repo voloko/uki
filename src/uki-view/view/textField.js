@@ -59,7 +59,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
                 
                 uki.dom.bind(this._placeholderDom, 'mousedown', uki.proxy(function(e) { 
                     this.focus(); 
-                    uki.dom.preventDefault(e); 
+                    e.preventDefault(); 
                 }, this));
             } else {
                 this._placeholderDom.innerHTML = v;
