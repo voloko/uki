@@ -3,15 +3,13 @@ include('flow.js');
 
 uki.view.toolbar = {};
 
-uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container.prototype,
-        proto = this;
-        
-    proto.typeName = function() { return 'uki.view.Toolbar'; };
+uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
+
+    this.typeName = function() { return 'uki.view.Toolbar'; };
     
-    proto._moreWidth = 30;
+    this._moreWidth = 30;
     
-    proto._setup = function() {
+    this._setup = function() {
         Base._setup.call(this);
         this._buttons = [];
         this._widths = [];
@@ -29,7 +27,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this._updateMoreVisible();
     });
     
-    proto._createDom = function() {
+    this._createDom = function() {
         Base._createDom.call(this);
         
         var rect = this.rect(),
@@ -51,7 +49,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this._more.bind('click', uki.proxy(this._showMissingButtons, this));
     };
     
-    proto._showMissingButtons = function() {
+    this._showMissingButtons = function() {
         var maxWith = this._flow.rect().width,
             currentWidth = 0,
             missing = [];
@@ -70,7 +68,7 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         this._popup.resizeToContents('width height').toggle();
     };
     
-    proto._updateMoreVisible = function() {
+    this._updateMoreVisible = function() {
         var rect = this._rect;
         if (this._more.visible() != rect.width < this._totalWidth) {
             this._more.visible(rect.width < this._totalWidth);
@@ -80,13 +78,13 @@ uki.view.Toolbar = uki.newClass(uki.view.Container, new function() {
         }
     };
     
-    proto.rect = function(rect) {
+    this.rect = function(rect) {
         var result = Base.rect.call(this, rect);
         if (rect) this._updateMoreVisible();
         return result;
     };
     
-    proto._createButton = function(descr) {
+    this._createButton = function(descr) {
         return uki.extend({ 
                 view: 'Button', rect: new Rect(100, this.rect().height), focusable: false, align: 'left',
                 anchors: 'left top', backgroundPrefix: 'toolbar-button-', autosizeToContents: 'width', focusable: false

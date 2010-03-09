@@ -2,20 +2,17 @@ include('list.js');
 
 uki.view.table = {};
 
-uki.view.Table = uki.newClass(uki.view.Container, new function() {
-    var proto = this,
-        Base = uki.view.Container.prototype,
-        propertiesToDelegate = ['rowHeight', 'data', 'packSize', 'visibleRectExt', 'render', 'selectedIndex', 'focusable', 'textSelectable'];
+uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
+    var propertiesToDelegate = ['rowHeight', 'data', 'packSize', 'visibleRectExt', 'render', 'selectedIndex', 'focusable', 'textSelectable'];
     
-    proto.typeName = function() { return 'uki.view.Table'; };
-    proto._rowHeight = 17;
-    proto._headerHeight = 17;
-    proto.defaultCss = Base.defaultCss + 'overflow:hidden;';
-    proto._listImpl = 'uki.view.List';
+    this._rowHeight = 17;
+    this._headerHeight = 17;
+    this.defaultCss = Base.defaultCss + 'overflow:hidden;';
+    this._listImpl = 'uki.view.List';
     
-    uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(proto, name, '_list'); });
+    uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(this, name, '_list'); }, this);
     
-    proto.columns = uki.newProp('_columns', function(c) {
+    this.columns = uki.newProp('_columns', function(c) {
         this._columns = uki.build(c);
         this._totalWidth = 0;
         for (var i = 0; i < this._columns.length; i++) {
@@ -29,7 +26,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this._header.columns(this._columns);
     });
     
-    proto._updateTotalWidth = function() {
+    this._updateTotalWidth = function() {
         this._totalWidth = 0;
         for (var i=0; i < this._columns.length; i++) {
             this._columns[i].position(i);
@@ -40,7 +37,7 @@ uki.view.Table = uki.newClass(uki.view.Container, new function() {
         this._header.minSize(new Size(this._totalWidth, 0));
     };
     
-    proto._createDom = function() {
+    this._createDom = function() {
         Base._createDom.call(this);
         var scrollPaneRect = new Rect(0, this._headerHeight, this.rect().width, this.rect().height - this._headerHeight),
             listRect = scrollPaneRect.clone().normalize(),

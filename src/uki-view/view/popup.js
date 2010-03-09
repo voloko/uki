@@ -1,9 +1,6 @@
-
-uki.view.Popup = uki.newClass(uki.view.Container, new function() {
-    var Base = uki.view.Container.prototype,
-        proto = this;
+uki.view.declare('uki.view.Popup', uki.view.Container, function(Base) {
     
-    proto._setup = function() {
+    this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
             _offset: 2,
@@ -14,12 +11,12 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         });
     };
     
-    proto._createDom = function() {
+    this._createDom = function() {
         Base._createDom.call(this);
         this.hideOnClick(true);
     };
     
-    uki.addProps(proto, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
+    uki.addProps(this, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
     
     this.hideOnClick = function(state) {
         if (state === undefined) return this._clickHandler;
@@ -41,11 +38,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         return this;
     };
     
-    proto.typeName = function() {
-        return 'uki.view.Popup';
-    };
-    
-    proto.toggle = function() {
+    this.toggle = function() {
         if (this.parent() && this.visible()) {
             this.hide();
         } else {
@@ -53,7 +46,7 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         }
     };
     
-    proto.show = function() {
+    this.show = function() {
         this.visible(true);
         if (!this.parent()) {
             new uki.Attachment( root, this );
@@ -64,25 +57,25 @@ uki.view.Popup = uki.newClass(uki.view.Container, new function() {
         this.trigger('toggle', { source: this });
     };
     
-    proto.hide = function() {
+    this.hide = function() {
         this.visible(false);
         this.trigger('toggle', { source: this });
     };
     
-    proto.parentResized = function() {
+    this.parentResized = function() {
         this.rect(this._recalculateRect());
     };
     
-    proto._resizeSelf = function(newRect) {
+    this._resizeSelf = function(newRect) {
         this._rect = this._normalizeRect(newRect);
         return true;
     };
     
-    proto._layoutDom = function(rect) {
+    this._layoutDom = function(rect) {
         return Base._layoutDom.call(this, rect);
     };
     
-    proto._recalculateRect = function() {
+    this._recalculateRect = function() {
         if (!this.visible()) return this._rect;
         var relativeOffset = uki.dom.offset(this._relativeTo.dom()),
             relativeRect = this._relativeTo.rect(),

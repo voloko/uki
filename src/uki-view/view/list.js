@@ -1,20 +1,13 @@
 include('scrollPane.js');
 
 uki.view.list = {};
-
-uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
-    var Base = uki.view.Base.prototype,
-        proto = this;
-        
-    proto.typeName = function() {
-        return 'uki.view.List';
-    };
+uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     
-    proto._throttle = 5; // do not try to render more often than every 5ms
-    proto._visibleRectExt = 300; // extend visible rect by 300 px overflow
-    proto._defaultBackground = 'theme(list)';
+    this._throttle = 5; // do not try to render more often than every 5ms
+    this._visibleRectExt = 300; // extend visible rect by 300 px overflow
+    this._defaultBackground = 'theme(list)';
     
-    proto._setup = function() {
+    this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
             _rowHeight: 30,
@@ -24,20 +17,20 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         });
     };
     
-    proto.defaultBackground = function() {
+    this.defaultBackground = function() {
         return uki.theme.background('list', this._rowHeight);
     };
     
-    uki.addProps(proto, ['render', 'packSize', 'visibleRectExt', 'throttle']);
+    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle']);
     
-    proto.rowHeight = uki.newProp('_rowHeight', function(val) {
+    this.rowHeight = uki.newProp('_rowHeight', function(val) {
         this._rowHeight = val;
         if (this._background) this._background.detach();
         this._background = null;
         if (this.background()) this.background().attachTo(this);
     });
     
-    proto.data = function(d) {
+    this.data = function(d) {
         if (d === undefined) return this._data;
         this.clearSelection();
         this._data = d;
@@ -47,19 +40,19 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return this;
     };
     
-    proto.addRow = function(position, data) {
+    this.addRow = function(position, data) {
         this.clearSelection();
         this._data.splice(position, 0, data);
         this.data(this._data);
     };
     
-    proto.removeRow = function(position, data) {
+    this.removeRow = function(position, data) {
         this.clearSelection();
         this._data.splice(position, 1);
         this.data(this._data);
     };
     
-    proto.selectedIndex = function(position) {
+    this.selectedIndex = function(position) {
         if (position === undefined) return this._selectedIndex;
         var nextIndex = MAX(0, MIN((this._data || []).length - 1, position));
         if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
@@ -68,12 +61,12 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return this;
     };
     
-    proto.clearSelection = function() {
+    this.clearSelection = function() {
         if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
         this._selectedIndex = -1;
     };
     
-    proto.layout = function() {
+    this.layout = function() {
         this._layoutDom(this._rect);
         this._needsLayout = false;
         // send visibleRect with layout
@@ -81,7 +74,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._firstLayout = false;
     };
     
-    proto._scrollableParentScroll = function() {
+    this._scrollableParentScroll = function() {
         if (this._throttle) {
             if (this._throttleStarted) return;
             this._throttleStarted = true;
@@ -94,7 +87,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         }
     };
     
-    proto._relayoutParent = function() {
+    this._relayoutParent = function() {
         if (!this._scrollableParent) return;
         var c = this;
         while ( c && c != this._scrollableParent) {
@@ -105,28 +98,28 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
     };
     
     
-    proto._updateRectOnDataChnage = function() {
+    this._updateRectOnDataChnage = function() {
         this.rect(this._parentRect);
     };
     
-    proto.keyPressEvent = function() {
+    this.keyPressEvent = function() {
         var useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
         return useKeyPress ? 'keypress' : 'keydown';
     };
     
-    proto._bindSelectionEvents = function() {
+    this._bindSelectionEvents = function() {
         this.bind('mousedown', this._mousedown);
         this.bind(this.keyPressEvent(), this._keypress);
     };
     
-    proto._mousedown = function(e) {
+    this._mousedown = function(e) {
         var o = uki.dom.offset(this._dom),
             y = e.domEvent.pageY - o.y,
             p = FLOOR(y / this._rowHeight);
         this.selectedIndex(p);
     };
     
-    proto._keypress = function(e) {
+    this._keypress = function(e) {
         if (e.which == 38 || e.keyCode == 38) { // UP
             this.selectedIndex(MAX(0, this.selectedIndex() - 1));
             e.preventDefault();
@@ -136,7 +129,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         }
     };
     
-    proto._createDom = function() {
+    this._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
         
         var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
@@ -159,13 +152,13 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._bindSelectionEvents();
     };
     
-    proto._setSelected = function(position, state) {
+    this._setSelected = function(position, state) {
         var item = this._itemAt(position);
         if (!item) return;
         this._render.setSelected(item, this._data[position], state, this.hasFocus());
     };
     
-    proto._scrollToPosition = function(position) {
+    this._scrollToPosition = function(position) {
         if (!this._visibleRect) return;
         var maxY, minY;
         maxY = (position+1)*this._rowHeight;
@@ -178,7 +171,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this.layout();
     };
     
-    proto._itemAt = function(position) {
+    this._itemAt = function(position) {
         if (position < this._packs[1].itemTo && position >= this._packs[1].itemFrom) {
             return this._packs[1].dom.childNodes[position - this._packs[1].itemFrom];
         } else if (position < this._packs[0].itemTo && position >= this._packs[0].itemFrom) {
@@ -187,18 +180,18 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return null;
     };
     
-    proto._focus = function() {
+    this._focus = function() {
         this._selectedIndex = this._selectedIndex > -1 ? this._selectedIndex : 0;
         this._setSelected(this._selectedIndex, true);
     };
     
-    proto._blur = function() {
+    this._blur = function() {
         if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
     };
     
-    proto._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden">${text}</div>')
+    this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden">${text}</div>')
     
-    proto._renderPack = function(pack, itemFrom, itemTo) {
+    this._renderPack = function(pack, itemFrom, itemTo) {
         var html = [], position,
             rect = new Rect(0, itemFrom*this._rowHeight, this.rect().width, this._rowHeight);
         for (i=itemFrom; i < itemTo; i++) {
@@ -215,19 +208,19 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         this._restorePackSelection(pack, itemFrom, itemTo);
     };
     
-    proto._restorePackSelection = function(pack) {
+    this._restorePackSelection = function(pack) {
         if (this._selectedIndex >= pack.itemFrom && this._selectedIndex < pack.itemTo) {
             this._render.setSelected(this._itemAt(this._selectedIndex), this._data[this._selectedIndex - pack.itemFrom], true, this.hasFocus());
         }
     };
     
-    proto._swapPacks = function() {
+    this._swapPacks = function() {
         var tmp = this._packs[0];
         this._packs[0] = this._packs[1];
         this._packs[1] = tmp;
     };
     
-    proto._normalizeRect = function(rect) {
+    this._normalizeRect = function(rect) {
         rect = Base._normalizeRect.call(this, rect);
         // if (rect.height != this._rowHeight * this._data.length) {
         //     rect = new Rect(rect.x, rect.y, rect.width, this._rowHeight * this._data.length);
@@ -238,7 +231,7 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
         return rect;
     };
     
-    proto._layoutDom = function(rect) {
+    this._layoutDom = function(rect) {
         if (!this._scrollableParent) {
             this._scrollableParent = uki.view.scrollableParent(this);
             this._scrollableParent.bind('scroll', uki.proxy(this._scrollableParentScroll, this));
@@ -303,28 +296,24 @@ uki.view.List = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
             
     };
     
-    proto._bindToDom = function(name) {
-        return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
+    this._bindToDom = function(name) {
+        return Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
 });
 
 uki.Collection.addAttrs('data,selectedIndex');
 
-uki.view.ScrollableList = uki.newClass(uki.view.ScrollPane, new function() {
-    var Base = uki.view.ScrollPane.prototype,
-        proto = this;
-        
-    proto.typeName = function() { return 'uki.view.ScrollableList'; };
+uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) {
 
-    proto._createDom = function() {
+    this._createDom = function() {
         Base._createDom.call(this);
         this._list = uki({ view: 'List', rect: this.rect().clone().normalize(), anchors: 'left top right bottom' })[0];
         this.appendChild(this._list);
     };
     
-    uki.each(['data', 'rowHeight', 'render', 'packSize', 'visibleRectExt', 'throttle', 'focusable'], function() {
-        uki.delegateProp(proto, this, '_list');
-    });
+    uki.each(['data', 'rowHeight', 'render', 'packSize', 'visibleRectExt', 'throttle', 'focusable'], function(i, name) {
+        uki.delegateProp(this, name, '_list');
+    }, this);
     
 });
 

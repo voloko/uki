@@ -1,3 +1,1 @@
-uki.view.Box = uki.newClass(uki.view.Container, {
-    typeName: function() { return 'uki.view.Box'; }
-});
+uki.view.declare('uki.view.Box', uki.view.Container, {});

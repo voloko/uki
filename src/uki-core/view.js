@@ -16,5 +16,6 @@ uki.view = {
             obj = obj[part];
         };
         obj[parts[parts.length - 1]] = klass;
+        return klass;
     }
 };

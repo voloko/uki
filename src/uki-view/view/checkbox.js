@@ -1,47 +1,44 @@
-(function() {
-
-var Base = uki.view.Base.prototype,
-self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
+uki.view.declare('uki.view.Checkbox', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     
-    _bindToDom: function(name) {
+    this._bindToDom = function(name) {
         if (' change'.indexOf(name) > -1) return;
         Base._bindToDom.apply(this, arguments);
-    },
+    };
     
-    _imageSize: 18,
+    this._imageSize = 18;
     
-    _setup: function() {
+    this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
             _checked: false,
             _textSelectable: false,
             _disabled: false
         });
-    },
+    };
     
-    checked: uki.newProp('_checked', function(state) {
+    this.value = this.checked = uki.newProp('_checked', function(state) {
         this._checked = !!state;
         this._updateBg();
-    }),
+    });
     
-    _click: function() {
+    this._click = function() {
         if (this._disabled) return;
         this.checked(!this._checked);
         this.trigger('change', {checked: this._checked, source: this});
-    },
+    };
     
-    _updateBg: function() {
+    this._updateBg = function() {
         var position = this._checked ? 0 : this._imageSize;
         position += this._disabled ? this._imageSize*4 : this._over ? this._imageSize*2 : 0; 
         this._image.style.top = - position + PX;
-    },
+    };
     
-    _createImages: function() {
+    this._createImages = function() {
         this._image = uki.theme.image('checkbox');
         this._focusImage = uki.theme.image('checkbox-focus');
-    },
+    };
     
-    _createDom: function() {
+    this._createDom = function() {
         this._createImages();
         
         var w = this._imageSize + PX,
@@ -69,45 +66,35 @@ self = uki.view.Checkbox = uki.newClass(uki.view.Base, uki.view.Focusable, {
         }, this));
         
         this.bind('keyup', this._keyup);
-        
-    },
+    };
     
-    _keyup: function(e) {
+    this._keyup = function(e) {
         e = e.domEvent;
         if (e.which == 32 || e.which == 13) {
             this._click();
             this.trigger('click', {domEvent: e, source: this});
         }
-    },
+    };
     
-    _mousover: function(e) {
+    this._mousover = function(e) {
         this._over = true;
         this._updateBg();
-    },
+    };
     
-    _mouseout: function(e) {
+    this._mouseout = function(e) {
         this._over = false;
         this._updateBg();
-    },
+    };
     
-    _focus: function() {
+    this._focus = function() {
         this._dom.appendChild(this._focusImage);
-    },
+    };
     
-    _blur: function() {
+    this._blur = function() {
         this._dom.removeChild(this._focusImage);
-    },
+    };
     
-    typeName: function() {
-        return 'uki.view.Checkbox';
-    },
-    
-    _bindToDom: function(name) {
+    this._bindToDom = function(name) {
         return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
-    }
-    
+    };
 });
-
-self.prototype.value = self.prototype.checked;
-
-})();

@@ -1,8 +1,7 @@
 include('label.js');
 
-uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function() {
-    var proto = this,
-        Base = uki.view.Label.prototype;
+uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function(Base, Focusable) {
+    var proto = this;
     
     proto._setup = function() {
         Base._setup.call(this);
@@ -11,10 +10,6 @@ uki.view.Button = uki.newClass(uki.view.Label, uki.view.Focusable, new function(
             _backgroundPrefix: 'button-',
             defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
         });
-    };
-    
-    proto.typeName = function() {
-        return 'uki.view.Button';
     };
     
     uki.addProps(proto, ['backgroundPrefix']);

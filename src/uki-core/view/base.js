@@ -14,10 +14,9 @@ var ANCHOR_TOP    = 1,
     ANCHOR_WIDTH  = 16,
     ANCHOR_HEIGHT = 32;
 
-uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new function() {
+uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Stylable, function(Observable, Stylable) {
 
-    var layoutId = 1,
-        proto = this;
+    var layoutId = 1;
 
     this.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
                      + 'font-family:Arial,Helvetica,sans-serif;';
@@ -92,14 +91,6 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     
     /* ------------------------------- Common settings --------------------------------*/
     /**
-     * Full type name of a view. Used by uki.Selector
-     * @return {String}
-     */
-    this.typeName = function() {
-        return 'uki.view.Base';
-    };
-    
-    /**
      * Used for fast (on hash lookup) view searches: uki('#view_id');
      *
      * @param {string=} id New id value
@@ -139,7 +130,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @param {string|uki.background.Base=} background
      * @returns {uki.background.Base|uki.view.Base} current background or self
      */
-    proto.background = function(val) {
+    this.background = function(val) {
         if (val === undefined && !this._background && this.defaultBackground) this._background = this.defaultBackground();
         if (val === undefined) return this._background;
         val = uki.background(val);
@@ -158,7 +149,7 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
      * @function
      * @returns {uki.background.Base} default background if not overridden through attribute
      */
-    proto.defaultBackground = function() {
+    this.defaultBackground = function() {
         return this._defaultBackground && uki.background(this._defaultBackground);
     };
     
@@ -439,10 +430,10 @@ uki.view.Base = uki.newClass(uki.view.Observable, uki.view.Stylable, new functio
     /** @function
     @name uki.view.Base#top */
     uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'], function(index, attr) {
-        proto[attr] = function(value) {
+        this[attr] = function(value) {
             return uki.attr(this.rect(), attr, value);
         };
-    });
+    }, this);
     
     /* ---------------------------------- Dom --------------------------------*/
     /**

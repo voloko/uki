@@ -1,11 +1,8 @@
 include('../../uki-core/const.js');
 
-uki.view.Label = uki.newClass(uki.view.Base, new function() {
-    var Base = uki.view.Base.prototype,
-        proto = this;
-    
-    
-    proto._setup = function() {
+uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
+
+    this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
             _scrollable: false,
@@ -14,18 +11,14 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         });
     };
     
-    proto.typeName = function() {
-        return 'uki.view.Label';
-    };
-    
-    proto._style = function(name, value) {
+    this._style = function(name, value) {
         if (value && 'fontWeight fontSize textDecoration color'.indexOf(name) != -1) {
             this._label.style[name] = value;
         }
         return Base._style.call(this, name, value);
     };
     
-    proto.textSelectable = function(state) {
+    this.textSelectable = function(state) {
         if (state !== undefined && !this._textSelectProp) {
             this._label.unselectable = state ? '' : 'on';
         }
@@ -35,7 +28,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
     /**
      * Warning! this operation is expensive
      */
-    proto.contentsSize = function(autosize) {
+    this.contentsSize = function(autosize) {
         var clone = this._createLabelClone(autosize), inset = this.inset(), size;
         
         uki.dom.probe(clone, function() {
@@ -45,31 +38,31 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         return size;
     };
     
-    proto.text = function(text) {
+    this.text = function(text) {
         return text === undefined ? this.html() : this.html(uki.escapeHTML(text));
     };
     
-    proto.html = function(html) {
+    this.html = function(html) {
         if (html === undefined) return this._label.innerHTML;
         this._label.innerHTML = html;
         return this;
     };
     
-    proto.inset = uki.newProp('_inset', function(inset) {
+    this.inset = uki.newProp('_inset', function(inset) {
         this._inset = Inset.create(inset);
     });
 
-    proto.scrollable = uki.newProp('_scrollable', function(state) {
+    this.scrollable = uki.newProp('_scrollable', function(state) {
         this._scrollable = state;
         this._label.style.overflow = state ? 'auto' : 'hidden';
     });
     
-    proto.multiline = uki.newProp('_multiline', function(state) {
+    this.multiline = uki.newProp('_multiline', function(state) {
         this._multiline = state;
         this._label.style.whiteSpace = state ? '' : 'nowrap';
     });
     
-    proto._createLabelClone = function(autosize) {
+    this._createLabelClone = function(autosize) {
         var clone = this._label.cloneNode(true),
             inset = this.inset(), rect = this.rect();
             
@@ -90,7 +83,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         return clone;
     };
     
-    proto._createDom = function() {
+    this._createDom = function() {
         Base._createDom.call(this);
         this._label = uki.createElement('div', Base.defaultCss + 
             "font-size:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
@@ -98,7 +91,7 @@ uki.view.Label = uki.newClass(uki.view.Base, new function() {
         this.textSelectable(this.textSelectable());
     };
     
-    proto._layoutDom = function() {
+    this._layoutDom = function() {
         Base._layoutDom.apply(this, arguments);
         
         var inset = this._inset;

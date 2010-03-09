@@ -1,3 +1,24 @@
+v0.1.0
+- uki.dom.Event wrapper
+- emulate mouseover, mouseleave events (planned)
+- emulate dragover, dragout, dragstart, dragend, drag events (planned)
+- clone
+- remove uki.dom.drag (planned)
+- d&d for list items? (planned)
+- progressive rendering in long flows (>10 elements) (planned)
+- uki-more: twitter widget fixes (planned)
+- uki-more: menu (flow + disclosure + list) (planned)
+- uki-more: RSS reader demo (planned)
+- uki-more: Gallery demo (planned)
+
+- list events
+- split pane events bound to handle
+- use uki.view.declare instead of uki.newClass
+
+
+v0.0.9
+- uki-more
+
 v0.0.8
 - Simpler inheritance for event handlers
 - Window dev server

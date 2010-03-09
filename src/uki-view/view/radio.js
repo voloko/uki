@@ -3,35 +3,30 @@ include('checkbox.js');
 
 
 (function() {
-    var self = uki.view.Radio = uki.newClass(uki.view.Checkbox, new function() {
-        var proto = this;
-        
-        proto.typeName = function() { return 'uki.view.Radio' };
-
-        proto._createImages = function() {
+    var self = uki.view.declare('uki.view.Radio', uki.view.Checkbox, new function(Base) {
+        this._createImages = function() {
             this._image = uki.theme.image('radio');
             this._focusImage = uki.theme.image('radio-focus');
         }
     
-        proto.group = uki.newProp('_group', function(g) {
+        this.group = uki.newProp('_group', function(g) {
             self.unregisterGroup(this);
             this._group = g;
             self.registerGroup(this);
             self.clearGroup(this);
         });
         
-        proto.checked = uki.newProp('_checked', function(state) {
+        this.checked = uki.newProp('_checked', function(state) {
             this._checked = !!state;
             if (state) self.clearGroup(this);
             this._updateBg();
         });
         
-        proto._click = function() {
+        this._click = function() {
             if (this._disabled || this.checked()) return;
             this.checked(!this._checked);
             this.trigger('change', {checked: this._checked, source: this});
         }
-        
     });
     
     self.groups = {};

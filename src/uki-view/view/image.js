@@ -1,12 +1,9 @@
-uki.view.Image = uki.newClass(uki.view.Base, new function() {
-    var proto = this;
+uki.view.declare('uki.view.Image', uki.view.Base, function() {
+    this.typeName = function() { return 'uki.view.Image'; };
     
-    proto.typeName = function() { return 'uki.view.Image'; };
+    uki.delegateProp(this, 'src', '_dom');
     
-    uki.delegateProp(proto, 'src', '_dom');
-    
-    proto._createDom = function() {
+    this._createDom = function() {
         this._dom = uki.createElement('img', this.defaultCss)
     };
-    
 });

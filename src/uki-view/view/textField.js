@@ -1,7 +1,5 @@
-uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new function() {
-    var Base = uki.view.Base.prototype,
-        emptyInputHeight = {},
-        proto = this;
+uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
+    var emptyInputHeight = {};
 
     function getEmptyInputHeight (fontSize) {
         if (!emptyInputHeight[fontSize]) {
@@ -21,7 +19,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     }
 
     
-    proto._setup = function() {
+    this._setup = function() {
         Base._setup.apply(this, arguments);
         uki.extend(this, {
             _value: '',
@@ -32,11 +30,11 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         });
     };
     
-    proto._updateBg = function() {
+    this._updateBg = function() {
         this._input.style.color = this._disabled ? '#999' : '#000';
     };
     
-    proto.value = function(value) {
+    this.value = function(value) {
         if (value === undefined) return this._input.value;
 
         this._input.value = value;
@@ -44,7 +42,7 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         return this;
     };
     
-    proto.placeholder = uki.newProp('_placeholder', function(v) {
+    this.placeholder = uki.newProp('_placeholder', function(v) {
         this._placeholder = v;
         if (!this._multiline && nativePlaceholder(this._input)) {
             this._input.placeholder = v;
@@ -68,24 +66,20 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
     });
     
 
-    proto._style = function(name, value) {
+    this._style = function(name, value) {
         if (value === undefined) return this._input.style[name];
         this._input.style[name] = value;
         if (this._placeholderDom) this._placeholderDom.style[name] = value;
         return this;
     };
 
-    uki.addProps(proto, ['backgroundPrefix']);
+    uki.addProps(this, ['backgroundPrefix']);
     
-    proto.defaultBackground = function() {
+    this.defaultBackground = function() {
         return uki.theme.background(this._backgroundPrefix + 'input');
     };
     
-    proto.typeName = function() {
-        return 'uki.view.TextField';
-    };
-    
-    proto._createDom = function() {
+    this._createDom = function() {
         var tagName = this._multiline ? 'textarea' : 'input';
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible');
         this._input = uki.createElement(tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
@@ -97,9 +91,13 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
         this._input.value = this.value();
         
         this._initFocusable(this._input);
+        this.bind('mousedown', function(e) {
+            this.focus(); 
+            e.preventDefault();
+        })
     };
     
-    proto._layoutDom = function(rect) {
+    this._layoutDom = function(rect) {
         Base._layoutDom.apply(this, arguments);
         uki.dom.layout(this._input.style, {
             width: this._rect.width - 4
@@ -115,34 +113,31 @@ uki.view.TextField = uki.newClass(uki.view.Base, uki.view.Focusable, new functio
             this._input.style.margin = margin;
         }
         if (this._placeholderDom) this._placeholderDom.style.margin = margin;
-        if (this._firstLayout) this._initFocusable(this._input);
     };
     
-    proto._updatePlaceholderVis = function() {
+    this._updatePlaceholderVis = function() {
         if (this._placeholderDom) this._placeholderDom.style.display = this.value() ? 'none' : 'block';
     };
 
-    proto._focus = function() {
+    this._focus = function() {
         this._focusBackground = this._focusBackground || uki.theme.background(this._backgroundPrefix + 'input-focus');
         this._focusBackground.attachTo(this);
         if (this._placeholderDom) this._placeholderDom.style.display = 'none';
     };
     
-    proto._blur = function() {
+    this._blur = function() {
         this._focusBackground.detach();
         this._updatePlaceholderVis();
     };
 
-    proto._bindToDom = function(name) {
-        return uki.view.Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
+    this._bindToDom = function(name) {
+        return Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
 });
 
-uki.view.MultilineTextField = uki.newClass(uki.view.TextField, {
-    typeName: function() { return 'uki.view.MultilineTextField'; },
-    
-    _setup: function() {
-        uki.view.TextField.prototype._setup.call(this);
+uki.view.declare('uki.view.MultilineTextField', uki.view.TextField, function(Base) {
+    this._setup = function() {
+        Base._setup.call(this);
         this._multiline = true;
-    }
+    };
 });
