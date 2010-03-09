@@ -5,7 +5,7 @@ include('../builder.js');
 include('../dom.js');
 include('../dom/nativeLayout.js');
 include('observable.js');
-include('stylable.js');
+include('styleable.js');
 
 var ANCHOR_TOP    = 1,
     ANCHOR_RIGHT  = 2,
@@ -14,7 +14,7 @@ var ANCHOR_TOP    = 1,
     ANCHOR_WIDTH  = 16,
     ANCHOR_HEIGHT = 32;
 
-uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Stylable, function(Observable, Stylable) {
+uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, function(Observable, Styleable) {
 
     var layoutId = 1;
 
@@ -52,7 +52,7 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Stylable, functi
      * @see uki.view.Base#anchors
      * @constructor
      * @augments uki.view.Observable
-     * @augments uki.view.Stylable
+     * @augments uki.view.Styleable
      *
      * @name uki.view.Base
      * @implements uki.view.Observable

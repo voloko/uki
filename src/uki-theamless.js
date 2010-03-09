@@ -37,7 +37,7 @@ include('uki-core/theme/base.js');
 include('uki-core/theme/template.js');
 
 include('uki-core/view/utils.js');
-include('uki-core/view/stylable.js');
+include('uki-core/view/styleable.js');
 include('uki-core/view/observable.js');
 include('uki-core/view/focusable.js');
 include('uki-core/view/base.js');

@@ -3,12 +3,12 @@ include('../view.js');
 /**
  * @class
  */
-uki.view.Stylable = new function() {
-    /** @scope uki.view.Stylable.prototype */
+uki.view.Styleable = new function() {
+    /** @scope uki.view.Styleable.prototype */
     
     /**
      * @name style
-     * @memberOf uki.view.Stylable#
+     * @memberOf uki.view.Styleable#
      * @function
      */
     this.style = function(name, value) {
@@ -42,7 +42,7 @@ uki.view.Stylable = new function() {
     /**
      * Sets whether text of the view can be selected.
      *
-     * @memberOf uki.view.Stylable#
+     * @memberOf uki.view.Styleable#
      * @name textSelectable
      * @function
      * @param {boolean=} state 
