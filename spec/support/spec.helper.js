@@ -29,6 +29,7 @@ if (document.createEventObject) {
             params.button    || 0,
             null
         );
+        uki.extend(event);
         
         el.dispatchEvent(event);
     };

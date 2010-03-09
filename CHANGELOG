@@ -11,8 +11,8 @@ v0.1.0
 - uki-more: RSS reader demo (planned)
 - uki-more: Gallery demo (planned)
 
-- list events
-- split pane events bound to handle
+- list events (planned)
+- split pane events bound to handle (planned)
 - use uki.view.declare instead of uki.newClass
 
 

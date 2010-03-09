@@ -59,8 +59,10 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
         for (i=0; i < types.length; i++) {
             type = types[i];
             if (!uki.dom.bound[id][type]) {
-                el.addEventListener ? el.addEventListener(type, handle, false) : el.attachEvent('on' + type, handle);
                 uki.dom.bound[id][type] = [];
+                if ( !uki.dom.special[type] || uki.dom.special[type].setup.call(el) === false ) {
+                    el.addEventListener ? el.addEventListener(type, handle, false) : el.attachEvent('on' + type, handle);
+                }
             }
             uki.dom.bound[id][type].push(handler);
         };
@@ -134,8 +136,32 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
 			event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));    
 			
 		return event;    
-    }
+    },
+    
+    special: {}
 });
+
+uki.each({ 
+	mouseover: 'mouseenter', 
+	mouseout: 'mouseleave'
+}, function( orig, fix ){
+    var handler = function(e) {
+	    if (!uki.dom.contains(this, e.relatedTarget)) {
+	        e.type = fix;
+	        uki.dom.handler.apply(this, arguments);
+        }
+	};
+	
+	uki.dom.special[ fix ] = {
+		setup: function() {
+			uki.dom.bind( this, orig, handler );
+		},
+		teardown: function(){
+		    uki.dom.unbind( this, orig, handler );
+		}
+	};			   
+});
+
 
 if (root.attachEvent) {
     root.attachEvent('onunload', function() {

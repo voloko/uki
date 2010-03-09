@@ -45,8 +45,6 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this._backgroundByName(name);
     };
         
-    var supportMouseEnter = root.attachEvent && !root.opera;
-    
     proto._createDom = function() {
         // dom
         this._dom = uki.createElement('div', this.defaultCss + 'color:#333;text-align:center;');
@@ -65,8 +63,8 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         
         uki.dom.bind(document, 'mouseup', uki.proxy(this._mouseup, this));
         this.bind('mousedown', this._mousedown);
-        this.bind(supportMouseEnter ? 'mouseenter' : 'mouseover', this._mouseover);
-        this.bind(supportMouseEnter ? 'mouseleave' : 'mouseout', this._mouseout);
+        this.bind('mouseenter', this._mouseenter);
+        this.bind('mouseleave', this._mouseleave);
         this.bind('keyup', this._keyup);
         this.bind('keydown', this._keydown);
     };
@@ -82,14 +80,12 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this._updateBg();
     };
     
-    proto._mouseover = function(e) {
-        if (!supportMouseEnter && uki.dom.contains(this._dom, e.relatedTarget) || this._over) return;
+    proto._mouseenter = function(e) {
         this._over = true;
         this._updateBg();
     };
     
-    proto._mouseout = function(e) {
-        if (!supportMouseEnter && uki.dom.contains(this._dom, e.relatedTarget) || !this._over) return;
+    proto._mouseleave = function(e) {
         this._over = false;
         this._updateBg();
     };

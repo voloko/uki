@@ -1,8 +1,9 @@
 describe 'uki.dom.Event'
     
     before_each
-        dom = uki.createElement('div', '', '<span>1<u>2</u></span>')
+        dom = uki.createElement('div', '', '<span>1<u>2</u></span><b>3</b>')
         u = dom.getElementsByTagName('u')[0]
+        b = dom.getElementsByTagName('b')[0]
     end
     
     it 'should handle dom events'
@@ -48,6 +49,28 @@ describe 'uki.dom.Event'
                 e.stopPropagation.should.not.be_null
             });
             triggerEvent(u, 'click', {});
+            called.should.be_true
+        });
+    end
+    
+    it 'should support mouseenter in all browser'
+        uki.dom.probe(dom, function() { // safari won't bubble unless dom attached to document
+            called = false
+            uki.dom.bind(dom, 'mouseenter', function(e) {
+                called = true; 
+            });
+            triggerEvent(u, 'mouseover', {relatedTarget: 'b'});
+            called.should.be_true
+        });
+    end
+    
+    it 'should support mouseleave in all browser'
+        uki.dom.probe(dom, function() { // safari won't bubble unless dom attached to document
+            called = false
+            uki.dom.bind(dom, 'mouseleave', function(e) {
+                called = true; 
+            });
+            triggerEvent(u, 'mouseout', {relatedTarget: 'b'});
             called.should.be_true
         });
     end
