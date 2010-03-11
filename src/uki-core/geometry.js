@@ -19,8 +19,8 @@ uki.geometry = {};
  * @param {Integer=} y defaults to 0
  */
 var Point = uki.geometry.Point = function(x, y) {
-    this.x = x || 0.0;
-    this.y = y || 0.0;
+    this.x = x*1.0 || 0.0;
+    this.y = y*1.0 || 0.0;
 };
 
 Point.prototype = /** @lends uki.geometry.Point.prototype */ {
@@ -63,6 +63,10 @@ Point.prototype = /** @lends uki.geometry.Point.prototype */ {
      * @return {uki.geometry.Point} self
      */
     offset: function(x, y) {
+        if (typeof x == 'object') {
+            y = x.y;
+            x = x.x;
+        }
         this.x += x;
         this.y += y;
         return this;

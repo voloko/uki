@@ -51,21 +51,20 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
         this._handle.style.cssText += ';margin-left:-' + (this._bg.width / 2) + 'px;width:' +this._bg.width + 'px;height:' + (this._bg.height / 2) + 'px;';
         this._dom.appendChild(this._handle);
         
-        uki.dom.drag.watch(this._handle, this);
-        
-        uki.dom.bind(this._handle, 'mouseover', uki.proxy(this._mouseover, this));
-        uki.dom.bind(this._handle, 'mouseout', uki.proxy(this._mouseout, this));
+        uki.each(['mouseenter', 'mouseleave', 'draggesturestart', 'draggesture', 'draggestureend'], function(i, name) {
+            uki.dom.bind(this._handle, name, uki.proxy(this['_' + name], this));
+        }, this);
         
         this.bind('click', this._click);
         this.bind('keydown', this._keydown);
     };
     
-    this._mouseover = function() {
+    this._mouseenter = function() {
         this._over = true;
         this._bg.style.top = - this._bg.height / 2 + 'px';
     };
     
-    this._mouseout = function() {
+    this._mouseleave = function() {
         this._over = false;
         this._bg.style.top = this._dragging ? (- this._bg.height / 2 + 'px') : 0;
     };
@@ -90,7 +89,7 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
         this._focusBg.style.left = this._handle.style.left = this._position + 'px';
     };
     
-    this._acceptDrag = function() {
+    this._draggesturestart = function(e) {
         this._dragging = true;
         this._initialPosition = new Point(parseInt(this._handle.style.left, 10), parseInt(this._handle.style.top, 10));
         return true;
@@ -99,14 +98,14 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
     /**
      * @fires event:change
      */
-    this._drag = function(e, offset) {
-        this._position = MAX(0, MIN(this._rect.width, this._initialPosition.x - offset.x));
+    this._draggesture = function(e) {
+        this._position = MAX(0, MIN(this._rect.width, this._initialPosition.x + e.dragOffset.x));
         this._value = this._pos2val(this._position);
         this._moveHandle();
         this.trigger('change', {source: this, value: this._value});
     };
     
-    this._drop = function(e, offset) {
+    this._draggestureend = function(e) {
         this._dragging = false;
         this._initialPosition = null;
         if (!this._over) this._bg.style.top = 0;

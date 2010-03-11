@@ -67,7 +67,9 @@ uki.view.declare('uki.view.HorizontalSplitPane', uki.view.Container, function(Ba
             handle.style.left = this._handlePosition + PX;
         }
         
-        uki.dom.drag.watch(handle, this);
+        uki.each(['draggesturestart', 'draggesture', 'draggestureend'], function(i, name) {
+            uki.dom.bind(handle, name, uki.proxy(this['_' + name], this));
+        }, this);
         
         return handle;
     };
@@ -117,20 +119,20 @@ uki.view.declare('uki.view.HorizontalSplitPane', uki.view.Container, function(Ba
         return true;
     };
     
-    proto._acceptDrag = function(e) {
+    proto._draggesturestart = function(e) {
         var offset = uki.dom.offset(this.dom());
         this._posWithinHandle = (e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x']) - this._handlePosition;
         return true;
     };
     
-    proto._drag = function(e) {
+    proto._draggesture = function(e) {
         var offset = uki.dom.offset(this.dom());
         this.handlePosition(e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x'] - this._posWithinHandle);
         e.preventDefault();
         this.layout();
     };
     
-    proto._drop = function(e, offset) {
+    proto._draggestureend = function(e, offset) {
     };
     
     proto.topPane = proto.leftPane = function(pane) {

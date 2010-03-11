@@ -18,7 +18,6 @@ include('uki-core/selector.js');
 include('uki-core/dom.js');
 include('uki-core/dom/event.js');
 include('uki-core/dom/offset.js');
-include('uki-core/dom/drag.js');
 include('uki-core/dom/nativeLayout.js');
 
 include('uki-core/attachment.js');

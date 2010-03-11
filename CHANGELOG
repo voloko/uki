@@ -1,6 +1,6 @@
 v0.1.0
 - uki.dom.Event wrapper
-- emulate mouseover, mouseleave events (planned)
+- emulate mouseover, mouseleave events
 - emulate dragover, dragout, dragstart, dragend, drag events (planned)
 - clone
 - remove uki.dom.drag (planned)
@@ -14,6 +14,7 @@ v0.1.0
 - list events (planned)
 - split pane events bound to handle (planned)
 - use uki.view.declare instead of uki.newClass
+- slider values
 
 
 v0.0.9

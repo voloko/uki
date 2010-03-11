@@ -1,10 +1,17 @@
+uki.dom.special = {};
+
+include('dnd.js');
+
 uki.dom.Event = function( domEvent ) {
-    this.domEvent = domEvent;
+    domEvent = domEvent || {};
+    this.domEvent = domEvent.domEvent || domEvent;
 
 	for ( var i = uki.dom.props.length, prop; i; ){
 		prop = uki.dom.props[ --i ];
 		this[ prop ] = domEvent[ prop ];
 	}
+	
+    // this.dataTransfer = new uki.dom.DataTransfer(domEvent);
 };
 
 uki.dom.Event.prototype = new function() {
@@ -35,9 +42,9 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     bound: {},
     handles: {},
     
-    props: "type altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
+    props: "type altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which dragOffset".split(" "),
     
-    events: "blur focus load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error".split(" "),
+    events: "blur focus load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error draggesturestart draggestureend draggesture dragstart dragend drag drop dragenter dragleave".split(" "),
 
     bind: function(el, types, handler) {
 		if ( el.setInterval && el != window )
@@ -83,14 +90,16 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     
     /** @ignore */
     handler: function( e ) {
-        e = new uki.dom.Event(e);
-        e = uki.dom.fix( e || root.event );
-
+        e = e || root.event;
+        
         var type = e.type,
             id = this[expando],
             handlers = uki.dom.bound[id],
             i;
             
+        e = new uki.dom.Event(e);
+        e = uki.dom.fix( e );
+        
         if (!id || !handlers || !handlers[type]) return;
         
         for (i=0, handlers = handlers[type]; i < handlers.length; i++) {
@@ -136,9 +145,7 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
 			event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));    
 			
 		return event;    
-    },
-    
-    special: {}
+    }
 });
 
 uki.each({ 
