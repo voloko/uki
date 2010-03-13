@@ -1,24 +1,11 @@
 (function() {
     var defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;font-family:Arial,Helvetica,sans-serif;';
     
-    function u(url) {
-        return uki.theme.airport.imagePath + url;
-    }
-    
-    function shadowData() {
-        var prefix = "shadow/large-";
-        return {
-            c: [u(prefix + "c.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAACzklEQVRo3t2a63KiUBCEPYCX1U2Ixvd/Qm/kYjRBWd2aTjW950CS3fyYtaprULl8p2kGAcMg/QqR6SDTsXk/8moi041Mx+bt3WAKVDVIDOQj0ArcROCbFHzoAGbYTICzLwygC/jc8T62bGccFDKLKLUXeH2625sIpCo2mBa8bkiBWbkpo5oaQMrxFPCJ6ikxkNYAQg90Tiqk5h0DiDmeAoZqqTqIFrxuSB0uSENTQVUHkHJdnVbgN6qYrmkQ6n7U6VygRwY6Eg1pHiyDdcQcx0YZGLCvInxWyx44q+Nwi6Hh8Ng0kTqieTQ2QcCbSDzeCPB40UHqUfYAlvu9Lu0aDD0i0B+iiQnup1wfdLgNdw+mFxEG8CrwZziuB6JCT00zqQyfcn3Q4TZD7y96lrqPwL9HJkiLKygecPcK+tN0Y3VG348lMlnC8bNE5EjuXmGfLnq0+mSf4fujuh6kM8DtCUHfmG6pMry63uc4u83QDwaO+kjwB3U9SD45InD61lSS4PzU4GNxUXCNyYvFAU5XpAcTnOfI/AFeiNuIxhX0TgT3pxKXoge8lpjsyeWdqKLosOs1wIcEzgck3L6Czk0Le1/ad7O/BH826MpgNxdtTTtynQ/UFngh4DNym6HvbfqO4oKcfwYc+UZMdga7FviKss7gdbB45NJNAA637wl8QXFBzsfSz7vAccLZ00EJt9dU4TofpOgup0AbLKSbICYAZiEu3NM/6zh6NmKyFm0oLtxdWo5z/8ZJpiTwpYDPxfGvgsPxrUCvCLyik9J7P1dw7igAB+zStDDw8h+BVwa+MeAVDQDg3FmS4NxR5gTN9TvA1wS9opxrZ+kFL6mbLEnfDb6iqGzJ8f8f3F1UXB6cLtuhyxOQy1O+2x9Zbn/Wur2QcHvp5vZi2e3tCbc3hNzegnN709P1bWaXN/bdPkpx/fDK9eNCtw9oXT8Sd/MnhF+iLpLibpmRrgAAAABJRU5ErkJggg==", u(prefix + "c.gif")],
-            v: [u(prefix + "v.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAECAYAAADxjg1nAAAAWklEQVQYGdXBWwpAQAAAwLEeSUqy9z/hSkpSnh9OsTMFGlSo0aJDjwEjJkREREwYMaBHhxY1KpQIKPxePLhx4cSBHRtWLJiRkJAwY8GKDTsOnLiCTAWZCjL1AeihFg5/1kytAAAAAElFTkSuQmCC", u(prefix + "v.gif")],
-            h: [u(prefix + "h.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAuCAYAAAAPxrguAAAAe0lEQVQoz5XSWwtAQBCG4XEMOST+/y8kOYScKRe8WzZbc7FPX7PNtLaIuPI49l0vUBIewT/LuO/7BRETMRMpExkh/w9KD+WVhBASAu20jnZjFsEkGAQh7ISNsBIWwkwYCT2hI9SEilASiv+g9KgEH6ZhomVi0E47fW7sAEmnGr/QVlzBAAAAAElFTkSuQmCC", u(prefix + "h.gif")],
-            m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEUlEQVQIHWNgYGD4i4ZJFQAAAkoP0RsgosoAAAAASUVORK5CYII=", u(prefix + "m.gif"), true]
-        };
-    };
-    
     uki.theme.airport = uki.extend({}, uki.theme.Base, {
         imagePath: '/src/uki-theme/airport/i/',
         
         backgrounds: {
+            // basic button
             'button-normal': function() {
                 var prefix = "button/normal-";
                 return new uki.background.Sliced9({
@@ -60,6 +47,67 @@
                 }, "6 6 6 6", { inset: '-4 -4 -4 -4', zIndex: 2 });
             },
             
+            'button-disabled': function() {
+                return new uki.background.Multi(
+                    uki.theme.background('button-normal'),
+                    new uki.background.Css({ color: '#999' })
+                );
+            },
+            
+            
+            // checkbox
+            'checkbox-normal': function() {
+                return checkboxBg(18);
+            },
+            
+            'checkbox-hover': function() {
+                return checkboxBg(54);
+            },
+            
+            'checkbox-disabled': function() {
+                return checkboxBg(90);
+            },
+            
+            'checkbox-checked-normal': function() {
+                return checkboxBg(0);
+            },
+            
+            'checkbox-checked-hover': function() {
+                return checkboxBg(36);
+            },
+            
+            'checkbox-checked-disabled': function() {
+                return checkboxBg(72);
+            },
+            
+
+            // radio button
+            'radio-normal': function() {
+                return radioBg(18);
+            },
+            
+            'radio-hover': function() {
+                return radioBg(54);
+            },
+            
+            'radio-disabled': function() {
+                return radioBg(90);
+            },
+            
+            'radio-checked-normal': function() {
+                return radioBg(0);
+            },
+            
+            'radio-checked-hover': function() {
+                return radioBg(36);
+            },
+            
+            'radio-checked-disabled': function() {
+                return radioBg(72);
+            },    
+            
+                    
+            // toolbar button
             'toolbar-button-normal': function() {
                 return new uki.background.Css('#CCC');
             },
@@ -80,6 +128,15 @@
                 return new uki.background.Css({ background: '#4086FF', color: '#FFF' });
             },
             
+            
+            // panel
+            'popup-normal': function() {
+                return new uki.background.Multi(
+                    new uki.background.CssBox('opacity:0.95;background:#ECEDEE;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;border:1px solid #CCC'),
+                    uki.theme.background('shadow-medium')
+                );
+            },
+            
             'panel': function() {
                 var prefix = "panel/dark-";
                 return new uki.background.Sliced9({
@@ -87,12 +144,16 @@
                     m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAABlCAYAAABnRzLGAAAAPUlEQVQoz2O5e/fefwYgYGGAAgTj////DERLkaSY6lLkKaaQATfw379/BNVgSsF1Ud1hw5VBYYBTaCntGQBCJspdTUaYMwAAAABJRU5ErkJggg==", false, true]
                 }, "3 0 3 0");
             },
+            
+            // text field
             'input': function() {
                 return new uki.background.CssBox(
                    'background:white;border: 1px solid #999;border-top-color:#555;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-moz-box-shadow:0 1px 0 rgba(255, 255, 255, 0.4);-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.4);box-shadow:0 1px 0 rgba(255, 255, 255, 0.4)',
                    { inset: '0 0 0 0' }
                );
             },
+            
+            // slider
             'slider-bar': function() {
                 var prefix = "slider/bar-"; 
                 return new uki.background.Sliced9({ 
@@ -100,15 +161,12 @@
                     m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAASCAYAAAB4gjqpAAAAUUlEQVQYGe3BwRFAMBAAwItJIVTAR0taSE9eVHiKOA9jdjcCAAAAAAAAgJ9rY4wMgKK+bnsAVPV5XgKgagqAF/T7OgOgqmXmEQAAAAAAAHzTAx6DCNiUJps4AAAAAElFTkSuQmCC", u(prefix + "m.gif"), true] 
                 }, "0 3 0 3", {fixedSize: '0 18'});            
             },
+            
+            // list
             list: function(rowHeight) {
                 return new uki.background.Rows(rowHeight, '#EDF3FE');
             },
-            'popup-normal': function() {
-                return new uki.background.Multi(
-                    new uki.background.CssBox('opacity:0.95;background:#ECEDEE;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;border:1px solid #CCC'),
-                    uki.theme.background('shadow-medium')
-                );
-            },
+
             'shadow-big': function() {
                 return new uki.background.Sliced9(shadowData(), "23 23 23 23", {zIndex: -2, inset: '-4 -10 -12 -10'});
             },
@@ -210,7 +268,36 @@
         }
     });
 
-    uki.theme.airport.backgrounds['button-disabled'] = uki.theme.airport.backgrounds['button-normal'];
+    function u(url) {
+        return uki.theme.airport.imagePath + url;
+    }
+    
+    function checkboxBg (offset) {
+        var src = uki.theme.imageSrc('checkbox');
+        return new uki.background.CssBox('', 
+            { innerHTML: '<div style="position:absolute;left:50%;top:50%;width:18px;height:18px;overflow:hidden;' +
+            'margin:-9px 0 0 -9px; background: url(' + src + ') 0 -' + offset + 'px"></div>' }
+        );
+    }
+    
+    function radioBg (offset) {
+        var src = uki.theme.imageSrc('radio');
+        return new uki.background.CssBox('', 
+            { innerHTML: '<div style="position:absolute;left:50%;top:50%;width:18px;height:18px;overflow:hidden;' +
+            'margin:-9px 0 0 -9px; background: url(' + src + ') 0 -' + offset + 'px"></div>' }
+        );
+    }
+    
+    function shadowData() {
+        var prefix = "shadow/large-";
+        return {
+            c: [u(prefix + "c.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAACzklEQVRo3t2a63KiUBCEPYCX1U2Ixvd/Qm/kYjRBWd2aTjW950CS3fyYtaprULl8p2kGAcMg/QqR6SDTsXk/8moi041Mx+bt3WAKVDVIDOQj0ArcROCbFHzoAGbYTICzLwygC/jc8T62bGccFDKLKLUXeH2625sIpCo2mBa8bkiBWbkpo5oaQMrxFPCJ6ikxkNYAQg90Tiqk5h0DiDmeAoZqqTqIFrxuSB0uSENTQVUHkHJdnVbgN6qYrmkQ6n7U6VygRwY6Eg1pHiyDdcQcx0YZGLCvInxWyx44q+Nwi6Hh8Ng0kTqieTQ2QcCbSDzeCPB40UHqUfYAlvu9Lu0aDD0i0B+iiQnup1wfdLgNdw+mFxEG8CrwZziuB6JCT00zqQyfcn3Q4TZD7y96lrqPwL9HJkiLKygecPcK+tN0Y3VG348lMlnC8bNE5EjuXmGfLnq0+mSf4fujuh6kM8DtCUHfmG6pMry63uc4u83QDwaO+kjwB3U9SD45InD61lSS4PzU4GNxUXCNyYvFAU5XpAcTnOfI/AFeiNuIxhX0TgT3pxKXoge8lpjsyeWdqKLosOs1wIcEzgck3L6Czk0Le1/ad7O/BH826MpgNxdtTTtynQ/UFngh4DNym6HvbfqO4oKcfwYc+UZMdga7FviKss7gdbB45NJNAA637wl8QXFBzsfSz7vAccLZ00EJt9dU4TofpOgup0AbLKSbICYAZiEu3NM/6zh6NmKyFm0oLtxdWo5z/8ZJpiTwpYDPxfGvgsPxrUCvCLyik9J7P1dw7igAB+zStDDw8h+BVwa+MeAVDQDg3FmS4NxR5gTN9TvA1wS9opxrZ+kFL6mbLEnfDb6iqGzJ8f8f3F1UXB6cLtuhyxOQy1O+2x9Zbn/Wur2QcHvp5vZi2e3tCbc3hNzegnN709P1bWaXN/bdPkpx/fDK9eNCtw9oXT8Sd/MnhF+iLpLibpmRrgAAAABJRU5ErkJggg==", u(prefix + "c.gif")],
+            v: [u(prefix + "v.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAECAYAAADxjg1nAAAAWklEQVQYGdXBWwpAQAAAwLEeSUqy9z/hSkpSnh9OsTMFGlSo0aJDjwEjJkREREwYMaBHhxY1KpQIKPxePLhx4cSBHRtWLJiRkJAwY8GKDTsOnLiCTAWZCjL1AeihFg5/1kytAAAAAElFTkSuQmCC", u(prefix + "v.gif")],
+            h: [u(prefix + "h.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAuCAYAAAAPxrguAAAAe0lEQVQoz5XSWwtAQBCG4XEMOST+/y8kOYScKRe8WzZbc7FPX7PNtLaIuPI49l0vUBIewT/LuO/7BRETMRMpExkh/w9KD+WVhBASAu20jnZjFsEkGAQh7ISNsBIWwkwYCT2hI9SEilASiv+g9KgEH6ZhomVi0E47fW7sAEmnGr/QVlzBAAAAAElFTkSuQmCC", u(prefix + "h.gif")],
+            m: [u(prefix + "m.png"), "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEUlEQVQIHWNgYGD4i4ZJFQAAAkoP0RsgosoAAAAASUVORK5CYII=", u(prefix + "m.gif"), true]
+        };
+    };
+    
     uki.theme.airport.backgrounds['input-focus'] = uki.theme.airport.backgrounds['button-focus'];
     uki.theme.airport.backgrounds['toolbar-popup'] = uki.theme.airport.backgrounds['popup-normal'];
 

@@ -13,17 +13,22 @@ uki.view.Focusable = /** @lends uki.view.Focusable.prototype */ {
     
     focusable: uki.newProp('_focusable', function(v) {
         this._focusable = v;
-        if (this._focusableInput) this._focusableInput.style.display = v ? '' : 'none';
+        if (this._focusableInput) {
+            this._focusableInput.style.display = v ? '' : 'none';
+        } else if (v) {
+            this._initFocusable();
+        }
     }),
     
     disabled: uki.newProp('_disabled', function(d) {
         this._disabled = d;
         if (d) this.blur();
-        this._focusableInput.disabled = d;
+        if (this._focusableInput) this._focusableInput.disabled = d;
         if (this._updateBg) this._updateBg();
     }),    
     
     _initFocusable: function(preCreatedInput) {
+        this._focusableInput = preCreatedInput;
         if (!this._focusable) return;
         
         var input = preCreatedInput;

@@ -3,33 +3,34 @@ include('label.js');
 uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function(Base, Focusable) {
     var proto = this;
     
-    proto._setup = function() {
+    this._backgroundPrefix = 'button-';
+    
+    this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
             _inset: new Inset(0, 4),
-            _backgroundPrefix: 'button-',
             defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
         });
     };
     
-    uki.addProps(proto, ['backgroundPrefix']);
+    uki.addProps(this, ['backgroundPrefix']);
     
     uki.each(['normal', 'hover', 'down', 'focus', 'disabled'], function(i, name) {
         var property = name + '-background';
-        proto[property] = function(bg) {
+        this[property] = function(bg) {
             if (bg) this['_' + property] = bg;
             return this['_' + property] = this['_' + property] || 
                 uki.theme.background(this._backgroundPrefix + name, {height: this.rect().height, view: this});
         };
-    });
+    }, this);
     
-    proto._createLabelClone = function(autosize) {
+    this._createLabelClone = function(autosize) {
         var clone = Base._createLabelClone.call(this, autosize);
         // clone.style.fontWeight = this.style('fontWeight');
         return clone;
     };
     
-    proto._layoutDom = function(rect) {
+    this._layoutDom = function(rect) {
         Base._layoutDom.call(this, rect);
         if (this._firstLayout) {
             this['hover-background']();
@@ -39,13 +40,12 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         }
     };
     
-    proto._updateBg = function() {
+    this._updateBg = function() {
         var name = this._disabled ? 'disabled' : this._down ? 'down' : this._over ? 'hover' : 'normal';
-        this._dom.style.color = this._disabled ? '#999' : '#333'; // do not redefine explict style
         this._backgroundByName(name);
     };
         
-    proto._createDom = function() {
+    this._createDom = function() {
         // dom
         this._dom = uki.createElement('div', this.defaultCss + 'color:#333;text-align:center;');
         this._label = uki.createElement('div', Base.defaultCss + 
@@ -69,36 +69,36 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this.bind('keydown', this._keydown);
     };
     
-    proto._mouseup = function(e) {
+    this._mouseup = function(e) {
         if (!this._down) return;
         this._down = false;
         this._updateBg();
     };
     
-    proto._mousedown = function(e) {
+    this._mousedown = function(e) {
         this._down = true;
         this._updateBg();
     };
     
-    proto._mouseenter = function(e) {
+    this._mouseenter = function(e) {
         this._over = true;
         this._updateBg();
     };
     
-    proto._mouseleave = function(e) {
+    this._mouseleave = function(e) {
         this._over = false;
         this._updateBg();
     };
     
-    proto._focus = function() {
+    this._focus = function() {
         this['focus-background']().attachTo(this);
     };
     
-    proto._keydown = function(e) {
+    this._keydown = function(e) {
         if ((e.which == 32 || e.which == 13) && !this._down) this._mousedown();
     };
     
-    proto._keyup = function(e) {
+    this._keyup = function(e) {
         if ((e.which == 32 || e.which == 13) && this._down) {
             this._mouseup();
             this.trigger('click', {domEvent: e, source: this});
@@ -108,11 +108,11 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         }
     };
     
-    proto._blur = function() {
+    this._blur = function() {
        this['focus-background']().detach();
     };
     
-    proto._backgroundByName = function(name) {
+    this._backgroundByName = function(name) {
         var bg = this[name + '-background']();
         if (this._background == bg) return;
         if (this._background) this._background.detach();
@@ -121,7 +121,7 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this._backgroundName = name;
     };
 
-    proto._bindToDom = function(name) {
+    this._bindToDom = function(name) {
         return uki.view.Focusable._bindToDom.call(this, name) || uki.view.Label.prototype._bindToDom.call(this, name);
     };
 });
