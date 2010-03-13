@@ -46,6 +46,7 @@ include('collection.js');
             for (var i=0; i < parts.length; i++) {
                 obj = obj[parts[i]];
             };
+            if (!obj) throw 'No view of type ' + c + ' found';
             result = new obj(mlRow.rect);
         } else {
             result = c;

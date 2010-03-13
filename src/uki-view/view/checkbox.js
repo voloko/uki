@@ -69,7 +69,6 @@ uki.view.declare('uki.view.Checkbox', uki.view.Base, uki.view.Focusable, functio
     };
     
     this._keyup = function(e) {
-        e = e.domEvent;
         if (e.which == 32 || e.which == 13) {
             this._click();
             this.trigger('click', {domEvent: e, source: this});

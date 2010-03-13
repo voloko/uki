@@ -114,7 +114,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
     this._mousedown = function(e) {
         var o = uki.dom.offset(this._dom),
-            y = e.domEvent.pageY - o.y,
+            y = e.pageY - o.y,
             p = FLOOR(y / this._rowHeight);
         this.selectedIndex(p);
     };
@@ -189,7 +189,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
     };
     
-    this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden">${text}</div>')
+    this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden" draggable>${text}</div>')
     
     this._renderPack = function(pack, itemFrom, itemTo) {
         var html = [], position,
@@ -301,7 +301,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     };
 });
 
-uki.Collection.addAttrs('data,selectedIndex');
+uki.Collection.addAttrs(['data','selectedIndex']);
 
 uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) {
 
@@ -311,9 +311,10 @@ uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) 
         this.appendChild(this._list);
     };
     
-    uki.each(['data', 'rowHeight', 'render', 'packSize', 'visibleRectExt', 'throttle', 'focusable'], function(i, name) {
-        uki.delegateProp(this, name, '_list');
-    }, this);
+    uki.each('data,rowHeight,render,packSize,visibleRectExt,throttle,focusable,selectedIndexes,selectedIndex'.split(','), 
+        function(i, name) {
+            uki.delegateProp(this, name, '_list');
+        }, this);
     
 });
 

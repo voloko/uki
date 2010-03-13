@@ -1,6 +1,6 @@
 include('uki.js');
 include('attachment.js');
-
+include('dom/event.js');
 
 /**
  * Collection performs group operations on uki.view objects.
@@ -132,7 +132,7 @@ uki.fn = uki.Collection.prototype = new function() {
      * @function
      */
     uki.Collection.addAttrs = function(attrNames) {
-        uki.each(attrNames.split(','), function(i, name) {
+        uki.each(attrNames, function(i, name) {
             proto[name] = function( value ) { return this.attr( name, value ); };
         });
     };
@@ -167,8 +167,8 @@ uki.fn = uki.Collection.prototype = new function() {
     @name uki.Collection#focusable */
     /** @function
     @name uki.Collection#style */
-    uki.Collection.addAttrs('html,text,background,value,rect,checked,anchors,' +
-        'childViews,typeName,id,name,visible,disabled,focusable,style');
+    uki.Collection.addAttrs(('dom,html,text,background,value,rect,checked,anchors,' +
+        'childViews,typeName,id,name,visible,disabled,focusable,style').split(','));
 
     /** @function
     @name uki.Collection#parent */
@@ -263,9 +263,7 @@ uki.fn = uki.Collection.prototype = new function() {
     @name uki.Collection#keyup */
     /** @function
     @name uki.Collection#error */
-    uki.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
-    	"mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave," +
-    	"change,select,submit,keydown,keypress,keyup,error").split(","), function(i, name){
+    uki.each( uki.dom.events, function(i, name){
     	proto[name] = function( handler ){
     	    if (handler) {
         		this.bind(name, handler);

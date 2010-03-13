@@ -1,4 +1,4 @@
-uki.view.declare('uki.view.HorizontalSplitPane', uki.view.Container, function(Base) {
+uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     var proto = this;
         
     proto._setup = function() {
@@ -202,7 +202,7 @@ uki.view.declare('uki.view.HorizontalSplitPane', uki.view.Container, function(Ba
     
 });
 
-uki.view.declare('uki.view.VerticalSplitPane', uki.view.HorizontalSplitPane, function(Base) {
+uki.view.declare('uki.view.VSplitPane', uki.view.HSplitPane, function(Base) {
     this._setup = function() {
         Base._setup.call(this);
         this._vertical = true;
@@ -210,4 +210,4 @@ uki.view.declare('uki.view.VerticalSplitPane', uki.view.HorizontalSplitPane, fun
 });
 
 
-uki.Collection.addAttrs('handlePosition');
+uki.Collection.addAttrs(['handlePosition']);

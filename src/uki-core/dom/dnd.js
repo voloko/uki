@@ -90,6 +90,47 @@ function unbindGestures() {
 
 
 
+// browser DnD implementation
+uki.dom.DataTransfer = uki.newClass(new function() {
+    this.init = function() {
+        uki.extend(this, {
+            dropEffect: 'none',
+            effectAllowed: 'none',
+            types: [],
+            files: [],
+            dragImage: '',
+            imagePosition: new Point(),
+            data: {}
+        });
+    };
+    
+    this.domEvent = uki.newProp('_domEvent');
+    
+    this.setData = function(format, data) {
+        this.data[format] = data;
+        if (uki.inArray(format, this.types) == -1) this.types.push(format);
+    };
+    
+    this.clearData = function(format) {
+        if (format) {
+            delete this.data[format];
+            this.types = uki.grep(this.types, function(x) { return x != format; });
+        } else {
+            this.data = {};
+            this.types = [];
+        }
+    };
+    
+    this.getData = function(format) {
+        return this.data[format];
+    };
+    
+    this.setDragImage = function(element, x, y) {
+        this.dragImage = element;
+        this.imagePosition = new Point(x || 0, y || 0);
+    };
+});
+
 })();
 
 // 

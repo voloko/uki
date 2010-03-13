@@ -64,7 +64,7 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     };
 });
 
-uki.Collection.addAttrs('columns');
+uki.Collection.addAttrs(['columns']);
 
 include('table/render.js');
 include('table/column.js');

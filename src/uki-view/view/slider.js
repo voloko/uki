@@ -70,13 +70,11 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
     };
     
     this._click = function(e) {
-        e = e.domEvent;
         var x = e.pageX - uki.dom.offset(this._dom).x;
         this.value(this._pos2val(x));
     };
     
     this._keydown = function(e) {
-        e = e.domEvent;
         if (e.which == 39) {
             this.value(this.value() + this._keyStep * (this._max - this._min));
         } else if (e.which == 37) {

@@ -12,8 +12,6 @@ include('uki-core/const.js');
 include('uki-core/uki.js');
 include('uki-core/utils.js');
 include('uki-core/geometry.js');
-include('uki-core/builder.js');
-include('uki-core/selector.js');
 
 include('uki-core/dom.js');
 include('uki-core/dom/event.js');
@@ -21,6 +19,9 @@ include('uki-core/dom/offset.js');
 include('uki-core/dom/nativeLayout.js');
 
 include('uki-core/attachment.js');
+include('uki-core/builder.js');
+include('uki-core/selector.js');
+
 include('uki-core/image.js');
 
 include('uki-core/background.js');

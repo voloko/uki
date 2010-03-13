@@ -1,4 +1,4 @@
-uki.view.declare('uki.view.VerticalFlow', uki.view.Container, function(Base) {
+uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
     this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
@@ -104,7 +104,7 @@ uki.view.declare('uki.view.VerticalFlow', uki.view.Container, function(Base) {
     };
 });
 
-uki.view.declare('uki.view.HorizontalFlow', uki.view.VerticalFlow, function(Base) {
+uki.view.declare('uki.view.HFlow', uki.view.VFlow, function(Base) {
     this._setup = function() {
         Base._setup.call(this);
         this._horizontal = true;

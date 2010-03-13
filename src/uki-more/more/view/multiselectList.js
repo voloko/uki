@@ -1,13 +1,9 @@
 include('../view.js');
 include('../utils.js');
 
-uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
-    var Base = uki.view.List.prototype,
-        proto = this;
+uki.view.declare('uki.more.view.MultiselectList', uki.view.List, function(Base) {
         
-    proto.typeName = 'uki.more.view.MultiselectList';
-        
-    proto._setup = function() {
+    this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
             _selectedIndexes: [],
@@ -15,9 +11,9 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         });
     };
     
-    proto.lastClickIndex = uki.newProp('_lastClickIndex');
+    this.lastClickIndex = uki.newProp('_lastClickIndex');
     
-    proto.clearSelection = function(skipClickIndex) {
+    this.clearSelection = function(skipClickIndex) {
         for (var i=0; i < this._selectedIndexes.length; i++) {
             this._setSelected(this._selectedIndexes[i], false);
         };
@@ -25,7 +21,7 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         if (!skipClickIndex) this._lastClickIndex = -1;
     };
     
-    proto.selectedIndexes = function(indexes) {
+    this.selectedIndexes = function(indexes) {
         if (indexes === undefined) return this._selectedIndexes;
         this.clearSelection(true);
         this._selectedIndexes = indexes;
@@ -36,7 +32,13 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         return this;
     };
     
-    proto.selectedIndex = function(position) {
+    this.selectedRows = function() {
+        return uki.map(this.selectedIndexes(), function(index) {
+            return this._data[index];
+        }, this)
+    };
+    
+    this.selectedIndex = function(position) {
         if (position === undefined) return this._selectedIndexes.length ? this._selectedIndexes[0] : -1;
         this.selectedIndexes([position]);
         this._scrollToPosition(position);
@@ -50,7 +52,7 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         if (p > initialP) array.splice(initialP, p - initialP);
     }
     
-    proto._toggleSelection = function(p) {
+    this._toggleSelection = function(p) {
         var indexes = [].concat(this._selectedIndexes);
         var addTo = uki.more.utils.binarySearch(indexes, p);
         if (indexes[addTo] == p) {
@@ -61,16 +63,17 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         this.selectedIndexes(indexes);
     };
     
-    proto._bindSelectionEvents = function() {
+    this._bindSelectionEvents = function() {
         this.bind('mousedown', this._mousedown);
-        
-        var ua = navigator.userAgent,
-            useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
-            
-        this.bind(useKeyPress ? 'keypress' : 'keydown', this._keypress);
+        this.bind('mouseup', this._mouseup);
+        this.bind(this.keyPressEvent(), this._keypress);
     };
     
-    proto._mousedown = function(e) {
+    this._mouseup = function(e) {
+        
+    };
+    
+    this._mousedown = function(e) {
         var o = uki.dom.offset(this._dom),
             y = e.domEvent.pageY - o.y,
             p = y / this._rowHeight << 0,
@@ -94,7 +97,7 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         this._lastClickIndex = p;
     };
     
-    proto._keypress = function(e) {
+    this._keypress = function(e) {
         var indexes = this._selectedIndexes,
             nextIndex = -1;
         if (e.which == 38 || e.keyCode == 38) { // UP
@@ -117,14 +120,14 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         }
     };
     
-    proto.isSelected = function(index) {
+    this.isSelected = function(index) {
         var found = uki.more.utils.binarySearch(this._selectedIndexes, index);
         return this._selectedIndexes[found] == index;
     };
     
     //   xxxxx    |    xxxxx  |  xxxxxxxx  |     xxx
     //     yyyyy  |  yyyyy    |    yyyy    |   yyyyyyy
-    proto._restorePackSelection = function(pack) {
+    this._restorePackSelection = function(pack) {
         var indexes = this._selectedIndexes;
         
         if (
@@ -142,12 +145,12 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         }
     };
     
-    proto._setSelected = function(position, state) {
+    this._setSelected = function(position, state) {
         var item = this._itemAt(position);
         if (item) this._render.setSelected(item, this._data[position], state, this.hasFocus());
     };
     
-    proto._focus = function() {
+    this._focus = function() {
         if (this._selectedIndexes.length == 0 && this._data.length > 0) {
             this.selectedIndexes([0]);
         } else {
@@ -155,12 +158,28 @@ uki.more.view.MultiselectList = uki.newClass(uki.view.List, new function() {
         }
     };
     
-    proto._blur = function() {
+    this._blur = function() {
         this.selectedIndexes(this.selectedIndexes());
     };
 });
 
+uki.view.declare('uki.more.view.ScrollableMultiselectList', uki.view.ScrollPane, function(Base) {
+
+    this._createDom = function() {
+        Base._createDom.call(this);
+        this._list = uki({ view: 'uki.more.view.MultiselectList', rect: this.rect().clone().normalize(), anchors: 'left top right bottom' })[0];
+        this.appendChild(this._list);
+    };
+    
+    uki.each('data,rowHeight,render,packSize,visibleRectExt,throttle,focusable,selectedIndexes,selectedIndex,selectedRows'.split(','), 
+        function(i, name) {
+            uki.delegateProp(this, name, '_list');
+        }, this);
+    
+});
+
+
 // export properties
-uki.Collection.addAttrs('lastClickIndex,selectedIndexes');
+uki.Collection.addAttrs(['lastClickIndex','selectedIndexes']);
 uki.delegateProp(uki.view.Table.prototype, 'selectedIndexes', '_list');
 uki.delegateProp(uki.view.Table.prototype, 'lastClickIndex', '_list');

@@ -95,12 +95,10 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
     };
     
     proto._keydown = function(e) {
-        e = e.domEvent;
         if ((e.which == 32 || e.which == 13) && !this._down) this._mousedown();
     };
     
     proto._keyup = function(e) {
-        e = e.domEvent;
         if ((e.which == 32 || e.which == 13) && this._down) {
             this._mouseup();
             this.trigger('click', {domEvent: e, source: this});
