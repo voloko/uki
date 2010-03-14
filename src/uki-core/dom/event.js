@@ -1,7 +1,5 @@
 uki.dom.special = {};
 
-include('dnd.js');
-
 uki.dom.Event = function( domEvent ) {
     domEvent = domEvent || {};
     this.domEvent = domEvent.domEvent || domEvent;
@@ -40,25 +38,25 @@ uki.dom.Event.prototype = new function() {
 
 uki.extend(uki.dom, /** @lends uki.dom */ {
     bound: {},
-    handles: {},
+    handlers: {},
     
-    props: "type altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which dragOffset".split(" "),
+    props: "type altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which dragOffset dataTransfer".split(" "),
     
     events: "blur focus load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error draggesturestart draggestureend draggesture dragstart dragend drag drop dragenter dragleave".split(" "),
 
-    bind: function(el, types, handler) {
+    bind: function(el, types, listener) {
 		if ( el.setInterval && el != window )
 			el = window;
 			
-        handler.huid = handler.huid || uki.dom.guid++;
+        listener.huid = listener.huid || uki.dom.guid++;
         
         var id = el[expando] = el[expando] || uki.dom.guid++,
-            handle = uki.dom.handles[id] = uki.dom.handles[id] || function() {
+            handler = uki.dom.handlers[id] = uki.dom.handlers[id] || function() {
                 uki.dom.handler.apply(arguments.callee.elem, arguments);
             },
             i, type;
             
-        handle.elem = el;
+        handler.elem = el;
         
         if (!uki.dom.bound[id]) uki.dom.bound[id] = {};
         
@@ -68,23 +66,31 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
             if (!uki.dom.bound[id][type]) {
                 uki.dom.bound[id][type] = [];
                 if ( !uki.dom.special[type] || uki.dom.special[type].setup.call(el) === false ) {
-                    el.addEventListener ? el.addEventListener(type, handle, false) : el.attachEvent('on' + type, handle);
+                    el.addEventListener ? el.addEventListener(type, handler, false) : el.attachEvent('on' + type, handler);
                 }
             }
-            uki.dom.bound[id][type].push(handler);
+            uki.dom.bound[id][type].push(listener);
         };
-        handler = handle = el = null;
+        listener = handler = el = null;
     },
     
-    unbind: function(el, types, handler) {
+    unbind: function(el, types, listener) {
         var id = el[expando],
-            huid = handler.huid,
+            huid = listener.huid,
             i, type;
         types = types.split(' ');
         for (i=0; i < types.length; i++) {
             type = types[i];
             if (!huid || !id || !uki.dom.bound[id] || !uki.dom.bound[id][type]) continue;
             uki.dom.bound[id][type] = uki.grep(uki.dom.bound[id][type], function(h) { return h.huid !== huid; });
+            
+            if (uki.dom.bound[id][type].length == 0) {
+                var handler = uki.dom.handlers[id];
+                if ( !uki.dom.special[type] || uki.dom.special[type].teardown.call(el) === false ) {
+                    el.removeEventListener ? el.removeEventListener(type, handler, false) : el.detachEvent('on' + type, handler);
+                }
+                uki.dom.bound[id][type] = null;
+            }
         }
     },
     
@@ -175,7 +181,7 @@ if (root.attachEvent) {
         uki.each(uki.dom.bound, function(id, types) {
             uki.each(types, function(type, handlers) {
                 try {
-                    uki.dom.handles[id].elem.detachEvent('on' + type, uki.dom.handles[id]);
+                    uki.dom.handlers[id].elem.detachEvent('on' + type, uki.dom.handlers[id]);
                 } catch (e) {};
             });
         });

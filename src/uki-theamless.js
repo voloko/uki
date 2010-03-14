@@ -15,6 +15,8 @@ include('uki-core/geometry.js');
 
 include('uki-core/dom.js');
 include('uki-core/dom/event.js');
+include('uki-core/dom/dnd.js');
+include('uki-core/dom/w3cdnd.js');
 include('uki-core/dom/offset.js');
 include('uki-core/dom/nativeLayout.js');
 

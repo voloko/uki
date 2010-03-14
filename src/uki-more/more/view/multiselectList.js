@@ -75,10 +75,11 @@ uki.view.declare('uki.more.view.MultiselectList', uki.view.List, function(Base) 
     
     this._mousedown = function(e) {
         var o = uki.dom.offset(this._dom),
-            y = e.domEvent.pageY - o.y,
+            y = e.pageY - o.y,
             p = y / this._rowHeight << 0,
             indexes = this._selectedIndexes;
-        if (e.domEvent.shiftKey && indexes.length > 0) {
+
+        if (e.shiftKey && indexes.length > 0) {
             if (this.isSelected(p)) {
                 indexes = [].concat(indexes);
                 removeRange(indexes, Math.min(p+1, this._lastClickIndex), Math.max(p-1, this._lastClickIndex));
@@ -89,7 +90,7 @@ uki.view.declare('uki.more.view.MultiselectList', uki.view.List, function(Base) 
                     Math.max(p, indexes[indexes.length - 1])
                 ));
             }
-        } else if (e.domEvent.metaKey) {
+        } else if (e.metaKey) {
             this._toggleSelection(p);
         } else {
             this.selectedIndexes([p]);

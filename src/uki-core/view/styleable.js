@@ -61,5 +61,11 @@ uki.view.Styleable = new function() {
         return this;
     };
     
+    this.draggable = function(state) {
+        if (state === undefined) return this._dom.getAttribute('draggable');
+        this._dom.setAttribute('draggable', true);
+        this._dom.style.WebkitUserDrag = 'element';
+    };
+    
     /**#@-*/ 
 };

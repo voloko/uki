@@ -189,7 +189,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
     };
     
-    this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden" draggable>${text}</div>')
+    this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden">${text}</div>')
     
     this._renderPack = function(pack, itemFrom, itemTo) {
         var html = [], position,
