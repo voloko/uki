@@ -203,7 +203,7 @@ include('event.js');
     var retriggering = false;
     
     function dragenter (e) {
-        if (e.domEvent.__dragOver) return;
+        if (!dnd.dataTransfer || e.domEvent.__dragOver) return;
         e.domEvent.__dragOver = true;
         if (dnd.dragOver == this) return;
         dnd.dragOver = this;
