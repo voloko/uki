@@ -16,9 +16,10 @@ var dnd = uki.dom.dnd = {
 try {
     if (
         // typeof doc.createElement('div').ondragstart == 'object' || // ie support
-        doc.createEvent('DragEvent').dataTransfer.setDragImage // w3c support
+        typeof doc.createEvent('MouseEvent').dataTransfer == 'object' || // safari
+        doc.createEvent('DragEvent').initDragEvent // w3c support
     ) {
-        // dnd.nativeDnD = true;
+        dnd.nativeDnD = true;
     }
 } catch (e) {}
 

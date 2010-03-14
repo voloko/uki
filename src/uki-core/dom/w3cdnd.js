@@ -9,9 +9,6 @@ include('event.js');
     uki.extend(dnd, {
         dragDelta: 5,
         initNativeDnD: function() {
-            if (ua.indexOf('WebKit/') != -1) {
-                uki.dom.createStylesheet('[draggable] { -webkit-user-drag: element;}');
-            }
             // moz needs the drag image to be appended to document
             // so create an offscreen container to hold drag images.
             // note that it can't have overflow:hidden, since drag image will be cutted to container
@@ -29,9 +26,11 @@ include('event.js');
     
     
     function wrapDataTransfer (dataTransfer) {
-        var x = function() {};
-        x.prototype = dataTransfer;
-        x.setDragImage = function(image, x, y) {
+        var klass = function() {},
+            instance;
+        klass.prototype = dataTransfer;
+        instance = new klass();
+        instance.setDragImage = function(image, x, y) {
             dnd.initNativeDnD();
             image = viewToDom(image);
             var clone = image.cloneNode(true),
@@ -42,9 +41,9 @@ include('event.js');
             dataTransfer.setDragImage.call(dataTransfer, clone, x, y);
             setTimeout(function() {
                 dnd.dragImageContainer.removeChild(clone);
-            });
+            }, 1);
         };
-        return x;
+        return instance;
     }
     
     function viewToDom (element) {
@@ -135,10 +134,10 @@ include('event.js');
         uki.extend(uki.dom.special, {
             dragstart: {
                 setup: function() {
-                    el.addEventListener('dragstart', nativeDragWrapper, false)
+                    this.addEventListener('dragstart', nativeDragWrapper, false);
                 },
                 teardown: function() {
-                    el.removeEventListener('dragstart', nativeDragWrapper, false)
+                    this.removeEventListener('dragstart', nativeDragWrapper, false);
                 }
             }
         })
@@ -186,8 +185,10 @@ include('event.js');
     
     function nativeDragWrapper (e) {
         e = new uki.dom.Event(e);
-        e.dataTransfer = wrapDataTransfer(e.dataTransfer);
+        var dataTransfer = e.dataTransfer;
+        e.dataTransfer = wrapDataTransfer(dataTransfer);
         uki.dom.handler.apply(this, arguments);
+        dataTransfer.effectAllowed = e.dataTransfer.effectAllowed;
     }
 
     function startW3Cdrag (element) {
