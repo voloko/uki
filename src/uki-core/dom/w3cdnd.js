@@ -25,12 +25,40 @@ include('event.js');
     });
     
     
-    function wrapDataTransfer (dataTransfer) {
-        var klass = function() {},
-            instance;
-        klass.prototype = dataTransfer;
-        instance = new klass();
-        instance.setDragImage = function(image, x, y) {
+    function viewToDom (element) {
+        if (uki.isFunction(element.dom)) {
+            if (element.parent().length) return element.dom();
+            var container = uki.createElement('div', 'width:1px;height:1px;position:absolute;left:-999em;top:0');
+            doc.body.appendChild(container);
+            element.attachTo(container);
+            return container;
+        }
+        return element;
+    }
+    
+    var dataTransferProps = ['dropEffect', 'effectAllowed', 'types', 'files'];
+    
+    uki.dom.DataTransferWrapper = uki.newClass(new function() {
+        this.init = function(dataTransfer) {
+            this.dataTransfer = dataTransfer;
+            for (var i = dataTransferProps.length - 1; i >= 0; i--){
+                this[ dataTransferProps[i] ] = dataTransfer[ dataTransferProps[i] ];
+            };
+        };
+        
+        this.setData = function(format, data) {
+            return this.dataTransfer.setData(format, data);
+        };
+        
+        this.clearData = function(format) {
+            return this.dataTransfer.clearData(format);
+        };
+        
+        this.getData = function(format) {
+            return this.dataTransfer.getData(format);
+        };
+        
+        this.setDragImage = function(image, x, y) {
             dnd.initNativeDnD();
             image = viewToDom(image);
             var clone = image.cloneNode(true),
@@ -38,17 +66,12 @@ include('event.js');
             style.left = style.right = style.top = style.bottom = '';
             style.position = 'static';
             dnd.dragImageContainer.appendChild(clone);
-            dataTransfer.setDragImage.call(dataTransfer, clone, x, y);
             setTimeout(function() {
                 dnd.dragImageContainer.removeChild(clone);
             }, 1);
+            return this.dataTransfer.setDragImage(clone, x, y);
         };
-        return instance;
-    }
-    
-    function viewToDom (element) {
-        return element.dom ? element.dom() : element;
-    }
+    })
         
     // w3c spec based dataTransfer implementation
     uki.dom.DataTransfer = uki.newClass(new function() {
@@ -186,7 +209,7 @@ include('event.js');
     function nativeDragWrapper (e) {
         e = new uki.dom.Event(e);
         var dataTransfer = e.dataTransfer;
-        e.dataTransfer = wrapDataTransfer(dataTransfer);
+        e.dataTransfer = new uki.dom.DataTransferWrapper(dataTransfer);
         uki.dom.handler.apply(this, arguments);
         dataTransfer.effectAllowed = e.dataTransfer.effectAllowed;
     }
@@ -197,7 +220,7 @@ include('event.js');
 
     function stopW3Cdrag (element) {
         dnd.dataTransfer.cleanup();
-        dnd.dataTransfer = dnd.target = null;
+        dnd.dragOver = dnd.dataTransfer = dnd.target = null;
         uki.dom.unbind( element, 'draggestureend', dragend );
     }
     

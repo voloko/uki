@@ -70,7 +70,12 @@ uki.view.declare('uki.more.view.MultiselectList', uki.view.List, function(Base) 
     };
     
     this._mouseup = function(e) {
-        
+        var o = uki.dom.offset(this._dom),
+            y = e.pageY - o.y,
+            p = y / this._rowHeight << 0;
+            
+        if (this._selectionInProcess && this._lastClickIndex == p && this.isSelected(p)) this.selectedIndexes([p]);
+        this._selectionInProcess = false;
     };
     
     this._mousedown = function(e) {
@@ -79,6 +84,7 @@ uki.view.declare('uki.more.view.MultiselectList', uki.view.List, function(Base) 
             p = y / this._rowHeight << 0,
             indexes = this._selectedIndexes;
 
+        this._selectionInProcess = false;
         if (e.shiftKey && indexes.length > 0) {
             if (this.isSelected(p)) {
                 indexes = [].concat(indexes);
@@ -93,7 +99,11 @@ uki.view.declare('uki.more.view.MultiselectList', uki.view.List, function(Base) 
         } else if (e.metaKey) {
             this._toggleSelection(p);
         } else {
-            this.selectedIndexes([p]);
+            if (!this.isSelected(p)) {
+                this.selectedIndexes([p]);
+            } else {
+                this._selectionInProcess = true;
+            }
         }
         this._lastClickIndex = p;
     };
@@ -172,7 +182,7 @@ uki.view.declare('uki.more.view.ScrollableMultiselectList', uki.view.ScrollPane,
         this.appendChild(this._list);
     };
     
-    uki.each('data,rowHeight,render,packSize,visibleRectExt,throttle,focusable,selectedIndexes,selectedIndex,selectedRows'.split(','), 
+    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex selectedRows contentDraggable draggable'.split(' '), 
         function(i, name) {
             uki.delegateProp(this, name, '_list');
         }, this);

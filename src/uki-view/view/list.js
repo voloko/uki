@@ -21,7 +21,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return uki.theme.background('list', this._rowHeight);
     };
     
-    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle']);
+    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle', 'contentDraggable']);
     
     this.rowHeight = uki.newProp('_rowHeight', function(val) {
         this._rowHeight = val;
@@ -189,7 +189,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
     };
     
-    this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden">${text}</div>')
+    this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden;">${text}</div>')
     
     this._renderPack = function(pack, itemFrom, itemTo) {
         var html = [], position,
@@ -197,7 +197,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         for (i=itemFrom; i < itemTo; i++) {
             html[html.length] = this._rowTemplate.render({ 
                 height: this._rowHeight, 
-                text: this._render.render(this._data[i], rect, i) 
+                text: this._render.render(this._data[i], rect, i)
             });
             rect.y += this._rowHeight;
         };
@@ -299,6 +299,8 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     this._bindToDom = function(name) {
         return Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
+    
+    
 });
 
 uki.Collection.addAttrs(['data','selectedIndex']);
@@ -311,7 +313,7 @@ uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) 
         this.appendChild(this._list);
     };
     
-    uki.each('data,rowHeight,render,packSize,visibleRectExt,throttle,focusable,selectedIndexes,selectedIndex'.split(','), 
+    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex contentDraggable draggable'.split(' '), 
         function(i, name) {
             uki.delegateProp(this, name, '_list');
         }, this);
