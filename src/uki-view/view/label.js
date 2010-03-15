@@ -12,7 +12,7 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
     };
     
     this._style = function(name, value) {
-        if (value && 'fontWeight fontSize textDecoration color'.indexOf(name) != -1) {
+        if (value !== undefined && 'fontWeight fontSize textDecoration color'.indexOf(name) != -1) {
             this._label.style[name] = value;
         }
         return Base._style.call(this, name, value);

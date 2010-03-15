@@ -182,7 +182,7 @@ uki.view.declare('uki.more.view.ScrollableMultiselectList', uki.view.ScrollPane,
         this.appendChild(this._list);
     };
     
-    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex selectedRows contentDraggable draggable'.split(' '), 
+    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex selectedRows contentDraggable draggable hasFocus'.split(' '), 
         function(i, name) {
             uki.delegateProp(this, name, '_list');
         }, this);

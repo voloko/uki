@@ -313,6 +313,22 @@ uki.utils = {
     },
     
     /**
+     * Search closest value in a sorted array
+     * @param {nubmer} value to search
+     * @param {array} array sorted array
+     * @returns {number} index of closest value
+     */
+    binarySearch: function (value, array) {
+        var low = 0, high = array.length, mid;
+        while (low < high) {
+            mid = (low + high) >> 1;
+            array[mid] < value ? low = mid + 1 : high = mid;
+        }
+        return low;
+    },
+    
+    
+    /**
      * Creates default uki property function
      * <p>If value is given to this function it sets property to value
      * If no arguments given than function returns current property value</p>

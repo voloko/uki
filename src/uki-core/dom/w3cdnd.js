@@ -3,7 +3,7 @@ include('event.js');
 (function() {
     
     var dnd = uki.dom.dnd,
-        emptySpecial = { setup: function() {}, teardown: function() {} };
+        retriggering = false;
         
     // common properties
     uki.extend(dnd, {
@@ -81,7 +81,7 @@ include('event.js');
                 effectAllowed: 'none',
                 types: [],
                 files: [],
-                dragImage: '',
+                dragImage: new Image(),
                 imagePosition: new Point(),
                 data: {}
             });
@@ -178,7 +178,7 @@ include('event.js');
         }, function( source, target ){
             
             var handler = function(e) {
-         	    if (dnd.dataTransfer) {
+         	    if (dnd.dataTransfer && retriggering) {
          	        e.type = source;
          	        e.dataTransfer = dnd.dataTransfer;
          	        uki.dom.handler.apply(this, arguments);
@@ -223,8 +223,6 @@ include('event.js');
         dnd.dragOver = dnd.dataTransfer = dnd.target = null;
         uki.dom.unbind( element, 'draggestureend', dragend );
     }
-    
-    var retriggering = false;
     
     function dragenter (e) {
         if (!dnd.dataTransfer || e.domEvent.__dragOver) return;

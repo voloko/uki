@@ -13,7 +13,8 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             _rowHeight: 30,
             _render: new uki.view.list.Render(),
             _data: [],
-            _selectedIndex: -1
+            _lastClickIndex: -1,
+            _selectedIndexes: []
         });
     };
     
@@ -21,7 +22,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return uki.theme.background('list', this._rowHeight);
     };
     
-    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle', 'contentDraggable']);
+    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle', 'contentDraggable', 'lastClickIndex', 'multiselect']);
     
     this.rowHeight = uki.newProp('_rowHeight', function(val) {
         this._rowHeight = val;
@@ -53,17 +54,40 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     };
     
     this.selectedIndex = function(position) {
-        if (position === undefined) return this._selectedIndex;
-        var nextIndex = MAX(0, MIN((this._data || []).length - 1, position));
-        if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
-        if (nextIndex == position) this._setSelected(this._selectedIndex = nextIndex, true);
+        if (position === undefined) return this._selectedIndexes.length ? this._selectedIndexes[0] : -1;
+        this.selectedIndexes([position]);
         this._scrollToPosition(position);
         return this;
     };
     
-    this.clearSelection = function() {
-        if (this._selectedIndex > -1) this._setSelected(this._selectedIndex, false);
-        this._selectedIndex = -1;
+    this.selectedIndexes = function(indexes) {
+        if (indexes === undefined) return this._selectedIndexes;
+        this.clearSelection(true);
+        this._selectedIndexes = indexes;
+        for (var i=0; i < this._selectedIndexes.length; i++) {
+            this._setSelected(this._selectedIndexes[i], true);
+        };
+        this.trigger('selection', {source: this});
+        return this;
+    };
+    
+    this.selectedRows = function() {
+        return uki.map(this.selectedIndexes(), function(index) {
+            return this._data[index];
+        }, this)
+    };
+    
+    this.clearSelection = function(skipClickIndex) {
+        for (var i=0; i < this._selectedIndexes.length; i++) {
+            this._setSelected(this._selectedIndexes[i], false);
+        };
+        this._selectedIndexes = [];
+        if (!skipClickIndex) this._lastClickIndex = -1;
+    };
+    
+    this.isSelected = function(index) {
+        var found = uki.binarySearch(index, this._selectedIndexes);
+        return this._selectedIndexes[found] == index;
     };
     
     this.layout = function() {
@@ -72,6 +96,32 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         // send visibleRect with layout
         this.trigger('layout', { rect: this._rect, source: this, visibleRect: this._visibleRect });
         this._firstLayout = false;
+    };
+    
+    function range (from, to) {
+        var result = new Array(to - from);
+        for (var idx = 0; from <= to; from++, idx++) {
+            result[idx] = from;
+        };
+        return result;
+    }
+    
+    function removeRange (array, from, to) {
+        var p = uki.binarySearch(from, array),
+            initialP = p;
+        while (array[p] <= to) p++;
+        if (p > initialP) array.splice(initialP, p - initialP);
+    }
+    
+    this._toggleSelection = function(p) {
+        var indexes = [].concat(this._selectedIndexes);
+        var addTo = uki.binarySearch(p, indexes);
+        if (indexes[addTo] == p) {
+            indexes.splice(addTo, 1);
+        } else {
+            indexes.splice(addTo, 0, p);
+        }
+        this.selectedIndexes(indexes);
     };
     
     this._scrollableParentScroll = function() {
@@ -109,22 +159,74 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
     this._bindSelectionEvents = function() {
         this.bind('mousedown', this._mousedown);
+        this.bind('mouseup', this._mouseup);
         this.bind(this.keyPressEvent(), this._keypress);
+    };
+    
+    this._mouseup = function(e) {
+        if (!this._multiselect) return;
+        
+        var o = uki.dom.offset(this._dom),
+            y = e.pageY - o.y,
+            p = y / this._rowHeight << 0;
+            
+        if (this._selectionInProcess && this._lastClickIndex == p && this.isSelected(p)) this.selectedIndexes([p]);
+        this._selectionInProcess = false;
     };
     
     this._mousedown = function(e) {
         var o = uki.dom.offset(this._dom),
             y = e.pageY - o.y,
-            p = FLOOR(y / this._rowHeight);
-        this.selectedIndex(p);
-    };
+            p = y / this._rowHeight << 0,
+            indexes = this._selectedIndexes;
+
+        if (this._multiselect) {
+            this._selectionInProcess = false;
+            if (e.shiftKey && indexes.length > 0) {
+                if (this.isSelected(p)) {
+                    indexes = [].concat(indexes);
+                    removeRange(indexes, Math.min(p+1, this._lastClickIndex), Math.max(p-1, this._lastClickIndex));
+                    this.selectedIndexes(indexes);
+                } else {
+                    this.selectedIndexes(range(
+                        Math.min(p, indexes[0]),
+                        Math.max(p, indexes[indexes.length - 1])
+                    ));
+                }
+            } else if (e.metaKey) {
+                this._toggleSelection(p);
+            } else {
+                if (!this.isSelected(p)) {
+                    this.selectedIndexes([p]);
+                } else {
+                    this._selectionInProcess = true;
+                }
+            }
+        } else {
+            this.selectedIndexes([p]);
+        }
+        this._lastClickIndex = p;
+    };    
     
     this._keypress = function(e) {
+        var indexes = this._selectedIndexes,
+            nextIndex = -1;
         if (e.which == 38 || e.keyCode == 38) { // UP
-            this.selectedIndex(MAX(0, this.selectedIndex() - 1));
-            e.preventDefault();
+            nextIndex = Math.max(0, this._lastClickIndex - 1);
         } else if (e.which == 40 || e.keyCode == 40) { // DOWN
-            this.selectedIndex(MIN(this._data.length-1, this.selectedIndex() + 1));
+            nextIndex = Math.min(this._data.length-1, this._lastClickIndex + 1);
+        }
+        if (nextIndex > -1 && nextIndex != this._lastClickIndex) {
+            if (e.shiftKey) {
+                if (this.isSelected(nextIndex)) {
+                    this._toggleSelection(this._lastClickIndex);
+                } else {
+                    this._toggleSelection(nextIndex);
+                }
+            } else {
+                this.selectedIndex(nextIndex);
+            }
+            this._lastClickIndex = nextIndex;
             e.preventDefault();
         }
     };
@@ -154,8 +256,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
     this._setSelected = function(position, state) {
         var item = this._itemAt(position);
-        if (!item) return;
-        this._render.setSelected(item, this._data[position], state, this.hasFocus());
+        if (item) this._render.setSelected(item, this._data[position], state, this.hasFocus());
     };
     
     this._scrollToPosition = function(position) {
@@ -180,15 +281,6 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return null;
     };
     
-    this._focus = function() {
-        this._selectedIndex = this._selectedIndex > -1 ? this._selectedIndex : 0;
-        this._setSelected(this._selectedIndex, true);
-    };
-    
-    this._blur = function() {
-        if (this._selectedIndex > -1) { this._setSelected(this._selectedIndex, true); }
-    };
-    
     this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden;">${text}</div>')
     
     this._renderPack = function(pack, itemFrom, itemTo) {
@@ -208,9 +300,23 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         this._restorePackSelection(pack, itemFrom, itemTo);
     };
     
+    //   xxxxx    |    xxxxx  |  xxxxxxxx  |     xxx
+    //     yyyyy  |  yyyyy    |    yyyy    |   yyyyyyy
     this._restorePackSelection = function(pack) {
-        if (this._selectedIndex >= pack.itemFrom && this._selectedIndex < pack.itemTo) {
-            this._render.setSelected(this._itemAt(this._selectedIndex), this._data[this._selectedIndex - pack.itemFrom], true, this.hasFocus());
+        var indexes = this._selectedIndexes;
+        
+        if (
+            (indexes[0] <= pack.itemFrom && indexes[indexes.length - 1] >= pack.itemFrom) || // left index
+            (indexes[0] <= pack.itemTo   && indexes[indexes.length - 1] >= pack.itemTo) || // right index
+            (indexes[0] >= pack.itemFrom && indexes[indexes.length - 1] <= pack.itemTo) // within
+        ) {
+            var currentSelection = uki.binarySearch(pack.itemFrom, indexes);
+            currentSelection = Math.max(currentSelection, 0);
+            while(indexes[currentSelection] !== null && indexes[currentSelection] < pack.itemTo) {
+                var position = indexes[currentSelection] - pack.itemFrom;
+                this._render.setSelected(pack.dom.childNodes[position], this._data[position], true, this.hasFocus());
+                currentSelection++;
+            }
         }
     };
     
@@ -300,6 +406,17 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
     
+    this._focus = function() {
+        if (this._selectedIndexes.length == 0 && this._data.length > 0) {
+            this.selectedIndexes([0]);
+        } else {
+            this.selectedIndexes(this.selectedIndexes());
+        }
+    };
+    
+    this._blur = function() {
+        this.selectedIndexes(this.selectedIndexes());
+    };
     
 });
 
@@ -313,7 +430,7 @@ uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) 
         this.appendChild(this._list);
     };
     
-    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex contentDraggable draggable'.split(' '), 
+    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex selectedIndexes selectedRows multiselect contentDraggable draggable'.split(' '), 
         function(i, name) {
             uki.delegateProp(this, name, '_list');
         }, this);

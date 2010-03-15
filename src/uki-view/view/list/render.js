@@ -13,7 +13,7 @@ uki.view.list.Render = uki.newClass({
      * @return String html
      */
     render: function(data, rect, i) {
-        return '<div style="line-height: ' + rect.height + 'px; font-size: 12px; padding: 0 4px">' + data + '</div>';
+        return '<div style="line-height: ' + rect.height + 'px; font-size: 12px; padding: 0 4px;">' + data + '</div>';
     },
     
     setSelected: function(container, data, state, focus) {
