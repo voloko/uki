@@ -39,7 +39,6 @@ end
 desc "Build scripts"
 task :build_scripts do
   base = File.dirname(__FILE__)
-  config = YAML.load(File.read File.join(base, 'config.yaml'))
   version = read_version
   compiler_path = File.join(base, 'compiler.jar')
   FileUtils.rm_rf('pkg')
@@ -63,7 +62,7 @@ task :push_version do
   include AWS::S3
   
   base = File.dirname(__FILE__)
-  config = YAML.load(File.read File.join(base, 'config.yaml'))
+  config = YAML.load(File.read File.join(base, '..', 'config.yaml'))
   version = read_version
   Base.establish_connection!(
     :access_key_id => config['access_key_id'], 
