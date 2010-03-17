@@ -80,6 +80,14 @@
                 return checkboxBg(72);
             },
             
+            'checkbox-focus': function() {
+                var src = uki.theme.imageSrc('checkbox-focus');
+                return new uki.background.CssBox('', 
+                    { innerHTML: '<div style="position:absolute;left:50%;top:50%;width:24px;height:24px;overflow:hidden;' +
+                    'margin:-12px 0 0 -12px; background: url(' + src + ') 0 0"></div>', zIndex: -2  }
+                );
+            },
+            
 
             // radio button
             'radio-normal': function() {
@@ -105,6 +113,15 @@
             'radio-checked-disabled': function() {
                 return radioBg(72);
             },    
+            
+            'radio-focus': function() {
+                var src = uki.theme.imageSrc('radio-focus');
+                return new uki.background.CssBox('', 
+                    { innerHTML: '<div style="position:absolute;left:50%;top:50%;width:24px;height:24px;overflow:hidden;' +
+                    'margin:-12px 0 0 -12px; background: url(' + src + ') 0 0"></div>', zIndex: -2  }
+                );
+            },
+            
             
                     
             // toolbar button

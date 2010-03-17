@@ -110,13 +110,15 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
         this._value = this._pos2val(this._position);
     };
     
-    this._focus = function() {
+    this._focus = function(e) {
         this._dom.appendChild(this._focusBg);
         this._focusBg.style.left = this._handle.style.left;
+        Focusable._focus.call(this, e);
     };
     
-    this._blur = function() {
+    this._blur = function(e) {
         this._dom.removeChild(this._focusBg);
+        Focusable._blur.call(this, e);
     };
     
     this._layoutDom = function(rect) {

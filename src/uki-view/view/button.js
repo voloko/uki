@@ -53,10 +53,7 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this._dom.appendChild(this._label);
         this.style('fontWeight', 'bold');
         
-        // if (this._dom.attachEvent) {
-            // click handler for ie
-            this._dom.appendChild(uki.createElement('div', 'left:0;top:0;width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
-        // }
+        this._dom.appendChild(uki.createElement('div', 'left:0;top:0;width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
         
         this.textSelectable(this.textSelectable());
         this._initFocusable();
@@ -90,8 +87,9 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this._updateBg();
     };
     
-    this._focus = function() {
+    this._focus = function(e) {
         this['focus-background']().attachTo(this);
+        Focusable._focus.call(this, e);
     };
     
     this._keydown = function(e) {
@@ -108,8 +106,9 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         }
     };
     
-    this._blur = function() {
+    this._blur = function(e) {
        this['focus-background']().detach();
+       Focusable._blur.call(this, e);
     };
     
     this._backgroundByName = function(name) {

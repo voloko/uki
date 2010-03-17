@@ -32,6 +32,9 @@ var bindDraggestures = {
         } else {
             this.__draggesturebound = 1;
     		uki.dom.bind( this, 'mousedown', draggesturestart );
+    		 // prevent interference with ie drag events
+            if (!dnd.nativeDnD && typeof this.ondragstart == 'object') 
+                this.ondragstart = function() { event.returnValue = false; };
         }
     },
     teardown: function() {

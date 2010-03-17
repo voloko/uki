@@ -119,4 +119,5 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
         }
         this._lastLabelLayout = uki.dom.layout(this._label.style, l, this._lastLabelLayout);
     };
+    
 });

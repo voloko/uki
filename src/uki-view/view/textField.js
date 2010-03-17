@@ -119,15 +119,17 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         if (this._placeholderDom) this._placeholderDom.style.display = this.value() ? 'none' : 'block';
     };
 
-    this._focus = function() {
+    this._focus = function(e) {
         this._focusBackground = this._focusBackground || uki.theme.background(this._backgroundPrefix + 'input-focus');
         this._focusBackground.attachTo(this);
         if (this._placeholderDom) this._placeholderDom.style.display = 'none';
+        Focusable._focus.call(this, e);
     };
     
-    this._blur = function() {
+    this._blur = function(e) {
         this._focusBackground.detach();
         this._updatePlaceholderVis();
+        Focusable._blur.call(this, e);
     };
 
     this._bindToDom = function(name) {
