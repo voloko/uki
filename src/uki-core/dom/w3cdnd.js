@@ -119,6 +119,7 @@ include('event.js');
 
         this.cleanup = function() {
             this._dragImage && this._dragImage.parentNode.removeChild(this._dragImage);
+            this._dragImage = undefined;
         };
 
         this._initDragImage = function(image) {
@@ -126,8 +127,6 @@ include('event.js');
             var clone = image.cloneNode(true),
                 style = clone.style;
 
-            // style.width = image.clientWidth + 'px';
-            // style.height = image.clientHeight + 'px';
             style.left = style.right = style.top = style.bottom = '';
             style.position = 'absolute';
             style.left = '-999em';

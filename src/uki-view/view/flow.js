@@ -12,7 +12,7 @@ uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
         var offset = 0, rect, view;
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             view = childViews[i];
-            view.rect(new Rect(0, offset, view._rect.width, view._rect.height));
+            view.rect(new Rect(view._rect.x, offset, view._rect.width, view._rect.height));
             if (this._hidePartlyVisible) {
                 view.visible(view._rect.height + offset <= this._rect.height);
             }
@@ -36,7 +36,7 @@ uki.view.declare('uki.view.HFlow', uki.view.Container, function(Base) {
         var offset = 0, rect, view;
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             view = childViews[i];
-            view.rect(new Rect(offset, 0, view._rect.width, view._rect.height));
+            view.rect(new Rect(offset, view._rect.y, view._rect.width, view._rect.height));
             if (this._hidePartlyVisible) {
                 view.visible(view._rect.width + offset <= this._rect.width);
             }
