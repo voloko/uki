@@ -13,6 +13,12 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
     
     uki.addProps(this, ['min', 'max', 'values', 'keyStep']);
     
+    this.values = uki.newProp('_values', function(val) {
+        this._values = val;
+        this._min = val[0];
+        this._max = val[val.length - 1];
+    });
+    
     /**
      * @fires event:change
      */
@@ -23,11 +29,20 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
         this.trigger('change', {source: this, value: this._value});
     });
     
-    this._pos2val = function(pos) {
+    this._pos2val = function(pos, cacheIndex) {
+        if (this._values) {
+            var index = Math.round(1.0 * pos / this._rect.width * (this._values.length - 1));
+            if (cacheIndex) this._cachedIndex = index;
+            return this._values[index];
+        }
         return pos / this._rect.width * (this._max - this._min);
     };
     
     this._val2pos = function(val) {
+        if (this._values) {
+            var index = this._cachedIndex !== undefined ? this._cachedIndex : uki.binarySearch(val, this._values);
+            return index / (this._values.length - 1) * this._rect.width;
+        }
         return val / (this._max - this._min) * this._rect.width;
     };
     
@@ -71,7 +86,8 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
     
     this._click = function(e) {
         var x = e.pageX - uki.dom.offset(this._dom).x;
-        this.value(this._pos2val(x));
+        this.value(this._pos2val(x, true));
+        this._cachedIndex = undefined;
     };
     
     this._keydown = function(e) {
@@ -97,17 +113,17 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
      * @fires event:change
      */
     this._draggesture = function(e) {
-        this._position = MAX(0, MIN(this._rect.width, this._initialPosition.x + e.dragOffset.x));
-        this._value = this._pos2val(this._position);
-        this._moveHandle();
-        this.trigger('change', {source: this, value: this._value});
+        var position = MAX(0, MIN(this._rect.width, this._initialPosition.x + e.dragOffset.x));
+        this.value(this._pos2val(position, true));
+        this._cachedIndex = undefined;
     };
     
     this._draggestureend = function(e) {
         this._dragging = false;
         this._initialPosition = null;
         if (!this._over) this._bg.style.top = 0;
-        this._value = this._pos2val(this._position);
+        this.value(this._pos2val(this._position, true));
+        this._cachedIndex = undefined;
     };
     
     this._focus = function(e) {

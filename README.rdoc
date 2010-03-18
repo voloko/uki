@@ -144,9 +144,9 @@ results in http://ukijs.org/functional/splitPaneEx.html
 == Builder
     uki({
         view: 'Button',
-        rect: '400px 40px 200px 24px',
+        rect: '400 40 200 24',
         text: 'uki is awesome!'
-    }).attachTo( document.getElementById('test'), '1000px 100px' );
+    }).attachTo( document.getElementById('test'), '1000 100' );
 
     uki('Button[text^=uki]').click(function() {
         alert('Hello world!');

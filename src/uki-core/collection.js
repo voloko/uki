@@ -269,7 +269,7 @@ uki.fn = uki.Collection.prototype = new function() {
         		this.bind(name, handler);
     	    } else {
                 for (var i=0; i < this.length; i++) {
-                    this[i][name]();
+                    this[i].trigger(name);
                 };
     	    }
     		return this;
