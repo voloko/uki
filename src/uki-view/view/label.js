@@ -18,6 +18,13 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
         return Base._style.call(this, name, value);
     };
     
+    this.textSelectable = function(state) {
+        if (state !== undefined && !this._textSelectProp) {
+            this._label.unselectable = state ? '' : 'on';
+        }
+        return Base.textSelectable.call(this, state);
+    };  
+    
     /**
      * Warning! this operation is expensive
      */

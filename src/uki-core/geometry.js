@@ -101,8 +101,8 @@ Point.fromString = function(string) {
  * @constructor
  */
 var Size = uki.geometry.Size = function(width, height) {
-    this.width  = width ||  0.0;
-    this.height = height || 0.0;
+    this.width  = width*1.0 || 0.0;
+    this.height = height*1.0 || 0.0;
 };
 
 Size.prototype = /** @lends uki.geometry.Size.prototype */ {
@@ -205,20 +205,20 @@ Size.create = function(a1, a2) {
  */
 var Rect = uki.geometry.Rect = function(a1, a2, a3, a4) {
     if (a3 !== undefined) {
-        this.x      = a1;
-        this.y      = a2;
-        this.width  = a3;
-        this.height = a4;
+        this.x      = a1*1.0 || 0.0;
+        this.y      = a2*1.0 || 0.0;
+        this.width  = a3*1.0 || 0.0;
+        this.height = a4*1.0 || 0.0;
     } else if (a1 === undefined || a1.x === undefined) {
         this.x      = 0;
         this.y      = 0;
-        this.width  = a1 || 0;
-        this.height = a2 || 0;
+        this.width  = a1*1.0 || 0.0;
+        this.height = a2*1.0 || 0.0;
     } else {
-        this.x      = a1 ? a1.x      : 0;
-        this.y      = a1 ? a1.y      : 0;
-        this.width  = a2 ? a2.width  : 0;
-        this.height = a2 ? a2.height : 0;
+        this.x      = a1 ? a1.x*1.0      : 0;
+        this.y      = a1 ? a1.y*1.0      : 0;
+        this.width  = a2 ? a2.width*1.0  : 0;
+        this.height = a2 ? a2.height*1.0 : 0;
     }
 };
 
@@ -543,10 +543,10 @@ Rect.create = function(a1, a2, a3, a4) {
  * @constructor
  */
 var Inset = uki.geometry.Inset = function(top, right, bottom, left) {
-    this.top    = top   || 0;
-    this.right  = right || 0;
-    this.bottom = bottom === undefined ? this.top : bottom;
-    this.left   = left === undefined ? this.right : left;
+    this.top    = top*1.0   || 0;
+    this.right  = right*1.0 || 0;
+    this.bottom = bottom === undefined ? this.top*1.0 : bottom*1.0;
+    this.left   = left === undefined ? this.right*1.0 : left*1.0;
 };
 
 Inset.prototype = /** @lends uki.geometry.Inset.prototype */ {
