@@ -57,14 +57,14 @@ function startGesture (el) {
     dnd.draggable = el;
     uki.dom.bind(doc, 'mousemove scroll', draggesture);
     uki.dom.bind(doc, dragEndEvents, draggestureend);
-    uki.dom.bind(doc.body, 'selectstart mousedown', preventSelectionHandler);
+    uki.dom.bind(doc, 'selectstart mousedown', uki.dom.preventDefaultHandler);
 }
 
 function stopGesture () {
     dnd.draggable = null;
     uki.dom.unbind(doc, 'mousemove scroll', draggesture);
     uki.dom.unbind(doc, dragEndEvents, draggestureend);
-    uki.dom.unbind(doc.body, 'selectstart mousedown', preventSelectionHandler);
+    uki.dom.unbind(doc, 'selectstart mousedown', uki.dom.preventDefaultHandler);
 }
 
 function draggesturestart (e) {
@@ -90,7 +90,4 @@ function draggestureend (e) {
     stopGesture(dnd.draggable);
 }
 
-function preventSelectionHandler(e) { 
-    e.preventDefault();
-}
 })();

@@ -355,7 +355,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             minRenderedY = this._packs[0].itemFrom * this._rowHeight,
             maxRenderedY = this._packs[1].itemTo * this._rowHeight,
             
-            itemFrom, itemTo, startAt;
+            itemFrom, itemTo, startAt, updated = true;
 
         Base._layoutDom.call(this, rect);
         
@@ -396,17 +396,18 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             
             this._renderPack(this._packs[1], itemFrom, itemTo);
             this._swapPacks();
+        } else {
+            updated = false;
         }
-        
-        if (this._focusableInput) this._focusableInput.style.top = this._visibleRect.y + 'px'; // move to reduce on focus jump
-            
+        if (updated && /MSIE 7/.test(ua)) this.dom().className += '';
     };
     
     this._bindToDom = function(name) {
         return Focusable._bindToDom.call(this, name) || Base._bindToDom.call(this, name);
     };
     
-    this._focus = function() {
+    this._focus = function(e) {
+        Focusable._focus.call(this, e);
         if (this._selectedIndexes.length == 0 && this._data.length > 0) {
             this.selectedIndexes([0]);
         } else {
@@ -414,7 +415,8 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         }
     };
     
-    this._blur = function() {
+    this._blur = function(e) {
+        Focusable._blur.call(this, e);
         this.selectedIndexes(this.selectedIndexes());
     };
     
@@ -430,7 +432,7 @@ uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) 
         this.appendChild(this._list);
     };
     
-    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex selectedIndexes selectedRows multiselect contentDraggable draggable'.split(' '), 
+    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex selectedIndexes selectedRows multiselect contentDraggable draggable textSelectable'.split(' '), 
         function(i, name) {
             uki.delegateProp(this, name, '_list');
         }, this);

@@ -123,7 +123,7 @@
                 }
             };
         };
-    
+        
         this._layoutDom = function(rect) {
             this._updateClientRects();
         
@@ -138,9 +138,6 @@
             }
         
             Base._layoutDom.call(this, rect);
-        
-            // force redraw in ie
-            if (this._dom.attachEvent) this._dom.className += '';
         };
     });
 

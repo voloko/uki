@@ -151,6 +151,10 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
 			event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));    
 			
 		return event;    
+    },
+    
+    preventDefaultHandler: function(e) {
+        e.preventDefault();
     }
 });
 
