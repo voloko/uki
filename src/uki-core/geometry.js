@@ -77,20 +77,18 @@ Point.prototype = /** @lends uki.geometry.Point.prototype */ {
 
 /**
  * Creates point from "x y" string
- * x and y may have optional units=px specified: Point.fromString("20% 10px")
  *
  * @memberOf uki.geometry.Point
  * @name fromString
  * @function
  *
  * @param {string} string String representation of point
- * @param {uki.geometry.Size=} relative Relative size to calculate % values
  *
  * @returns {uki.geometry.Point} created point
  */
-Point.fromString = function(string, relative) {
+Point.fromString = function(string) {
     var parts = string.split(/\s+/);
-    return new Point( unitsToPx(parts[0], relative && relative.width), unitsToPx(parts[1], relative && relative.height) );
+    return new Point( parts[0], parts[1] );
 };
 
 
@@ -154,20 +152,18 @@ Size.prototype = /** @lends uki.geometry.Size.prototype */ {
 
 /**
  * Creates size from "width height" string
- * x and y may have optional units=px specified: Size.fromString("20% 10px")
  *
  * @memberOf uki.geometry.Size
  * @name fromString
  * @function
  *
  * @param {string} string String representation of size
- * @param {uki.geometry.Size=} relative Relative size to calculate % values
  *
  * @returns {uki.geometry.Size} created size
  */
-Size.fromString = function(string, relative) {
+Size.fromString = function(string) {
     var parts = string.split(/\s+/);
-    return new Size( unitsToPx(parts[0], relative && relative.width), unitsToPx(parts[1], relative && relative.height) );
+    return new Size( parts[0], parts[1] );
 };
 
 /**
@@ -472,16 +468,15 @@ Rect.fromCoords = function(minX, minY, maxX, maxY) {
  * @function
  *
  * @param {string} string
- * @param {uki.geometry.Size=} relative Relative size to calculate % values
  * @returns {uki.geometry.Rect}
  */
-Rect.fromCoordsString = function(string, relative) {
+Rect.fromCoordsString = function(string) {
     var parts = string.split(/\s+/);
     return Rect.fromCoords( 
-        unitsToPx(parts[0], relative && relative.width),
-        unitsToPx(parts[1], relative && relative.height),
-        unitsToPx(parts[2], relative && relative.width),
-        unitsToPx(parts[3], relative && relative.height)
+        parts[0],
+        parts[1],
+        parts[2],
+        parts[3]
     ) ;
 };
 
@@ -493,21 +488,20 @@ Rect.fromCoordsString = function(string, relative) {
  * @function
  *
  * @param {string} string
- * @param {uki.geometry.Size=} relative Relative size to calculate % values
  * @returns {uki.geometry.Rect}
  */
-Rect.fromString = function(string, relative) {
+Rect.fromString = function(string) {
     var parts = string.split(/\s+/);
     
     if (parts.length > 2) return new Rect( 
-        unitsToPx(parts[0], relative && relative.width),
-        unitsToPx(parts[1], relative && relative.height),
-        unitsToPx(parts[2], relative && relative.width),
-        unitsToPx(parts[3], relative && relative.height)
+        parts[0],
+        parts[1],
+        parts[2],
+        parts[3]
     );
     return new Rect( 
-        unitsToPx(parts[0], relative && relative.width),
-        unitsToPx(parts[1], relative && relative.height)
+        parts[0],
+        parts[1]
     ) ;
 };
 
@@ -625,19 +619,18 @@ Inset.prototype = /** @lends uki.geometry.Inset.prototype */ {
  * @function
  *
  * @param {string} string
- * @param {uki.geometry.Size=} relative Relative size to calculate % values
  * @returns {uki.geometry.Inset}
  */
-Inset.fromString = function(string, relative) {
+Inset.fromString = function(string) {
     var parts = string.split(/\s+/);
     if (parts.length < 3) parts[2] = parts[0];
     if (parts.length < 4) parts[3] = parts[1];
     
     return new Inset(
-        unitsToPx(parts[0], relative),
-        unitsToPx(parts[1], relative),
-        unitsToPx(parts[2], relative),
-        unitsToPx(parts[3], relative)
+        parts[0],
+        parts[1],
+        parts[2],
+        parts[3]
     );
 };
 
@@ -663,18 +656,3 @@ Inset.create = function(a1, a2, a3, a4) {
     if (a3 === undefined) return new Inset(a1, a2);
     return new Inset(a1, a2, a3, a4);
 };
-
-
-/** @ignore */
-function unitsToPx (units, relative) {
-    var m = (units + '').match(/([-0-9\.]+)(\S*)/),
-        v = parseFloat(m[1], 10),
-        u = (m[2] || '').toLowerCase();
-        
-    if (u) {
-        // if (u == 'px') v = v;
-        if (u == '%' && relative) v *= relative / 100;
-    }
-    if (v < 0 && relative) v = relative + v;
-    return v;
-}
