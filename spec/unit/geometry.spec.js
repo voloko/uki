@@ -13,10 +13,6 @@ describe 'uki.Geometry'
         it 'should unserialize from string'
             Point.fromString('10 -11').should.eql new Point(10, -11)
         end
-        
-        it 'should unserialize with px units'
-            Point.fromString('10px -11px').should.eql new Point(10, -11)
-        end
     end  
     
     describe 'Size'
@@ -27,10 +23,6 @@ describe 'uki.Geometry'
         
         it 'should unserialize from string'
             Size.fromString('20 21').should.eql new Size(20, 21)
-        end
-        
-        it 'should unserialize with px units'
-            Size.fromString('20px 22px').should.eql new Size(20, 22)
         end
     end
     
@@ -44,10 +36,6 @@ describe 'uki.Geometry'
             Rect.fromString('10 11 21 22').should.eql new Rect(10, 11, 21, 22)
         end
     
-        it 'should unserialize with px units'
-            Rect.fromString('20px 21px 31px 32px').should.eql new Rect(20, 21, 31, 32)
-        end
-        
         it 'should create iteself from Point and Size'
             s = new Rect(new Point(10, 11), new Size(12, 13))
             s.should.eql new Rect(10, 11, 12, 13)
