@@ -15,6 +15,7 @@ ranging from Sliders to Grids and SplitPanes.
  * Google group http://groups.google.com/group/ukijs
  * Code examples at http://github.com/voloko/uki/tree/master/app/functional/
  * Development docs and tutorial at http://wiki.github.com/voloko/uki/
+ * Google wave in 100 lines of code example: http://ukijs.org/examples/core-examples/wave
  
 == Contribute
 To install development server
@@ -28,21 +29,12 @@ On *nix
     rake start
 4. http://127.0.0.1:21119/src/uki.cjs – should be a merged version of uki 
 
-To work server-side with tests
-1. Install narwhal http://narwhaljs.org/
-2. Open terminal and run
-    tusk install qunit
-    tusk install browserjs
-    cd PATH_TO_UKI
-    narwhal runner.js
-    
 == Image path
 For older browsers uki loads images from server.
 By default development version loads them from uki.theme.airport.imagePath. 
 To point it to your development server do
     uki.theme.airport.imagePath = 'http://127.0.0.1:21119//src/uki-theme/airport/i/'
 
-    
 == Simple
 The Web should be simple. 
 Adding a new library to your app should not require 
