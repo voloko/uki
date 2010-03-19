@@ -51,10 +51,10 @@
             if (dy) this.scrollTop(this.scrollTop() + dy);
         };
     
-        uki.each(['appendChild', 'removeChild', 'childViews'], function(i, name) {
-            this[name] = function(arg) {
+        uki.each(['appendChild', 'removeChild', 'insertBefore'], function(i, name) {
+            this[name] = function(arg1, arg2) {
                 this._clientRectValid = false;
-                return Base[name].call(this, arg);
+                return Base[name].call(this, arg1, arg2);
             };
         }, this);
     
