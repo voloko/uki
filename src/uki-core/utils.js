@@ -1,6 +1,10 @@
 include('uki.js');
 
-var toString = Object.prototype.toString;
+var toString = Object.prototype.toString,
+    trim = String.prototype.trim,
+    
+    trimRe = /^\s+|\s+$/g;
+    
 var marked = '__uki_marked';
 	
 var utils = 
@@ -82,7 +86,8 @@ uki.utils = {
      * @returns {string} trimmed text
      */
     trim: function( text ) {
-        return (text || "").replace( /^\s+|\s+$/g, "" );
+        text = text || '';
+        return trim ? trim.call(text) : text.replace( trimRe, "" );
     },
     
     /**
@@ -309,6 +314,7 @@ uki.utils = {
             baseClasses.push(tmp);
             utils.extend(klass.prototype, arguments[i]);
         };
+        if (!klass.prototype.init) klass.prototype.init = function() {};
         return klass;
     },
     
