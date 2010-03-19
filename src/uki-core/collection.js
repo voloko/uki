@@ -209,8 +209,7 @@ uki.fn = uki.Collection.prototype = new function() {
     @name uki.Collection#resizeToContents */
     /** @function
     @name uki.Collection#toggle */
-    uki.each(('bind,unload,trigger,layout,appendChild,removeChild,insertBefore,addRow,removeRow,' +
-        'resizeToContents,toggle').split(','), function(i, name) {
+    uki.each('bind unbind trigger layout appendChild removeChild insertBefore addRow removeRow resizeToContents toggle'.split(' '), function(i, name) {
         proto[name] = function() { 
             for (var i=0; i < this.length; i++) {
                 this[i][name].apply(this[i], arguments);

@@ -36,7 +36,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
         return this;
     },
     
-    _unbindFromDom: function(name, target) {
+    _unbindFromDom: function(name) {
         if (!this._domHander || !this._eventTargets[name]) return;
         uki.dom.unbind(this._eventTargets[name], name, this._domHander);
     },
