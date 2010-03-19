@@ -33,7 +33,6 @@
             uki.extend(this, {
                 _clientRect: this.rect().clone(), // rect with scroll bars excluded
                 _rectForChild: this.rect().clone(),
-                _clientRectValid: false,
                 _scrollableV: true,
                 _scrollableH: false,
                 _scrollV: false,
@@ -53,7 +52,6 @@
     
         uki.each(['appendChild', 'removeChild', 'insertBefore'], function(i, name) {
             this[name] = function(arg1, arg2) {
-                this._clientRectValid = false;
                 return Base[name].call(this, arg1, arg2);
             };
         }, this);
@@ -75,7 +73,6 @@
             var oldRect = this._rect;
             this._parentRect = newRect;
             if (!this._resizeSelf(newRect)) return this;
-            this._clientRectValid = false;
             this._updateClientRects();
             this._needsLayout = true;
             this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
@@ -84,7 +81,6 @@
     
         this._recalcClientRects = function() {
             initScrollWidth();
-            this._clientRectValid = true;
 
             var cw = this.contentsWidth(),
                 ch = this.contentsHeight(),
@@ -100,8 +96,6 @@
         };
     
         this._updateClientRects = function() {
-            if (this._clientRectValid) return;
-
             var oldClientRect = this._clientRect;
             this._recalcClientRects();
 

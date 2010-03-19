@@ -27,7 +27,7 @@ root.uki = function(val, context) {
  * @type string
  * @field
  */
-uki.version = '0.1.0';
+uki.version = '0.1.0.1';
 
 /**
  * Empty function
