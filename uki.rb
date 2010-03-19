@@ -21,7 +21,7 @@ class Uki < Sinatra::Base
     process_path(File.join(File.dirname(__FILE__), path))
   end
   
-  get %r{^/(src|tmp)/.*} do
+  get %r{^/(src|tmp|spec)/.*} do
     path = request.path
     response.header['Content-type'] = 'image/png' if path.match(/\.png$/)
     response.header['Content-type'] = 'text/css' if path.match(/\.css$/)

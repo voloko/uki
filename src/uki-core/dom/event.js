@@ -154,7 +154,8 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     },
     
     preventDefaultHandler: function(e) {
-        e.preventDefault();
+        e && e.preventDefault();
+        return false;
     }
 });
 

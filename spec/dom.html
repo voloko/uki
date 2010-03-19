@@ -4,9 +4,8 @@
 		<link type="text/css" rel="stylesheet" href="support/jspec.css" />
 		<script src="support/jspec.js"></script>
 		<script src="support/jspec.xhr.js"></script>
-		<!-- <script src="../pkg/uki.dev.js"></script> -->
-        <!-- <script src="http://127.0.0.1:21119/src/uki.cjs"></script> -->
-		<script src="http://10.211.55.2:21119/src/uki.cjs"></script>
+		<script src="../src/uki.cjs"></script>
+		<script src="../src/uki-data.cjs"></script>
 		<script src="support/spec.helper.js"></script>
 		<script>
 			function runSuites() {
@@ -25,6 +24,8 @@
                 .exec('unit/view/container.spec.js')
                 
                 .exec('unit/theme/template.spec.js')
+                
+                .exec('unit/data/model.spec.js')
 				.run()
 				.report({ fixturePath: 'fixtures' })
 			}
