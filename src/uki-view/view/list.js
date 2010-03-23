@@ -36,7 +36,9 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         this.clearSelection();
         this._data = d;
         this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
-        this._updateRectOnDataChnage();
+        
+        var minWidth = this._minSize ? this._minSize.width : 0;
+        this.minSize(new Size(minWidth, this._rowHeight * this._data.length));
         this._relayoutParent();
         return this;
     };
@@ -124,7 +126,9 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         this.selectedIndexes(indexes);
     };
     
+    var updatingScroll = false;
     this._scrollableParentScroll = function() {
+        if (updatingScroll) return;
         if (this._throttle) {
             if (this._throttleStarted) return;
             this._throttleStarted = true;
@@ -147,10 +151,6 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         c.layout();
     };
     
-    
-    this._updateRectOnDataChnage = function() {
-        this.rect(this._parentRect);
-    };
     
     this.keyPressEvent = function() {
         var useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
@@ -264,11 +264,13 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         var maxY, minY;
         maxY = (position+1)*this._rowHeight;
         minY = position*this._rowHeight;
+        updatingScroll = true;
         if (maxY >= this._visibleRect.maxY()) {
             this._scrollableParent.scroll(0, maxY - this._visibleRect.maxY());
         } else if (minY < this._visibleRect.y) {
             this._scrollableParent.scroll(0, minY - this._visibleRect.y);
         }
+        updatingScroll = false;
         this.layout();
     };
     
@@ -324,17 +326,6 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         var tmp = this._packs[0];
         this._packs[0] = this._packs[1];
         this._packs[1] = tmp;
-    };
-    
-    this._normalizeRect = function(rect) {
-        rect = Base._normalizeRect.call(this, rect);
-        // if (rect.height != this._rowHeight * this._data.length) {
-        //     rect = new Rect(rect.x, rect.y, rect.width, this._rowHeight * this._data.length);
-        // }
-        if (rect.height < this._rowHeight * this._data.length) {
-            rect = new Rect(rect.x, rect.y, rect.width, this._rowHeight * this._data.length);
-        }
-        return rect;
     };
     
     this._layoutDom = function(rect) {

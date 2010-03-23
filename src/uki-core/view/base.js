@@ -274,25 +274,22 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
         this._firstLayout = false;
     };
     
-    /**
-     * @function
-     */
-    this.minSize = uki.newProp('_minSize', function(s) {
-        this._minSize = Size.create(s);
-        this.rect(this._parentRect);
-        if (this._minSize.width) this._dom.style.minWidth = this._minSize.width + PX;
-        if (this._minSize.height) this._dom.style.minHeight = this._minSize.height + PX;
-    });
     
     /**
-     * @function
+     * @function uki.view.Base#minSize
+     * @function uki.view.Base#maxSize
      */
-    this.maxSize = uki.newProp('_maxSize', function(s) {
-        this._maxSize = Size.create(s);
-        this.rect(this._parentRect);
-        if (this._maxSize.width) this._dom.style.maxWidth = this._maxSize.width + PX;
-        if (this._maxSize.height) this._dom.style.maxHeight = this._maxSize.height + PX;
-    });
+    uki.each(['min', 'max'], function(i, name) {
+        var attr = name + 'Size',
+            prop = '_' + attr;
+        this[attr] = function(s) {
+            if (s === undefined) return this[prop] || new Size();
+            this[prop] = Size.create(s);
+            this.rect(this._parentRect);
+            if (this[prop].width) this._dom.style[name + 'Width'] = this[prop].width + PX;
+            if (this[prop].height) this._dom.style[name + 'Height'] = this[prop].height + PX;
+        };
+    }, this);
     
     /**
      * Resizes view when parent changes size according to anchors.

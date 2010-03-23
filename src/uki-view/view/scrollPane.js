@@ -40,7 +40,7 @@
             });
         };
     
-        uki.addProps(this, ['scrollableV', 'scrollableH']);
+        uki.addProps(this, ['scrollableV', 'scrollableH', 'scrollH', 'scrollV']);
     
         this.rectForChild = function() { return this._rectForChild; };
         this.clientRect = function() { return this._clientRect; };
@@ -56,8 +56,14 @@
             };
         }, this);
     
-        uki.delegateProp(this, 'scrollTop', '_dom');
-        uki.delegateProp(this, 'scrollLeft', '_dom');
+        uki.each(['scrollTop', 'scrollLeft'], function(i, name) {
+            this[name] = function(v) {
+                if (v == undefined) return this._dom[name];
+                this._dom[name] = v;
+                this.trigger('scroll', { source: this });
+                return this;
+            };
+        }, this);
     
         this.visibleRect = function() {
             var tmpRect = this._clientRect.clone();

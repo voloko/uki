@@ -56,6 +56,12 @@ task :build_scripts do
   FileUtils.cp_r(File.join(base, 'src', 'uki-theme'), File.join(base, 'pkg', 'uki-theme'))
 end
 
+desc "Merge file"
+task :merge do
+  code = process_path(ENV['file'])
+  File.open(ENV['target'], 'w') { |f| f.write code }
+end
+
 desc "Push version"
 task :push_version do
   require 'aws/s3'

@@ -2,17 +2,17 @@ include('uki.js');
 
 var toString = Object.prototype.toString,
     trim = String.prototype.trim,
+    slice = Array.prototype.slice,
     
     trimRe = /^\s+|\s+$/g;
     
 var marked = '__uki_marked';
-	
-var utils = 
+
+ 
 /**
- * Utility functions. Can be called both as uki.utils.function or uki.function
- * @namespace
+ * Utility functions.
  */
-uki.utils = {
+var utils = {
     
     /**
      * Sets or retrieves attribute on an object. 
@@ -30,16 +30,16 @@ uki.utils = {
      */
     attr: function(target, attr, value) {
         if (value !== undefined) {
-            // if (target[attr].apply) {
-            if (utils.isFunction(target[attr])) {
+            if (target[attr] && target[attr].apply) {
+            // if (uki.isFunction(target[attr])) {
                 target[attr](value);
             } else {
                 target[attr] = value;
             }
             return target;
         } else {
-            // if (target[attr].apply) {
-            if (utils.isFunction(target[attr])) {
+            if (target[attr] && target[attr].apply) {
+            // if (uki.isFunction(target[attr])) {
                 return target[attr]();
             } else {
                 return target[attr];
@@ -54,8 +54,9 @@ uki.utils = {
      * @param {object} context
      */
     proxy: function(fn, context) {
+        var args = slice.call(arguments, 2);
         return function() {
-            return fn.apply(context, arguments);
+            return fn.apply(context, args.concat(args, slice.call(arguments, 0)));
         }
     },
     
@@ -213,8 +214,8 @@ uki.utils = {
      */
     map: function( elems, callback, context ) {
         var ret = [],
-            mapper = utils.isFunction(callback) ? callback : 
-                     function(e) { return utils.attr(e, callback); };
+            mapper = uki.isFunction(callback) ? callback : 
+                     function(e) { return uki.attr(e, callback); };
 
         for ( var i = 0, length = elems.length; i < length; i++ ) {
             var value = mapper.call( context || elems[ i ], elems[ i ], i );
@@ -312,7 +313,7 @@ uki.utils = {
             tmp = arguments[i];
             if (this.isFunction(tmp)) tmp = tmp.apply(tmp, baseClasses);
             baseClasses.push(tmp);
-            utils.extend(klass.prototype, arguments[i]);
+            uki.extend(klass.prototype, arguments[i]);
         };
         if (!klass.prototype.init) klass.prototype.init = function() {};
         return klass;
@@ -372,7 +373,7 @@ uki.utils = {
      * @param {Array.<string>} props Property names
      */
     addProps: function(proto, props) {
-        utils.each(props, function() { proto[this] = utils.newProp('_' + this); });
+        uki.each(props, function() { proto[this] = uki.newProp('_' + this); });
     },
     
     toArray: function(arr) {
@@ -383,11 +384,11 @@ uki.utils = {
         var propName = '_' + name;
         proto[name] = function(value) {
             if (value === undefined) {
-                if (this[target]) return utils.attr(this[target], name, value);
+                if (this[target]) return uki.attr(this[target], name, value);
                 return this[propName];
             }
             if (this[target]) {
-                utils.attr(this[target], name, value);
+                uki.attr(this[target], name, value);
             } else {
                 this[propName] = value;
             }
@@ -395,5 +396,5 @@ uki.utils = {
         };
     }
 };
-
 utils.extend(uki, utils);
+delete utils;

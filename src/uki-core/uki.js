@@ -1,3 +1,4 @@
+include('const.js');
 /**
  * Shortcut access to uki.build, uki.Selector.find and uki.Collection constructor
  * uki('#id') is also a shortcut for search by id
@@ -9,7 +10,7 @@
  * @name uki
  * @return {uki.Collection}
  */
-root.uki = function(val, context) {
+root.uki = root.uki || function(val, context) {
     if (typeof val == 'string') {
         var m = val.match(/^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/),
             e = m && uki._ids[m[1]];

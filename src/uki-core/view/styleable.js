@@ -54,7 +54,7 @@ uki.view.Styleable = new function() {
         if (this._textSelectProp) {
             this._dom.style[this._textSelectProp] = state ? '' : this._textSelectProp == 'MozUserSelect' ? '-moz-none' : 'none';
         } else {
-            // uki.dom[state ? 'unbind' : 'bind'](this.dom(), 'selectstart mousedown', uki.dom.preventDefaultHandler);
+            uki.dom[state ? 'unbind' : 'bind'](this.dom(), 'selectstart', uki.dom.preventDefaultHandler);
         }
         this._dom.style.cursor = state ? 'text' : 'default';
         return this;
