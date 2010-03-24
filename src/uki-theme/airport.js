@@ -240,6 +240,20 @@
             }
         },
         
+        templates: {
+            'table-header-cell': function() {
+                return new uki.theme.Template(
+                    '<div style="position:relative;border:1px solid #CCC;border-top:none;border-left:none;'+
+                    '${style}" class="${className}">${data}</div>');
+            },
+            
+            'table-cell': function() {
+                return new uki.theme.Template(
+                    '<div style="position:relative;border-right:1px solid #CCC;height:100%;'+
+                    '${style}" class="${className}">${data}</div>');
+            }
+        },
+        
         doms: {
             'resizer': function(params) {
                 var template = new uki.theme.Template('position:absolute;width:5px;top:0;height:${height}px;cursor:col-resize;cursor:ew-resize;z-index:101;background:url(' + uki.theme.imageSrc('x') + ')'),
