@@ -213,8 +213,10 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             nextIndex = -1;
         if (e.which == 38 || e.keyCode == 38) { // UP
             nextIndex = Math.max(0, this._lastClickIndex - 1);
+            e.preventDefault();
         } else if (e.which == 40 || e.keyCode == 40) { // DOWN
             nextIndex = Math.min(this._data.length-1, this._lastClickIndex + 1);
+            e.preventDefault();
         }
         if (nextIndex > -1 && nextIndex != this._lastClickIndex) {
             if (e.shiftKey) {
@@ -227,7 +229,6 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
                 this.selectedIndex(nextIndex);
             }
             this._lastClickIndex = nextIndex;
-            e.preventDefault();
         }
     };
     
