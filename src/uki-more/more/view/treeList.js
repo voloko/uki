@@ -95,17 +95,20 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
         this._data.splice(index+1, length);
         
         var positionInSelection = uki.binarySearch(index, indexes),
-            toRemove = positionInSelection+1,
+            removeFrom = positionInSelection + (indexes[positionInSelection] == index ? 1 : 0),
+            toRemove = 0,
             clickIndex = this._lastClickIndex;
-        while (indexes[toRemove] && indexes[toRemove] < index + length) toRemove++;
+        while (indexes[removeFrom + toRemove] && indexes[removeFrom + toRemove] <= index + length) toRemove++;
         
         this.clearSelection(true);
-        offsetFrom(indexes, positionInSelection + (indexes[positionInSelection] == index ? 1 : 0), -length);
-        if (toRemove - positionInSelection - 1 > 0) indexes.splice(positionInSelection, toRemove - positionInSelection - 1);
+        offsetFrom(indexes, removeFrom, -length);
+        if (toRemove > 0) {
+            indexes.splice(positionInSelection, toRemove);
+        }
 
         this.listData(this._data);
         this.selectedIndexes(indexes);
-        this._lastClickIndex = clickIndex > index ? clickIndex + length : clickIndex;
+        this._lastClickIndex = clickIndex > index ? clickIndex - length : clickIndex;
     };
     
     this._mousedown = function(e) {
