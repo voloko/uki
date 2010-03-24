@@ -36,7 +36,7 @@ uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
             flowML = { view: 'HFlow', rect: flowRect, anchors: 'left top right', className: 'toolbar-flow', hidePartlyVisible: true },
             moreML = { view: 'Button', rect: moreRect, anchors: 'right top', className: 'toolbar-button',  visible: false, backgroundPrefix: 'toolbar-more-', text: '>>', focusable: false },
             popupML = { view: 'Popup', rect: '0 0', anchors: 'right top', className: 'toolbar-popup', background: 'theme(toolbar-popup)', 
-                childViews: { view: 'VFlow', rect: '0 0', anchors: 'right top left bottom' }
+                childViews: { view: 'VFlow', rect: '0 5 0 0', anchors: 'right top left bottom' }
             };
             
         this._flow = uki.build(flowML)[0];
@@ -58,14 +58,14 @@ uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
             if (currentWidth > maxWith) missing.push(i);
         };
         var newButtons = uki.map(missing, function(i) {
-            var descr = { html: childViews[i].html(), backgroundPrefix: 'toolbar-popup-' };
+            var descr = { html: childViews[i].html(), backgroundPrefix: 'toolbar-popup-button-' };
             uki.each(['fontSize', 'fontWeight', 'color', 'textAlign', 'inset'], function(j, name) {
                 descr[name] = uki.attr(childViews[i], name);
             });
             return this._createButton(descr);
         }, this);
         uki('VFlow', this._popup).childViews(newButtons).resizeToContents('width height');
-        this._popup.resizeToContents('width height').toggle();
+        this._popup.resizeToContents('width height').height(this._popup.height() + 5).toggle();
     };
     
     this._updateMoreVisible = function() {
@@ -85,8 +85,10 @@ uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
     };
     
     this._createButton = function(descr) {
+        var rect = this.rect().clone().normalize();
+        rect.width = 100;
         return uki.extend({ 
-                view: 'Button', rect: new Rect(100, this.rect().height), focusable: false, align: 'left',
+                view: 'Button', rect: rect, focusable: false, align: 'left',
                 anchors: 'left top', backgroundPrefix: 'toolbar-button-', autosizeToContents: 'width', focusable: false
             }, descr);
     };    

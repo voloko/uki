@@ -428,7 +428,9 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
     @name uki.view.Base#top */
     uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'], function(index, attr) {
         this[attr] = function(value) {
-            return uki.attr(this.rect(), attr, value);
+            if (value === undefined) return uki.attr(this.rect(), attr);
+            uki.attr(this.rect(), attr, value);
+            return this;
         };
     }, this);
     

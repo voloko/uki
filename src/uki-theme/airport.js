@@ -141,8 +141,16 @@
                 return new uki.background.Css('#CCC');
             },
             
+            'toolbar-popup-button-normal': function() {
+                return new uki.background.Css({ textAlign: 'left' });
+            },
+            
+            'toolbar-popup-button-down': function() {
+                return new uki.background.Css({ background: '#AAA', textAlign: 'left' });
+            },
+            
             'toolbar-popup-button-hover': function() {
-                return new uki.background.Css({ background: '#4086FF', color: '#FFF' });
+                return new uki.background.Css({ background: '#4086FF', color: '#FFF', textAlign: 'left' });
             },
             
             
@@ -331,6 +339,7 @@
     
     uki.theme.airport.backgrounds['input-focus'] = uki.theme.airport.backgrounds['button-focus'];
     uki.theme.airport.backgrounds['toolbar-popup'] = uki.theme.airport.backgrounds['popup-normal'];
+    uki.theme.airport.backgrounds['toolbar-popup-button-disabled'] = uki.theme.airport.backgrounds['toolbar-popup-button-normal'];
 
     uki.theme.register(uki.theme.airport);
 })();
