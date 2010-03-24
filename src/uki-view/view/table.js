@@ -12,6 +12,11 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(this, name, '_list'); }, this);
     
+    this._style = function(name, value) {
+        this._header.style(name, value);
+        return Base._style.call(this, name, value);
+    };
+    
     this.columns = uki.newProp('_columns', function(c) {
         this._columns = uki.build(c);
         this._totalWidth = 0;
