@@ -1,14 +1,20 @@
-include('../../../uki-core/geometry.js');
-
 uki.more.view.splitTable = {};
 
 uki.view.declare('uki.more.view.SplitTable', uki.view.Container, function(Base) {
-    var Rect = uki.geometry.Rect;
+    var Rect = uki.geometry.Rect,
+        Size = uki.geometry.Size;
+        
     var propertiesToDelegate = 'rowHeight data packSize visibleRectExt render selectedIndex focusable textSelectable multiselect'.split(' ');
     
     
     this._defaultHandlePosition = 200;
     this._headerHeight = 17;
+    
+    this._style = function(name, value) {
+        this._leftHeader.style(name, value);
+        this._rightHeader.style(name, value);
+        return Base._style.call(this, name, value);
+    };
     
     this.columns = uki.newProp('_columns', function(c) {
         this._columns = uki.build(c);
@@ -103,6 +109,7 @@ uki.view.declare('uki.more.view.SplitTable', uki.view.Container, function(Base) 
                     rect: new Rect(0, this._headerHeight, this.rect().width, bodyHeight),
                     anchors: 'left top right bottom',
                     className: 'table-v-scroll',
+                    scrollV: true,
                     childViews: [
                         { 
                             view: 'HSplitPane', 

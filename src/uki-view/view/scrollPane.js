@@ -36,7 +36,9 @@
                 _scrollableV: true,
                 _scrollableH: false,
                 _scrollV: false,
-                _scrollH: false
+                _scrollH: false,
+                _sbV: false,
+                _sbH: false
             });
         };
     
@@ -93,8 +95,8 @@
                 sh = this._scrollableH ? cw > this._rect.width : false,
                 sv = this._scrollableV ? ch > this._rect.height : false;
             
-            this._scrollH = sh;
-            this._scrollV = sv;
+            this._sbH = sh || this._scrollH;
+            this._sbV = sv || this._scrollV;
             this._clientRect = new Rect( this._rect.width +  (sv ? -1 : 0) * scrollWidth,
                                          this._rect.height + (sh ? -1 : 0) * scrollWidth );
             this._rectForChild = new Rect( this._rect.width +  (sv && !widthIncludesScrollBar ? -1 : 0) * scrollWidth,
@@ -127,14 +129,14 @@
         this._layoutDom = function(rect) {
             this._updateClientRects();
         
-            if (this._layoutScrollH !== this._scrollH) {
-                this._dom.style.overflowX = this._scrollH ? 'scroll' : 'hidden';
-                this._layoutScrollH = this._scrollH;
+            if (this._layoutScrollH !== this._sbH) {
+                this._dom.style.overflowX = this._sbH ? 'scroll' : 'hidden';
+                this._layoutScrollH = this._sbH;
             }
 
-            if (this._layoutScrollV !== this._scrollV) {
-                this._dom.style.overflowY = this._scrollV ? 'scroll' : 'hidden';
-                this._layoutScrollV = this._scrollV;
+            if (this._layoutScrollV !== this._sbV) {
+                this._dom.style.overflowY = this._sbV ? 'scroll' : 'hidden';
+                this._layoutScrollV = this._sbV;
             }
         
             Base._layoutDom.call(this, rect);
