@@ -219,7 +219,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             e.preventDefault();
         }
         if (nextIndex > -1 && nextIndex != this._lastClickIndex) {
-            if (e.shiftKey) {
+            if (e.shiftKey && this._multiselect) {
                 if (this.isSelected(nextIndex)) {
                     this._toggleSelection(this._lastClickIndex);
                 } else {

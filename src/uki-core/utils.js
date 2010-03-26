@@ -377,7 +377,7 @@ var utils = {
     },
     
     toArray: function(arr) {
-        return Array.prototype.slice.call(arr, 0);
+        return slice.call(arr, 0);
     },
     
     delegateProp: function(proto, name, target) {

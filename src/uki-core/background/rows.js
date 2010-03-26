@@ -6,13 +6,12 @@ include('../background.js');
  * @class
  */
 uki.background.Rows = uki.newClass(new function() {
-    var proto = this,
-        cache = [],
+    var cache = [],
         packSize = 100;
     
     /**#@+ @memberOf uki.background.Rows.prototype */
     
-    proto.init = function(height, colors) {
+    this.init = function(height, colors) {
         this._height = height || 20;
         this._colors = uki.isArray(colors) ? colors : colors.split(' ');
         this._packSize = CEIL(packSize/this._colors.length)*this._colors.length;
@@ -21,7 +20,7 @@ uki.background.Rows = uki.newClass(new function() {
         if (this._colors.length == 1) this._colors = this._colors.concat(['#FFF']);
     };
     
-    proto.attachTo = function(comp) {
+    this.attachTo = function(comp) {
         this._comp && this.detach();
         this._comp = comp;
         if (!this._container) {
@@ -35,7 +34,7 @@ uki.background.Rows = uki.newClass(new function() {
         this._comp.bind('layout', this._layoutHandler);
     };
     
-    proto.layout = function(rect, visibleRect) {
+    this.layout = function(rect, visibleRect) {
         var height = visibleRect ? visibleRect.height + this._visibleExt*2 : rect.maxY();
         while (this._renderedHeight < height) {
             var h = packSize * this._height,
@@ -48,7 +47,8 @@ uki.background.Rows = uki.newClass(new function() {
         }
     };
     
-    proto.detach = function() {
+    this.detach = function() {
+        if (!this._comp) return;
         this._comp.dom().removeChild(this._container);
         this._comp.unbind('layout', this._layoutHandler);
         this._comp = null;
