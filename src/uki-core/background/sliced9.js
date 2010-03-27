@@ -101,7 +101,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
         }
         if (settings.m) {
             html[html.length] = makeDiv('m',
-                [LEFT + inset.left + PX, TOP + inset.top + PX, RIGHT + inset.left + PX, BOTTOM + inset.bottom + PX].join(';'),
+                [LEFT + inset.left + PX, TOP + inset.top + PX, RIGHT + inset.right + PX, BOTTOM + inset.bottom + PX].join(';'),
                 settings.m, [LEFT + 0, TOP + 0, HEIGHT + P100, WIDTH + P100].join(';'), ''
             );
         }
