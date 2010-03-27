@@ -2,7 +2,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this._width = 100;
     this._offset = 0;
     this._position = 0;
-    this._minWidth = 40;
+    this._minWidth = 0;
     this._css = 'overflow:hidden;float:left;white-space:nowrap;text-overflow:ellipsis;';
     this._inset = new Inset(3, 5);
 
