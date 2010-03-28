@@ -263,9 +263,9 @@
         },
         
         doms: {
-            'resizer': function(params) {
-                var template = new uki.theme.Template('position:absolute;width:5px;top:0;height:${height}px;cursor:col-resize;cursor:ew-resize;z-index:101;background:url(' + uki.theme.imageSrc('x') + ')'),
-                    node = uki.createElement('div', template.render(params));
+            'resizer': function(height) {
+                var template = new uki.theme.Template('position:absolute;width:5px;top:0;right:-3px;height:${height}px;cursor:col-resize;cursor:ew-resize;z-index:101;background:url(' + uki.theme.imageSrc('x') + ')'),
+                    node = uki.createElement('div', template.render({height:height}));
                     
                 if (!node.style.cursor || window.opera) node.style.cursor = 'e-resize';
                 return node;

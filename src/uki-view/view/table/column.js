@@ -3,12 +3,13 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this._offset = 0;
     this._position = 0;
     this._minWidth = 0;
-    this._css = 'overflow:hidden;float:left;white-space:nowrap;text-overflow:ellipsis;';
+    this._maxWidth = 0;
+    this._css = 'float:left;white-space:nowrap;text-overflow:ellipsis;';
     this._inset = new Inset(3, 5);
 
     this.init = function() {};
     
-    uki.addProps(this, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth']);
+    uki.addProps(this, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth', 'maxWidth']);
     
     this.template = function(v) {
         if (v === undefined) return this._template = this._template || uki.theme.template('table-cell');
@@ -54,10 +55,16 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
         return this._prerenderedTemplate.join('');
     };
     
+    this.appendResizer = function(dom, height) {
+        var resizer = uki.theme.dom('resizer', height);
+        dom.appendChild(resizer);
+        return resizer;
+    };
+    
     this.renderHeader = function(height) {
         this._className || this._initStylesheet();
         var x = this.headerTemplate().render({
-            data: this.label(),
+            data: '<div style="overflow:hidden">' + this.label() + '</div>',
             style: this._cellStyle(uki.dom.offset.boxModel ? height - 1 : height),
             className: this._className
         });
@@ -68,16 +75,19 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
         this._className || this._initStylesheet();
         this._prerenderedTemplate = this.template().render({
             data: '\u0001\u0001',
-            style: this._cellStyle(rect.height),
+            style: 'overflow:hidden;' + this._cellStyle(rect.height),
             className: this._className
         }).split('\u0001');
     };
     
+    this._cellPadding = function() {
+        var inset = this._inset;
+        return ['padding:', inset.top, 'px ', inset.right, 'px ', inset.bottom, 'px ', inset.left, 'px;'].join('');
+    };
+    
     this._cellStyle = function(height) {
-        var inset = this._inset,
-            padding = ['padding:', inset.top, 'px ', inset.right, 'px ', inset.bottom, 'px ', inset.left, 'px;'].join(''),
-            h = 'height:' + (height - (uki.dom.offset.boxModel ? inset.height() : 0)) + 'px;';
-        return this._css + padding + ';' + h;
+        var h = 'height:' + (height - (uki.dom.offset.boxModel ? this._inset.height() : 0)) + 'px;';
+        return this._css + this._cellPadding() + ';' + h;
     };
     
     this._clientWidth = function() {

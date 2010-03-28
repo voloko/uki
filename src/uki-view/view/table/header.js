@@ -29,10 +29,7 @@ uki.view.table.Header = uki.newClass(uki.view.Label, new function() {
         for (var i=0, column, resizer, offset = 0; i < this._columns.length; i++) {
             column = this._columns[i];
             if (column.resizable()) {
-                resizer = uki.theme.dom('resizer', {height: this.rect().height});
-                resizer.style.right = -2 + PX;
-                // resizer.style.background = 'red';
-                this._label.childNodes[i].appendChild(resizer);
+                var resizer = column.appendResizer(this._label.childNodes[i], this.rect().height);
                 this._bindResizerDrag(resizer, i);
             }
         };
