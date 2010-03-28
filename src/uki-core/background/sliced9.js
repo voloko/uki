@@ -52,7 +52,7 @@ uki.background.Sliced9 = uki.newClass(new function() {
 
     /** @ignore */
     function img (setting, style) {
-        return uki.imageHTML(setting[0], setting[1], setting[2], ' galleryimg="no" style="-webkit-user-drag:none;position:absolute;' + style + '"');
+        return uki.imageHTML(setting[0], setting[1], setting[2], ' ondragstart="return false;" galleryimg="no" style="-webkit-user-drag:none;position:absolute;' + style + '"');
     }
     
     /** @ignore */
