@@ -167,8 +167,7 @@ uki.fn = uki.Collection.prototype = new function() {
     @name uki.Collection#focusable */
     /** @function
     @name uki.Collection#style */
-    uki.Collection.addAttrs(('dom,html,text,background,value,rect,checked,anchors,' +
-        'childViews,typeName,id,name,visible,disabled,focusable,style').split(','));
+    uki.Collection.addAttrs('dom html text background value rect checked anchors childViews typeName id name visible disabled focusable style draggable textSelectable'.split(' '));
 
     /** @function
     @name uki.Collection#parent */

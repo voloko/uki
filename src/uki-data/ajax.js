@@ -78,7 +78,7 @@ try {
 	script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
 } catch(e) {}
 
-document.documentElement.insertBefore( script, root.firstChild );
+document.documentElement.insertBefore( script, document.documentElement.firstChild );
 
 // Make sure that the execution of code works by injecting a script
 // tag with appendChild/createTextNode
