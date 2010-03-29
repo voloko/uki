@@ -12,15 +12,23 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(this, name, '_list'); }, this);
     
+    this._setup = function() {
+        this._columns = [];
+        Base._setup.call(this);
+    };
+    
     this._style = function(name, value) {
         this._header.style(name, value);
         return Base._style.call(this, name, value);
     };
     
     this.columns = uki.newProp('_columns', function(c) {
+        for (var i = 0; i < this._columns.length; i++) {
+            this._columns[i].unbind();
+        }
         this._columns = uki.build(c);
         this._totalWidth = 0;
-        for (var i = 0; i < this._columns.length; i++) {
+        for (i = 0; i < this._columns.length; i++) {
             this._columns[i].position(i);
             this._columns[i].bind('beforeResize', uki.proxy(function() {
                 this._updateTotalWidth();
@@ -37,8 +45,8 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
             this._columns[i].position(i);
             this._totalWidth += this._columns[i].width();
         };
-        this._list.minSize(new Size(this._totalWidth, 0));
-        this._list.rect(new Rect(this._totalWidth, this._list.height()));
+        this._list.minSize(new Size(this._totalWidth, this._list.minSize().height));
+        // this._list.rect(new Rect(this._totalWidth, this._list.height()));
         this._header.minSize(new Size(this._totalWidth, 0));
     };
     

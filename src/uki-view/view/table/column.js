@@ -28,13 +28,18 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
      * @fires event:resize
      */
     this.width = uki.newProp('_width', function(w) {
+        var e = {
+            oldWidth: this._width,
+            source: this
+        };
         this._width = this._normailizeWidth(w);
-        this.trigger('beforeResize', {source: this});
-        if (this._stylesheet) {
+        e.newWidth = this._width;
+        this.trigger('beforeResize', e);
+        if (this._stylesheet && e.newWidth != e.oldWidth) {
             var rules = this._stylesheet.styleSheet ? this._stylesheet.styleSheet.rules : this._stylesheet.sheet.cssRules;
             rules[0].style.width = this._clientWidth() + PX;
         }
-        this.trigger('resize', {source: this});
+        this.trigger('resize', e);
     });
     
     this._bindToDom = uki.F;
@@ -64,7 +69,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this.renderHeader = function(height) {
         this._className || this._initStylesheet();
         var x = this.headerTemplate().render({
-            data: '<div style="overflow:hidden">' + this.label() + '</div>',
+            data: '<div style="overflow:hidden;text-overflow:ellipsis;">' + this.label() + '</div>',
             style: this._cellStyle(uki.dom.offset.boxModel ? height - 1 : height),
             className: this._className
         });

@@ -54,10 +54,12 @@ var utils = {
      * @param {object} context
      */
     proxy: function(fn, context) {
-        var args = slice.call(arguments, 2);
-        return function() {
-            return fn.apply(context, args.concat(args, slice.call(arguments, 0)));
-        }
+        var args = slice.call(arguments, 2),
+            result = function() {
+                return fn.apply(context, args.concat(slice.call(arguments, 0)));
+            };
+        result.huid = fn.huid = fn.huid || uki.dom.guid++;
+        return result;
     },
     
     /**

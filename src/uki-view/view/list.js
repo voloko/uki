@@ -43,6 +43,11 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return this;
     };
     
+    this.relayout = function() {
+        this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
+        this.layout();
+    };
+    
     this.addRow = function(position, data) {
         this.clearSelection();
         this._data.splice(position, 0, data);
@@ -153,7 +158,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
     
     this.keyPressEvent = function() {
-        var useKeyPress = /mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua );
+        var useKeyPress = root.opera || (/mozilla/i.test( ua ) && !(/(compatible|webkit)/i).test( ua ));
         return useKeyPress ? 'keypress' : 'keydown';
     };
     
