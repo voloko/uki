@@ -8,7 +8,7 @@ uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
     
     this.hidePartlyVisible = uki.newProp('_hidePartlyVisible');
     
-    this._layoutChildViews = function(oldRect) {
+    this._layoutChildViews = function() {
         var offset = 0, rect, view;
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             view = childViews[i];
@@ -32,7 +32,7 @@ uki.view.declare('uki.view.HFlow', uki.view.Container, function(Base) {
         return new Size( value, this.contentsHeight() );
     };
     
-    this._layoutChildViews = function(oldRect) {
+    this._layoutChildViews = function() {
         var offset = 0, rect, view;
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             view = childViews[i];

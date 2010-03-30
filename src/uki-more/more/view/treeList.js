@@ -14,6 +14,12 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
     this.data = uki.newProp('_treeData', function(v) {
         this._treeData = v;
         this.listData(this._treeNodeToListData(v));
+        var children = this.listData();
+        for (var i=children.length - 1; i >= 0 ; i--) {
+            if (this._data[i].__opened) {
+                this._openSubElement(i);
+            }
+        };
     });
 
     this._treeNodeToListData = function(node, indent) {
@@ -80,6 +86,7 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
         this.listData(this._data);
         this.selectedIndexes(indexes);
         this._lastClickIndex = clickIndex > index ? clickIndex + length : clickIndex;
+        this.trigger('open');
         return this;
     };
     
@@ -109,12 +116,13 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
         this.listData(this._data);
         this.selectedIndexes(indexes);
         this._lastClickIndex = clickIndex > index ? clickIndex - length : clickIndex;
+        this.trigger('close');
     };
     
     this._mousedown = function(e) {
-        if (e.domEvent.target.className.indexOf('toggle-tree') > -1) {
+        if (e.target.className.indexOf('toggle-tree') > -1) {
             var o = uki.dom.offset(this._dom),
-                y = e.domEvent.pageY - o.y,
+                y = e.pageY - o.y,
                 p = y / this._rowHeight << 0;
             this.toggle(p);
         } else {

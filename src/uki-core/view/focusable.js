@@ -4,40 +4,47 @@ include('observable.js');
 /**
  * @class
  */
-uki.view.Focusable = /** @lends uki.view.Focusable.prototype */ {
+uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */ 
+    
     // dom: function() {
     //     return null; // should implement
     // },
-    _focusable: true, // default value
+    this._focusable = true; // default value
+    this._focusOnClick = true;
     
-    focusable: uki.newProp('_focusable', function(v) {
+    this.focusOnClick = uki.newProp('_focusOnClick');
+    
+    this.focusable = uki.newProp('_focusable', function(v) {
         this._focusable = v;
-        this._updateTabIndex();
+        if (v) this._initFocusable();
+        this._updateFocusable();
     }),
     
-    disabled: uki.newProp('_disabled', function(d) {
+    this.disabled = uki.newProp('_disabled', function(d) {
         this._disabled = d;
         if (d) this.blur();
-        this._updateTabIndex();
+        this._updateFocusable();
         if (this._updateBg) this._updateBg();
     }),
     
-    _updateTabIndex: function() {
-        if (this._focusTarget) {
-            if (this._focusable && !this._disabled) this._focusTarget.setAttribute('tabIndex', 1)
-            else this._focusTarget.removeAttribute('tabIndex');
+    this._updateFocusable = function() {
+        if (this._preCreatedFocusTarget) return;
+        
+        if (this._focusable && !this._disabled) {
+            this._focusTarget.style.display = 'block';
+        } else {
+            this._focusTarget.style.display = 'none';
         }
     }, 
     
-    _initFocusable: function(preCreatedInput) {
-        this._focusTarget = preCreatedInput;
-
-        if (!preCreatedInput) {
-            this._focusTarget = root.opera ? uki.createElement('div', 'position:absolute;left:-999px;top:0;width:1px;height:1px;') : this.dom();
-            if (root.opera) this.dom().appendChild(this._focusTarget);
-            this._updateTabIndex();
-            this._focusTarget.style.outline = 'none';
-            this._focusTarget.hideFocus = true;
+    this._initFocusable = function(preCreatedFocusTarget) {
+        if ((!preCreatedFocusTarget && !this._focusable) || this._focusTarget) return;
+        this._focusTarget = preCreatedFocusTarget;
+        this._preCreatedFocusTarget = preCreatedFocusTarget;
+        
+        if (!preCreatedFocusTarget) {
+            this._focusTarget = uki.createElement('input', 'position:absolute;left:-999px;top:0;width:1px;height:1px;');
+            this.dom().appendChild(this._focusTarget);
         }
         this._hasFocus = false;
         this._firstFocus = true;
@@ -49,44 +56,45 @@ uki.view.Focusable = /** @lends uki.view.Focusable.prototype */ {
             if (this._hasFocus) this._blur(e);
         }, this));
         
-        if (!preCreatedInput) this.bind('mousedown', function(e) {
-            setTimeout(uki.proxy(function() {
-                try { this.focus(); } catch (e) {};
-            }, this), 1);
+        if (!preCreatedFocusTarget) this.bind('mousedown', function(e) {
+            if (this._focusOnClick) setTimeout(uki.proxy(this.focus, this), 1);
         });
-    },
+        this._updateFocusable();
+    }
     
-    _focus: function(e) {
+    this._focus = function(e) {
         this._hasFocus = true;
         this._firstFocus = false;
-    },
+    }
     
-    _blur: function(e) {
+    this._blur = function(e) {
         this._hasFocus = false;
-    },
+    }
     
-    focus: function() {
+    this.focus = function() {
         try {
-            if (this._focusable && !this._disabled) this._focusTarget.focus();
+            if (this._focusable && !this._disabled) {
+                this._focusTarget.focus();
+            }
         } catch(e) {}
         return this;
     },
     
-    blur: function() {
+    this.blur = function() {
         try {
             this._focusTarget.blur();
         } catch(e) {}
         return this;
-    },
+    }
     
-    hasFocus: function() {
+    this.hasFocus = function() {
         return this._hasFocus;
-    },
+    }
     
-    _bindToDom: function(name) {
+    this._bindToDom = function(name) {
         if (!this._focusTarget || 'keyup keydown keypress focus blur'.indexOf(name) == -1) return false;
-        
-        return uki.view.Observable._bindToDom.call(this, name, this._focusableInput);
+
+        return uki.view.Observable._bindToDom.call(this, name, this._focusTarget);
     }
     
 

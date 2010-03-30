@@ -86,6 +86,11 @@
             this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
             return this;
         };
+        
+        this._createDom = function() {
+            Base._createDom.call(this);
+            if (ua.indexOf('Gecko/') > -1) this._dom.tabIndex = '-1';
+        };
     
         this._recalcClientRects = function() {
             initScrollWidth();

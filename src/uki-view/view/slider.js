@@ -71,7 +71,7 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
         }, this);
         
         this.bind('click', this._click);
-        this.bind('keydown', this._keydown);
+        this.bind(uki.view.List.prototype.keyPressEvent(), this._keypress);
     };
     
     this._mouseenter = function() {
@@ -90,10 +90,10 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
         this._cachedIndex = undefined;
     };
     
-    this._keydown = function(e) {
-        if (e.which == 39) {
+    this._keypress = function(e) {
+        if (e.which == 39 || e.keyCode == 39) {
             this.value(this.value() + this._keyStep * (this._max - this._min));
-        } else if (e.which == 37) {
+        } else if (e.which == 37 || e.keyCode == 37) {
             this.value(this.value() - this._keyStep * (this._max - this._min));
         }
     };

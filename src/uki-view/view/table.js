@@ -55,7 +55,7 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
         var scrollPaneRect = new Rect(0, this._headerHeight, this.rect().width, this.rect().height - this._headerHeight),
             listRect = scrollPaneRect.clone().normalize(),
             headerRect = new Rect(0, 0, this.rect().width, this._headerHeight),
-            listML = { view: this._listImpl, rect: listRect, anchors: 'left top bottom', render: new uki.view.table.Render(this), className: 'table-list' },
+            listML = { view: this._listImpl, rect: listRect, anchors: 'left top bottom right', render: new uki.view.table.Render(this), className: 'table-list' },
             paneML = { view: 'ScrollPane', rect: scrollPaneRect, anchors: 'left top right bottom', scrollableH: true, childViews: [listML], className: 'table-scroll-pane'},
             headerML = { view: 'table.Header', rect: headerRect, anchors: 'top left right', className: 'table-header' };
             
