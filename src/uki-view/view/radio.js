@@ -16,6 +16,7 @@ include('checkbox.js');
             this._checked = !!state;
             if (state) manager.clearGroup(this);
             this._updateBg();
+            this.trigger('change', {checked: this._checked, source: this});
         });
 
         this._mouseup = function() {
@@ -23,7 +24,6 @@ include('checkbox.js');
             this._down = false;
             if (!this._checked && !this._disabled) {
                 this.checked(!this._checked);
-                this.trigger('change', {checked: this._checked, source: this});
             }
         }
     });
