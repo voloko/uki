@@ -107,7 +107,7 @@ var utils = {
             '"': '&quot;',
             "'": '&#x27;'
         };
-        return html.replace(/[&<>\"\']/g, function(c) { return trans[c]; });
+        return (html + '').replace(/[&<>\"\']/g, function(c) { return trans[c]; });
     },
     
     /**
