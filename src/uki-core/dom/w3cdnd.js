@@ -224,8 +224,8 @@ include('event.js');
     }
     
     function dragenter (e) {
-        if (!dnd.dataTransfer || e.domEvent.__dragOver) return;
-        e.domEvent.__dragOver = true;
+        if (!dnd.dataTransfer || e.domEvent.__dragEntered || !retriggering) return;
+        e.domEvent.__dragEntered = true;
         if (dnd.dragOver == this) return;
         dnd.dragOver = this;
         e.type = 'dragenter';
@@ -234,7 +234,7 @@ include('event.js');
     
     function drag (e) {
         if (retriggering) {
-            if (!e.domEvent.__dragOver && dnd.dragOver) {
+            if (!e.domEvent.__dragEntered && dnd.dragOver) {
                 e.type = 'dragleave';
                 uki.dom.handler.apply(dnd.dragOver, arguments);
                 dnd.dragOver = null;
