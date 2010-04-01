@@ -48,7 +48,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             this._input.placeholder = v;
         } else {
             if (!this._placeholderDom) {
-                this._placeholderDom = uki.createElement('div', this.defaultCss + 'z-input:103;color:#999;cursor:text', v);
+                this._placeholderDom = uki.createElement('div', this.defaultCss + 'z-input:103;color:#999;cursor:text;-moz-user-select:none;', v);
                 this._dom.appendChild(this._placeholderDom);
                 this._updatePlaceholderVis();
                 uki.each(['fontSize', 'fontFamily', 'fontWeight'], function(i, name) {
