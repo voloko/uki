@@ -64,6 +64,7 @@ uki.view.Styleable = new function() {
         if (state === undefined) return this._dom.getAttribute('draggable');
         this._dom.setAttribute('draggable', true);
         this._dom.style.WebkitUserDrag = 'element';
+        return this;
     };
     
     /**#@-*/ 
