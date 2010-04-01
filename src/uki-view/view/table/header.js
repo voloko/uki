@@ -4,6 +4,7 @@ uki.view.table.Header = uki.newClass(uki.view.Label, function(Base) {
     this._setup = function() {
         Base._setup.call(this);
         this._multiline = true;
+        this._resizers = [];
     };
     
     this.typeName = function() { return 'uki.view.table.Header'; };
@@ -14,6 +15,15 @@ uki.view.table.Header = uki.newClass(uki.view.Label, function(Base) {
         this._createResizers();
     });
     
+    this.redrawColumn = function(col) {
+        if (this._resizers[col]) {
+            uki.dom.unbind(this._resizers[col]);
+        }
+        var container = doc.createElement('div');
+        container.innerHTML = this._columns[col].renderHeader(this.rect().height);
+        this._label.replaceChild(container.firstChild, this._label.childNodes[col]);
+    };
+    
     this._createColumns = function() {
         var html = [];
         for(var i = 0, offset = 0, columns = this._columns, l = columns.length; i < l; i++) {
@@ -22,14 +32,17 @@ uki.view.table.Header = uki.newClass(uki.view.Label, function(Base) {
         return html.join('')
     };
     
+    this._createResizer = function(i) {
+        var column = this._columns[i];
+        if (column.resizable()) {
+            var resizer = column.appendResizer(this._label.childNodes[i], this.rect().height);
+            this._bindResizerDrag(resizer, i);
+            this._resizers[i] = resizer;
+        }
+    };
+    
     this._createResizers = function() {
-        for (var i=0, column, resizer, offset = 0; i < this._columns.length; i++) {
-            column = this._columns[i];
-            if (column.resizable()) {
-                var resizer = column.appendResizer(this._label.childNodes[i], this.rect().height);
-                this._bindResizerDrag(resizer, i);
-            }
-        };
+        uki.each(this._columns, this._createResizer, this);
     };
     
     this._bindResizerDrag = function(resizer, columnIndex) {
