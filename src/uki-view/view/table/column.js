@@ -69,7 +69,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this.renderHeader = function(height) {
         this._className || this._initStylesheet();
         var x = this.headerTemplate().render({
-            data: '<div style="overflow:hidden;text-overflow:ellipsis;*width:100%;">' + this.label() + '</div>',
+            data: '<div style="overflow:hidden;text-overflow:ellipsis;*width:100%;height:100%;">' + this.label() + '</div>',
             style: '*overflow-y:hidden;' + this._cellStyle(uki.dom.offset.boxModel ? height - 1 : height),
             className: this._className
         });
