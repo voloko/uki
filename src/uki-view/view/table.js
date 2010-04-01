@@ -59,11 +59,15 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
             cell = container.firstChild;
             item.replaceChild(cell, item.childNodes[col]);
         }
+        return this;
     };
     
-    this.redrawRow = function(row) {
-        return this.list().redrawRow(row);
-    };
+    uki.each(['redrawRow', 'addRow', 'removeRow'], function(i, name) {
+        this[name] = function() {
+            this.list()[name].apply(this.list(), arguments);
+            return this;
+        };
+    }, this)
     
     this.redrawColumn = function(col) {
         var from = this._list._packs[0].itemFrom,
@@ -71,6 +75,7 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
         for (var i=from; i < to; i++) {
             this.redrawCell(i, col);
         };
+        return this;
     };
     
     this._updateTotalWidth = function() {

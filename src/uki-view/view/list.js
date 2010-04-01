@@ -53,19 +53,47 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return new Size(this.rect().width, this._rowHeight * this._data.length);
     };
     
+    // used in search. should be fast
     this.addRow = function(position, data) {
         this._data.splice(position, 0, data);
-        this.data(this._data);
+        var item = this._itemAt(position);
+        if (item) {
+            var container = doc.createElement('div');
+            
+            container.innerHTML = this._rowTemplate.render({ 
+                height: this._rowHeight, 
+                text: this._render.render(this._data[position], this._rowRect(position), position)
+            });
+            item.parentNode.insertBefore(container.firstChild, item);
+            if (position < this._packs[0].itemTo) {
+                this._packs[0].itemTo++;
+                this._packs[1].itemFrom++;
+                this._packs[1].itemTo++;
+                this._packs[1].dom.style.top = this._packs[1].itemFrom*this._rowHeight + 'px';
+            } else {
+                this._packs[1].itemTo++;
+            }
+        }
+        
+        // offset selection
+        var selectionPosition = uki.binarySearch(position, this.selectedIndexes());
+        for (var i = selectionPosition; i < this._selectedIndexes.length; i++) {
+            this._selectedIndexes[i]++;
+        };
+        
+        return this;
     };
     
     this.removeRow = function(position, data) {
         this._data.splice(position, 1);
         this.data(this._data);
+        return this;
     };
     
     this.redrawRow = function(row) {
         var item = this._itemAt(row);
-        if (item) item.innerHTML = this._render.render(this._data[row], new Rect(0, row*this.rowHeight(), this.width(), this.rowHeight()), row);
+        if (item) item.innerHTML = this._render.render(this._data[row], this._rowRect(row), row);
+        return this;
     };
     
     this.selectedIndex = function(position) {
@@ -127,6 +155,10 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         while (array[p] <= to) p++;
         if (p > initialP) array.splice(initialP, p - initialP);
     }
+    
+    this._rowRect = function(p) {
+        return new Rect(0, p*this._rowHeight, this.rect().width, this._rowHeight);
+    };
     
     this._toggleSelection = function(p) {
         var indexes = [].concat(this._selectedIndexes);
@@ -304,14 +336,12 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     this._rowTemplate = new uki.theme.Template('<div style="width:100%;height:${height}px;overflow:hidden;">${text}</div>')
     
     this._renderPack = function(pack, itemFrom, itemTo) {
-        var html = [], position,
-            rect = new Rect(0, itemFrom*this._rowHeight, this.rect().width, this._rowHeight);
+        var html = [], position;
         for (i=itemFrom; i < itemTo; i++) {
             html[html.length] = this._rowTemplate.render({ 
                 height: this._rowHeight, 
-                text: this._render.render(this._data[i], rect, i)
+                text: this._render.render(this._data[i], this._rowRect(i), i)
             });
-            rect.y += this._rowHeight;
         };
         pack.dom.innerHTML = html.join('');
         pack.itemFrom = itemFrom;
