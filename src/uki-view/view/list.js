@@ -54,15 +54,18 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     };
     
     this.addRow = function(position, data) {
-        this.clearSelection();
         this._data.splice(position, 0, data);
         this.data(this._data);
     };
     
     this.removeRow = function(position, data) {
-        this.clearSelection();
         this._data.splice(position, 1);
         this.data(this._data);
+    };
+    
+    this.redrawRow = function(row) {
+        var item = this._itemAt(row);
+        if (item) item.innerHTML = this._render.render(this._data[row], new Rect(0, row*this.rowHeight(), this.width(), this.rowHeight()), row);
     };
     
     this.selectedIndex = function(position) {
@@ -364,7 +367,6 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             itemFrom, itemTo, startAt, updated = true;
 
         Base._layoutDom.call(this, rect);
-        
         if (
             maxVisibleY <= minRenderedY || minVisibleY >= maxRenderedY || // both packs below/above visible area
             (maxVisibleY > maxRenderedY && this._packs[1].itemFrom * this._rowHeight > this._visibleRect.y && this._packs[1].itemTo > this._packs[1].itemFrom) || // need to render below, and pack 2 is not enough to cover

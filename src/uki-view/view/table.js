@@ -22,6 +22,14 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
         return Base._style.call(this, name, value);
     };
     
+    this.list = function() {
+        return this._list;
+    };
+    
+    this.header = function() {
+        return this._header;
+    };
+    
     this.columns = uki.newProp('_columns', function(c) {
         for (var i = 0; i < this._columns.length; i++) {
             this._columns[i].unbind();
@@ -38,6 +46,32 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
         this._updateTotalWidth();
         this._header.columns(this._columns);
     });
+    
+    this.redrawCell = function(row, col) {
+        var item = this._list._itemAt(row);
+        if (item) {
+            var cell, container = doc.createElement('div');
+            container.innerHTML = this.columns()[col].render(
+                this.data()[row],
+                new Rect(0, row*this.rowHeight(), this.list().width(), this.rowHeight()),
+                row
+            );
+            cell = container.firstChild;
+            item.replaceChild(cell, item.childNodes[col]);
+        }
+    };
+    
+    this.redrawRow = function(row) {
+        return this.list().redrawRow(row);
+    };
+    
+    this.redrawColumn = function(col) {
+        var from = this._list._packs[0].itemFrom,
+            to   = this._list._packs[1].itemTo
+        for (var i=from; i < to; i++) {
+            this.redrawCell(i, col);
+        };
+    };
     
     this._updateTotalWidth = function() {
         this._totalWidth = 0;
