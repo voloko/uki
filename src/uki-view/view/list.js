@@ -3,7 +3,7 @@ include('scrollPane.js');
 uki.view.list = {};
 uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     
-    this._throttle = 5; // do not try to render more often than every 5ms
+    this._throttle = 42; // do not try to render more often than every 42ms
     this._visibleRectExt = 300; // extend visible rect by 300 px overflow
     this._defaultBackground = 'theme(list)';
     

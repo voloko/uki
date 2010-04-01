@@ -52,12 +52,21 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
         uki.dom.bind(this._focusTarget, 'focus', uki.proxy(function(e) {
             if (!this._hasFocus) this._focus(e);
         }, this));
+        
         uki.dom.bind(this._focusTarget, 'blur', uki.proxy(function(e) {
-            if (this._hasFocus) this._blur(e);
+            if (this._hasFocus) {
+                this._hasFocus = false;
+                setTimeout(uki.proxy(function() { // wait for mousedown refocusing
+                    if (!this._hasFocus) this._blur(e);
+                }, this),1);
+            }
         }, this));
         
         if (!preCreatedFocusTarget) this.bind('mousedown', function(e) {
-            if (this._focusOnClick) setTimeout(uki.proxy(this.focus, this), 1);
+            if (this._focusOnClick) {
+                if (this._focusable && !this._disabled && !this._hasFocus) this._focus();
+                setTimeout(uki.proxy(this.focus, this), 1);
+            }
         });
         this._updateFocusable();
     }
