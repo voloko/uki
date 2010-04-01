@@ -1,7 +1,5 @@
 uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
-    var proto = this;
-        
-    proto._setup = function() {
+    this._setup = function() {
         Base._setup.call(this);
         this._originalRect = this._rect;
         uki.extend(this, {
@@ -20,13 +18,13 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     /**
      * @fires event:handleMove
      */
-    proto.handlePosition = uki.newProp('_handlePosition', function(val) {
+    this.handlePosition = uki.newProp('_handlePosition', function(val) {
         this._handlePosition = this._normalizePosition(val);
         this.trigger('handleMove', {source: this, handlePosition: this._handlePosition, dragValue: val });
         this._resizeChildViews();
     });
     
-    proto.handleWidth = uki.newProp('_handleWidth', function(val) {
+    this.handleWidth = uki.newProp('_handleWidth', function(val) {
         if (this._handleWidth != val) {
             this._handleWidth = val;
             var handle = this._createHandle();
@@ -38,7 +36,7 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     });
     
     
-    proto._normalizePosition = function(val) {
+    this._normalizePosition = function(val) {
         var prop = this._vertical ? 'height' : 'width';
         return MAX(
                 this._leftMin,
@@ -49,15 +47,15 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     };
     
     
-    uki.addProps(proto, ['leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight']);
-    proto.topMin = proto.leftMin;
-    proto.bottomMin = proto.rightMin;
+    uki.addProps(this, ['leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight']);
+    this.topMin = this.leftMin;
+    this.bottomMin = this.rightMin;
     
-    proto._removeHandle = function() {
+    this._removeHandle = function() {
         this._dom.removeChild(this._handle);
     };
     
-    proto._createHandle = function() {
+    this._createHandle = function() {
         var handle;
         if (this._vertical) {
             handle = uki.theme.dom('splitPane-vertical', {handleWidth: this._handleWidth});
@@ -74,7 +72,7 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
         return handle;
     };
     
-    proto._createDom = function() {
+    this._createDom = function() {
         this._dom = uki.createElement('div', Base.defaultCss);
         for (var i=0, paneML; i < 2; i++) {
             paneML = { view: 'Container' };
@@ -88,7 +86,7 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
         this._dom.appendChild(this._handle = this._createHandle());
     };
     
-    proto._normalizeRect = function(rect) {
+    this._normalizeRect = function(rect) {
         rect = Base._normalizeRect.call(this, rect);
         var newRect = rect.clone();
         if (this._vertical) {
@@ -99,7 +97,7 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
         return newRect;
     };
     
-    proto._resizeSelf = function(newRect) {
+    this._resizeSelf = function(newRect) {
         var oldRect = this._rect,
             dx, prop = this._vertical ? 'height' : 'width';
         if (!Base._resizeSelf.call(this, newRect)) return false;
@@ -119,51 +117,51 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
         return true;
     };
     
-    proto._draggesturestart = function(e) {
+    this._draggesturestart = function(e) {
         var offset = uki.dom.offset(this.dom());
         this._posWithinHandle = (e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x']) - this._handlePosition;
         return true;
     };
     
-    proto._draggesture = function(e) {
+    this._draggesture = function(e) {
         var offset = uki.dom.offset(this.dom());
         this.handlePosition(e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x'] - this._posWithinHandle);
         e.preventDefault();
         this.layout();
     };
     
-    proto._draggestureend = function(e, offset) {
+    this._draggestureend = function(e, offset) {
     };
     
-    proto.topPane = proto.leftPane = function(pane) {
+    this.topPane = this.leftPane = function(pane) {
         return this._paneAt(0, pane);
     };
     
-    proto.bottomPane = proto.rightPane = function(pane) {
+    this.bottomPane = this.rightPane = function(pane) {
         return this._paneAt(1, pane);
     };
     
-    proto.topChildViews = proto.leftChildViews = function(views) {
+    this.topChildViews = this.leftChildViews = function(views) {
         return this._childViewsAt(0, views);
     };
     
-    proto.bottomChildViews = proto.rightChildViews = function(views) {
+    this.bottomChildViews = this.rightChildViews = function(views) {
         return this._childViewsAt(1, views);
     };
     
-    proto._childViewsAt = function(i, views) {
+    this._childViewsAt = function(i, views) {
         if (views === undefined) return this._panes[i].childViews();
         this._panes[i].childViews(views);
         return this;
     };
     
-    proto._paneAt = function(i, pane) {
+    this._paneAt = function(i, pane) {
         if (pane === undefined) return this._panes[i];
         uki.build.copyAttrs(this._panes[i], pane);
         return this;
     };
     
-    proto._leftRect = function() {
+    this._leftRect = function() {
         if (this._vertical) {
             return new Rect(this._rect.width, this._handlePosition);
         } else {
@@ -171,7 +169,7 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
         }
     };
     
-    proto._rightRect = function() {
+    this._rightRect = function() {
         if (this._vertical) {
             return new Rect(
                 0, this._handlePosition + this._handleWidth,
@@ -185,17 +183,17 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
         }
     };
     
-    proto._resizeChildViews = function() {
+    this._resizeChildViews = function() {
         this._panes[0].rect(this._leftRect());
         this._panes[1].rect(this._rightRect());
     };
     
-    proto._layoutDom = function(rect) {
+    this._layoutDom = function(rect) {
         Base._layoutDom.call(this, rect);
         this._handle.style[this._vertical ? 'top' : 'left'] = this._handlePosition + 'px';
     };
     
-    proto._bindToDom = function(name) {
+    this._bindToDom = function(name) {
         if (name == 'handleMove') return true;
         return Base._bindToDom.call(this, name);
     };

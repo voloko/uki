@@ -33,11 +33,10 @@ uki.view.Styleable = new function() {
     //     };
     // });
     
-    var probe = uki.createElement('div').style,
-        proto = this;
-    uki.each(['userSelect', 'MozUserSelect', 'WebkitUserSelect'], function() {
-        if (typeof probe[this] == 'string') proto._textSelectProp = this;
-    });
+    var probe = uki.createElement('div').style;
+    uki.each(['userSelect', 'MozUserSelect', 'WebkitUserSelect'], function(i, name) {
+        if (typeof probe[name] == 'string') this._textSelectProp = name;
+    }, this);
     
     /**
      * Sets whether text of the view can be selected.
