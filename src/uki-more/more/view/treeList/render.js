@@ -11,7 +11,7 @@ uki.more.view.treeList.Render = uki.newClass(uki.view.list.Render, new function(
     );
     
     this.initStyles = function() {
-        this.classPrefix = 'treeList-' + uki.dom.guid++;
+        this.classPrefix = 'treeList-' + uki.guid++;
         var style = new uki.theme.Template(
             '.${classPrefix}-row { color: #333; position:relative; padding-top:3px; } ' +
             '.${classPrefix}-toggle { overflow: hidden; position:absolute; left:-15px; top:5px; width: 10px; height:9px; } ' +

@@ -58,7 +58,7 @@ var utils = {
             result = function() {
                 return fn.apply(context, args.concat(slice.call(arguments, 0)));
             };
-        result.huid = fn.huid = fn.huid || uki.dom.guid++;
+        result.huid = fn.huid = fn.huid || uki.guid++;
         return result;
     },
     

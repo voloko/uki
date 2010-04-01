@@ -9,7 +9,7 @@ describe 'uki.dom'
 
     it 'should create stylesheets'
         x = uki.createElement('div')
-        x.className = 'test' + uki.dom.guid++
+        x.className = 'test' + uki.guid++
         uki.dom.createStylesheet('.' + x.className + ' { display: inline !important; }')
         uki.dom.probe(x, function() {
             uki.dom.computedStyle(x).display.should.be 'inline'

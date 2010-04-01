@@ -102,7 +102,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this._initStylesheet = function() {
         if (!this._className) {
             uki.dom.offset.initializeBoxModel();
-            this._className = 'uki-table-column-' + (++uki.dom.guid);
+            this._className = 'uki-table-column-' + (uki.guid++);
             var css = '.' + this._className + ' {width:' + this._clientWidth() + 'px;}';
             this._stylesheet = uki.dom.createStylesheet(css);
         }

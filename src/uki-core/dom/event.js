@@ -48,9 +48,9 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
 		if ( el.setInterval && el != window )
 			el = window;
 			
-        listener.huid = listener.huid || uki.dom.guid++;
+        listener.huid = listener.huid || uki.guid++;
         
-        var id = el[expando] = el[expando] || uki.dom.guid++,
+        var id = el[expando] = el[expando] || uki.guid++,
             handler = uki.dom.handlers[id] = uki.dom.handlers[id] || function() {
                 uki.dom.handler.apply(arguments.callee.elem, arguments);
             },

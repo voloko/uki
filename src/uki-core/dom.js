@@ -8,8 +8,6 @@ include('utils.js');
  * @author voloko
  */
 uki.dom = {
-    guid: 1,
-    
     /**
      * Convenience wrapper around document.createElement
      * Creates dom element with given tagName, cssText and innerHTML
@@ -23,7 +21,7 @@ uki.dom = {
         var e = doc.createElement(tagName);            
         if (cssText) e.style.cssText = cssText;
         if (innerHTML) e.innerHTML = innerHTML;
-        e[expando] = uki.dom.guid++;
+        e[expando] = uki.guid++;
         return e;
     },
     
