@@ -54,6 +54,7 @@ var dragEndEvents = 'mouseup ' + (dnd.nativeDnD ? ' dragend' : '');
 // if (window.attachEvent && !window.opera) dragEndEvents += ' mouseleave';
 
 function startGesture (el) {
+    if (dnd.draggable) return;
     dnd.draggable = el;
     uki.dom.bind(doc, 'mousemove scroll', draggesture);
     uki.dom.bind(doc, dragEndEvents, draggestureend);
