@@ -76,13 +76,18 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     
     unbind: function(el, types, listener) {
         var id = el[expando],
-            huid = listener.huid,
+            huid = listener && listener.huid,
             i, type;
-        types = types.split(' ');
+        if (types) {
+            types = types.split(' ');
+        } else {
+            types = [];
+            uki.each(uki.dom.bound[id] || [], function(k, v) { types.push(k); });
+        }
         for (i=0; i < types.length; i++) {
             type = types[i];
-            if (!huid || !id || !uki.dom.bound[id] || !uki.dom.bound[id][type]) continue;
-            uki.dom.bound[id][type] = uki.grep(uki.dom.bound[id][type], function(h) { return h.huid !== huid; });
+            if (!id || !uki.dom.bound[id] || !uki.dom.bound[id][type]) continue;
+            uki.dom.bound[id][type] = listener ? uki.grep(uki.dom.bound[id][type], function(h) { return h.huid !== huid; }) : [];
             
             if (uki.dom.bound[id][type].length == 0) {
                 var handler = uki.dom.handlers[id];
