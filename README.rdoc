@@ -44,7 +44,7 @@ It comes with a rich view-component library ranging from Sliders to Grids and Sp
    at http://github.com/voloko/uki/blob/master/src/uki-theme/airport.js
 9. If your adding uki to existing project then it is better to simply add
     <script src='http://static.ukijs.org/pkg/0.1.3/uki.gz.js'></script>
-   to your pages an it will work. If you start a new one you might try
+   to your pages and it will work. If you start a new one you might try
    uki-tools (http://github.com/voloko/uki-tools)
 10. See the available resources in Links section and have fun
   
