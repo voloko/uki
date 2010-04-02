@@ -1,21 +1,63 @@
 = UKI – simple UiKit for complex Web apps
-Uki is a 
-JavaScript 
-user interface toolkit for desktop-like web applications.
-It comes with 
-a rich view-component library 
-ranging from Sliders to Grids and SplitPanes.
+Uki is a JavaScript user interface toolkit for desktop-like web applications.
+It comes with a rich view-component library ranging from Sliders to Grids and SplitPanes.
 
     uki({ view: 'Button', text: 'Click me', rect: '10 10 100 24' }).attachTo( window );
     
     uki('Button[text^=Click]').click(function() { alert(this.text()); });
     
+    
+== All you have to know in 5 minutes 
+1. Uki interfaces are created from Views the same way web pages are created from DOM nodes.
+   Views even behave similar to DOM nodes. You can appendView, insertBefore, access parentView etc.
+    panel.appendView(button) 
+   Examples of views: Slider, SplitPane or Table
+2. View have attributes. You can read them by calling attrname() without params and write with
+   attrname(newValue).
+    label.text('Lorem') // set text to a label
+    label.text() == 'Lorem' // get text
+    splitPane.handlePosition(300) // move the split pane handle to 300px
+3. You can create Views with uki() function. 
+   Once created view can be attached to any block DOM container with attachTo()
+    uki({ view: 'Label', text: 'Lorem', ... more attributes ... }).attachTo( window )
+4. You can find attached views using css-like selectors. 
+    uki('Label') // find all labels on page
+    uki('Box[name=main] > Label') // find all immediate descendant Labels in a box with name = "main"
+5. uki() calls return Collection of Views. This is similar to jQuery('expression') result. You can 
+   access individual views with [index]. You can manipulate all views at the same 
+   time with a number of collection methods (http://ukijs.org/docs/symbols/uki.Collection.html)
+    uki('Label')[3] // get 3-d found label
+6. Events are bound to Views (not individual DOM nodes) with the bind() function
+    uki('Label')[0].bind('click', function() {  handle the event here  }) // bind click to the first label
+    uki('Label').bind('click', function() {  handle the event here  }) // bind click to all labels
+    uki('Label').unbind('click') // unbind all click handlers from all labels
+7. Views are laid out with initial position and resize rules. Initial position is set with the rect property
+    button.rect('50 20 100 22') // set left = 50px, top = 20px, width = 100px, height = 22px
+   Resize rules are set with the anchors property:
+    button.anchors('left top') // stay at the left top when container resizes
+    button.anchors('right bottom') // move with the bottom right corner of the container
+    button.anchors('left top right') // stay at the top, resize width with the container
+   You can pass both rect and anchors to the uki() function:
+    uki({ view: 'Button', rect: '50 20 100 22', anchors: 'left top right' })
+8. You can change visual appearance of the views with themes. Theme is basically a collection of 
+   resources like images, styled dom nodes and backgrounds. You can find an example of one
+   at http://github.com/voloko/uki/blob/master/src/uki-theme/airport.js
+9. If your adding uki to existing project then it is better to simply add
+    <script src='http://static.ukijs.org/pkg/0.1.3/uki.gz.js'></script>
+   to your pages an it will work. If you start a new one you might try
+   uki-tools (http://github.com/voloko/uki-tools)
+10. See the available resources in Links section and have fun
+  
+    
+
+
 == Links
  * API docs at http://ukijs.org/docs/
  * Google group http://groups.google.com/group/ukijs
- * Code examples at http://github.com/voloko/uki/tree/master/app/functional/
+ * Code examples at http://ukijs.org/examples/
  * Development docs and tutorial at http://wiki.github.com/voloko/uki/
  * Google wave in 100 lines of code example: http://ukijs.org/examples/core-examples/wave
+ 
  
 == Contribute
 To install development server
