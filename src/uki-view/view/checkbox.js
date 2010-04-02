@@ -20,12 +20,13 @@ uki.view.declare('uki.view.Checkbox', uki.view.Button, function(Base) {
         var name = this._disabled ? 'disabled' : this._over ? 'hover' : 'normal';
         if (this._checked) name = 'checked-' + name;
         this._backgroundByName(name);
-        this.trigger('change', {checked: this._checked, source: this});
     };
     
     this.value = this.checked = uki.newProp('_checked', function(state) {
+        var changed = this._checked != !!state;
         this._checked = !!state;
         this._updateBg();
+        if (changed) this.trigger('change', {checked: this._checked, source: this});
     });
     
     this._mouseup = function(e) {
