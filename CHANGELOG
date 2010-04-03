@@ -1,9 +1,11 @@
 (planned)
-- split pane events bound to handle (planned)
-- uki-more: twitter widget fixes (planned)
-- uki-more: menu (flow + disclosure + list) (planned)
-- uki-more: RSS reader demo (planned)
 - uki-more: Gallery demo (planned)
+
+v0.2.0
+- uki-tools
+- initial model/controller support
+- mail.app demo
+- api improvements
 
 v0.1.0
 - uki.dom.Event wrapper
