@@ -55,7 +55,7 @@ uki.view.Styleable = new function() {
         } else {
             uki.dom[state ? 'unbind' : 'bind'](this.dom(), 'selectstart', uki.dom.preventDefaultHandler);
         }
-        this._dom.style.cursor = state ? 'text' : 'default';
+        this._dom.style.cursor = state ? '' : 'default';
         return this;
     };
     

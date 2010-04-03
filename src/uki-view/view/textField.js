@@ -83,7 +83,6 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         var tagName = this._multiline ? 'textarea' : 'input';
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible');
         this._input = uki.createElement(tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
-        this._inputStyle = this._input.style;
         
         this._input.value = this._value;
         this._dom.appendChild(this._input);
@@ -92,8 +91,8 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         
         this._initFocusable(this._input);
         this.bind('mousedown', function(e) {
+            if (e.target == this._input) return;
             this.focus(); 
-            e.preventDefault();
         })
     };
     

@@ -9,7 +9,7 @@ uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
     this.hidePartlyVisible = uki.newProp('_hidePartlyVisible');
     
     this.resizeToContents = function(autosizeStr) {
-        this._resizeChildViews();
+        this._resizeChildViews(this._rect);
         return Base.resizeToContents.call(this, autosizeStr);
     }
     
@@ -21,17 +21,19 @@ uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
     }, this)
     
     this.layout = function() {
-        if (this._contentChanged) this._resizeChildViews();
+        if (this._contentChanged) this._resizeChildViews(this._rect);
         return Base.layout.call(this);
     };
     
     // resize in layout
-    this._resizeChildViews = function() {
+    this._resizeChildViews = function(oldRect) {
         this._contentChanged = false;
         var offset = 0, rect, view;
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             view = childViews[i];
-            view.rect(new Rect(view._rect.x, offset, this._rect.width, view._rect.height));
+            view.parentResized(oldRect, this._rect);
+            view.rect().y = offset;
+            // view.rect(new Rect(view._rect.x, offset, view._rect.width, view._rect.height));
             if (this._hidePartlyVisible) {
                 view.visible(view._rect.height + offset <= this._rect.height);
             }
@@ -48,11 +50,13 @@ uki.view.declare('uki.view.HFlow', uki.view.VFlow, function(Base) {
         return new Size( value, this.contentsHeight() );
     };
     
-    this._resizeChildViews = function() {
+    this._resizeChildViews = function(oldRect) {
         var offset = 0, rect, view;
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             view = childViews[i];
-            view.rect(new Rect(offset, view._rect.y, view._rect.width, this._rect.height));
+            view.parentResized(oldRect, this._rect);
+            view.rect().x = offset;
+            // view.rect(new Rect(offset, view._rect.y, view._rect.width, view._rect.height));
             if (this._hidePartlyVisible) {
                 view.visible(view._rect.width + offset <= this._rect.width);
             }
