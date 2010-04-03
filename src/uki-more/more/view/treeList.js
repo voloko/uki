@@ -13,13 +13,16 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
 
     this.data = uki.newProp('_treeData', function(v) {
         this._treeData = v;
-        this.listData(this._treeNodeToListData(v));
-        var children = this.listData();
+        this._data = this._treeNodeToListData(v);
+        var children = this.listData(), opened = false;
         for (var i=children.length - 1; i >= 0 ; i--) {
             if (this._data[i].__opened) {
+                opened = true;
                 this._openSubElement(i);
             }
         };
+        this.listData(this._data);
+        if (opened) this.trigger('open');
     });
 
     this._treeNodeToListData = function(node, indent) {
@@ -41,7 +44,7 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
     }
     
     function recursiveLength (item) {
-        var children = item.children,
+        var children = uki.attr(item, 'children'),
         length = children.length;
 
         for (var i=0; i < children.length; i++) {
@@ -52,8 +55,8 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
     
     this._openSubElement = function(index) {
         var item = this._data[index],
-            children = item.children;
-            
+            children = uki.attr(item, 'children');
+
         if (!children || !children.length) return 0;
         var length = children.length;
         
@@ -93,7 +96,7 @@ uki.view.declare('uki.more.view.TreeList', uki.view.List, function(Base) {
     this.close = function(index) {
         var item = this._data[index],
             indexes = this._selectedIndexes,
-            children = item.children;
+            children = uki.attr(item, 'children');
         if (!children || !children.length || !item.__opened) return;
             
         var length = recursiveLength(item);
