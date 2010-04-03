@@ -21,14 +21,15 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
     }),
     
     this.disabled = uki.newProp('_disabled', function(d) {
+        var changed = d !== !!this._disabled;
         this._disabled = d;
         if (d) this.blur();
         this._updateFocusable();
-        if (this._updateBg) this._updateBg();
+        if (changed && this._updateBg) this._updateBg();
     }),
     
     this._updateFocusable = function() {
-        if (this._preCreatedFocusTarget) return;
+        if (this._preCreatedFocusTarget || !this._focusTarget) return;
         
         if (this._focusable && !this._disabled) {
             this._focusTarget.style.display = 'block';
@@ -58,15 +59,12 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
                 this._hasFocus = false;
                 setTimeout(uki.proxy(function() { // wait for mousedown refocusing
                     if (!this._hasFocus) this._blur(e);
-                }, this),1);
+                }, this), 1);
             }
         }, this));
         
         if (!preCreatedFocusTarget) this.bind('mousedown', function(e) {
-            if (this._focusOnClick) {
-                if (this._focusable && !this._disabled && !this._hasFocus) this._focus();
-                setTimeout(uki.proxy(this.focus, this), 1);
-            }
+            if (this._focusOnClick) this.focus();
         });
         this._updateFocusable();
     }
@@ -82,9 +80,8 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
     
     this.focus = function() {
         try {
-            if (this._focusable && !this._disabled) {
-                this._focusTarget.focus();
-            }
+            if (this._focusable && !this._disabled && !this._hasFocus) this._focus();
+            setTimeout(uki.proxy(this._focusTarget.focus, this._focusTarget), 1);
         } catch(e) {}
         return this;
     },
