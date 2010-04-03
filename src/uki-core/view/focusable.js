@@ -80,13 +80,13 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
     }
     
     this.focus = function() {
-        if (this._focusable && !this._disabled && !this._hasFocus) {
-            this._focus();
+        if (this._focusable && !this._disabled) {
+            if (!this._hasFocus) this._focus();
             var target = this._focusTarget;
             setTimeout(function() {
                 try {
                     target.focus();
-                } catch(e) { alert(e) }
+                } catch(e) { }
                 target = null;
             }, 1);
         }
