@@ -9,7 +9,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
 
     this.init = function() {};
     
-    uki.addProps(this, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth', 'maxWidth']);
+    uki.addProps(this, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth', 'maxWidth', 'key']);
     
     this.template = function(v) {
         if (v === undefined) return this._template = this._template || uki.theme.template('table-cell');
@@ -56,7 +56,8 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     
     this.render = function(row, rect, i) {
         this._prerenderedTemplate || this._prerenderTemplate(rect);
-        this._prerenderedTemplate[1] = this._formatter ? this._formatter(row[this._position], row) : row[this._position];
+        var value = this._key ? uki.attr(row, this._key) : row[this._position];
+        this._prerenderedTemplate[1] = this._formatter ? this._formatter(value, row) : value;
         return this._prerenderedTemplate.join('');
     };
     

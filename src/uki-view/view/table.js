@@ -3,7 +3,7 @@ include('list.js');
 uki.view.table = {};
 
 uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
-    var propertiesToDelegate = 'rowHeight data packSize visibleRectExt render selectedIndex focusable textSelectable multiselect'.split(' ');
+    var propertiesToDelegate = 'rowHeight data packSize visibleRectExt render selectedIndex selectedIndexes selectedRows focus blur hasFocus lastClickIndex focusable textSelectable multiselect'.split(' ');
     
     this._rowHeight = 17;
     this._headerHeight = 17;

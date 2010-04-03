@@ -22,6 +22,7 @@ uki.view.table.Header = uki.newClass(uki.view.Label, function(Base) {
         var container = doc.createElement('div');
         container.innerHTML = this._columns[col].renderHeader(this.rect().height);
         this._label.replaceChild(container.firstChild, this._label.childNodes[col]);
+        if (this._columns[col].resizable()) this._createResizers(col);
     };
     
     this._createColumns = function() {
