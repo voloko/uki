@@ -55,10 +55,11 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
         }, this));
         
         uki.dom.bind(this._focusTarget, 'blur', uki.proxy(function(e) {
+            document.title = 'blur' + this.typeName();
             if (this._hasFocus) {
                 this._hasFocus = false;
                 setTimeout(uki.proxy(function() { // wait for mousedown refocusing
-                    if (!this._hasFocus) this._blur(e);
+                    if (!this._hasFocus) this._blur();
                 }, this), 1);
             }
         }, this));
@@ -79,10 +80,16 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
     }
     
     this.focus = function() {
-        try {
-            if (this._focusable && !this._disabled && !this._hasFocus) this._focus();
-            setTimeout(uki.proxy(this._focusTarget.focus, this._focusTarget), 1);
-        } catch(e) {}
+        if (this._focusable && !this._disabled && !this._hasFocus) {
+            this._focus();
+            var target = this._focusTarget;
+            setTimeout(function() {
+                try {
+                    target.focus();
+                } catch(e) { alert(e) }
+                target = null;
+            }, 1);
+        }
         return this;
     },
     
