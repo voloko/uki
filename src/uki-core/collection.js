@@ -62,9 +62,9 @@ uki.fn = uki.Collection.prototype = new function() {
      */
     this.attr = function( name, value ) {
         if (value !== undefined) {
-            this.each(function() {
-                uki.attr( this, name, value );
-            });
+            for (var i=0; i < this.length; i++) {
+                uki.attr( this[i], name, value );
+            };
             return this;
         } else {
             return this[0] ? uki.attr( this[0], name ) : '';
@@ -267,7 +267,7 @@ uki.fn = uki.Collection.prototype = new function() {
         		this.bind(name, handler);
     	    } else {
                 for (var i=0; i < this.length; i++) {
-                    this[i].trigger(name);
+                    this[i][name] ? this[i][name]() : this[i].trigger(name);
                 };
     	    }
     		return this;
