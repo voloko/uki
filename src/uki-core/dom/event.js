@@ -108,8 +108,10 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
             handlers = uki.dom.bound[id],
             i;
             
-        e = new uki.dom.Event(e);
-        e = uki.dom.fix( e );
+        if (!e.domEvent) {
+            e = new uki.dom.Event(e);
+            e = uki.dom.fix( e );
+        }
         
         if (!id || !handlers || !handlers[type]) return;
         

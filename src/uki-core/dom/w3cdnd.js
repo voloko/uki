@@ -178,9 +178,19 @@ include('event.js');
             
             var handler = function(e) {
          	    if (dnd.dataTransfer && retriggering) {
+                    e = new uki.dom.Event(e);
          	        e.type = source;
          	        e.dataTransfer = dnd.dataTransfer;
+         	        if (source == 'dragover') {
+         	            dnd.__canDrop = false;
+         	        } else {
+                        stopW3Cdrag(this);
+         	            if (!dnd.__canDrop) return;
+     	            }
          	        uki.dom.handler.apply(this, arguments);
+         	        if (e.isDefaultPrevented()) {
+         	            dnd.__canDrop = true;
+     	            }
                  }
          	};
          	
@@ -211,6 +221,7 @@ include('event.js');
         e.dataTransfer = new uki.dom.DataTransferWrapper(dataTransfer);
         uki.dom.handler.apply(this, arguments);
         dataTransfer.effectAllowed = e.dataTransfer.effectAllowed;
+        dataTransfer.dropEffect = e.dataTransfer.dropEffect;
     }
 
     function startW3Cdrag (element) {
@@ -225,6 +236,7 @@ include('event.js');
     
     function dragenter (e) {
         if (!dnd.dataTransfer || e.domEvent.__dragEntered || !retriggering) return;
+        e = new uki.dom.Event(e);
         e.domEvent.__dragEntered = true;
         if (dnd.dragOver == this) return;
         dnd.dragOver = this;
@@ -235,6 +247,7 @@ include('event.js');
     function drag (e) {
         if (retriggering) {
             if (!e.domEvent.__dragEntered && dnd.dragOver) {
+                e = new uki.dom.Event(e);
                 e.type = 'dragleave';
                 uki.dom.handler.apply(dnd.dragOver, arguments);
                 dnd.dragOver = null;
@@ -262,6 +275,7 @@ include('event.js');
         } else {
             return;
         }
+        e = new uki.dom.Event(e);
         uki.dom.handler.apply(this, arguments);
         if (e.isDefaultPrevented()) {
             stopW3Cdrag(this);

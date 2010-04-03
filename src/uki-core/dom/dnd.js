@@ -69,6 +69,7 @@ function stopGesture () {
 }
 
 function draggesturestart (e) {
+    e = new uki.dom.Event(e);
     e.type = 'draggesturestart';
     uki.dom.handler.apply(this, arguments);
     if (!e.isDefaultPrevented()) {
@@ -78,6 +79,7 @@ function draggesturestart (e) {
 }
 
 function draggesture (e) {
+    e = new uki.dom.Event(e);
     e.type = 'draggesture';
     e.dragOffset = (new Point(e.pageX, e.pageY)).offset(dnd.position);
     uki.dom.handler.apply(dnd.draggable, arguments);
@@ -85,6 +87,7 @@ function draggesture (e) {
 }
 
 function draggestureend (e) {
+    e = new uki.dom.Event(e);
     e.type = 'draggestureend';
     e.dragOffset = (new Point(e.pageX, e.pageY)).offset(dnd.position);
     uki.dom.handler.apply(dnd.draggable, arguments);
