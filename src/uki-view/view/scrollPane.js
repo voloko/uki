@@ -52,12 +52,6 @@
             if (dy) this.scrollTop(this.scrollTop() + dy);
         };
     
-        uki.each(['appendChild', 'removeChild', 'insertBefore'], function(i, name) {
-            this[name] = function(arg1, arg2) {
-                return Base[name].call(this, arg1, arg2);
-            };
-        }, this);
-    
         uki.each(['scrollTop', 'scrollLeft'], function(i, name) {
             this[name] = function(v) {
                 if (v == undefined) return this._dom[name];
