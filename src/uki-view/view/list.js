@@ -22,7 +22,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return uki.theme.background('list', this._rowHeight);
     };
     
-    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle', 'contentDraggable', 'lastClickIndex', 'multiselect']);
+    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle', 'contentDraggable', 'lastClickIndex', 'multiselect', 'lastClickIndex']);
     
     this.rowHeight = uki.newProp('_rowHeight', function(val) {
         this._rowHeight = val;
@@ -105,12 +105,13 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
     this.selectedIndexes = function(indexes) {
         if (indexes === undefined) return this._selectedIndexes;
+        var changed = indexes != this._selectedIndexes;
         this.clearSelection(true);
         this._selectedIndexes = indexes;
         for (var i=0; i < this._selectedIndexes.length; i++) {
             this._setSelected(this._selectedIndexes[i], true);
         };
-        this.trigger('selection', {source: this});
+        if (changed) this.trigger('selection', {source: this});
         return this;
     };
     
@@ -460,7 +461,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
 });
 
-uki.Collection.addAttrs(['data','selectedIndex']);
+uki.Collection.addAttrs(['data','selectedIndex', 'selectedIndexes', 'selectedRows']);
 
 uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) {
 
