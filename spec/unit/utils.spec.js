@@ -1,5 +1,5 @@
 describe 'uki.utils'
-    utils = uki.utils;
+    utils = uki;
     
     it 'should test isFunction'
         var f1 = function() {};

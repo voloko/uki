@@ -288,6 +288,7 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
             this.rect(this._parentRect);
             this._dom.style[name + 'Width'] = this[prop].width ? this[prop].width + PX : '';
             this._dom.style[name + 'Height'] = this[prop].height ? this[prop].height + PX : '';
+            return this;
         };
     }, this);
     
