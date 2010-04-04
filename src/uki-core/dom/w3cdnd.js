@@ -229,6 +229,7 @@ include('event.js');
     }
 
     function stopW3Cdrag (element) {
+        if (!dnd.dataTransfer) return;
         dnd.dataTransfer.cleanup();
         dnd.dragOver = dnd.dataTransfer = dnd.target = null;
         uki.dom.unbind( element, 'draggestureend', dragend );

@@ -286,8 +286,8 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
             if (s === undefined) return this[prop] || new Size();
             this[prop] = Size.create(s);
             this.rect(this._parentRect);
-            if (this[prop].width) this._dom.style[name + 'Width'] = this[prop].width + PX;
-            if (this[prop].height) this._dom.style[name + 'Height'] = this[prop].height + PX;
+            this._dom.style[name + 'Width'] = this[prop].width ? this[prop].width + PX : '';
+            this._dom.style[name + 'Height'] = this[prop].height ? this[prop].height + PX : '';
         };
     }, this);
     
@@ -426,7 +426,7 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
     @name uki.view.Base#left */
     /** @function
     @name uki.view.Base#top */
-    uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'], function(index, attr) {
+    uki.each(['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'x', 'y', 'left', 'top'], function(index, attr) {
         this[attr] = function(value) {
             if (value === undefined) return uki.attr(this.rect(), attr);
             uki.attr(this.rect(), attr, value);

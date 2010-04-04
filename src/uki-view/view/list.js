@@ -40,6 +40,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
         
         this.minSize(new Size(this.minSize().width, this._rowHeight * this._data.length));
+        this.trigger('selection', {source: this})
         this._relayoutParent();
         return this;
     };

@@ -55,7 +55,6 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
         }, this));
         
         uki.dom.bind(this._focusTarget, 'blur', uki.proxy(function(e) {
-            document.title = 'blur' + this.typeName();
             if (this._hasFocus) {
                 this._hasFocus = false;
                 setTimeout(uki.proxy(function() { // wait for mousedown refocusing

@@ -5,6 +5,7 @@ include('data.js');
 uki.data.Observable = {
     bind: function(name, callback) {
         var _this = this;
+        callback.huid = callback.huid || uki.guid++;
         uki.each(name.split(' '), function(i, name) {
             _this._observersFor(name).push(callback);
         });
@@ -14,7 +15,7 @@ uki.data.Observable = {
         var _this = this;
         uki.each(name.split(' '), function(i, name) {
             _this._observers[name] = !callback ? [] : uki.grep(_this._observersFor(name), function(c) {
-                return c != callback;
+                return c != callback && c.huid != callback.huid;
             });
             if (_this._observers[name]) delete _this._observers[name];
         });

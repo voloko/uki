@@ -9,6 +9,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     // },
     
     bind: function(name, callback) {
+        callback.huid = callback.huid || uki.guid++;
         uki.each(name.split(' '), function(i, name) {
             if (!this._bound(name)) this._bindToDom(name);
             this._observersFor(name).push(callback);
@@ -19,7 +20,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     unbind: function(name, callback) {
         uki.each(name.split(' '), function(i, name) {
             this._observers[name] = !callback ? [] : uki.grep(this._observersFor(name, true), function(observer) {
-                return observer != callback;
+                return observer != callback && observer.huid != callback.huid;
             });
             if (this._observers[name].length == 0) {
                 this._unbindFromDom(name);
