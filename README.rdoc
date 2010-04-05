@@ -11,7 +11,7 @@ It comes with a rich view-component library ranging from Sliders to Grids and Sp
 1. Uki interfaces are created from Views the same way web pages are created from DOM nodes.
    Views even behave similar to DOM nodes. You can appendChild, insertBefore, access parent etc.
     panel.appendChild(button) 
-   Examples of views: Slider, SplitPane or Table
+   Examples of views: Slider, SplitPane or Table (http://ukijs.org/examples/)
 2. View have attributes. You can read them by calling attrname() without params and write with
    attrname(newValue).
     label.text('Lorem') // set text to a label
@@ -43,7 +43,7 @@ It comes with a rich view-component library ranging from Sliders to Grids and Sp
    resources like images, styled dom nodes and backgrounds. You can find an example of one
    at http://github.com/voloko/uki/blob/master/src/uki-theme/airport.js
 9. If your adding uki to existing project then it is better to simply add
-    <script src='http://static.ukijs.org/pkg/0.2.0/uki.gz.js'></script>
+    <script src='http://static.ukijs.org/pkg/0.2.0/uki.js'></script>
    to your pages and it will work. If you start a new one you might try
    uki-tools (http://github.com/voloko/uki-tools)
 10. See the available resources in Links section and have fun
