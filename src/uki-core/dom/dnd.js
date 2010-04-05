@@ -19,7 +19,8 @@ try {
         typeof doc.createEvent('MouseEvent').dataTransfer == 'object' || // safari
         doc.createEvent('DragEvent').initDragEvent // w3c support
     ) {
-        dnd.nativeDnD = true;
+        // Google Chrome has to many issues with native d&d. It is simpler to disable than to fix
+        dnd.nativeDnD = !ua.match(/Chrome\/4/);
     }
 } catch (e) {}
 
