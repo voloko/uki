@@ -116,6 +116,10 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return this;
     };
     
+    this.selectedRow = function() {
+        return this._data[this.selectedIndex()];
+    };    
+    
     this.selectedRows = function() {
         return uki.map(this.selectedIndexes(), function(index) {
             return this._data[index];
