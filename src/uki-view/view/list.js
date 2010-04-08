@@ -106,13 +106,12 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
     this.selectedIndexes = function(indexes) {
         if (indexes === undefined) return this._selectedIndexes;
-        var changed = indexes != this._selectedIndexes;
         this.clearSelection(true);
         this._selectedIndexes = indexes;
         for (var i=0; i < this._selectedIndexes.length; i++) {
             this._setSelected(this._selectedIndexes[i], true);
         };
-        if (changed) this.trigger('selection', {source: this});
+        this.trigger('selection', {source: this});
         return this;
     };
     
