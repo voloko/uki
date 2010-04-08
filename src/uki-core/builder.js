@@ -36,7 +36,7 @@ include('collection.js');
         var c = mlRow.view || mlRow.type,
             result;
         if (uki.isFunction(c)) {
-            result = c();
+            result = new c(mlRow.rect);
         } else if (typeof c === 'string') {
             var parts = c.split('.'),
                 obj   = root;
