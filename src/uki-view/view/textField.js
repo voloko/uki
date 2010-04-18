@@ -18,7 +18,6 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         return typeof node.placeholder == 'string';
     }
 
-    
     this._setup = function() {
         Base._setup.apply(this, arguments);
         uki.extend(this, {
@@ -64,7 +63,6 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             }
         }
     });
-    
 
     this._style = function(name, value) {
         if (value === undefined) return this._input.style[name];
@@ -142,3 +140,11 @@ uki.view.declare('uki.view.MultilineTextField', uki.view.TextField, function(Bas
         this._multiline = true;
     };
 });
+
+uki.view.declare('uki.view.PasswordTextField', uki.view.TextField, function(Base) {
+    this._createDom = function() {
+        Base._createDom.call(this, arguments);
+        this._input.type = 'password';
+    };
+});
+
