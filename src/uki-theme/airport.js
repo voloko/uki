@@ -313,7 +313,7 @@
                 return 'font-size:12px;'
             },
             'button': function() {
-                return 'color:#333;text-align:center;'
+                return 'color:#333;text-align:center;font-weight:bold;'
             }
         }
     });

@@ -7,14 +7,14 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     
     this._rowHeight = 17;
     this._headerHeight = 17;
-    this.defaultCss += 'overflow:hidden;';
     this._listImpl = 'uki.view.List';
     
     uki.each(propertiesToDelegate, function(i, name) { uki.delegateProp(this, name, '_list'); }, this);
     
     this._setup = function() {
-        this._columns = [];
         Base._setup.call(this);
+        this._columns = [];
+        this.defaultCss += 'overflow:hidden;';
     };
     
     this._style = function(name, value) {
