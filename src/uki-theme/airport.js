@@ -310,10 +310,13 @@
                 return 'font-family:Arial,Helvetica,sans-serif;';
             },
             'label': function() {
-                return 'font-size:12px;'
+                return 'font-size:12px;';
             },
             'button': function() {
-                return 'color:#333;text-align:center;font-weight:bold;'
+                return 'color:#333;text-align:center;font-weight:bold;';
+            },
+            'input': function() {
+                return 'font-size:11px;';
             }
         }
     });
