@@ -24,7 +24,8 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             _value: '',
             _multiline: false,
             _placeholder: '',
-            _backgroundPrefix: ''
+            _backgroundPrefix: '',
+            _type: 'text'
         });
         this.defaultCss += "margin:0;border:none;outline:none;padding:0;font-size:11px;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ");"
     };
@@ -83,6 +84,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         this._input = uki.createElement(tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
         
         this._input.value = this._value;
+        this._input.type = this._type;
         this._dom.appendChild(this._input);
         
         this._input.value = this.value();
@@ -142,9 +144,9 @@ uki.view.declare('uki.view.MultilineTextField', uki.view.TextField, function(Bas
 });
 
 uki.view.declare('uki.view.PasswordTextField', uki.view.TextField, function(Base) {
-    this._createDom = function() {
-        Base._createDom.call(this, arguments);
-        this._input.type = 'password';
+    this._setup = function() {
+        Base._setup.call(this);
+        this._type = 'password';
     };
 });
 
