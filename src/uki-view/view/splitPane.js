@@ -73,7 +73,7 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     };
     
     this._createDom = function() {
-        this._dom = uki.createElement('div', Base.defaultCss);
+        this._dom = uki.createElement('div', this.defaultCss);
         for (var i=0, paneML; i < 2; i++) {
             paneML = { view: 'Container' };
             paneML.anchors = i == 1         ? 'left top bottom right' :

@@ -18,8 +18,7 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
 
     var layoutId = 1;
 
-    this.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;'
-                     + 'font-family:Arial,Helvetica,sans-serif;';
+    this.defaultCss = 'position:absolute;z-index:100;-moz-user-focus:none;';
     
     /**
      * Base class for all uki views.
@@ -79,6 +78,7 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
            _styleV: 'top',
            _firstLayout: true
         });
+        this.defaultCss += uki.theme.style('base');
     };
     
     /**

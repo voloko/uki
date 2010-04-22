@@ -58,22 +58,25 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     this.addRow = function(position, data) {
         this._data.splice(position, 0, data);
         var item = this._itemAt(position);
+        var container = doc.createElement('div');
+        
+        container.innerHTML = this._rowTemplate.render({ 
+            height: this._rowHeight, 
+            text: this._render.render(this._data[position], this._rowRect(position), position)
+        });
         if (item) {
-            var container = doc.createElement('div');
-            
-            container.innerHTML = this._rowTemplate.render({ 
-                height: this._rowHeight, 
-                text: this._render.render(this._data[position], this._rowRect(position), position)
-            });
             item.parentNode.insertBefore(container.firstChild, item);
-            if (position < this._packs[0].itemTo) {
-                this._packs[0].itemTo++;
-                this._packs[1].itemFrom++;
-                this._packs[1].itemTo++;
-                this._packs[1].dom.style.top = this._packs[1].itemFrom*this._rowHeight + 'px';
-            } else {
-                this._packs[1].itemTo++;
-            }
+        } else {
+            this._dom.childNodes[0].appendChild(container.firstChild);
+        }
+
+        if (position <= this._packs[0].itemTo) {
+            this._packs[0].itemTo++;
+            this._packs[1].itemFrom++;
+            this._packs[1].itemTo++;
+            this._packs[1].dom.style.top = this._packs[1].itemFrom*this._rowHeight + 'px';
+        } else {
+            this._packs[1].itemTo++;
         }
         
         // offset selection
@@ -82,6 +85,10 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             this._selectedIndexes[i]++;
         };
         
+        // needed for scrollbar
+        this.minSize(new Size(this.minSize().width, this._rowHeight * this._data.length));
+        this._relayoutParent();
+
         return this;
     };
     

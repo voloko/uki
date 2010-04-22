@@ -57,7 +57,7 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this.render = function(row, rect, i) {
         this._prerenderedTemplate || this._prerenderTemplate(rect);
         var value = this._key ? uki.attr(row, this._key) : row[this._position];
-        this._prerenderedTemplate[1] = this._formatter ? this._formatter(value, row) : value;
+        this._prerenderedTemplate[1] = this._formatter ? this._formatter(value, row, i) : value;
         return this._prerenderedTemplate.join('');
     };
     

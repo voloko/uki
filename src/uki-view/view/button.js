@@ -8,9 +8,9 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
     this._setup = function() {
         Base._setup.call(this);
         uki.extend(this, {
-            _inset: new Inset(0, 4),
-            defaultCss: Base.defaultCss + "cursor:default;-moz-user-select:none;-webkit-user-select:none;" //text-shadow:0 1px 0px rgba(255,255,255,0.8)
+            _inset: new Inset(0, 4)
         });
+        this.defaultCss += "cursor:default;-moz-user-select:none;-webkit-user-select:none;" + uki.theme.style('button');
     };
     
     uki.addProps(this, ['backgroundPrefix']);
@@ -47,9 +47,8 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         
     this._createDom = function() {
         // dom
-        this._dom = uki.createElement('div', this.defaultCss + 'color:#333;text-align:center;');
-        this._label = uki.createElement('div', Base.defaultCss + 
-            "font-size:12px;line-height:12px;white-space:nowrap;"); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this._dom = uki.createElement('div', this.defaultCss);
+        this._label = uki.createElement('div', this.defaultCss); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
         this.style('fontWeight', 'bold');
         

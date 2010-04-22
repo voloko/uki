@@ -47,11 +47,11 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
     };
     
     this._createDom = function() {
-        this._dom = uki.createElement('div', Base.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');
-        this._handle = uki.createElement('div', Base.defaultCss + 'overflow:hidden;cursor:default;background:url(' + uki.theme.image('x').src + ')');
+        this._dom = uki.createElement('div', this.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');
+        this._handle = uki.createElement('div', this.defaultCss + 'overflow:hidden;cursor:default;background:url(' + uki.theme.image('x').src + ')');
         this._bg = uki.theme.image('slider-handle');
         this._focusBg = uki.theme.image('slider-focus');
-        this._focusBg.style.cssText += this._bg.style.cssText += Base.defaultCss + 'top:0;left:0;z-index:-1;position:absolute;'; 
+        this._focusBg.style.cssText += this._bg.style.cssText += this.defaultCss + 'top:0;left:0;z-index:-1;position:absolute;'; 
         this._handle.appendChild(this._bg);
         
         
