@@ -50,7 +50,6 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this._dom = uki.createElement('div', this.defaultCss);
         this._label = uki.createElement('div', this.defaultCss); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
-        this.style('fontWeight', 'bold');
         
         this._dom.appendChild(uki.createElement('div', 'left:0;top:0;width:100%;height:100%;position:absolute;background:url(' + uki.theme.imageSrc('x') + ');'));
         
