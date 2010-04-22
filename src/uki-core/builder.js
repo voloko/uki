@@ -23,7 +23,9 @@ include('collection.js');
         if (ml.length === undefined) ml = [ml];
         return new uki.Collection(createMulti(ml));
     };
-
+    
+    uki.viewNamespaces = ['uki.view.', ''];
+    
     function createMulti (ml) {
         return uki.map(ml, function(mlRow) { return createSingle(mlRow); });
     }
@@ -38,16 +40,19 @@ include('collection.js');
         if (uki.isFunction(c)) {
             result = new c(mlRow.rect);
         } else if (typeof c === 'string') {
-            var parts = c.split('.'),
-                obj   = root;
-            if (!root[parts[0]] || parts[0] == 'Image') {
-                parts = ['uki', 'view'].concat(parts); // try with default prefix
-            }
-            for (var i=0; i < parts.length; i++) {
-                obj = obj[parts[i]];
+            for (var i=0, ns = uki.viewNamespaces; i < ns.length; i++) {
+                var parts = (ns[i] + c).split('.'),
+                    obj = root;
+                
+                for (var j=0; obj && j < parts.length; j++) {
+                    obj = obj[parts[j]];
+                };
+                if (obj) {
+                    result = new obj(mlRow.rect);
+                    break;
+                }
             };
             if (!obj) throw 'No view of type ' + c + ' found';
-            result = new obj(mlRow.rect);
         } else {
             result = c;
         }

@@ -25,9 +25,9 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             _value: '',
             _multiline: false,
             _placeholder: '',
-            _backgroundPrefix: '',
-            defaultCss: Base.defaultCss + "margin:0;border:none;outline:none;padding:0;font-size:11px;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ")"
+            _backgroundPrefix: ''
         });
+        this.defaultCss += "margin:0;border:none;outline:none;padding:0;font-size:11px;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ");"
     };
     
     this._updateBg = function() {

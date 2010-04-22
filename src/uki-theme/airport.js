@@ -304,6 +304,17 @@
                 return handle;
                 
             }
+        },
+        styles: {
+            base: function() {
+                return 'font-family:Arial,Helvetica,sans-serif;';
+            },
+            'label': function() {
+                return 'font-size:12px;'
+            },
+            'button': function() {
+                return 'color:#333;text-align:center;'
+            }
         }
     });
 
