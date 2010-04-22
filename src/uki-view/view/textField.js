@@ -25,8 +25,8 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             _multiline: false,
             _placeholder: '',
             _backgroundPrefix: '',
-            _tagName: 'input'
-            
+            _tagName: 'input',
+            _type: 'text'
         });
         this.defaultCss += "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ");" + uki.theme.style('input');
     };
@@ -84,6 +84,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         this._input = uki.createElement(this._tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
         
         this._input.value = this._value;
+        if (this._type) this._input.type = this._type;
         this._dom.appendChild(this._input);
         
         this._input.value = this.value();
@@ -92,7 +93,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         this.bind('mousedown', function(e) {
             if (e.target == this._input) return;
             this.focus(); 
-        })
+        });
     };
     
     this._layoutDom = function(rect) {
@@ -139,15 +140,15 @@ uki.view.declare('uki.view.MultilineTextField', uki.view.TextField, function(Bas
     this._setup = function() {
         Base._setup.call(this);
         this._tagName = 'textarea';
+        this._type = '';
         this._multiline = true;
     };
 });
 
 uki.view.declare('uki.view.PasswordTextField', uki.view.TextField, function(Base) {
-    this._createDom = function() {
-        if (/IE 6/.test(ua)) this._tagName = '<input type="password">';
-        Base._createDom.call(this, arguments);
-        this._input.type = 'password';
+    this._setup = function() {
+        Base._setup.call(this);
+        this._type = 'password';
     };
 });
 
