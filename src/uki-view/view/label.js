@@ -9,7 +9,7 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
             _textSelectable: false,
             _inset: new Inset(),
         });
-        this.defaultCss += uki.theme.style('label') + 'white-space:nowrap;';
+        this.defaultCss += uki.theme.style('label');
     };
     
     this._style = function(name, value) {
@@ -86,7 +86,7 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
     
     this._createDom = function() {
         Base._createDom.call(this);
-        this._label = uki.createElement('div', this.defaultCss); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
+        this._label = uki.createElement('div', this.defaultCss + 'white-space:nowrap;'); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
         this.textSelectable(this.textSelectable());
     };
