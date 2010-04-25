@@ -28,7 +28,7 @@ root.uki = root.uki || function(val, context) {
  * @type string
  * @field
  */
-uki.version = '0.2.0';
+uki.version = '0.2.1';
 uki.guid = 1;
 
 /**

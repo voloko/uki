@@ -1,5 +1,7 @@
-(planned)
-- uki-more: Gallery demo (planned)
+v0.2.1
+- List#addRow bugfix
+- Moved default font styles to themes
+- PasswordTextField
 
 v0.2.0
 - uki-tools

@@ -132,11 +132,6 @@ such as CSS selectors, events and attributes.
 If you've ever used
 jQuery, learning uki won't take long.
 
-== Specific
-Uki doesn't want to be a Jack-of-all-trades. 
-It only does layout, but it does it well.
-You won't find any AJAX or data-storage-layer code here. 
-    
 == Programmable Layout
 HTML and CSS are great technologies,
 though you can't lay everything out with them.
