@@ -299,7 +299,7 @@ var utils = {
                 this.init.apply(this, arguments);
             };
             
-        var inheritance, i, startFrom = 0, tmp, baseClasses = [];
+        var inheritance, i, startFrom = 0, tmp, baseClasses = [], base, name, copy;
             
         if (arguments.length > 1) {
             if (arguments[0].prototype) { // real inheritance
@@ -312,10 +312,17 @@ var utils = {
             }
         }
         for (i=startFrom; i < arguments.length; i++) {
-            tmp = arguments[i];
+            base = tmp = arguments[i];
             if (this.isFunction(tmp)) tmp = tmp.apply(tmp, baseClasses);
             baseClasses.push(tmp);
-            uki.extend(klass.prototype, arguments[i]);
+            
+            for ( name in base ) {
+                copy = base[ name ];
+                if ( !base.hasOwnProperty(name) || copy === undefined ) continue;
+                klass.prototype[ name ] = copy;
+            }
+            
+            // uki.extend(klass.prototype, base);
         };
         if (!klass.prototype.init) klass.prototype.init = function() {};
         return klass;
