@@ -20,8 +20,9 @@ include('collection.js');
      * @returns {uki.view.Collection} collection of created elements
      */
     uki.build = function(ml) {
-        if (ml.length === undefined) ml = [ml];
-        return new uki.Collection(createMulti(ml));
+        
+        return new uki.Collection( createMulti( (ml.length === undefined) ? [ml] : ml ) );
+		
     };
     
     uki.viewNamespaces = ['uki.view.', ''];
@@ -40,11 +41,11 @@ include('collection.js');
         if (uki.isFunction(c)) {
             result = new c(mlRow.rect);
         } else if (typeof c === 'string') {
-            for (var i=0, ns = uki.viewNamespaces; i < ns.length; i++) {
+            for (var i=0, ns = uki.viewNamespaces, ns$length = ns.length; i < ns$length; i++) {
                 var parts = (ns[i] + c).split('.'),
                     obj = root;
                 
-                for (var j=0; obj && j < parts.length; j++) {
+                for (var j=0, parts$length = parts.length; obj && j < parts$length; j++) {
                     obj = obj[parts[j]];
                 };
                 if (obj) {
