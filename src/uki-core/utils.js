@@ -258,9 +258,9 @@ var utils = {
      * @returns Describe what it returns
      */
     extend: function() {
-        var target = arguments[0] || {}, i = 1, length = arguments.length, options;
+        var target = arguments[0] || {}, i = arguments.length-1, options;
 
-        for ( ; i < length; i++ ) {
+        for ( ; i >0; i-- ) {
             if ( (options = arguments[i]) != null ) {
                 
                 for ( var name in options ) {
@@ -297,12 +297,12 @@ var utils = {
     newClass: function(/* [[superClass], mixin1, mixin2, ..] */ methods) {
         var klass = function() {
                 this.init.apply(this, arguments);
-            };
+            },
             
-        var inheritance, i, startFrom = 0, tmp, baseClasses = [], base, name, copy;
+			inheritance, i, startFrom = 0, tmp, baseClasses = [], base, name, copy, $arguments = arguments, $arguments$length;
             
-        if (arguments.length > 1) {
-            if (arguments[0].prototype) { // real inheritance
+        if (($arguments$length = $arguments.length)> 1) {
+            if ($arguments[0].prototype) { // real inheritance
                 /** @ignore */
                 inheritance = function() {};
                 inheritance.prototype = arguments[0].prototype;
@@ -311,14 +311,15 @@ var utils = {
                 baseClasses = [inheritance.prototype];
             }
         }
-        for (i=startFrom; i < arguments.length; i++) {
+
+        for (i=startFrom; i < $arguments$length; i++) {
             base = arguments[i];
             if (this.isFunction(base)) {
                 tmp = {};
                 base.apply(tmp, baseClasses);
                 base = tmp;
             }
-            baseClasses.push(base);
+            baseClasses[ baseClasses.length ] = base;
             
             for ( name in base ) {
                 copy = base[ name ];
