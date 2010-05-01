@@ -31,8 +31,7 @@ uki.fn = uki.Collection.prototype = new function() {
      * @returns {uki.view.Collection} self
      */
     this.each = function( callback ) {
-        uki.each( this, callback );
-        return this;
+        return uki.each( this, callback );        
     };
 
     /**
@@ -62,12 +61,12 @@ uki.fn = uki.Collection.prototype = new function() {
      */
     this.attr = function( name, value ) {
         if (value !== undefined) {
-            for (var i=0; i < this.length; i++) {
+            for (var i=this.length-1; i >= 0; i--) {
                 uki.attr( this[i], name, value );
             };
             return this;
         } else {
-            return this[0] ? uki.attr( this[0], name ) : '';
+            return this[0] ? uki.attr( this[0], name ) : "";
         }
     };
 
@@ -109,21 +108,26 @@ uki.fn = uki.Collection.prototype = new function() {
      * @param {Array.<uki.view.Base>} views Views to append
      * @returns {uki.view.Collection} self
      */
-    this.append = function( views ) {
-        if (!this[0]) return this;
+    this.append = function( views , $this_0) {
+        if (! ($this_0 = this[0])) return this;
+		
         views = views.length !== undefined ? views : [views];
-        for (var i=0; i < views.length; i++) {
-            this[0].appendChild(views[i]);
+		
+        for (var i = views.length-1; i >= 0; i--) {
+            $this_0.appendChild(views[i]);
         };
+		
         return this;
     };
     
     this.appendTo = function( target ) {
-        target = uki(target)[0];
-        this.each(function() {
-            target.appendChild(this);
-        });
-        return this;
+        var
+			target$appendChild = uki(target)[0].appendChild;
+			
+        return this.each(function() {
+            target$appendChild(this);
+        });		
+        
     };
 
     /**#@-*/
@@ -180,7 +184,7 @@ uki.fn = uki.Collection.prototype = new function() {
         ['next', 'nextView'],
         ['prev', 'prevView']
     ], function(i, desc) {
-        proto[desc[0]] = function() {
+        proto[ desc[0] ] = function() {
             return new uki.Collection( uki.unique( uki.map(this, desc[1]) ) );
         };
     });
@@ -210,7 +214,7 @@ uki.fn = uki.Collection.prototype = new function() {
     @name uki.Collection#toggle */
     uki.each('bind unbind trigger layout appendChild removeChild insertBefore addRow removeRow resizeToContents toggle'.split(' '), function(i, name) {
         proto[name] = function() { 
-            for (var i=0; i < this.length; i++) {
+            for (var i=this.length-1; i >=0; i--) {
                 this[i][name].apply(this[i], arguments);
             };
             return this;
@@ -266,7 +270,7 @@ uki.fn = uki.Collection.prototype = new function() {
     	    if (handler) {
         		this.bind(name, handler);
     	    } else {
-                for (var i=0; i < this.length; i++) {
+                for (var i=this.length-1; i >=0; i--) {
                     this[i][name] ? this[i][name]() : this[i].trigger(name);
                 };
     	    }
