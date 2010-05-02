@@ -63,13 +63,9 @@ It comes with a rich view-component library ranging from Sliders to Grids and Sp
 To install development server
 1. Install ruby http://ruby-lang.org
 2. Open terminal and run
-    gem install rake sinatra
+    gem install uki
     cd PATH_TO_UKI
-3. On windows run
-    ruby run.rb 
-On *nix
-    rake start
-4. http://127.0.0.1:21119/src/uki.cjs – should be a merged version of uki 
+    uki run
 
 == Image path
 For older browsers uki loads images from server.

@@ -1,2 +1,0 @@
-require 'uki'
-run Uki

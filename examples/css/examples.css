@@ -1,0 +1,23 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    font-size: 20px;
+    margin: 20px 0 20px 50px;
+}
+
+ul {
+    padding: 0;
+    margin: 0 0 0 50px;
+}
+
+li {
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+small a {
+    font-size: 11px;
+    color: #547BE1;
+}

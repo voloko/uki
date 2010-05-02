@@ -2,42 +2,15 @@ require 'fileutils'
 require 'rubygems'
 require 'yaml'
 
-def process_path(path, included = {})
-  code = File.read(path)
-  base = File.dirname(path)
-  code.gsub(%r{include\s*\(\s*['"]([^"']+)["']\s*\)\s*;?\s*\n?}) {
-    include_path = File.expand_path(File.join(base, $1))
-    unless included[include_path]
-      included[include_path] = true
-      process_path(include_path, included)
-    else
-      ''
-    end
-  }
-end
-
 def read_version
   base = File.dirname(__FILE__)
   File.read(File.join(base, 'src', 'uki-core', 'uki.js')).match(%r{uki.version\s*=\s*'([^']+)'})[1]
 end
 
-desc "Run thin"
-task :start do
-  sh "thin -s 1 -C thin.yaml -R uki.ru start"
-end
-
-desc "Run thin"
-task :restart do
-  sh "thin -s 1 -C thin.yaml -R uki.ru restart"
-end
-
-desc "Stop thin"
-task :stop do
-  sh "thin -s 1 -C thin.yaml -R uki.ru stop"
-end
-
 desc "Build scripts"
 task :build_scripts do
+  require 'uki/include_js'
+  
   base = File.dirname(__FILE__)
   version = read_version
   compiler_path = File.join(base, 'compiler.jar')
@@ -97,9 +70,3 @@ task :push_version do
     )
   end
 end
-
-# ['width', 'height', 'minX', 'maxX', 'minY', 'maxY', 'left', 'top'].each { |name|
-#     print "/** @function
-#     @name uki.view.Base##{name} */
-#     "
-# }

@@ -1,0 +1,24 @@
+!!!1.1
+%html
+  %head
+    %meta{ "http-equiv" => "Content-type", "content" => "text/html; charset=utf-8" }
+    %title Uki examples
+    %link{ :rel => 'stylesheet', :href => '/examples/css/reset.css', :type => 'text/css', :media => 'screen' }
+    %link{ :rel => 'stylesheet', :href => '/examples/css/examples.css', :type => 'text/css', :media => 'screen' }
+    
+  %body.text
+    %h1 <a href="/">Uki</a> code examples
+    %ul
+      - lastExample = nil
+      - exampleList.each do |example|
+        - if lastExample && example[:order] - lastExample[:order] > 100
+          %li
+            %br
+        - lastExample = example
+        %li
+          %a{:href => example[:path]}= example[:title]
+          %small
+            %a{:href => "http://github.com/voloko/ukijs.org/tree/master/examples/#{example[:path]}/"} source
+    - unless DEVELOPMENT
+      = File.read File.join(File.dirname(__FILE__), 'ga.txt')
+    
