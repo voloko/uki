@@ -17,7 +17,7 @@ task :build_scripts do
   
   files = ['uki.js', 'uki-theamless.js', 'uki-more.js', 'airport.js']
   paths = files.map { |f| File.join('src', f) }
-  `../uki-tools/bin/uki build -o pkg -C #{paths.join(' ')}`
+  `uki build -o pkg -C #{paths.join(' ')}`
   files.each do |name|
     original = File.join('pkg', name)
     target = File.join('pkg', name.sub(/\.js$/, '.dev.js'))
@@ -29,7 +29,7 @@ task :build_scripts do
     FileUtils.rm original
   end
   
-  `../uki-tools/bin/uki build -o pkg #{paths.join(' ')}`
+  `uki build -o pkg #{paths.join(' ')}`
   files.each do |name| 
     original = File.join('pkg', name)
     tmp = File.join('pkg', name.sub(/\.js$/, '.tmp.js'))
