@@ -11,22 +11,40 @@ desc "Build scripts"
 task :build_scripts do
   require 'uki/include_js'
   
-  base = File.dirname(__FILE__)
   version = read_version
-  compiler_path = File.join(base, 'compiler.jar')
   FileUtils.rm_rf('pkg')
   FileUtils.mkdir('pkg')
   
-  ['uki.js', 'uki-theamless.js', 'uki-more.js', 'airport.js'].each do |name|
-    src = File.join(base, 'src', name)
-    target = File.join(base, 'pkg', name).sub(/.js$/, '.dev.js')
-    File.open(target, 'w') { |f| f.write process_path(src).sub('/src/uki-theme/airport/i/', "http://static.ukijs.org/pkg/#{version}/uki-theme/airport/i/") }
-    `java -jar #{compiler_path} --js #{target} > #{target.sub('.dev.js', '.shrinked.js')}`
-    `gzip -c #{target.sub('.dev.js', '.shrinked.js')} > #{target.sub('.dev.js', '.gz.js')}`
-    FileUtils.rm target.sub('.dev.js', '.shrinked.js')
+  files = ['uki.js', 'uki-theamless.js', 'uki-more.js', 'airport.js']
+  paths = files.map { |f| File.join('src', f) }
+  `../uki-tools/bin/uki build -o pkg -C #{paths.join(' ')}`
+  files.each do |name|
+    original = File.join('pkg', name)
+    target = File.join('pkg', name.sub(/\.js$/, '.dev.js'))
+    File.open( target, 'w' ) do |f|
+      code = File.read( original )
+      code = code.sub('/src/uki-theme/airport/i/', "http://static.ukijs.org/pkg/#{version}/uki-theme/airport/i/")
+      f.write( code )
+    end
+    FileUtils.rm original
   end
   
-  FileUtils.cp_r(File.join(base, 'src', 'uki-theme'), File.join(base, 'pkg', 'uki-theme'))
+  `../uki-tools/bin/uki build -o pkg #{paths.join(' ')}`
+  files.each do |name| 
+    original = File.join('pkg', name)
+    tmp = File.join('pkg', name.sub(/\.js$/, '.tmp.js'))
+    target = File.join('pkg', name.sub(/\.js$/, '.gz.js'))
+    File.open( tmp, 'w' ) do |f|
+      code = File.read( original )
+      code = code.sub('/src/uki-theme/airport/i/', "http://static.ukijs.org/pkg/#{version}/uki-theme/airport/i/")
+      f.write( code )
+    end
+    `gzip -c #{tmp} > #{target}`
+    FileUtils.rm tmp
+    FileUtils.rm original
+  end
+  
+  FileUtils.cp_r(File.join('src', 'uki-theme'), File.join('pkg', 'uki-theme'))
 end
 
 desc "Merge file"
