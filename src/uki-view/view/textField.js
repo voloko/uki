@@ -35,6 +35,8 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         this._input.style.color = this._disabled ? '#999' : '#000';
     };
     
+    uki.delegateProp(this, 'name', '_input');
+    
     this.value = function(value) {
         if (value === undefined) return this._input.value;
 
