@@ -312,9 +312,13 @@ var utils = {
             }
         }
         for (i=startFrom; i < arguments.length; i++) {
-            base = tmp = arguments[i];
-            if (this.isFunction(tmp)) tmp = tmp.apply(tmp, baseClasses);
-            baseClasses.push(tmp);
+            base = arguments[i];
+            if (this.isFunction(base)) {
+                tmp = {};
+                base.apply(tmp, baseClasses);
+                base = tmp;
+            }
+            baseClasses.push(base);
             
             for ( name in base ) {
                 copy = base[ name ];
