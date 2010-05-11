@@ -8,33 +8,28 @@
     <script src="select.js"></script>
 */
 
-uki({ 
-    view: 'Select', 
-    rect: '40 40 300 23', 
-    anchors: 'left top', 
-    rowHeight: 22,
-    options: [
-        { text: 'one' },
-        { text: 'two' },
-        { text: 'three' },
-        { text: 'one' },
-        { text: 'two' },
-        { text: 'three' },
-        { text: 'one' },
-        { text: 'two' },
-        { text: 'three' },
-        { text: 'one' },
-        { text: 'two' },
-        { text: 'three' },
-        { text: 'one' },
-        { text: 'two' },
-        { text: 'three' },
-        { text: 'one' },
-        { text: 'two' },
-        { text: 'three' },
-        { text: 'one' },
-        { text: 'two' },
-        { text: 'three' },
-        { text: 'four' }
-    ]
-}).attachTo(window, '1000 1000')
+var options = uki.map(uki.range(0, 100), function(i) {
+    return { value: i, text: 'option ' + i }
+});
+
+uki([
+    { 
+        view: 'Select', 
+        rect: '40 50 300 22', 
+        anchors: 'left top', 
+        rowHeight: 22,
+        options: options
+    },
+    
+    { view: 'TextField', rect: '40 10 100 22', anchors: 'left top', value: '0' },
+    
+    { view: 'Button',    rect: '150 10 100 22', anchors: 'left top', text: 'Set value' }
+]).attachTo(window, '1000 1000');
+
+uki('Select').change(function() {
+    uki('TextField').value(this.value());
+});
+
+uki('Button').click(function() {
+    uki('Select').value(uki('TextField').value());
+});

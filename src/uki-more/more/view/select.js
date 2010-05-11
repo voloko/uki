@@ -115,13 +115,33 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
     };
     
     this.selectCurrent = function() {
-        if (this._selectFirst) this.text(this._options[this.selectedIndex()].text);
+        if (this.selectedIndex() == -1) {
+            this.text(this._selectFirst && this._options[0] ? this._options[0].text : '');
+        } else {
+            this.text(this._options[this.selectedIndex()].text);
+        }
         this._popup.hide();
         this.trigger('change', { source: this });
     };
     
-    this.value = function() {
-        return this._options[this.selectedIndex()].value;
+    this.value = function(v) {
+        if (v === undefined) {
+            return this._options[this.selectedIndex()] ? this._options[this.selectedIndex()].value : undefined;
+        } else {
+            var index = -1,
+                option,
+                l = this._options.length,
+                i;
+            for (i=0; i < l; i++) {
+                option = this._options[i];
+                if (option.value == v) {
+                    index = i;
+                    break;
+                }
+            };
+            this.selectedIndex(index);
+            this.selectCurrent();
+        }
     };
     
     this.maxPopupHeight = uki.newProp('_maxPopupHeight');
