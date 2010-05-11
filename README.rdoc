@@ -26,7 +26,7 @@ It comes with a rich view-component library ranging from Sliders to Grids and Sp
 5. uki() calls return Collection of Views. This is similar to jQuery('expression') result. You can 
    access individual views with [index]. You can manipulate all views at the same 
    time with a number of collection methods (http://ukijs.org/docs/symbols/uki.Collection.html)
-    uki('Label')[3] // get 3-d found label
+    uki('Label')[2] // get 3-d found label
 6. Events are bound to Views (not individual DOM nodes) with the bind() function
     uki('Label')[0].bind('click', function() {  handle the event here  }) // bind click to the first label
     uki('Label').bind('click', function() {  handle the event here  }) // bind click to all labels
