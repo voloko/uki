@@ -10,10 +10,12 @@ uki.view = {
             i, part, $partslen = parts.length;
         
         klass.prototype.typeName = function() { return name; };
-        for ( i= $partslen - 2; i >= 0; i-- ) {
+		
+        for ( i= 0; i < $partslen-1; i++ ) {
             part = parts[i];
             if (!obj[part]) obj[part] = {};
             obj = obj[part];
+			
         };
 		
         obj[ parts[$partslen - 1] ] = klass;

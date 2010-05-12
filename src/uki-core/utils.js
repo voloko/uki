@@ -258,14 +258,14 @@ var utils = {
      * @returns Describe what it returns
      */
     extend: function() {
-        var target = arguments[0] || {}, i = arguments.length-1, options;
-
-        for ( ; i >0; i-- ) {
+        var target = arguments[0] || {}, i=0, len = arguments.length, options;
+		
+        for ( ; i < len; i++ ) {
             if ( (options = arguments[i]) != null ) {
                 
                 for ( var name in options ) {
                     var copy = options[ name ];
-
+					
                     if ( copy !== undefined ) {
                         target[ name ] = copy;
                     }
@@ -273,7 +273,7 @@ var utils = {
                 }
             }
         }
-
+		
         return target;      
     },
     
@@ -300,8 +300,9 @@ var utils = {
             },
             
 			inheritance, i, startFrom = 0, tmp, baseClasses = [], base, name, copy, $arguments = arguments, $arguments$length;
-            
+		
         if (($arguments$length = $arguments.length)> 1) {
+
             if ($arguments[0].prototype) { // real inheritance
                 /** @ignore */
                 inheritance = function() {};

@@ -35,10 +35,12 @@ uki.theme = (function (uki$theme) { return uki$theme = {
     },
     
     _namedResource: function(name, type, params, i, result) {
-        for ( i = uki$theme.themes.length - 1, ; i >= 0; i--) {
-            if (result = uki$theme.themes[i] [type](name, params))
+		
+        for ( i = uki$theme.themes.length - 1 ; i >= 0; i--) {
+            if (result = (uki$theme.themes[i] [type](name, params)))
 				return result;
         };
+		
         return null;
         
     }
