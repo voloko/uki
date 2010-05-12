@@ -7,18 +7,18 @@ uki.view = {
             klass = uki.newClass.apply(uki, args),
             parts = name.split('.'),
             obj   = root,
-            i, part, $partslen = parts.length;
+            i, part, l = parts.length - 1;
         
         klass.prototype.typeName = function() { return name; };
 		
-        for ( i= 0; i < $partslen-1; i++ ) {
+        for ( i= 0; i < l; i++ ) {
             part = parts[i];
             if (!obj[part]) obj[part] = {};
             obj = obj[part];
 			
         };
 		
-        obj[ parts[$partslen - 1] ] = klass;
+        obj[ parts[l] ] = klass;
         return klass;
     }
 };

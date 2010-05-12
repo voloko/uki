@@ -258,9 +258,9 @@ var utils = {
      * @returns Describe what it returns
      */
     extend: function() {
-        var target = arguments[0] || {}, i=0, len = arguments.length, options;
+        var target = arguments[0] || {}, i = 1, length = arguments.length, options;
 		
-        for ( ; i < len; i++ ) {
+        for ( ; i < length; i++ ) {
             if ( (options = arguments[i]) != null ) {
                 
                 for ( var name in options ) {
@@ -299,9 +299,9 @@ var utils = {
                 this.init.apply(this, arguments);
             },
             
-			inheritance, i, startFrom = 0, tmp, baseClasses = [], base, name, copy, $arguments = arguments, $arguments$length;
+			inheritance, i, startFrom = 0, tmp, baseClasses = [], base, name, copy, $arguments = arguments, length;
 		
-        if (($arguments$length = $arguments.length)> 1) {
+        if ((length = $arguments.length) > 1) {
 
             if ($arguments[0].prototype) { // real inheritance
                 /** @ignore */
@@ -313,7 +313,7 @@ var utils = {
             }
         }
 
-        for (i=startFrom; i < $arguments$length; i++) {
+        for (i=startFrom; i < length; i++) {
             base = arguments[i];
             if (this.isFunction(base)) {
                 tmp = {};
@@ -343,8 +343,10 @@ var utils = {
     binarySearch: function (value, array) {
         var low = 0, high = array.length, mid;
 		
-        while (low < high)
-            array[ mid = (low + high) >> 1 ] < value ? low = mid + 1 : high = mid;
+        while (low < high) {
+            mid = (low + high) >> 1;
+            array[mid] < value ? low = mid + 1 : high = mid;
+        }
         
         return low;
     },
@@ -388,8 +390,8 @@ var utils = {
      * @param {Array.<string>} props Property names
      */
     addProps: function(proto, props) {
-        for (var i=0, len = props.length;i<len;i++)
-			proto[props[i]] = uki.newProp('_' + props[i]);
+        for (var i =0, len = props.length; i<len; i++)
+			proto[ props[i] ] = uki.newProp('_' + props[i]);
     },
     
     toArray: function(arr) {

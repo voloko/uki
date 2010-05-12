@@ -62,9 +62,9 @@ uki.imageHTML = function(url, dataUrl, alphaUrl, html) {
 uki.image.load = function(images, callback) {
     
     
-    for(var img,i=0, imagesToLoad = images.length;i<imagesToLoad;i++) {
+    for(var img, i=0, l = images.length; i < l; i++) {
 		
-        if (!( img = images[i]) || img.width) {
+        if ( !(img = images[i]) || img.width ) {
             if (!--imagesToLoad) callback();
             return;
         }

@@ -108,25 +108,25 @@ uki.fn = uki.Collection.prototype = new function() {
      * @param {Array.<uki.view.Base>} views Views to append
      * @returns {uki.view.Collection} self
      */
-    this.append = function( views , $this_0) {
-        if (! ($this_0 = this[0])) return this;
+    this.append = function( views ) {
+        var target = this[0];
+        if (!target) return this;
 		
         views = views.length !== undefined ? views : [views];
 		
         for (var i = views.length-1; i >= 0; i--) {
-            $this_0.appendChild(views[i]);
+            target.appendChild(views[i]);
         };
 		
         return this;
     };
     
     this.appendTo = function( target ) {
-        var
-			target$appendChild = uki(target)[0] && uki(target)[0].appendChild;
-			
-        return this.each(function() {
-            target$appendChild(this);
-        });		
+        target = uki(target)[0];
+        this.each(function() {
+            target.appendChild(this);
+        });
+        return this;	
         
     };
 
