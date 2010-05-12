@@ -3,7 +3,7 @@ include('uki.js');
 /**
  * @namespace
  */
-uki$theme = (function (uki$theme) { return uki$theme = {
+uki.theme = (function (uki$theme) { return uki$theme = {
     themes: [],
     
     register: function(theme, /* internal */ themes) {

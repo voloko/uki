@@ -6,7 +6,7 @@ include('../image.js');
  *
  * @class
  */
-uki.background.Css = uki.newClass(new function() {
+uki.background.Css = uki.newClass(new function($this) {
     
     /**#@+ @memberOf uki.background.Css.prototype */
     this.init = function(options) {
