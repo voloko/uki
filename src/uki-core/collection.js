@@ -122,7 +122,7 @@ uki.fn = uki.Collection.prototype = new function() {
     
     this.appendTo = function( target ) {
         var
-			target$appendChild = uki(target)[0].appendChild;
+			target$appendChild = uki(target)[0] && uki(target)[0].appendChild;
 			
         return this.each(function() {
             target$appendChild(this);
