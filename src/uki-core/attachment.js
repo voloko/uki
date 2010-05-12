@@ -149,9 +149,10 @@ include('view/observable.js');
             uki.dom.bind(root, 'resize', function() {
                 if (!timeout) {
                     timeout = true;
-                    setTimeout(function() {
+                    setTimeout(function(i,len) {
                         timeout = false;
-                        uki.each(self.instances, function() { this.layout(); });
+						for (i=0,len=self.instances.length;i<len;i++)
+							self.instances[i].layout();
                     }, 1)
                 }
             });

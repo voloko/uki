@@ -342,10 +342,10 @@ var utils = {
      */
     binarySearch: function (value, array) {
         var low = 0, high = array.length, mid;
-        while (low < high) {
-            mid = (low + high) >> 1;
-            array[mid] < value ? low = mid + 1 : high = mid;
-        }
+		
+        while (low < high)
+            array[ mid = (low + high) >> 1 ] < value ? low = mid + 1 : high = mid;
+        
         return low;
     },
     
@@ -388,7 +388,8 @@ var utils = {
      * @param {Array.<string>} props Property names
      */
     addProps: function(proto, props) {
-        uki.each(props, function() { proto[this] = uki.newProp('_' + this); });
+        for (var i=0, len = props.length;i<len;i++)
+			proto[props[i]] = uki.newProp('_' + props[i]);
     },
     
     toArray: function(arr) {

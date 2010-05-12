@@ -60,10 +60,11 @@ uki.imageHTML = function(url, dataUrl, alphaUrl, html) {
  * @param {function()} callback
  */
 uki.image.load = function(images, callback) {
-    var imagesToLoad = images.length;
     
-    uki.each(images, function(i, img) {
-        if (!img || img.width) {
+    
+    for(var img,i=0, imagesToLoad = images.length;i<imagesToLoad;i++) {
+		
+        if (!( img = images[i]) || img.width) {
             if (!--imagesToLoad) callback();
             return;
         }
@@ -75,7 +76,7 @@ uki.image.load = function(images, callback) {
 		img.onload  = handler;
 		img.onerror = handler;
 		img.onabort = handler;
-    });
+    };
 };
 
 /**
