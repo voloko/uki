@@ -195,3 +195,5 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
     };
     
 });
+
+uki.Collection.addAttrs(['options']);
