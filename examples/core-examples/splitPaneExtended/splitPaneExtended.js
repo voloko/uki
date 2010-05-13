@@ -9,7 +9,7 @@
 
 uki(
     { view: 'HSplitPane', rect: '1000 600', anchors: 'left top right bottom', handlePosition: 200, rightMin: 500, handleWidth: 1, id: 'top',
-        leftPane: {  background: '#FFF' },
+        throttle: 42, leftPane: {  background: '#FFF' },
         rightChildViews: { view: 'HSplitPane', rect: '799 600', anchors: 'left top right bottom', id: 'second',
             handlePosition: 300, autogrowRight: true, autogrowLeft: false, leftMin: 200, rightMin: 300, handleWidth: 1,
             leftPane: {  background: '#D0D7E2', childViews: [

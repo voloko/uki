@@ -1,4 +1,6 @@
 uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
+    this._throttle = 0; // do not try to render more often than every Xms
+    
     this._setup = function() {
         Base._setup.call(this);
         this._originalRect = this._rect;
@@ -14,6 +16,10 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
             _panes: []
         });
     };
+    
+    uki.addProps(this, ['leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'throttle']);
+    this.topMin = this.leftMin;
+    this.bottomMin = this.rightMin;
     
     /**
      * @fires event:handleMove
@@ -46,10 +52,6 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
                 ));
     };
     
-    
-    uki.addProps(this, ['leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight']);
-    this.topMin = this.leftMin;
-    this.bottomMin = this.rightMin;
     
     this._removeHandle = function() {
         this._dom.removeChild(this._handle);
@@ -124,13 +126,29 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     };
     
     this._draggesture = function(e) {
-        var offset = uki.dom.offset(this.dom());
-        this.handlePosition(e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x'] - this._posWithinHandle);
-        this.layout();
+        this._updatePositionOnDrag(e);
     };
     
     this._draggestureend = function(e, offset) {
+        this._updatePositionOnDrag(e);
     };
+    
+    this._updatePositionOnDrag = function(e) {
+        var offset = uki.dom.offset(this.dom());
+        this.handlePosition(e[this._vertical ? 'pageY' : 'pageX'] - offset[this._vertical ? 'y' : 'x'] - this._posWithinHandle);
+        if (this._throttle) {
+            this._throttleHandler = this._throttleHandler || uki.proxy(function() {
+                this.layout();
+                this._trottling = false;
+            }, this);
+            if (this._trottling) return;
+            this._trottling = true;
+            setTimeout(this._throttleHandler, this._throttle);
+        } else {
+            this.layout();
+        }
+    };
+    
     
     this.topPane = this.leftPane = function(pane) {
         return this._paneAt(0, pane);
