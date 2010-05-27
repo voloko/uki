@@ -259,6 +259,16 @@
                 return new uki.theme.Template(
                     '<div style="position:relative;border-right:1px solid #CCC;height:100%;'+
                     '${style}" class="${className}">${data}</div>');
+            },
+            
+            'table-cell-asc': function() {
+                return new uki.theme.Template(
+                    '<div style="position:relative;border-right:1px solid #CCC;height:100%;'+
+                    '${style}" class="${className}">${data}</div>');
+            },
+            
+            'table-cell-desc': function() {
+                
             }
         },
         

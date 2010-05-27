@@ -1,3 +1,11 @@
+/**
+ * Popup
+ * 
+ * @author voloko
+ * @name uki.view.Popup
+ * @class
+ * @extends uki.view.Container
+ */
 uki.view.declare('uki.view.Popup', uki.view.Container, function(Base) {
     
     this._setup = function() {
@@ -16,8 +24,28 @@ uki.view.declare('uki.view.Popup', uki.view.Container, function(Base) {
         this.hideOnClick(true);
     };
     
+    /**
+    * @function
+    * @name uki.view.Popup#offset
+    */
+    /**
+    * @function
+    * @name uki.view.Popup#relativeTo
+    */
+    /**
+    * @function
+    * @name uki.view.Popup#horizontal
+    */
+    /**
+    * @function
+    * @name uki.view.Popup#flipOnResize
+    */
     uki.addProps(this, ['offset', 'relativeTo', 'horizontal', 'flipOnResize']);
     
+    /**
+    * @function
+    * @name uki.view.Popup#hideOnClick
+    */
     this.hideOnClick = function(state) {
         if (state === undefined) return this._clickHandler;
         if (state != !!this._clickHandler) {
@@ -38,6 +66,10 @@ uki.view.declare('uki.view.Popup', uki.view.Container, function(Base) {
         return this;
     };
     
+    /**
+    * @function
+    * @name uki.view.Popup#toggle
+    */
     this.toggle = function() {
         if (this.parent() && this.visible()) {
             this.hide();
@@ -46,6 +78,10 @@ uki.view.declare('uki.view.Popup', uki.view.Container, function(Base) {
         }
     };
     
+    /**
+    * @function
+    * @name uki.view.Popup#show
+    */
     this.show = function() {
         this.visible(true);
         if (!this.parent()) {
@@ -57,6 +93,10 @@ uki.view.declare('uki.view.Popup', uki.view.Container, function(Base) {
         this.trigger('toggle', { source: this });
     };
     
+    /**
+    * @function
+    * @name uki.view.Popup#hide
+    */
     this.hide = function() {
         this.visible(false);
         this.trigger('toggle', { source: this });

@@ -1,3 +1,12 @@
+/**
+* Horizontal Slider. 
+*
+* @author voloko
+* @name uki.view.Slider
+* @class
+* @extends uki.view.Base
+* @extends uki.view.Focusable
+*/
 uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     
     this._setup = function() {
@@ -11,6 +20,22 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
         });
     };
     
+    /**
+    * @function
+    * @name uki.view.Slider#min
+    */
+    /**
+    * @function
+    * @name uki.view.Slider#max
+    */
+    /**
+    * @function
+    * @name uki.view.Slider#values
+    */
+    /**
+    * @function
+    * @name uki.view.Slider#keyStep
+    */
     uki.addProps(this, ['min', 'max', 'values', 'keyStep']);
     
     this.values = uki.newProp('_values', function(val) {
@@ -20,8 +45,10 @@ uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(
     });
     
     /**
-     * @fires event:change
-     */
+    * @function
+    * @fires event:change
+    * @name uki.view.Slider#value
+    */
     this.value = uki.newProp('_value', function(val) {
         this._value = MAX(this._min, MIN(this._max, val));
         this._position = this._val2pos(this._value);

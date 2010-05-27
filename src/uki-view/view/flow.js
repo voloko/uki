@@ -1,3 +1,12 @@
+/**
+ * Vertical Flow
+ * Arranges child views verticaly, one after another
+ *
+ * @author voloko
+ * @name uki.view.VFlow
+ * @class
+ * @extends uki.view.Container
+ */
 uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
     this.contentsSize = function() {
         var value = uki.reduce(0, this._childViews, function(sum, e) { 
@@ -42,6 +51,15 @@ uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
     };
 });
 
+/**
+ * Horizontla Flow
+ * Arranges child views horizontally
+ *
+ * @author voloko
+ * @name uki.view.HFlow
+ * @class
+ * @extends uki.view.VFlow
+ */
 uki.view.declare('uki.view.HFlow', uki.view.VFlow, function(Base) {
     this.contentsSize = function() {
         var value = uki.reduce(0, this._childViews, function(sum, e) { 

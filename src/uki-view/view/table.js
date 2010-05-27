@@ -2,6 +2,36 @@ include('list.js');
 
 uki.view.table = {};
 
+/**
+* Table
+*
+* Uses uki.view.List to render data. Wraps it into scroll pane and ads a header
+* @author voloko
+* @name uki.view.Table
+* @class
+* @extends uki.view.Container
+*
+* @lends uki.view.List#rowHeight as rowHeight
+* @lends uki.view.List#data as data
+* @lends uki.view.List#packSize as packSize
+* @lends uki.view.List#visibleRectExt as visibleRectExt
+* @lends uki.view.List#render as render
+* @lends uki.view.List#selectedIndex as selectedIndex
+* @lends uki.view.List#selectedIndexes as selectedIndexes
+* @lends uki.view.List#selectedRow as selectedRow
+* @lends uki.view.List#selectedRows as selectedRows
+* @lends uki.view.List#lastClickIndex as lastClickIndex
+* @lends uki.view.List#textSelectable as textSelectable
+* @lends uki.view.List#multiselect as multiselect
+* @lends uki.view.List#redrawRow as redrawRow
+* @lends uki.view.List#addRow as addRow
+* @lends uki.view.List#removeRow as removeRow
+* @lends uki.view.List#focusable as lastClickIndex
+* @lends uki.view.List#focus as focus
+* @lends uki.view.List#blur as blur
+* @lends uki.view.List#hasFocus as hasFocus
+*
+*/
 uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     var propertiesToDelegate = 'rowHeight data packSize visibleRectExt render selectedIndex selectedIndexes selectedRows selectedRow focus blur hasFocus lastClickIndex focusable textSelectable multiselect'.split(' ');
     
@@ -22,14 +52,29 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
         return Base._style.call(this, name, value);
     };
     
+    /**
+    * @function
+    * @return {uki.view.List}
+    * @name uki.view.Table#list
+    */
     this.list = function() {
         return this._list;
     };
     
+    /**
+    * @function
+    * @return {uki.view.table.Header}
+    * @name uki.view.Table#header
+    */
     this.header = function() {
         return this._header;
     };
     
+    /**
+    * @function
+    * @param {array<uki.view.table.Column>} c
+    * @name uki.view.Table#columns
+    */
     this.columns = uki.newProp('_columns', function(c) {
         for (var i = 0; i < this._columns.length; i++) {
             this._columns[i].unbind();
@@ -47,6 +92,12 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
         this._header.columns(this._columns);
     });
     
+    /**
+    * @function
+    * @param {Number} row
+    * @param {Number} col
+    * @name uki.view.Table#redrawCell
+    */
     this.redrawCell = function(row, col) {
         var item = this._list._itemAt(row);
         if (item) {
@@ -69,6 +120,11 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
         };
     }, this)
     
+    /**
+    * @function
+    * @param {Number} col
+    * @name uki.view.Table#redrawColumn
+    */
     this.redrawColumn = function(col) {
         var from = this._list._packs[0].itemFrom,
             to   = this._list._packs[1].itemTo

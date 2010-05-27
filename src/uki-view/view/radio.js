@@ -1,10 +1,23 @@
 include('checkbox.js');
 
 (function() {
+    /**
+     * Radio button
+     *
+     * @author voloko
+     * @name uki.view.Radio
+     * @class
+     * @extends uki.view.Checkbox
+     */
     var manager = uki.view.declare('uki.view.Radio', uki.view.Checkbox, function(base) {
         
         this._backgroundPrefix = 'radio-';
         
+        /**
+        * @function
+        * @param {String} group
+        * @name uki.view.Popup#hide
+        */
         this.group = uki.newProp('_group', function(g) {
             manager.unregisterGroup(this);
             this._group = g;

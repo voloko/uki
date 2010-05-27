@@ -3,6 +3,7 @@ include('../list.js');
 /**
  * Flyweight view rendering
  * Used in lists, tables, grids
+ * @class
  */
 uki.view.list.Render = uki.newClass({
     init: function() {},

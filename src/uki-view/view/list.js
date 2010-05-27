@@ -1,6 +1,17 @@
 include('scrollPane.js');
 
 uki.view.list = {};
+/**
+ * List View
+ * Progressevly renders list data. Support selection and drag&drop.
+ * Renders rows with plain html.
+ * 
+ * @author voloko
+ * @name uki.view.List
+ * @class
+ * @extends uki.view.Base
+ * @extends uki.view.Focusable
+ */
 uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     
     this._throttle = 42; // do not try to render more often than every 42ms
@@ -18,12 +29,45 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         });
     };
     
+    /**
+     * @function
+     * @name uki.view.List#defaultBackground
+     */
     this.defaultBackground = function() {
         return uki.theme.background('list', this._rowHeight);
     };
     
-    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle', 'contentDraggable', 'lastClickIndex', 'multiselect', 'lastClickIndex']);
+    /**
+    * @type uki.view.list.Render
+    * @function
+    * @name uki.view.List#render
+    */
+    /**
+    * @function
+    * @name uki.view.List#packSize
+    */
+    /**
+    * @function
+    * @name uki.view.List#visibleRectExt
+    */
+    /**
+    * @function
+    * @name uki.view.List#throttle
+    */
+    /**
+    * @function
+    * @name uki.view.List#lastClickIndex
+    */
+    /**
+    * @function
+    * @name uki.view.List#multiselect
+    */
+    uki.addProps(this, ['render', 'packSize', 'visibleRectExt', 'throttle', 'lastClickIndex', 'multiselect']);
     
+    /**
+    * @function
+    * @name uki.view.List#rowHeight
+    */
     this.rowHeight = uki.newProp('_rowHeight', function(val) {
         this._rowHeight = val;
         this.minSize(new Size(this.minSize().width, this._rowHeight * this._data.length));
@@ -33,6 +77,11 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         this._relayoutParent();
     });
     
+    /**
+    * @example list.data(['row1', 'row2', ...])
+    * @function
+    * @name uki.view.List#data
+    */
     this.data = function(d) {
         if (d === undefined) return this._data;
         this.clearSelection();
@@ -45,6 +94,11 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return this;
     };
     
+    /**
+    * Forces list content update
+    * @function
+    * @name uki.view.List#relayout
+    */
     this.relayout = function() {
         this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
         this.layout();
@@ -54,7 +108,13 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return new Size(this.rect().width, this._rowHeight * this._data.length);
     };
     
-    // used in search. should be fast
+    /**
+    * used in search. should be fast
+    * @function
+    * @param {Number} position
+    * @param {String} data
+    * @name uki.view.List#addRow
+    */
     this.addRow = function(position, data) {
         this._data.splice(position, 0, data);
         var item = this._itemAt(position);
@@ -92,18 +152,35 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return this;
     };
     
-    this.removeRow = function(position, data) {
+    /**
+    * @function
+    * @param {Number} position
+    * @name uki.view.List#removeRow
+    */
+    this.removeRow = function(position) {
         this._data.splice(position, 1);
         this.data(this._data);
         return this;
     };
     
-    this.redrawRow = function(row) {
-        var item = this._itemAt(row);
-        if (item) item.innerHTML = this._render.render(this._data[row], this._rowRect(row), row);
+    /**
+    * Forces one particular row to be redrawn
+    * @function
+    * @param {Number} position
+    * @name uki.view.List#removeRow
+    */
+    this.redrawRow = function(position) {
+        var item = this._itemAt(position);
+        if (item) item.innerHTML = this._render.render(this._data[position], this._rowRect(position), position);
         return this;
     };
     
+    /**
+    * Read/write current selected index for selectable lists
+    * @function
+    * @param {Number} position
+    * @name uki.view.List#selectedIndex
+    */
     this.selectedIndex = function(position) {
         if (position === undefined) return this._selectedIndexes.length ? this._selectedIndexes[0] : -1;
         this.selectedIndexes([position]);
@@ -111,6 +188,12 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return this;
     };
     
+    /**
+    * Read/write all selected indexes for multiselectable lists
+    * @function
+    * @param {array<Number>} position
+    * @name uki.view.List#selectedIndex
+    */
     this.selectedIndexes = function(indexes) {
         if (indexes === undefined) return this._selectedIndexes;
         this.clearSelection(true);
@@ -122,16 +205,30 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         return this;
     };
     
+    /**
+    * Read contents of selected row
+    * @function
+    * @name uki.view.List#selectedRow
+    */
     this.selectedRow = function() {
         return this._data[this.selectedIndex()];
     };    
     
+    /**
+    * Read contents of all selected rows
+    * @function
+    * @name uki.view.List#selectedRows
+    */
     this.selectedRows = function() {
         return uki.map(this.selectedIndexes(), function(index) {
             return this._data[index];
         }, this)
     };
     
+    /**
+    * @function
+    * @name uki.view.List#clearSelection
+    */
     this.clearSelection = function(skipClickIndex) {
         for (var i=0; i < this._selectedIndexes.length; i++) {
             this._setSelected(this._selectedIndexes[i], false);
@@ -140,6 +237,11 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         if (!skipClickIndex) this._lastClickIndex = -1;
     };
     
+    /**
+    * @function
+    * @param {Number} index
+    * @name uki.view.List#isSelected
+    */
     this.isSelected = function(index) {
         var found = uki.binarySearch(index, this._selectedIndexes);
         return this._selectedIndexes[found] == index;
@@ -472,8 +574,27 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
 });
 
-uki.Collection.addAttrs(['data','selectedIndex', 'selectedIndexes', 'selectedRows']);
+/** @function
+@name uki.Collection#data */
+/** @function
+@name uki.Collection#selectedIndex */
+/** @function
+@name uki.Collection#selectedIndexes */
+/** @function
+@name uki.Collection#selectedRow */
+/** @function
+@name uki.Collection#selectedRows */
+uki.Collection.addAttrs(['data','selectedIndex', 'selectedIndexes', 'selectedRow', 'selectedRows']);
 
+/**
+ * Scrollable List View
+ * Puts a list into a scroll pane
+ * 
+ * @author voloko
+ * @name uki.view.ScrollableList
+ * @class
+ * @extends uki.view.ScrollPane
+ */
 uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) {
 
     this._createDom = function() {
@@ -482,7 +603,7 @@ uki.view.declare('uki.view.ScrollableList', uki.view.ScrollPane, function(Base) 
         this.appendChild(this._list);
     };
     
-    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndexes selectedIndex selectedIndexes selectedRows multiselect contentDraggable draggable textSelectable'.split(' '), 
+    uki.each('data rowHeight render packSize visibleRectExt throttle focusable selectedIndex selectedIndexes selectedRow selectedRows multiselect draggable textSelectable'.split(' '), 
         function(i, name) {
             uki.delegateProp(this, name, '_list');
         }, this);

@@ -1,7 +1,17 @@
 include('label.js');
 
+/**
+ * Button view
+ *
+ *
+ * @author voloko
+ * @name uki.view.Button
+ * @class
+ * @extends uki.view.Label
+ * @implements uki.view.Focusable
+ */
 uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function(Base, Focusable) {
-    var proto = this;
+    /** @lends uki.view.Button.prototype */
     
     this._backgroundPrefix = 'button-';
     
@@ -13,8 +23,32 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
         this.defaultCss += "cursor:default;-moz-user-select:none;-webkit-user-select:none;" + uki.theme.style('button');
     };
     
+    /**
+     * @function
+     * @name uki.view.Button#backgroundPrefix
+     */
     uki.addProps(this, ['backgroundPrefix']);
     
+    /**
+     * @function
+     * @name uki.view.Button#"normal-background"
+     */
+    /**
+     * @function
+     * @name uki.view.Button#"hover-background"
+     */
+    /**
+     * @function
+     * @name uki.view.Button#"down-background"
+     */
+    /**
+     * @function
+     * @name uki.view.Button#"focus-background"
+     */
+     /**
+      * @function
+      * @name uki.view.Button#"disabled-background"
+      */
     uki.each(['normal', 'hover', 'down', 'focus', 'disabled'], function(i, name) {
         var property = name + '-background';
         this[property] = function(bg) {

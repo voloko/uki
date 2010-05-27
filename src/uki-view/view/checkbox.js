@@ -1,7 +1,27 @@
+/**
+ * Checkbox
+ *
+ * @author voloko
+ * @name uki.view.Checkbox
+ * @class
+ * @extends uki.view.Button
+ */
 uki.view.declare('uki.view.Checkbox', uki.view.Button, function(Base) {
     
     this._backgroundPrefix = 'checkbox-';
     
+    /**
+     * @function
+     * @name uki.view.Button#"checked-normal-background"
+     */
+    /**
+     * @function
+     * @name uki.view.Button#"checked-hover-background"
+     */
+    /**
+     * @function
+     * @name uki.view.Button#"checked-disabled-background"
+     */
     uki.each(['checked-normal', 'checked-hover', 'checked-disabled'], function(i, name) {
         var property = name + '-background';
         this[property] = function(bg) {
@@ -22,6 +42,14 @@ uki.view.declare('uki.view.Checkbox', uki.view.Button, function(Base) {
         this._backgroundByName(name);
     };
     
+    /**
+     * @function
+     * @name uki.view.Button#value
+     */
+     /**
+      * @function
+      * @name uki.view.Button#checked
+      */
     this.value = this.checked = uki.newProp('_checked', function(state) {
         var changed = this._checked != !!state;
         this._checked = !!state;

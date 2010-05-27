@@ -1,3 +1,12 @@
+/**
+* Editable Text Field
+*
+* @author voloko
+* @name uki.view.TextField
+* @class
+* @extends uki.view.Base
+* @implements uki.view.Focusable
+*/
 uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     var emptyInputHeight = {};
 
@@ -35,8 +44,16 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         this._input.style.color = this._disabled ? '#999' : '#000';
     };
     
+    /**
+    * @function
+    * @name uki.view.TextField#name
+    */
     uki.delegateProp(this, 'name', '_input');
     
+    /**
+    * @function
+    * @name uki.view.TextField#value
+    */
     this.value = function(value) {
         if (value === undefined) return this._input.value;
 
@@ -45,6 +62,11 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         return this;
     };
     
+    /**
+    * Cross browser placeholder implementation
+    * @function
+    * @name uki.view.TextField#placeholder
+    */
     this.placeholder = uki.newProp('_placeholder', function(v) {
         this._placeholder = v;
         if (!this._multiline && nativePlaceholder(this._input)) {
@@ -76,8 +98,16 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         return this;
     };
 
+    /**
+    * @function
+    * @name uki.view.TextField#backgroundPrefix
+    */
     uki.addProps(this, ['backgroundPrefix']);
     
+    /**
+    * @function
+    * @name uki.view.TextField#defaultBackground
+    */
     this.defaultBackground = function() {
         return uki.theme.background(this._backgroundPrefix + 'input');
     };
@@ -139,6 +169,14 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     };
 });
 
+/**
+* Multiline Editable Text Field (textarea)
+*
+* @author voloko
+* @name uki.view.MultilineTextField
+* @class
+* @extends uki.view.TextField
+*/
 uki.view.declare('uki.view.MultilineTextField', uki.view.TextField, function(Base) {
     this._setup = function() {
         Base._setup.call(this);
@@ -148,6 +186,14 @@ uki.view.declare('uki.view.MultilineTextField', uki.view.TextField, function(Bas
     };
 });
 
+/**
+* Password Field
+*
+* @author voloko
+* @name uki.view.PasswordTextField
+* @class
+* @extends uki.view.TextField
+*/
 uki.view.declare('uki.view.PasswordTextField', uki.view.TextField, function(Base) {
     this._setup = function() {
         Base._setup.call(this);

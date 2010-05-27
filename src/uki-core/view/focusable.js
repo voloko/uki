@@ -2,7 +2,7 @@ include('../view.js');
 include('observable.js');
 
 /**
- * @class
+ * @interface
  */
 uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */ 
     

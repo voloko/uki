@@ -3,6 +3,14 @@ include('flow.js');
 
 uki.view.toolbar = {};
 
+/**
+* Toolbar
+*
+* @author voloko
+* @name uki.view.Toolbar
+* @class
+* @extends uki.view.Container
+*/
 uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
 
     this.typeName = function() { return 'uki.view.Toolbar'; };
@@ -15,6 +23,10 @@ uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
         this._widths = [];
     };
     
+    /**
+    * @function
+    * @name uki.view.Toolbar#buttons
+    */
     this.buttons = uki.newProp('_buttons', function(b) {
         this._buttons = b;
         var buttons = uki.build(uki.map(this._buttons, this._createButton, this)).resizeToContents('width');
@@ -22,6 +34,10 @@ uki.view.declare('uki.view.Toolbar', uki.view.Container, function(Base) {
         this._totalWidth = uki.reduce(0, this._flow.childViews(), function(s, v) { return s + v.rect().width; });
     });
     
+    /**
+    * @function
+    * @name uki.view.Toolbar#moreWidth
+    */
     uki.moreWidth = uki.newProp('_moreWidth', function(v) {
         this._moreWidth = v;
         this._updateMoreVisible();

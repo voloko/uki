@@ -1,5 +1,9 @@
 include('../list/render.js');
 
+/**
+ * @class
+ * @extends uki.view.list.Render
+ */
 uki.view.table.Render = uki.newClass(uki.view.list.Render, new function() {
     this.init = function(table) {
         this._table = table;

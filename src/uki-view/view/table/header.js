@@ -1,5 +1,9 @@
 include('../label.js');
 
+/**
+ * @class
+ * @extends uki.view.Label
+ */
 uki.view.table.Header = uki.newClass(uki.view.Label, function(Base) {
     this._setup = function() {
         Base._setup.call(this);

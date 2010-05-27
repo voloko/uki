@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends uki.view.Observable
+ */
 uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this._width = 100;
     this._offset = 0;

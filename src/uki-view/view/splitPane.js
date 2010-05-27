@@ -1,3 +1,11 @@
+/**
+* Horizontal Split Pane
+*
+* @author voloko
+* @name uki.view.HSplitPane
+* @class
+* @extends uki.view.Container
+*/
 uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     this._throttle = 0; // do not try to render more often than every Xms
     
@@ -17,19 +25,45 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
         });
     };
     
+    /**
+    * @function
+    * @name uki.view.HSplitPane#leftMin
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#rightMin
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#autogrowLeft
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#autogrowRight
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#throttle
+    */
     uki.addProps(this, ['leftMin', 'rightMin', 'autogrowLeft', 'autogrowRight', 'throttle']);
     this.topMin = this.leftMin;
     this.bottomMin = this.rightMin;
     
     /**
-     * @fires event:handleMove
-     */
+    * @function
+    * @fires event:handleMove
+    * @name uki.view.HSplitPane#handlePosition
+    */
     this.handlePosition = uki.newProp('_handlePosition', function(val) {
         this._handlePosition = this._normalizePosition(val);
         this.trigger('handleMove', {source: this, handlePosition: this._handlePosition, dragValue: val });
         this._resizeChildViews();
     });
     
+    /**
+    * @function
+    * @name uki.view.HSplitPane#handleWidth
+    */
     this.handleWidth = uki.newProp('_handleWidth', function(val) {
         if (this._handleWidth != val) {
             this._handleWidth = val;
@@ -150,18 +184,50 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     };
     
     
+    /**
+    * @function
+    * @name uki.view.HSplitPane#topPane
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#leftPane
+    */
     this.topPane = this.leftPane = function(pane) {
         return this._paneAt(0, pane);
     };
     
+    /**
+    * @function
+    * @name uki.view.HSplitPane#bottomPane
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#rightPane
+    */
     this.bottomPane = this.rightPane = function(pane) {
         return this._paneAt(1, pane);
     };
     
+    /**
+    * @function
+    * @name uki.view.HSplitPane#topChildViews
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#leftChildViews
+    */
     this.topChildViews = this.leftChildViews = function(views) {
         return this._childViewsAt(0, views);
     };
     
+    /**
+    * @function
+    * @name uki.view.HSplitPane#rightChildViews
+    */
+    /**
+    * @function
+    * @name uki.view.HSplitPane#bottomChildViews
+    */
     this.bottomChildViews = this.rightChildViews = function(views) {
         return this._childViewsAt(1, views);
     };
@@ -217,6 +283,14 @@ uki.view.declare('uki.view.HSplitPane', uki.view.Container, function(Base) {
     
 });
 
+/**
+* Vertical Split Pane
+*
+* @author voloko
+* @name uki.view.VSplitPane
+* @class
+* @extends uki.view.HSplitPane
+*/
 uki.view.declare('uki.view.VSplitPane', uki.view.HSplitPane, function(Base) {
     this._setup = function() {
         Base._setup.call(this);

@@ -1,5 +1,14 @@
 include('../../uki-core/const.js');
 
+/**
+ * Label View
+ * Contains any html
+ * 
+ * @author voloko
+ * @name uki.view.Label
+ * @class
+ * @extends uki.view.Base
+ */
 uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
 
     this._setup = function() {
@@ -39,25 +48,50 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
         return size;
     };
     
+    /**
+     * Read/write escaped html contents 
+     * @function
+     * @name uki.view.Label#text
+     */
     this.text = function(text) {
         return text === undefined ? this.html() : this.html(uki.escapeHTML(text));
     };
     
+    /**
+     * Read/write html contents
+     * @function
+     * @name uki.view.Label#html
+     */
     this.html = function(html) {
         if (html === undefined) return this._label.innerHTML;
         this._label.innerHTML = html;
         return this;
     };
     
+    /**
+     * Insets between text and view borders
+     * @function
+     * @name uki.view.Label#inset
+     */
     this.inset = uki.newProp('_inset', function(inset) {
         this._inset = Inset.create(inset);
     });
 
+    /**
+     * Whether label have inline scrollbars on not
+     * @function
+     * @name uki.view.Label#scrollable
+     */
     this.scrollable = uki.newProp('_scrollable', function(state) {
         this._scrollable = state;
         this._label.style.overflow = state ? 'auto' : 'hidden';
     });
     
+    /**
+     * Whether can have multiline lines or not
+     * @function
+     * @name uki.view.Label#multiline
+     */
     this.multiline = uki.newProp('_multiline', function(state) {
         this._multiline = state;
         this._label.style.whiteSpace = state ? '' : 'nowrap';

@@ -19,9 +19,15 @@
     }
         
     /**
-     * Scroll pane. Pane with scrollbars with content overflowing the borders.
-     * Works consistently across all supported browsers.
-     */
+    * Scroll pane. 
+    * Pane with scrollbars with content overflowing the borders.
+    * Works consistently across all supported browsers.
+    *
+    * @author voloko
+    * @name uki.view.ScrollPane
+    * @class
+    * @extends uki.view.Container
+    */
     uki.view.declare('uki.view.ScrollPane', uki.view.Container, function(Base) {
         this.typeName = function() {
             return 'uki.view.ScrollPane';
@@ -42,16 +48,46 @@
             });
         };
     
+        /**
+        * @function
+        * @name uki.view.ScrollPane#scrollableV
+        */
+        /**
+        * @function
+        * @name uki.view.ScrollPane#scrollableH
+        */
+        /**
+        * @function
+        * @name uki.view.ScrollPane#scrollH
+        */
+        /**
+        * @function
+        * @name uki.view.ScrollPane#scrollV
+        */
         uki.addProps(this, ['scrollableV', 'scrollableH', 'scrollH', 'scrollV']);
     
         this.rectForChild = function() { return this._rectForChild; };
         this.clientRect = function() { return this._clientRect; };
     
+        /**
+        * @function
+        * @param {Number} dx
+        * @param {Number} dy
+        * @name uki.view.ScrollPane#scroll
+        */
         this.scroll = function(dx, dy) {
             if (dx) this.scrollTop(this.scrollLeft() + dy);
             if (dy) this.scrollTop(this.scrollTop() + dy);
         };
     
+        /**
+        * @function
+        * @name uki.view.ScrollPane#scrollTop
+        */
+        /**
+        * @function
+        * @name uki.view.ScrollPane#scrollLeft
+        */
         uki.each(['scrollTop', 'scrollLeft'], function(i, name) {
             this[name] = function(v) {
                 if (v == undefined) return this._dom[name];
@@ -61,6 +97,11 @@
             };
         }, this);
     
+        /**
+        * @function
+        * @return {uki.geometry.Rect}
+        * @name uki.view.ScrollPane#visibleRect
+        */
         this.visibleRect = function() {
             var tmpRect = this._clientRect.clone();
             tmpRect.x = this.rect().x + this.scrollLeft();
