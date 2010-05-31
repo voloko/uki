@@ -102,7 +102,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     * @function
     * @name uki.view.TextField#backgroundPrefix
     */
-    uki.addProps(this, ['backgroundPrefix']);
+    uki.addProps(this, ['backgroundPrefix', 'placeholder']);
     
     /**
     * @function
