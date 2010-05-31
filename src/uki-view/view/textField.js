@@ -102,7 +102,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     * @function
     * @name uki.view.TextField#backgroundPrefix
     */
-    uki.addProps(this, ['backgroundPrefix', 'placeholder']);
+    uki.addProps(this, ['backgroundPrefix']);
     
     /**
     * @function
@@ -201,3 +201,4 @@ uki.view.declare('uki.view.PasswordTextField', uki.view.TextField, function(Base
     };
 });
 
+uki.Collection.addAttrs(['placeholder']);
