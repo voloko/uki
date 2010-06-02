@@ -72,7 +72,7 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     
     /**
     * @function
-    * @param {array<uki.view.table.Column>} c
+    * @param {Array.<uki.view.table.Column>} c
     * @name uki.view.Table#columns
     */
     this.columns = uki.newProp('_columns', function(c) {

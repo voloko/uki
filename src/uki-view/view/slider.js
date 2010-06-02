@@ -5,7 +5,7 @@
 * @name uki.view.Slider
 * @class
 * @extends uki.view.Base
-* @extends uki.view.Focusable
+* @implements uki.view.Focusable
 */
 uki.view.declare('uki.view.Slider', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     

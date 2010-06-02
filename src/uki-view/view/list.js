@@ -10,7 +10,7 @@ uki.view.list = {};
  * @name uki.view.List
  * @class
  * @extends uki.view.Base
- * @extends uki.view.Focusable
+ * @implements uki.view.Focusable
  */
 uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     
@@ -191,7 +191,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     /**
     * Read/write all selected indexes for multiselectable lists
     * @function
-    * @param {array<Number>} position
+    * @param {Array.<Number>} position
     * @name uki.view.List#selectedIndex
     */
     this.selectedIndexes = function(indexes) {
