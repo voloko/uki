@@ -7,7 +7,7 @@ uki.view.declare('uki.more.view.RadioButton', uki.more.view.ToggleButton, functi
         manager.unregisterGroup(this);
         this._group = g;
         manager.registerGroup(this);
-        manager.clearGroup(this);
+        if (this.checked()) manager.clearGroup(this);
     });
     
     this.value = this.checked = uki.newProp('_checked', function(state) {
