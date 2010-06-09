@@ -131,14 +131,18 @@ uki.view.declare('uki.view.Popup', uki.view.Container, function(Base) {
 
         if (this._anchors & ANCHOR_RIGHT) {
             position.x = relativeOffset.x + relativeRect.width - (this._horizontal ? 0 : rect.width) + hOffset;
-        } else {
+        } else if (this._anchors & ANCHOR_LEFT) {
             position.x = relativeOffset.x - (this._horizontal ? rect.width : 0) - hOffset;
+        } else {
+            position.x = relativeOffset.x + ((relativeRect.width - rect.width) >> 1) - hOffset;
         }
         
         if (this._anchors & ANCHOR_BOTTOM) {
             position.y = relativeOffset.y + (this._horizontal ? relativeRect.height : 0) - rect.height - vOffset;
-        } else {
+        } else if (this._anchors & ANCHOR_TOP) {
             position.y = relativeOffset.y + (this._horizontal ? 0 : relativeRect.height) + vOffset;
+        } else {
+            position.y = relativeOffset.y + ((relativeRect.height - rect.height) >> 1) + vOffset;
         }
         
         return new Rect(position.x, position.y, rect.width, rect.height);
