@@ -12,10 +12,21 @@ uki({
     view: 'Box', 
     rect: '100 100 100 100', 
     anchors: 'left top',
-    // background: 'url(gradient.svg)'
     background: new uki.more.background.LinearGradient({
         startColor: '#FFFFFF',
         endColor: '#E6E6E6',
         css: ';border: 1px solid #CCC;'
+    })
+}).attachTo(window, '1000 1000');
+
+uki({ 
+    view: 'Box', 
+    rect: '250 100 400 400', 
+    anchors: 'left top',
+    background: new uki.more.background.LinearGradient({
+        startColor: '#FFFFFF',
+        endColor: '#E6E6E6',
+        css: ';border: 1px solid #CCC;',
+        horizontal: true
     })
 }).attachTo(window, '1000 1000');
