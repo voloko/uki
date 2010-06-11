@@ -70,11 +70,11 @@ uki.more.background.LinearGradient = uki.newClass(uki.background.CssBox, new fun
         var startColor = this._options.startColor || '#FFFFFF',
             endColor   = this._options.endColor   || '#CCCCCC',
             horizontal = this._options.horizontal,
-            css        = this._options.css + ';position:absolute;overflow:hidden;z-index:' + (this._options.zIndex || '-1') + ';' + 
-                         'background-image:-moz-linear-gradient(0% 100% ' + (horizontal ? '0%' : '90%') + ', ' + endColor + ', ' + startColor + ');' +
+            css        = this._options.css + 'position:absolute;overflow:hidden;z-index:' + (this._options.zIndex || '-1') + ';' + 
+                         'background-image:-moz-linear-gradient(' + (horizontal ? 'right' : 'bottom') + ', ' + endColor + ', ' + startColor + ');' +
                          'background-image:-webkit-gradient(linear, 0% 0%, ' + (horizontal ? '100% 0%' : '0% 100%') + ', from(' + startColor + '), to(' + endColor + '));'
-            
             container = uki.createElement('div', css),
+            console.log(css);
             style = container.style;
         if (!(style.background + '').match(/-moz-linear-gradient|-webkit-gradient/)) {
             if (!window.opera && typeof style.filter !== 'undefined') {

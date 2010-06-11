@@ -6,3 +6,4 @@ include('uki-more/more/view/splitTable.js');
 include('uki-more/more/view/form.js');
 include('uki-more/more/view/select.js');
 include('uki-more/more/view/select-theme.js');
+include('uki-more/more/background/linearGradient.js');
