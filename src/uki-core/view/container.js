@@ -111,9 +111,7 @@ uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
     /** @private */
     this._layoutChildViews = function() {
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-            if (childViews[i]._needsLayout && childViews[i].visible()) {
-                childViews[i].layout(this._rect);
-            }
+            childViews[i].layoutIfNeeded();
         };
     };
     

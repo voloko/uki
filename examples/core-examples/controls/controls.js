@@ -13,23 +13,23 @@
 function views() {
     return [    
         { view: 'Button',   rect: '10 10 200 24',  anchors: 'left top', text: 'focusable button!' },
-        { view: 'MultilineTextField', rect: '10 35 200 40', anchors: 'left top', value: 'textarea' },
+        { view: 'MultilineTextField', rect: '10 40 200 40', anchors: 'left top', value: 'textarea' },
         
-        { view: 'Checkbox', rect: '250 10 24 24',  anchors: 'left top', name: 'probe' },
+        { view: 'Checkbox', rect: '250 10 24 24',  anchors: 'left top', name: 'probe', focusable: true },
         { view: 'Label',    rect: '275 10 100 24', anchors: 'left top', html: 'Checkbox 1' },
         { view: 'Checkbox', rect: '250 35 24 24',  anchors: 'left top', checked: true },
         { view: 'Label',    rect: '275 35 100 24', anchors: 'left top', text: 'Checkbox 2' },
         
-        { view: 'Radio',    rect: '720 10 24 24',  anchors: 'left top', name: 'probe', group: 'radio_1' },
+        { view: 'Radio',    rect: '720 10 24 24',  anchors: 'left top', name: 'probe', group: 'radio_1', focusable: true },
         { view: 'Label',    rect: '745 10 100 24', anchors: 'left top', html: 'Radio 1' },
         { view: 'Radio',    rect: '720 35 24 24',  anchors: 'left top', checked: true, group: 'radio_1' },
         { view: 'Label',    rect: '745 35 100 24', anchors: 'left top', text: 'Radio 2' },
         
         { view: 'TextField',rect: '400 10 100 24', anchors: 'left top', value: "Small input", placeholder: 'text' },
-        { view: 'PasswordTextField',rect: '400 36 100 24', anchors: 'left top', value: "Small input", placeholder: 'text' },
+        { view: 'PasswordTextField',rect: '400 40 100 24', anchors: 'left top', value: "Small input", placeholder: 'text' },
         { view: 'Button',   rect: '510 10 200 24', anchors: 'left top', text: 'button without focus!', focusable: false },
         { view: 'TextField',rect: '820 10 100 34', anchors: 'right top', value: "Big input" },
-        { view: 'Slider',   rect: '400 65 150 24', anchors: 'right top left width' }
+        { view: 'Slider',   rect: '400 70 150 24', anchors: 'right top left width' }
     ];
 }
 

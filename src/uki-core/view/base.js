@@ -274,6 +274,10 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
         this._firstLayout = false;
     };
     
+    this.layoutIfNeeded = function() {
+        if (this._needsLayout && this.visible()) this.layout();
+    };
+    
     
     /**
      * @function uki.view.Base#minSize

@@ -51,16 +51,17 @@ uki.view.declare('uki.view.Checkbox', uki.view.Button, function(Base) {
       * @name uki.view.Button#checked
       */
     this.value = this.checked = uki.newProp('_checked', function(state) {
-        var changed = this._checked != !!state;
         this._checked = !!state;
         this._updateBg();
-        if (changed) this.trigger('change', {checked: this._checked, source: this});
     });
     
     this._mouseup = function(e) {
         if (!this._down) return;
         this._down = false;
-        if (!this._disabled) this.checked(!this.checked())
+        if (!this._disabled) {
+            this.checked(!this.checked())
+            this.trigger('change', {checked: this._checked, source: this});
+        }
     };
     
 });
