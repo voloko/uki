@@ -33,11 +33,6 @@ uki.view.Styleable = new function() {
     //     };
     // });
     
-    var probe = uki.createElement('div').style;
-    uki.each(['userSelect', 'MozUserSelect', 'WebkitUserSelect'], function(i, name) {
-        if (typeof probe[name] == 'string') this._textSelectProp = name;
-    }, this);
-    
     /**
      * Sets whether text of the view can be selected.
      *
@@ -50,8 +45,8 @@ uki.view.Styleable = new function() {
     this.textSelectable = function(state) {
         if (state === undefined) return this._textSelectable;
         this._textSelectable = state;
-        if (this._textSelectProp) {
-            this._dom.style[this._textSelectProp] = state ? '' : this._textSelectProp == 'MozUserSelect' ? '-moz-none' : 'none';
+        if (uki.browser.cssUserSelect() == 'unsupported') {
+            this._dom.style.cssText += uki.browser.cssUserSelect() + ':' + (state ? 'normal' : uki.browser.cssUserSelect() == '-moz-user-select' ? '-moz-none' : 'none');
         } else {
             uki.dom[state ? 'unbind' : 'bind'](this.dom(), 'selectstart', uki.dom.preventDefaultHandler);
         }

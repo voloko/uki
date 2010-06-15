@@ -2,7 +2,7 @@ describe 'uki.background'
 
     it 'should unserialize themed backgrounds'
         b = uki.background('theme(panel)')
-        b.should.be_an_instance_of uki.background.Sliced9
+        b.should.be_an_instance_of uki.background.LinearGradient
     end
     
     it 'should unserialize cssBox backgrounds'

@@ -26,11 +26,9 @@ include('checkbox.js');
         });
 
         this.value = this.checked = uki.newProp('_checked', function(state) {
-            var changed = this._checked != !!state;
             this._checked = !!state;
             if (state) manager.clearGroup(this);
             this._updateBg();
-            if (changed) this.trigger('change', {checked: this._checked, source: this});
         });
 
         this._mouseup = function() {
@@ -38,6 +36,7 @@ include('checkbox.js');
             this._down = false;
             if (!this._checked && !this._disabled) {
                 this.checked(!this._checked);
+                this.trigger('change', { checked: this._checked, source: this });
             }
         }
     });
@@ -64,7 +63,10 @@ include('checkbox.js');
     manager.clearGroup = function(radio) {
         uki.each(manager.groups[radio.group()] || [], function(i, registered) {
             if (registered == radio) return;
-            if (registered.checked()) registered.checked(false);
+            if (registered.checked()) {
+                registered.checked(false);
+                this.trigger('change', { checked: false, source: registered });
+            }
         });
     };    
     

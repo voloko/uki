@@ -26,7 +26,7 @@ uki({ view: 'Box', rect: '1000 400', anchors: 'left top', childViews: [
         { view: 'Button', rect: '70 10 100 24', anchors: 'left top', text: 'Left Top', id: 'h_left_top' },
         { view: 'Button', rect: '180 10 100 24', anchors: 'left top', text: 'Rigth Top', id: 'h_right_top' },
         { view: 'Button', rect: '180 190 100 24', anchors: 'left top', text: 'Right Mid', id: 'h_right_mid' }
-    ] },
+    ] }
 ] }).attachTo( window, '1000 400' );
 
 // on button click

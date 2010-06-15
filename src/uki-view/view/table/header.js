@@ -4,14 +4,12 @@ include('../label.js');
  * @class
  * @extends uki.view.Label
  */
-uki.view.table.Header = uki.newClass(uki.view.Label, function(Base) {
+uki.view.declare('uki.view.table.Header', uki.view.Label, function(Base) {
     this._setup = function() {
         Base._setup.call(this);
         this._multiline = true;
         this._resizers = [];
     };
-    
-    this.typeName = function() { return 'uki.view.table.Header'; };
     
     this.columns = uki.newProp('_columns', function(v) {
         this._columns = v;

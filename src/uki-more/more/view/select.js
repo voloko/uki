@@ -104,7 +104,7 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
 
     this._keydown = function(e) {
         if ((e.which == 32 || e.which == 13) && this._popup.visible()) {
-            this.selectCurrent();
+            this.selectCurrent(e);
         } else if ((e.which == 40 || e.which == 38) && !this._popup.visible()) {
             this._popup.toggle();
             e.preventDefault();
@@ -114,14 +114,14 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
         }
     };
     
-    this.selectCurrent = function() {
+    this.selectCurrent = function(e) {
         if (this.selectedIndex() == -1) {
             this.text(this._selectFirst && this._options[0] ? this._options[0].text : '');
         } else {
             this.text(this._options[this.selectedIndex()].text);
         }
         this._popup.hide();
-        this.trigger('change', { source: this });
+        if (e) this.trigger('change', { source: this });
     };
     
     this.value = function(v) {
