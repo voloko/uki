@@ -168,7 +168,7 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
             .data(uki.map(o, 'text'))
             .selectedIndex(0);
         
-        if (this._selectFirst) this.text(o[0].text);
+        if (this._selectFirst && (o.length > 0)) this.text(o[0].text);
         this._longestText = '';
         uki.each(o, function(i, row) {
             if (row.text.length > this._longestText.length) this._longestText = row.text;
