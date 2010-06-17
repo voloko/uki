@@ -4,7 +4,8 @@ uki.browser = new function() {
     
     var boxShadow;
     this.cssBoxShadow = function() {
-        boxShadow = boxShadow || checkPrefixes('box-shadow');
+        // Opera 10.5 consistently fails to redraw shadows. Easier to switch off
+        boxShadow = boxShadow || (root.opera ? 'unsupported' : checkPrefixes('box-shadow'));
         return boxShadow;
     };
     
