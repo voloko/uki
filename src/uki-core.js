@@ -8,7 +8,6 @@ include('uki-core/dom/event.js');
 include('uki-core/dom/dnd.js');
 include('uki-core/dom/w3cdnd.js');
 include('uki-core/dom/offset.js');
-include('uki-core/dom/nativeLayout.js');
 include('uki-core/dom/browser.js');
 
 include('uki-core/attachment.js');
@@ -16,6 +15,7 @@ include('uki-core/builder.js');
 include('uki-core/selector.js');
 
 include('uki-core/image.js');
+include('uki-core/sync.js');
 
 include('uki-core/background.js');
 include('uki-core/background/null.js');

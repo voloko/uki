@@ -173,4 +173,18 @@ describe 'uki.utils'
         uki.unique(a).should.eql [x, y, z]
     end
     
+    
+    it 'should dasherize cammelcased literals'
+        uki.dasherize('WebkitBorderRadius').should.eql '-webkit-border-radius'
+        uki.dasherize('X').should.eql '-x'
+        uki.dasherize('').should.eql ''
+    end
+    
+    it 'should camalize dashed literals'
+        uki.camalize('-webkit-border-radius').should.eql 'WebkitBorderRadius'
+        uki.camalize('-x').should.eql 'X'
+        uki.camalize('foo_bar').should.eql 'fooBar'
+        uki.camalize('').should.eql ''
+    end
+    
 end

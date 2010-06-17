@@ -1,21 +1,22 @@
+include('../dom.js');
 
 uki.browser = new function() {
     
     var boxShadow;
     this.cssBoxShadow = function() {
-        boxShadow = boxShadow || checkPrefixes('box-shadow', 'BoxShadow');
+        boxShadow = boxShadow || checkPrefixes('box-shadow');
         return boxShadow;
     };
     
     var borderRadius;
     this.cssBorderRadius = function() {
-        borderRadius = borderRadius || checkPrefixes('border-radius', 'BorderRadius');
+        borderRadius = borderRadius || checkPrefixes('border-radius');
         return borderRadius;
     };
     
     var userSelect;
     this.cssUserSelect = function() {
-        userSelect = userSelect || checkPrefixes('user-select', 'UserSelect');
+        userSelect = userSelect || checkPrefixes('user-select');
         return userSelect;
     };
     
@@ -47,19 +48,15 @@ uki.browser = new function() {
         })
     };
     
-    function checkPrefixes (dashProp, camelProp) {
+    function checkPrefixes (dashProp) {
         var e = uki.createElement('div'),
-            style = e.style;
+            style = e.style,
+            prefixes = ['', '-webkit-', '-moz-'];
             
-        if (style['Webkit' + camelProp] !== undefined) {
-            return '-webkit-' + dashProp;
-        } else if (style['Moz' + camelProp] !== undefined) {
-            return '-moz-' + dashProp;
-        } else if (style[camelProp.substr(0, 1).toLowerCase() + camelProp.substr(1)] !== undefined) {
-            return dashProp;
-        } else {
-            return 'unsupported';
-        }
+        for (var i=0; i < prefixes.length; i++) {
+            if (style[ uki.camalize(prefixes[i] + dashProp) ] !== undefined) return prefixes[i] + dashProp;
+        };
+        return 'unsupported';
     }
     
     function initLinearGradient () {
@@ -82,7 +79,21 @@ uki.browser = new function() {
             return 'unsupported';
         }
     }
-    
-    
-    
 }
+
+uki.initNativeLayout = function() {
+    if (uki.supportNativeLayout === undefined) {
+        uki.dom.probe(
+            uki.createElement(
+                'div', 
+                'position:absolute;width:100px;height:100px;left:-999em;', 
+                '<div style="position:absolute;left:0;right:0"></div>'
+            ),
+            function(div) {
+                uki.supportNativeLayout = div.childNodes[0].offsetWidth == 100 && !root.opera;
+            }
+        );
+    }
+};
+
+// uki.supportNativeLayout = false;

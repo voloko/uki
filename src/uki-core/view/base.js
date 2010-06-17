@@ -3,7 +3,6 @@ include('../geometry.js');
 include('../utils.js');
 include('../builder.js');
 include('../dom.js');
-include('../dom/nativeLayout.js');
 include('observable.js');
 include('styleable.js');
 
