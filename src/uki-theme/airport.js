@@ -50,10 +50,11 @@
                         { inset: '-2 -2', zIndex: -2 } 
                     );
                 }
-                return new uki.background.CssBox(
-                    'border-radius: 3px; box-shadow: 0 0 6px #0244D4;',
-                    { zIndex: 2, inset: '1' }
-                );
+                return new uki.background.Css({ 
+                    // WebkitTransition: '-webkit-box-shadow 0.2s linear',
+                    boxShadow: '0 0 6px #0244D4',
+                    borderRadius: '3px'
+                });
             },
             
             'button-disabled': function() {
@@ -200,10 +201,10 @@
                         { inset: '-2 -2', zIndex: -2 } 
                     );
                 }
-                return new uki.background.CssBox(
-                    'box-shadow: 0 0 6px #0244D4;',
-                    { zIndex: 2, inset: '1' }
-                );
+                return new uki.background.Css({ 
+                    // WebkitTransition: '-webkit-box-shadow 0.2s linear',
+                    boxShadow: '0 0 6px #0244D4'
+                });
             },
             
             

@@ -38,15 +38,29 @@ uki.browser = new function() {
         return filter;
     };
     
-    this.css = function(string) {
-        if (!string) return '';
-        return string.replace(/(^|[^-])(box-shadow|border-radius|user-select)/g, function(value) {
-            var p;
-            if ((p = value.indexOf('box-shadow')) > -1) return value.substr(0, p) + uki.browser.cssBoxShadow();
-            if ((p = value.indexOf('border-radius')) > -1) return value.substr(0, p) + uki.browser.cssBorderRadius();
-            if ((p = value.indexOf('user-select')) > -1) return value.substr(0, p) + uki.browser.cssUserSelect();
-        })
+    function swap (obj, src, dst) {
+        var v = obj[src];
+        obj[src] = undefined;
+        obj[dst] = v;
+    }
+    this.css = function(css) {
+        if (!css) return '';
+        if (typeof css == 'string') {
+            return css.replace(/(^|[^-])(box-shadow|border-radius|user-select)/g, function(value) {
+                var p;
+                if ((p = value.indexOf('box-shadow')) > -1) return value.substr(0, p) + uki.browser.cssBoxShadow();
+                if ((p = value.indexOf('border-radius')) > -1) return value.substr(0, p) + uki.browser.cssBorderRadius();
+                if ((p = value.indexOf('user-select')) > -1) return value.substr(0, p) + uki.browser.cssUserSelect();
+            });
+        }
+        
+        uki.each(['boxShadow', 'borderRadius', 'userSelect'], function(k, v) {
+            if (css[v]) swap(css, v, uki.camalize( uki.browser[ uki.camalize('css-' + v) ]() ) );
+        });
+        return css;
     };
+    
+    this.textStyles = 'font fontFamily fontWeight fontSize textDecoration textOverflow textAlign textShadow overflow color'.split(' ');
     
     function checkPrefixes (dashProp) {
         var e = uki.createElement('div'),
@@ -79,7 +93,7 @@ uki.browser = new function() {
             return 'unsupported';
         }
     }
-}
+};
 
 uki.initNativeLayout = function() {
     if (uki.supportNativeLayout === undefined) {

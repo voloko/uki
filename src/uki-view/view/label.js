@@ -22,7 +22,7 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
     };
     
     this._style = function(name, value) {
-        if (value !== undefined && 'font fontFamily fontWeight fontSize textDecoration textOverflow textAlign textShadow overflow color'.indexOf(name) != -1) {
+        if (value !== undefined && uki.inArray(name, uki.browser.textStyles) != -1) {
             this._label.style[name] = value;
         }
         return Base._style.call(this, name, value);

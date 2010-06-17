@@ -78,7 +78,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
                 this._dom.appendChild(this._placeholderDom);
                 this._updatePlaceholderVis();
                 uki.each(['fontSize', 'fontFamily', 'fontWeight'], function(i, name) {
-                    this._placeholderDom.style[name] = this.style(name);
+                    this._placeholderDom.style[name] = this._input.style[name];
                 }, this);
                 
                 uki.dom.bind(this._placeholderDom, 'mousedown', uki.proxy(function(e) { 
@@ -92,10 +92,11 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     });
 
     this._style = function(name, value) {
-        if (value === undefined) return this._input.style[name];
-        this._input.style[name] = value;
-        if (this._placeholderDom) this._placeholderDom.style[name] = value;
-        return this;
+        if (uki.inArray(name, uki.browser.textStyles) != -1) {
+            this._input.style[name] = value;
+            if (this._placeholderDom) this._placeholderDom.style[name] = value;
+        }
+        return Base._style.call(this, name, value);
     };
 
     /**
@@ -113,7 +114,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     };
     
     this._createDom = function() {
-        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible');
+        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
         this._input = uki.createElement(this._tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
         
         this._input.value = this._value;
