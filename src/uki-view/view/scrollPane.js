@@ -181,6 +181,14 @@
         
             Base._layoutDom.call(this, rect);
         };
+        
+        this.childResized = function() {
+            this._needsLayout = true;
+            uki.after(uki.proxy(this.layoutIfNeeded, this));
+        };
+
+        this._contentChanged = this.childResized;
+        
     });
 
     uki.view.ScrollPane.initScrollWidth = initScrollWidth;

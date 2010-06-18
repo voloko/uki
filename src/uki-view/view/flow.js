@@ -22,21 +22,12 @@ uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
         return Base.resizeToContents.call(this, autosizeStr);
     }
     
-    uki.each(['appendChild', 'removeChild', 'insertBefore'], function(i, name) {
-        this[name] = function(arg1, arg2) {
-            this._contentChanged = true;
-            return Base[name].call(this, arg1, arg2);
-        };
-    }, this)
-    
     this.layout = function() {
-        if (this._contentChanged) this._resizeChildViews(this._rect);
         return Base.layout.call(this);
     };
     
     // resize in layout
     this._resizeChildViews = function(oldRect) {
-        this._contentChanged = false;
         var offset = 0, rect, view;
         for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
             view = childViews[i];
@@ -49,6 +40,20 @@ uki.view.declare('uki.view.VFlow', uki.view.Container, function(Base) {
             if (view.visible()) offset += view._rect.height;
         };
     };
+    
+    this.childResized = function() {
+        this._needsLayout = true;
+        uki.after(uki.proxy(this._afterChildResized, this));
+    };
+    
+    this._contentChanged = this.childResized;
+    
+    this._afterChildResized = function() {
+        this.resizeToContents('height');
+        this.parent().childResized(this);
+        this.layoutIfNeeded();
+    };
+    
 });
 
 /**
@@ -82,4 +87,9 @@ uki.view.declare('uki.view.HFlow', uki.view.VFlow, function(Base) {
         };
     };
     
+    this._afterChildResized = function() {
+        this.resizeToContents('width');
+        this.parent().childResized(this);
+        this.layoutIfNeeded();
+    };
 });

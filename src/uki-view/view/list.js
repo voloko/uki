@@ -74,7 +74,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         if (this._background) this._background.detach();
         this._background = null;
         if (this.background()) this.background().attachTo(this);
-        this._relayoutParent();
+        this._contentChanged();
     });
     
     /**
@@ -89,8 +89,8 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         this._packs[0].itemFrom = this._packs[0].itemTo = this._packs[1].itemFrom = this._packs[1].itemTo = 0;
         
         this.minSize(new Size(this.minSize().width, this._rowHeight * this._data.length));
-        this.trigger('selection', {source: this})
-        this._relayoutParent();
+        this.trigger('selection', {source: this});
+        this._contentChanged();
         return this;
     };
     
@@ -147,7 +147,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         
         // needed for scrollbar
         this.minSize(new Size(this.minSize().width, this._rowHeight * this._data.length));
-        this._relayoutParent();
+        this._contentChanged();
 
         return this;
     };
@@ -300,7 +300,13 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         }
     };
     
+    this._contentChanged = function() {
+        this._needsLayout = true;
+        uki.after(uki.proxy(this._relayoutParent, this));
+    };
+
     this._relayoutParent = function() {
+        this.parent().childResized(this);
         if (!this._scrollableParent) return;
         var c = this;
         while ( c && c != this._scrollableParent) {

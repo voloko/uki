@@ -27,15 +27,15 @@ for (var i=1; i < 11; i++) {
 };
 
 // resize to the number of labels appended and layout
-uki('VFlow').resizeToContents('height').layout();
-uki('HFlow').resizeToContents('width').layout();
+uki('VFlow');
+uki('HFlow');
 
 // create button to remove items from vertical flow
 uki({ view: 'Button', rect: '0 0 100 22', text: 'Remove' }).attachTo(window, '100 100').click(function() {
-    uki('VFlow').removeChild(uki('VFlow').childViews()[1]).resizeToContents('height').layout();
+    uki('VFlow').removeChild(uki('VFlow').childViews()[1]);
 });
 
 // create button to remove items from horizontal flow
 uki({ view: 'Button', rect: '0 30 100 22', text: 'Remove from list 2'}).attachTo(window, '100 100').resizeToContents('width').layout().click(function() {
-    uki('HFlow').removeChild(uki('HFlow').childViews()[1]).resizeToContents('width').layout();
+    uki('HFlow').removeChild(uki('HFlow').childViews()[1]);
 })

@@ -15,7 +15,7 @@ include('uki-core/builder.js');
 include('uki-core/selector.js');
 
 include('uki-core/image.js');
-include('uki-core/sync.js');
+include('uki-core/after.js');
 
 include('uki-core/background.js');
 include('uki-core/background/null.js');
