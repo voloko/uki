@@ -92,7 +92,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     });
 
     this._style = function(name, value) {
-        if (uki.inArray(name, uki.browser.textStyles) != -1) {
+        if (value !== undefined && uki.inArray(name, uki.browser.textStyles) != -1) {
             this._input.style[name] = value;
             if (this._placeholderDom) this._placeholderDom.style[name] = value;
         }

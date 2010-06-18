@@ -7,7 +7,7 @@
                 uki.createElement(
                     'div', 
                     'position:absolute;left:-99em;width:100px;height:100px;overflow:scroll;',
-                    '<div style="position:absolute;left:0;width:100%;"></div>'
+                    '<div style="position:absolute;left:0;right:100%;"></div>'
                 ),
                 function( probe ) {
                     scrollWidth = probe.offsetWidth - probe.clientWidth;
@@ -139,8 +139,8 @@
             this._sbV = sv || this._scrollV;
             this._clientRect = new Rect( this._rect.width +  (sv ? -1 : 0) * scrollWidth,
                                          this._rect.height + (sh ? -1 : 0) * scrollWidth );
-            this._rectForChild = new Rect( this._rect.width +  (sv && !widthIncludesScrollBar ? -1 : 0) * scrollWidth,
-                                           this._rect.height + (sh && !widthIncludesScrollBar ? -1 : 0) * scrollWidth );
+            this._rectForChild = new Rect( this._rect.width +  ((sv && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
+                                           this._rect.height + ((sh && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth );
         };
     
         this._updateClientRects = function() {
