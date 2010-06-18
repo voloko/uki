@@ -7,7 +7,7 @@
                 uki.createElement(
                     'div', 
                     'position:absolute;left:-99em;width:100px;height:100px;overflow:scroll;',
-                    '<div style="position:absolute;left:0;right:100%;"></div>'
+                    '<div style="position:absolute;left:0;width:100%;"></div>'
                 ),
                 function( probe ) {
                     scrollWidth = probe.offsetWidth - probe.clientWidth;
