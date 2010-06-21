@@ -28,6 +28,16 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
         return uki.theme.template(this._templatePrefix + 'header-cell' + suffix);
     };
     
+    this.sortData = function(data) {
+        var _this = this;
+        return data.sort(function(a, b) {
+            return _this._key ? 
+                _this.compare(uki.attr(a, _this._key), uki.attr(b, _this._key)) : 
+                _this.compare(a[_this._position], b[_this._position]);
+        });
+        
+    };
+    
     this.compare = function(a, b) {
         return (a >= b ? 1 : a == b ? 0 : -1) * (this._sort == 'DESC' ? -1 : 1);
     };

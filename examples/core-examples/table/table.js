@@ -54,12 +54,6 @@ window.DummyModel = uki.newClass(Searchable, new function() {
         })
     };
     
-    this.sortBy = function(key, column) {
-        this.items = this.items.sort(function(a, b) {
-            return column.compare(a[key], b[key]);
-        });
-    };
-    
     this.matchRow = function(row, iterator) {
         return row.searchIndex.indexOf(iterator.query) > -1;
     };
@@ -89,7 +83,7 @@ window.onLibraryLoad = function(data) {
                 header.redrawColumn(i);
             }
         });
-        model.sortBy(e.columnIndex, e.column);
+        model.items = e.column.sortData(model.items);
         table.data(model.items);
     })
         
