@@ -89,7 +89,6 @@ window.onLibraryLoad = function(data) {
                 header.redrawColumn(i);
             }
         });
-        
         model.sortBy(e.columnIndex, e.column);
         table.data(model.items);
     })

@@ -101,7 +101,6 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     
     /** @ignore */
     handler: function( e ) {
-        uki.after.start();
         
         e = e || root.event;
         
@@ -117,10 +116,10 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
         
         if (!id || !handlers || !handlers[type]) return;
         
+        uki.after.start();
         for (i=0, handlers = handlers[type]; i < handlers.length; i++) {
             handlers[i].call(this, e);
         };
-        
         uki.after.stop();
     },
     
