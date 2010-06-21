@@ -25,6 +25,8 @@ uki.view.declare('uki.view.table.Header', uki.view.Label, function(Base) {
     };
     
     this._click = function(e) {
+        if (this._dragging) return;
+        
         var target = e.target;
         if (target == this.dom() || target == this._label) return;
         while (target.parentNode != this._label) target = target.parentNode;
@@ -35,9 +37,7 @@ uki.view.declare('uki.view.table.Header', uki.view.Label, function(Base) {
     };
     
     this.redrawColumn = function(col) {
-        if (this._resizers[col]) {
-            uki.dom.unbind(this._resizers[col]);
-        }
+        if (this._resizers[col]) uki.dom.unbind(this._resizers[col]);
         var container = doc.createElement('div');
         container.innerHTML = this._columns[col].renderHeader(this.rect().height);
         this._label.replaceChild(container.firstChild, this._label.childNodes[col]);
@@ -66,14 +66,23 @@ uki.view.declare('uki.view.table.Header', uki.view.Label, function(Base) {
     };
     
     this._bindResizerDrag = function(resizer, columnIndex) {
-        uki.dom.bind(resizer, 'draggesture', uki.proxy(function(e) {
-            var headerOffset = uki.dom.offset(this.dom()),
+        var _this = this;
+        
+        uki.dom.bind(resizer, 'draggesture', function(e) {
+            _this._dragging = true;
+            var headerOffset = uki.dom.offset(_this.dom()),
                 offsetWithinHeader = e.pageX - headerOffset.x,
-                columnOffset = 0, i, column = this._columns[columnIndex];
+                columnOffset = 0, i, column = _this._columns[columnIndex];
             for (i=0; i < columnIndex; i++) {
-                columnOffset += this._columns[i].width();
+                columnOffset += _this._columns[i].width();
             };
             column.width(offsetWithinHeader - columnOffset);
-        }, this));
+        });
+        
+        uki.dom.bind(resizer, 'draggestureend', function() {
+            setTimeout(function() {
+                _this._dragging = false;
+            }, 1);
+        });
     };
 });
