@@ -6,7 +6,7 @@ include('uki.js');
  * Runs either at the end of event handling or after a timeout.
  * Each callback (by huid) is executed once
  * @function
- * @param {function} callback
+ * @param {function()} callback
  */
 uki.after = (function() {
     var after = function(callback) {
