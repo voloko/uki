@@ -89,8 +89,13 @@ include('collection.js');
     		},
     		
     		"~": function(context){
+    		    return uki.unique( flatten( uki.map(context, nextViews) ) );
     		}	        
 	    };
+	    
+	function nextViews (view) {
+	    return view.parent().childViews().slice((view._viewIndex || 0) + 1);
+	}
 	
 	function recChildren (comps) {
 	    return flatten(uki.map(comps, function(comp) {

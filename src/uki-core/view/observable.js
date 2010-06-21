@@ -43,7 +43,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     },
     
     _bindToDom: function(name, target) {
-        if (!target && !this.dom) return;
+        if (!target && !this.dom) return false;
         this._domHander = this._domHander || uki.proxy(function(e) {
             e.source = this;
             this.trigger(e.type, e);
