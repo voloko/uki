@@ -5,6 +5,8 @@ include('../label.js');
  * @extends uki.view.Label
  */
 uki.view.declare('uki.view.table.Header', uki.view.Label, function(Base) {
+    this._defaultBackground = 'theme(table-header)';
+    
     this._setup = function() {
         Base._setup.call(this);
         this._multiline = true;
@@ -16,6 +18,21 @@ uki.view.declare('uki.view.table.Header', uki.view.Label, function(Base) {
         this.html(this._createColumns());
         this._createResizers();
     });
+    
+    this._createDom = function() {
+        Base._createDom.call(this);
+        this.bind('click', this._click);
+    };
+    
+    this._click = function(e) {
+        var target = e.target;
+        if (target == this.dom() || target == this._label) return;
+        while (target.parentNode != this._label) target = target.parentNode;
+        var i = uki.inArray(target, this._label.childNodes);
+        if (i > -1) {
+            this.trigger('columnClick', { source: this, columnIndex: i, column: this._columns[i] });
+        }
+    };
     
     this.redrawColumn = function(col) {
         if (this._resizers[col]) {
@@ -32,7 +49,7 @@ uki.view.declare('uki.view.table.Header', uki.view.Label, function(Base) {
         for(var i = 0, offset = 0, columns = this._columns, l = columns.length; i < l; i++) {
             html[html.length] = columns[i].renderHeader(this.rect().height);
         }
-        return html.join('')
+        return html.join('');
     };
     
     this._createResizer = function(i) {

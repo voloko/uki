@@ -31,7 +31,7 @@ uki({ view: 'HSplitPane', rect: '1000 1000', anchors: 'left top right bottom', h
         ] },
         rightChildViews: [ // table with resizable columns
             { view: 'Table', rect: '0 0 800 1000', minSize: '0 200', anchors: 'left top right bottom', columns: [
-                { view: 'table.NumberColumn', label: 'ID', width: 40 },
+                { view: 'table.NumberColumn', label: 'ID', width: 40, sort: 'ASC' },
                 { view: 'table.CustomColumn', label: 'Name', resizable: true, minWidth: 100, width: 250, formatter: formatHlted },
                 { view: 'table.NumberColumn', label: 'Time', resizable: true, width: 50, formatter: formatTime },
                 { view: 'table.CustomColumn', label: 'Artist', resizable: true, minWidth: 100, width: 150, formatter: formatHlted },
@@ -54,6 +54,12 @@ window.DummyModel = uki.newClass(Searchable, new function() {
         })
     };
     
+    this.sortBy = function(key, column) {
+        this.items = this.items.sort(function(a, b) {
+            return column.compare(a[key], b[key]);
+        });
+    };
+    
     this.matchRow = function(row, iterator) {
         return row.searchIndex.indexOf(iterator.query) > -1;
     };
@@ -69,8 +75,26 @@ window.onLibraryLoad = function(data) {
     model.bind('search.foundInChunk', function(chunk) {
         table.data(table.data().concat(chunk)).layout();
     });
+    
+    table.find('Header').bind('columnClick', function(e) {
+        var header = this;
+            
+        if (e.column.sort() == 'ASC') e.column.sort('DESC')
+        else e.column.sort('ASC');
         
-    table.data(model.items).layout();
+        header.redrawColumn(e.columnIndex);
+        uki.each(header.columns(), function(i, col) {
+            if (col != e.column && col.sort()) {
+                col.sort('');
+                header.redrawColumn(i);
+            }
+        });
+        
+        model.sortBy(e.columnIndex, e.column);
+        table.data(model.items);
+    })
+        
+    table.data(model.items);
     
     uki('TextField').bind('keyup click', function() {
         if (this.value().toLowerCase() == lastQuery) return;

@@ -10,21 +10,26 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this._maxWidth = 0;
     this._css = 'float:left;white-space:nowrap;text-overflow:ellipsis;';
     this._inset = new Inset(3, 5);
+    this._templatePrefix = 'table-';
 
     this.init = function() {};
     
-    uki.addProps(this, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth', 'maxWidth', 'key']);
+    uki.addProps(this, ['position', 'css', 'formatter', 'label', 'resizable', 'maxWidth', 'minWidth', 'maxWidth', 'key', 'sort']);
     
-    this.template = function(v) {
-        if (v === undefined) return this._template = this._template || uki.theme.template('table-cell');
-        this._template = v;
-        return this;
+    this.template = function() {
+        // cache
+        return this._template || (this._template = uki.theme.template(this._templatePrefix + 'cell'));
     };
     
-    this.headerTemplate = function(v) {
-        if (v === undefined) return this._headerTemplate = this._headerTemplate || uki.theme.template('table-header-cell');
-        this._headerTemplate = v;
-        return this;
+    this.headerTemplate = function() {
+        var suffix = '';
+        if (this.sort() == 'ASC') suffix = '-asc';
+        if (this.sort() == 'DESC') suffix = '-desc';
+        return uki.theme.template(this._templatePrefix + 'header-cell' + suffix);
+    };
+    
+    this.compare = function(a, b) {
+        return (a >= b ? 1 : a == b ? 0 : -1) * (this._sort == 'DESC' ? -1 : 1);
     };
     
     /**
@@ -118,6 +123,12 @@ uki.view.table.NumberColumn = uki.newClass(uki.view.table.Column, new function()
     var Base = uki.view.table.Column.prototype;
 
     this._css = Base._css + 'text-align:right;';
+    
+    this.compare = function(a, b) {
+        a*=1;
+        b*=1;
+        return (a >= b ? 1 : a == b ? 0 : -1) * (this._sort == 'DESC' ? -1 : 1);
+    };
 });
 
 uki.view.table.CustomColumn = uki.view.table.Column;

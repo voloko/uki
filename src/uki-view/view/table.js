@@ -118,7 +118,7 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
             this.list()[name].apply(this.list(), arguments);
             return this;
         };
-    }, this)
+    }, this);
     
     /**
     * @function
@@ -127,7 +127,7 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     */
     this.redrawColumn = function(col) {
         var from = this._list._packs[0].itemFrom,
-            to   = this._list._packs[1].itemTo
+            to   = this._list._packs[1].itemTo;
         for (var i=from; i < to; i++) {
             this.redrawCell(i, col);
         };

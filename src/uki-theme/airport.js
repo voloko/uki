@@ -255,6 +255,18 @@
             // list
             list: function(rowHeight) {
                 return new uki.background.Rows(rowHeight, '#EDF3FE');
+            },
+            
+            // table
+            'table-header': function() {
+                return new uki.background.LinearGradient({
+                    startColor: '#FFFFFF',
+                    stops: [
+                        { pos: 0.8, color: '#e0e0e0' }
+                    ],
+                    endColor: '#EEEEEE',
+                    css: 'border-bottom:1px solid #CCC;'
+                });
             }
         },
         
@@ -290,7 +302,7 @@
         templates: {
             'table-header-cell': function() {
                 return new uki.theme.Template(
-                    '<div style="position:relative;border:1px solid #CCC;border-top:none;border-left:none;'+
+                    '<div style="position:relative;border-right:1px solid #CCC;'+
                     '${style}" class="${className}">${data}</div>');
             },
             
@@ -300,14 +312,16 @@
                     '${style}" class="${className}">${data}</div>');
             },
             
-            'table-cell-asc': function() {
+            'table-header-cell-asc': function() {
                 return new uki.theme.Template(
-                    '<div style="position:relative;border-right:1px solid #CCC;height:100%;'+
-                    '${style}" class="${className}">${data}</div>');
+                    '<div style="position:relative;border-right:1px solid #CCC;background: rgba(0,0,128,0.1);'+
+                    '${style}" class="${className}"><div style="padding-right:7px">${data}</div><span style="position:absolute;right:0;top:50%;margin-top:-7px;">&darr;</span></div>');
             },
             
-            'table-cell-desc': function() {
-                
+            'table-header-cell-desc': function() {
+                return new uki.theme.Template(
+                    '<div style="position:relative;border-right:1px solid #CCC;background: rgba(0,0,128,0.1);'+
+                    '${style}" class="${className}"><div style="padding-right:7px">${data}</div><span style="position:absolute;right:0;top:50%;margin-top:-7px;">&uarr;</span></div>');
             }
         },
         
@@ -391,7 +405,7 @@
     }
     
     function sliderPin () {
-        return '<div style="' + uki.browser.css('position:absolute;overflow:hidden;z-index:10;left:50%;top:50%;width:2px;height:11px;margin:-6px 0 0 -1px;background:#8599AE;border-top:1px solid #6A7A8C;') + '"></div>'
+        return '<div style="' + uki.browser.css('position:absolute;overflow:hidden;z-index:10;left:50%;top:50%;width:2px;height:11px;margin:-6px 0 0 -1px;background:#8599AE;border-top:1px solid #6A7A8C;') + '"></div>';
     }
     
     uki.theme.airport.backgrounds['slider-handle-down'] = uki.theme.airport.backgrounds['slider-handle-hover'];
