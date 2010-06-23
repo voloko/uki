@@ -73,7 +73,7 @@ window.onLibraryLoad = function(data) {
     table.find('Header').bind('columnClick', function(e) {
         var header = this;
             
-        if (e.column.sort() == 'ASC') e.column.sort('DESC')
+        if (e.column.sort() == 'ASC') e.column.sort('DESC');
         else e.column.sort('ASC');
         
         header.redrawColumn(e.columnIndex);
