@@ -89,8 +89,8 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
     this.renderHeader = function(height) {
         this._className || this._initStylesheet();
         var x = this.headerTemplate().render({
-            data: '<div style="overflow:hidden;text-overflow:ellipsis;*width:100%;height:100%;">' + this.label() + '</div>',
-            style: '*overflow-y:hidden;' + this._cellStyle(uki.dom.offset.boxModel ? height - 1 : height),
+            data: '<div style="overflow:hidden;text-overflow:ellipsis;*width:100%;height:100%;padding-top:' + this._inset.top + 'px">' + this.label() + '</div>',
+            style: '*overflow-y:hidden;' + this._cellStyle(true, height),
             className: this._className
         });
         return x;
@@ -100,19 +100,22 @@ uki.view.table.Column = uki.newClass(uki.view.Observable, new function() {
         this._className || this._initStylesheet();
         this._prerenderedTemplate = this.template().render({
             data: '\u0001\u0001',
-            style: 'overflow:hidden;' + this._cellStyle(rect.height),
+            style: 'overflow:hidden;' + this._cellStyle(false, rect.height),
             className: this._className
         }).split('\u0001');
     };
     
-    this._cellPadding = function() {
+    this._cellPadding = function(skipVertical) {
         var inset = this._inset;
-        return ['padding:', inset.top, 'px ', inset.right, 'px ', inset.bottom, 'px ', inset.left, 'px;'].join('');
+        return ['padding:', (skipVertical ? '0' : inset.top), 'px ', inset.right, 'px ', (skipVertical ? '0' : inset.bottom), 'px ', inset.left, 'px;'].join('');
     };
     
-    this._cellStyle = function(height) {
-        var h = 'height:' + (height - (uki.dom.offset.boxModel ? this._inset.height() : 0)) + 'px;';
-        return this._css + this._cellPadding() + ';' + h;
+    this._cellHeight = function(skipVertical, height) {
+        return 'height:' + (height - (uki.dom.offset.boxModel && !skipVertical ? this._inset.height() : 0)) + 'px;';
+    };
+    
+    this._cellStyle = function(skipVertical, height) {
+        return this._css + this._cellPadding(skipVertical) + ';' + this._cellHeight(skipVertical, height);
     };
     
     this._clientWidth = function() {
