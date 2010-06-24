@@ -28,6 +28,7 @@ uki.background.Rows = uki.newClass(new function() {
                 'div', 
                 'position:absolute;left:0;top:0;width:100%;z-index:-1'
             );
+            this._container.className = 'uki-background-Rows' ;
         }
         this._layoutHandler = this._layoutHandler || uki.proxy(function(e) { this.layout(e.rect, e.visibleRect); }, this);
         this._comp.dom().appendChild(this._container);
