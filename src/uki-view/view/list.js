@@ -591,7 +591,9 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
 @name uki.Collection#selectedRow */
 /** @function
 @name uki.Collection#selectedRows */
-uki.Collection.addAttrs(['data','selectedIndex', 'selectedIndexes', 'selectedRow', 'selectedRows']);
+/** @function
+@name uki.Collection#lastClickIndex */
+uki.Collection.addAttrs(['data', 'selectedIndex', 'selectedIndexes', 'selectedRow', 'selectedRows', 'lastClickIndex']);
 
 /**
  * Scrollable List View
