@@ -147,6 +147,7 @@ uki.view.declare('uki.view.Table', uki.view.Container, function(Base) {
     
     this._createDom = function() {
         Base._createDom.call(this);
+        this._initClassName();
         var scrollPaneRect = new Rect(0, this._headerHeight, this.rect().width, this.rect().height - this._headerHeight),
             listRect = scrollPaneRect.clone().normalize(),
             headerRect = new Rect(0, 0, this.rect().width, this._headerHeight),

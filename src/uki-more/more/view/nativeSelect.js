@@ -4,6 +4,7 @@ uki.view.declare('uki.more.view.NativeSelect', uki.more.view.NativeControl, func
     
     this._createDom = function() {
         this._dom = uki.createElement('select', 'position:absolute;z-index:100;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;margin:0;');
+        this._initClassName();
         this._initFocusable(this._dom);
     };
     

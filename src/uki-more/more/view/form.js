@@ -22,6 +22,7 @@ uki.view.declare('uki.more.view.Form', uki.view.Container, function(Base) {
     
     this._createDom = function() {
         this._dom = uki.createElement('form', Base.defaultCss);
+        this._initClassName();
         this._dom.action = this._action;
         this._dom.method = this._method;
     };

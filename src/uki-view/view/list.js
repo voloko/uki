@@ -403,6 +403,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
     
     this._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss + 'overflow:hidden');
+        this._initClassName();
         
         var packDom = uki.createElement('div', 'position:absolute;left:0;top:0px;width:100%;overflow:hidden');
         this._packs = [

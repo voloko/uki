@@ -45,6 +45,7 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
         
         if (!preCreatedFocusTarget) {
             this._focusTarget = uki.createElement('input', 'position:absolute;left:-9999px;top:0;width:1px;height:1px;');
+            this._focusTarget.className = 'uki-view-Focusable';
             this.dom().appendChild(this._focusTarget);
         }
         this._hasFocus = false;
