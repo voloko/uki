@@ -82,6 +82,7 @@ uki.background.LinearGradient = uki.newClass(uki.background.CssBox, new function
         }
         
         var container = uki.createElement('div', uki.browser.css(this._options.css) + ';position:absolute;overflow:hidden;z-index:' + (this._options.zIndex || '-1') + ';' + css, this._options.innerHTML);
+        container.className = 'uki-background-CssBox';
         if (css) return container;
         
         if (uki.browser.canvas()) {

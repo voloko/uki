@@ -41,6 +41,7 @@ uki.background.CssBox = uki.newClass(new function() {
             uki.browser.css(options),
             ext.innerHTML
         );
+        this._container.className = 'uki-background-CssBox';
         this._attached = false;
     };
     

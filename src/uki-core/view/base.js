@@ -452,6 +452,11 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
      */
     this._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
+        this._initClassName();
+    };
+    
+    this._initClassName = function() {
+        this._dom.className = this.typeName().replace(/\./g, '-');
     };
     
     /**

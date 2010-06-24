@@ -115,6 +115,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     
     this._createDom = function() {
         this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
+        this._initClassName();
         this._input = uki.createElement(this._tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
         
         this._input.value = this._value;

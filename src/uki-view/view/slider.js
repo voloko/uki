@@ -76,6 +76,7 @@ uki.view.declare('uki.view.Slider', uki.view.Container, uki.view.Focusable, func
     
     this._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');
+        this._initClassName();
         this._handle = uki({ 
             view: 'SliderHandle', 
             rect: new Rect(0, (this._rect.height-this._handleSize.height)/2, this._handleSize.width, this._handleSize.height),
