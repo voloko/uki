@@ -46,7 +46,7 @@ uki.background.LinearGradient = uki.newClass(uki.background.CssBox, new function
             };
             context.fillStyle = gradient;
             context.fillRect(0, 0, CANVAS_GRADIENT_SIZE, CANVAS_GRADIENT_SIZE);
-            urlCache[key] = canvas.toDataURL();
+            urlCache[key] = canvas.toDataURL && canvas.toDataURL();
         }
         return urlCache[key];
     }
@@ -63,7 +63,8 @@ uki.background.LinearGradient = uki.newClass(uki.background.CssBox, new function
             stops      = this._options.stops      || [],
             css        = '',
             i          = 0,
-            cssProp    = uki.browser.cssLinearGradient();
+            cssProp    = uki.browser.cssLinearGradient(),
+            url;
             
         if (cssProp == '-moz-linear-gradient' || cssProp == 'linear-gradient') {
             css += 'background-image:' + cssProp + '(' + (horizontal ? 'left' : 'top') + ', ' + startColor;
@@ -85,9 +86,9 @@ uki.background.LinearGradient = uki.newClass(uki.background.CssBox, new function
         container.className = 'uki-background-CssBox';
         if (css) return container;
         
-        if (uki.browser.canvas()) {
+        if (uki.browser.canvas() && (url = getGradientURL(startColor, endColor, horizontal, stops))) {
             var img = uki.createElement('img', 'position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;');
-            img.src = getGradientURL(startColor, endColor, horizontal, stops);
+            img.src = url;
             container.appendChild(img);
         } else if (uki.browser.cssFilter() && stops.length > 0) {
             stops.unshift({ pos: 0, color: startColor });

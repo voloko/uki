@@ -144,9 +144,9 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
         } else {
             var o = (this._rect.height - getEmptyInputHeight(this.style('fontSize'))) / 2;
             margin = CEIL(o) + 'px 0 ' + FLOOR(o) + 'px 0';
-            this._input.style.margin = margin;
+            this._input.style.padding = margin;
         }
-        if (this._placeholderDom) this._placeholderDom.style.margin = margin;
+        if (this._placeholderDom) this._placeholderDom.style.padding = margin;
     };
     
     this._updatePlaceholderVis = function() {
