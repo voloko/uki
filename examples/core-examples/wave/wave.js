@@ -79,7 +79,7 @@ uki({ view: 'HSplitPane', id: 'splitMain', rect: '15 50 975 950', minSize: '800 
                 { view: 'Button', rect: '58 16 33 24', backgroundPrefix: 'plus-big-button-', anchors: 'left bottom', focusable: false }
             ] },
             { view: 'Toolbar', rect: '0 79 470 24', anchors: 'left top right', background: 'theme(toolbar-normal)', buttons: [
-                toolbarButton('Reply', '-128px 0'), toolbarButton('Playback', '-144px 0'), toolbarButton('Unfollow', '-16px 0'), toolbarButton('Archive', '-32px 0'), toolbarButton('Spam', '-48px 0'), toolbarButton('Read', '-64px 0'), toolbarButton('Unread', '-80px 0'), toolbarButton('Trash', '-96px 0'), toolbarButton('Move to', '-112px 0')
+                toolbarButton('Reply', '-128px 0'), toolbarButton('Playback', '-144px 0'), toolbarButton('Unfollow', '-16px 0'), toolbarButton('Archive', '-32px 0'), toolbarButton('Spam', '-48px 0'), toolbarButton('Read', '-64px 0'), toolbarButton('Unread', '-80px 0'), toolbarButton('Trash', '-96px 0'), toolbarButton('Move&nbsp;to', '-112px 0')
             ] },
             { view: 'Label', id: 'message', rect: '0 103 470 791', anchors: 'left top right bottom', multiline: true, scrollable: true, inset: '2 2', textSelectable: true },
             { view: 'Box', rect: '0 894 470 32', background: 'theme(box-lblue-bottom)', anchors: 'left bottom right', childViews: [
