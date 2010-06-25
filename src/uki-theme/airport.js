@@ -379,7 +379,7 @@
                 return 'color:#333;text-align:center;font-weight:bold;text-shadow:0 1px 0 rgba(255,255,255,1);';
             },
             'input': function() {
-                return 'font-size:11px;';
+                return 'font-size:12px;';
             }
         }
     });
