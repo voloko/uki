@@ -47,7 +47,7 @@ uki.background.CssBox = uki.newClass(new function() {
     
     this.attachTo = function(comp) {
         this._comp = comp;
-        this._comp.dom().appendChild(this._container);
+        this._comp.dom().insertBefore(this._container, this._comp.dom().firstChild);
 
         if (uki.supportNativeLayout) return;
         

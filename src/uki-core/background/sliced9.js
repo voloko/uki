@@ -146,7 +146,8 @@ uki.background.Sliced9 = uki.newClass(new function() {
         this._comp = comp;
         
         this._container.style.visibility = 'visible';
-        this._comp.dom().appendChild(this._container);
+        this._comp.dom().insertBefore(this._container, this._comp.dom().firstChild);
+        // this._comp.dom().appendChild(this._container);
         
         if (!uki.supportNativeLayout) {
             this._layoutHandler = this._layoutHandler || uki.proxy(function(e) {
