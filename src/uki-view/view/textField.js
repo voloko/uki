@@ -10,17 +10,17 @@
 uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     var emptyInputHeight = {};
 
-    function getEmptyInputHeight (fontSize) {
-        if (!emptyInputHeight[fontSize]) {
-            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;border:0;overflow:hidden;font-size:"+fontSize+";left:-999em;top:0");
+    function getEmptyInputHeight (css) {
+        if (!emptyInputHeight[css]) {
+            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;border:0;margin:0;overflow:hidden;left:-999em;top:0;line-height:1;" + css);
             uki.dom.probe(
                 node,
                 function(probe) {
-                    emptyInputHeight[fontSize] = probe.offsetHeight;
+                    emptyInputHeight[css] = probe.offsetHeight;
                 }
             );
         }
-        return emptyInputHeight[fontSize];
+        return emptyInputHeight[css];
     }
 
     function nativePlaceholder (node) {
@@ -92,7 +92,8 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     });
 
     this._style = function(name, value) {
-        if (value !== undefined && uki.inArray(name, uki.browser.textStyles) != -1) {
+        if (uki.inArray(name, uki.browser.textStyles) != -1) {
+            if (value === undefined) return this._input.style[name];
             this._input.style[name] = value;
             if (this._placeholderDom) this._placeholderDom.style[name] = value;
         }
@@ -142,7 +143,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             this._input.style.top = 2 + PX;
             margin = '2px 0';
         } else {
-            var o = (this._rect.height - getEmptyInputHeight(this.style('fontSize'))) / 2;
+            var o = (this._rect.height - getEmptyInputHeight( 'font-size:' + this.style('fontSize') + ';font-family:' + this.style('fontFamily') )) / 2;
             margin = CEIL(o) + 'px 0 ' + FLOOR(o) + 'px 0';
             this._input.style.padding = margin;
         }
