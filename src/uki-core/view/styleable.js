@@ -45,7 +45,7 @@ uki.view.Styleable = new function() {
     this.textSelectable = uki.newProp('_textSelectable', function(state) {
         this._textSelectable = state;
         if (uki.browser.cssUserSelect() != 'unsupported') {
-            this._dom.style.cssText += uki.browser.cssUserSelect() + ':' + (state ? 'normal' : uki.browser.cssUserSelect() == '-moz-user-select' ? '-moz-none' : 'none');
+            this._dom.style[uki.camalize(uki.browser.cssUserSelect())] = (state ? '' : uki.browser.cssUserSelect() == '-moz-user-select' ? '-moz-none' : 'none');
         } else {
             uki.dom[state ? 'unbind' : 'bind'](this.dom(), 'selectstart', uki.dom.preventDefaultHandler);
         }

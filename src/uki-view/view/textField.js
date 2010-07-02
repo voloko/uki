@@ -37,7 +37,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             _tagName: 'input',
             _type: 'text'
         });
-        this.defaultCss += "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ");" + uki.theme.style('input');
+        this.defaultCss += "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;-moz-resize:none;resize:none;background: url(" + uki.theme.imageSrc('x') + ");" + uki.theme.style('input');
     };
     
     this._updateBg = function() {

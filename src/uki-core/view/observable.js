@@ -8,6 +8,10 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     //     return null; // should implement
     // },
     
+    /**
+     * @param {String} name Event name
+     * @param {function()}
+     */
     bind: function(name, callback) {
         callback.huid = callback.huid || uki.guid++;
         uki.each(name.split(' '), function(i, name) {
