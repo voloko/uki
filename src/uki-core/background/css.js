@@ -11,6 +11,7 @@ uki.background.Css = uki.newClass(new function() {
     /**#@+ @memberOf uki.background.Css.prototype */
     this.init = function(options) {
         this._options = typeof options == 'string' ? {background: options} : options;
+        this._options = uki.browser.css(this._options);
     };
     
     this.attachTo = function(comp) {

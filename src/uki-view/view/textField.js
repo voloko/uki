@@ -10,17 +10,17 @@
 uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, function(Base, Focusable) {
     var emptyInputHeight = {};
 
-    function getEmptyInputHeight (fontSize) {
-        if (!emptyInputHeight[fontSize]) {
-            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;border:0;overflow:hidden;font-size:"+fontSize+";left:-999em;top:0");
+    function getEmptyInputHeight (css) {
+        if (!emptyInputHeight[css]) {
+            var node = uki.createElement('input', Base.defaultCss + "border:none;padding:0;border:0;margin:0;overflow:hidden;left:-999em;top:0;line-height:1;" + css);
             uki.dom.probe(
                 node,
                 function(probe) {
-                    emptyInputHeight[fontSize] = probe.offsetHeight;
+                    emptyInputHeight[css] = probe.offsetHeight;
                 }
             );
         }
-        return emptyInputHeight[fontSize];
+        return emptyInputHeight[css];
     }
 
     function nativePlaceholder (node) {
@@ -37,7 +37,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             _tagName: 'input',
             _type: 'text'
         });
-        this.defaultCss += "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;resize:none;background: url(" + uki.theme.imageSrc('x') + ");" + uki.theme.style('input');
+        this.defaultCss += "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;-moz-resize:none;resize:none;background: url(" + uki.theme.imageSrc('x') + ");" + uki.theme.style('input');
     };
     
     this._updateBg = function() {
@@ -78,7 +78,7 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
                 this._dom.appendChild(this._placeholderDom);
                 this._updatePlaceholderVis();
                 uki.each(['fontSize', 'fontFamily', 'fontWeight'], function(i, name) {
-                    this._placeholderDom.style[name] = this.style(name);
+                    this._placeholderDom.style[name] = this._input.style[name];
                 }, this);
                 
                 uki.dom.bind(this._placeholderDom, 'mousedown', uki.proxy(function(e) { 
@@ -92,10 +92,12 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     });
 
     this._style = function(name, value) {
-        if (value === undefined) return this._input.style[name];
-        this._input.style[name] = value;
-        if (this._placeholderDom) this._placeholderDom.style[name] = value;
-        return this;
+        if (uki.inArray(name, uki.browser.textStyles) != -1) {
+            if (value === undefined) return this._input.style[name];
+            this._input.style[name] = value;
+            if (this._placeholderDom) this._placeholderDom.style[name] = value;
+        }
+        return Base._style.call(this, name, value);
     };
 
     /**
@@ -113,7 +115,8 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     };
     
     this._createDom = function() {
-        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible');
+        this._dom = uki.createElement('div', Base.defaultCss + ';cursor:text;overflow:visible;');
+        this._initClassName();
         this._input = uki.createElement(this._tagName, this.defaultCss + (this._multiline ? '' : ';overflow:hidden;'));
         
         this._input.value = this._value;
@@ -140,11 +143,11 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
             this._input.style.top = 2 + PX;
             margin = '2px 0';
         } else {
-            var o = (this._rect.height - getEmptyInputHeight(this.style('fontSize'))) / 2;
+            var o = (this._rect.height - getEmptyInputHeight( 'font-size:' + this.style('fontSize') + ';font-family:' + this.style('fontFamily') )) / 2;
             margin = CEIL(o) + 'px 0 ' + FLOOR(o) + 'px 0';
-            this._input.style.margin = margin;
+            this._input.style.padding = margin;
         }
-        if (this._placeholderDom) this._placeholderDom.style.margin = margin;
+        if (this._placeholderDom) this._placeholderDom.style.padding = margin;
     };
     
     this._updatePlaceholderVis = function() {

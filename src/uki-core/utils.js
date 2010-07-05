@@ -164,7 +164,7 @@ var utils = {
     	        array[i][marked] = true;
     	    };
     	    for (i = 0; i < result.length; i++) { 
-    	        delete result[i][marked] 
+    	        delete result[i][marked];
     	    };
     	    return result;
         	
@@ -412,6 +412,18 @@ var utils = {
             }
             return this;
         };
+    },
+    
+    camalize: function(string) {
+        return string.replace(/[-_]\S/g, function(v) {
+            return v.substr(1).toUpperCase();
+        });
+    },
+    
+    dasherize: function(string) {
+        return string.replace(/[A-Z]/g, function(v) {
+            return '-' + v.toLowerCase();
+        });
     }
 };
 utils.extend(uki, utils);

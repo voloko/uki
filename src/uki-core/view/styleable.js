@@ -42,17 +42,15 @@ uki.view.Styleable = new function() {
      * @param {boolean=} state 
      * @returns {boolean|uki.view.Base} current textSelectable state of self
      */
-    this.textSelectable = function(state) {
-        if (state === undefined) return this._textSelectable;
+    this.textSelectable = uki.newProp('_textSelectable', function(state) {
         this._textSelectable = state;
-        if (uki.browser.cssUserSelect() == 'unsupported') {
-            this._dom.style.cssText += uki.browser.cssUserSelect() + ':' + (state ? 'normal' : uki.browser.cssUserSelect() == '-moz-user-select' ? '-moz-none' : 'none');
+        if (uki.browser.cssUserSelect() != 'unsupported') {
+            this._dom.style[uki.camalize(uki.browser.cssUserSelect())] = (state ? '' : uki.browser.cssUserSelect() == '-moz-user-select' ? '-moz-none' : 'none');
         } else {
             uki.dom[state ? 'unbind' : 'bind'](this.dom(), 'selectstart', uki.dom.preventDefaultHandler);
         }
         this._dom.style.cursor = state ? '' : 'default';
-        return this;
-    };
+    });
     
     this.draggable = function(state) {
         if (state === undefined) return this._dom.getAttribute('draggable');

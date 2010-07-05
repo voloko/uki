@@ -1,5 +1,6 @@
 include('const.js');
 include('utils.js');
+include('after.js');
 include('dom.js');
 include('geometry.js');
 include('view/observable.js');
@@ -86,9 +87,12 @@ include('view/observable.js');
         /**
          * uki.view.Base api
          */
-        parent: function() {
-            return null;
-        },
+        parent: uki.F,
+        
+        /**
+         * uki.view.Base api
+         */
+        childResized: uki.F,
         
         /**
          * On window resize resizes and layout its child view
@@ -150,10 +154,14 @@ include('view/observable.js');
                 if (!timeout) {
                     timeout = true;
                     setTimeout(function(i,len) {
+                        uki.after.start();
+                        
                         timeout = false;
 						for (i=0,len=self.instances.length;i<len;i++)
 							self.instances[i].layout();
-                    }, 1)
+							
+                        uki.after.stop();
+                    }, 1);
                 }
             });
         }

@@ -13,6 +13,7 @@ uki.view.declare('uki.more.view.NativeControl', uki.view.Base, uki.view.Focusabl
         if (name === undefined) return this._dom.name;
         this._dom.setAttribute('name', name);
         this._dom.name = name;
+        this._initClassName();
         
         if (/MSIE 6/.test(navigator.userAgent)) {
             var clone = document.createElement('<input name="' + name + '" />');

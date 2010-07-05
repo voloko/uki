@@ -8,6 +8,8 @@ include('base.js');
 uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
     /**#@+ @memberOf uki.view.Container# */
     
+    this._inset = new Inset();
+    
     /** @private */
     this._setup = function() {
         this._childViews = [];
@@ -25,11 +27,11 @@ uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
     }
     
     this.contentsWidth = function() {
-        return maxProp(this, 'maxX');
+        return maxProp(this, 'maxX') + this.inset().right;
     };
     
     this.contentsHeight = function() {
-        return maxProp(this, 'maxY');
+        return maxProp(this, 'maxY') + this.inset().bottom;
     };
     
     this.contentsSize = function() {
@@ -65,6 +67,7 @@ uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
             this._childViews[i]._viewIndex--;
         };
         this._childViews = uki.grep(this._childViews, function(elem) { return elem != child; });
+        this._contentChanged();
     };
     
     /**
@@ -75,6 +78,7 @@ uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
         this._childViews.push(child);
         child.parent(this);
         this.domForChild(child).appendChild(child.dom());
+        this._contentChanged();
     };
     
     /**
@@ -91,6 +95,7 @@ uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
         this._childViews.splice(beforeChild._viewIndex-1, 0, child);
         child.parent(this);
         this.domForChild(child).insertBefore(child.dom(), beforeChild.dom());
+        this._contentChanged();
     };
     
     /**
@@ -101,8 +106,15 @@ uki.view.declare('uki.view.Container', uki.view.Base, function(Base) {
         return this._dom;
     };
     
+    this.inset = uki.newProp('_inset', function(v) {
+        this._inset = Inset.create(v);
+    });
     
     /** @private */
+    this._contentChanged = function() {
+        // called on every insertBefore, appendChild, removeChild
+    };
+    
     this._layoutDom = function(rect) {
         Base._layoutDom.call(this, rect);
         this._layoutChildViews(rect);

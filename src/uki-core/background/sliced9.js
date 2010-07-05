@@ -130,7 +130,9 @@ uki.background.Sliced9 = uki.newClass(new function() {
                 settings.c, [LEFT + '-' + inset.left + PX, TOP + '-' + inset.top + PX, WIDTH + width + PX, HEIGHT + height + PX].join(';'), 'right -' + inset.top + PX
             );
         }
-        return uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));
+        var container = uki.createElement('div', 'position:absolute;overflow:hidden;' + css, html.join(''));
+        container.className = 'uki-background-Sliced9';
+        return container;
     };
     
     /** @ignore */
@@ -144,7 +146,8 @@ uki.background.Sliced9 = uki.newClass(new function() {
         this._comp = comp;
         
         this._container.style.visibility = 'visible';
-        this._comp.dom().appendChild(this._container);
+        this._comp.dom().insertBefore(this._container, this._comp.dom().firstChild);
+        // this._comp.dom().appendChild(this._container);
         
         if (!uki.supportNativeLayout) {
             this._layoutHandler = this._layoutHandler || uki.proxy(function(e) {

@@ -45,21 +45,25 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
         
         if (!preCreatedFocusTarget) {
             this._focusTarget = uki.createElement('input', 'position:absolute;left:-9999px;top:0;width:1px;height:1px;');
+            this._focusTarget.className = 'uki-view-Focusable';
             this.dom().appendChild(this._focusTarget);
         }
         this._hasFocus = false;
         this._firstFocus = true;
             
         uki.dom.bind(this._focusTarget, 'focus', uki.proxy(function(e) {
+            this._stopWatingForBlur();
             if (!this._hasFocus) this._focus(e);
         }, this));
         
         uki.dom.bind(this._focusTarget, 'blur', uki.proxy(function(e) {
             if (this._hasFocus) {
                 this._hasFocus = false;
-                setTimeout(uki.proxy(function() { // wait for mousedown refocusing
-                    if (!this._hasFocus) this._blur();
-                }, this), 1);
+                this._waitingForBlur = 
+                    setTimeout(uki.proxy(function() { // wait for mousedown refocusing
+                        this._waitingForBlur = false;
+                        if (!this._hasFocus) this._blur();
+                    }, this), 1);
             }
         }, this));
         
@@ -78,8 +82,17 @@ uki.view.Focusable = new function() {/** @lends uki.view.Focusable.prototype */
         this._hasFocus = false;
     }
     
+    this._stopWatingForBlur = function() {
+        if (this._waitingForBlur) {
+            clearTimeout(this._waitingForBlur);
+            this._waitingForBlur = false;
+            this._hasFocus = true;
+        }
+    };
+    
     this.focus = function() {
         if (this._focusable && !this._disabled) {
+            this._stopWatingForBlur();
             if (!this._hasFocus) this._focus();
             var target = this._focusTarget;
             setTimeout(function() {

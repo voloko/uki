@@ -41,12 +41,13 @@ uki.background.CssBox = uki.newClass(new function() {
             uki.browser.css(options),
             ext.innerHTML
         );
+        this._container.className = 'uki-background-CssBox';
         this._attached = false;
     };
     
     this.attachTo = function(comp) {
         this._comp = comp;
-        this._comp.dom().appendChild(this._container);
+        this._comp.dom().insertBefore(this._container, this._comp.dom().firstChild);
 
         if (uki.supportNativeLayout) return;
         

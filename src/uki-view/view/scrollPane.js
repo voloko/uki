@@ -139,8 +139,8 @@
             this._sbV = sv || this._scrollV;
             this._clientRect = new Rect( this._rect.width +  (sv ? -1 : 0) * scrollWidth,
                                          this._rect.height + (sh ? -1 : 0) * scrollWidth );
-            this._rectForChild = new Rect( this._rect.width +  (sv && !widthIncludesScrollBar ? -1 : 0) * scrollWidth,
-                                           this._rect.height + (sh && !widthIncludesScrollBar ? -1 : 0) * scrollWidth );
+            this._rectForChild = new Rect( this._rect.width +  ((sv && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
+                                           this._rect.height + ((sh && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth );
         };
     
         this._updateClientRects = function() {
@@ -181,6 +181,14 @@
         
             Base._layoutDom.call(this, rect);
         };
+        
+        this.childResized = function() {
+            this._needsLayout = true;
+            uki.after(uki.proxy(this.layoutIfNeeded, this));
+        };
+
+        this._contentChanged = this.childResized;
+        
     });
 
     uki.view.ScrollPane.initScrollWidth = initScrollWidth;

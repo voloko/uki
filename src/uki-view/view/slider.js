@@ -63,7 +63,7 @@ uki.view.declare('uki.view.Slider', uki.view.Container, uki.view.Focusable, func
             if (cacheIndex) this._cachedIndex = index;
             return this._values[index];
         }
-        return pos / (this._rect.width - this._handleSize.width) * (this._max - this._min);
+        return pos / (this._rect.width - this._handleSize.width) * (this._max - this._min) + this._min;
     };
     
     this._val2pos = function(val) {
@@ -71,11 +71,12 @@ uki.view.declare('uki.view.Slider', uki.view.Container, uki.view.Focusable, func
             var index = this._cachedIndex !== undefined ? this._cachedIndex : uki.binarySearch(val, this._values);
             return index / (this._values.length - 1) * (this._rect.width - this._handleSize.width);
         }
-        return val / (this._max - this._min) * (this._rect.width - this._handleSize.width);
+        return (val - this._min) / (this._max - this._min) * (this._rect.width - this._handleSize.width);
     };
     
     this._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss + 'height:18px;-moz-user-select:none;-webkit-user-select:none;overflow:visible;');
+        this._initClassName();
         this._handle = uki({ 
             view: 'SliderHandle', 
             rect: new Rect(0, (this._rect.height-this._handleSize.height)/2, this._handleSize.width, this._handleSize.height),

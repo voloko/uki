@@ -9,7 +9,7 @@
 
 uki({ view: 'Box', rect: '500 100', anchors: 'left top right bottom', childViews: [
         { view: 'Label', rect: '10 12 70 18', anchors: 'left top', text: 'Continuous' },
-        { view: 'Slider', rect: '90 12 300 18', anchors: 'left right top' },
+        { view: 'Slider', rect: '90 12 300 18', anchors: 'left right top', min: -5, max: 20, value: 3 },
         { view: 'TextField', rect: '400 10 90 22', anchors: 'right top' },
         { view: 'Label', rect: '10 68 70 18', anchors: 'left top', text: 'With steps' },
         { view: 'Slider', rect: '90 68 300 18', anchors: 'left right top', values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },

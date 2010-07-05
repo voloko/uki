@@ -82,6 +82,7 @@ uki.view.declare('uki.view.Button', uki.view.Label, uki.view.Focusable, function
     this._createDom = function() {
         // dom
         this._dom = uki.createElement('div', this.defaultCss);
+        this._initClassName();
         this._label = uki.createElement('div', this.defaultCss); // text-shadow:0 1px 0px rgba(255,255,255,0.8);
         this._dom.appendChild(this._label);
         

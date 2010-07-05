@@ -3,7 +3,6 @@ include('../geometry.js');
 include('../utils.js');
 include('../builder.js');
 include('../dom.js');
-include('../dom/nativeLayout.js');
 include('observable.js');
 include('styleable.js');
 
@@ -323,6 +322,13 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
     };
     
     /**
+     * Called when child changes it's size
+     */
+    this.childResized = function(child) {
+        // do nothing, extend in subviews
+    };
+    
+    /**
      * Resizes view to its contents. Contents size is determined by view.
      * View can be resized by width, height or both. This is specified through
      * autosizeStr param.
@@ -446,6 +452,11 @@ uki.view.declare('uki.view.Base', uki.view.Observable, uki.view.Styleable, funct
      */
     this._createDom = function() {
         this._dom = uki.createElement('div', this.defaultCss);
+        this._initClassName();
+    };
+    
+    this._initClassName = function() {
+        this._dom.className = this.typeName().replace(/\./g, '-');
     };
     
     /**

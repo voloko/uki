@@ -44,16 +44,17 @@
             },
             
             'button-focus': function() {
-                if (window.opera || uki.browser.cssBoxShadow() == 'unsupported') {
+                if (uki.browser.cssBoxShadow() == 'unsupported') {
                     return new uki.background.CssBox( 
-                        'background:#7594D2;' + (uki.browser.cssFilter() && !window.opera ? 'filter:Alpha(opacity=70);' : 'opacity:0.7;'), 
+                        'background:#7594D2;' + (uki.browser.cssFilter() && uki.image.needAlphaFix ? 'filter:Alpha(opacity=70);' : 'opacity:0.7;'), 
                         { inset: '-2 -2', zIndex: -2 } 
                     );
                 }
-                return new uki.background.CssBox(
-                    'border-radius: 3px; box-shadow: 0 0 6px #0244D4;',
-                    { zIndex: 2, inset: '1' }
-                );
+                return new uki.background.Css({ 
+                    // WebkitTransition: '-webkit-box-shadow 0.2s linear',
+                    boxShadow: '0 0 6px #0244D4',
+                    borderRadius: '3px'
+                });
             },
             
             'button-disabled': function() {
@@ -189,21 +190,21 @@
             // text field
             'input': function() {
                 return new uki.background.CssBox(
-                   'background:white;border: 1px solid #777;border-top-color:#444;box-shadow:0 1px 0 rgba(255, 255, 255, 0.4), inset 0 0 2px rgba(0,0,0,0.4);'
+                   'background:white;border: 1px solid #999;border-top-color:#777;box-shadow:0 1px 0 rgba(255, 255, 255, 0.4), inset 0 1px 2px rgba(0,0,0,0.2);'
                );
             },
             
             'input-focus': function() {
-                if (window.opera || uki.browser.cssBoxShadow() == 'unsupported') {
+                if (uki.browser.cssBoxShadow() == 'unsupported') {
                     return new uki.background.CssBox( 
-                        'background:#7594D2;' + (uki.browser.cssFilter() && !window.opera ? 'filter:Alpha(opacity=70);' : 'opacity:0.7;'), 
+                        'background:#7594D2;' + (uki.browser.cssFilter() && uki.image.needAlphaFix ? 'filter:Alpha(opacity=70);' : 'opacity:0.7;'), 
                         { inset: '-2 -2', zIndex: -2 } 
                     );
                 }
-                return new uki.background.CssBox(
-                    'box-shadow: 0 0 6px #0244D4;',
-                    { zIndex: 2, inset: '1' }
-                );
+                return new uki.background.Css({ 
+                    // WebkitTransition: '-webkit-box-shadow 0.2s linear',
+                    boxShadow: '0 0 6px #0244D4'
+                });
             },
             
             
@@ -228,9 +229,9 @@
             },
 
             'slider-handle-focus': function() {
-                if (window.opera || uki.browser.cssBoxShadow() == 'unsupported') {
+                if (uki.browser.cssBoxShadow() == 'unsupported') {
                     return new uki.background.CssBox( 
-                        'background:#7594D2;' + (uki.browser.cssFilter() && !window.opera ? 'filter:Alpha(opacity=70);' : 'opacity:0.7;'), 
+                        'background:#7594D2;' + (uki.browser.cssFilter() && uki.image.needAlphaFix ? 'filter:Alpha(opacity=70);' : 'opacity:0.7;'), 
                         { inset: '-2 -2', zIndex: -2 } 
                     );
                 }
@@ -254,6 +255,18 @@
             // list
             list: function(rowHeight) {
                 return new uki.background.Rows(rowHeight, '#EDF3FE');
+            },
+            
+            // table
+            'table-header': function() {
+                return new uki.background.LinearGradient({
+                    startColor: '#FFFFFF',
+                    stops: [
+                        { pos: 0.8, color: '#e0e0e0' }
+                    ],
+                    endColor: '#EEEEEE',
+                    css: 'border-bottom:1px solid #CCC;'
+                });
             }
         },
         
@@ -289,7 +302,7 @@
         templates: {
             'table-header-cell': function() {
                 return new uki.theme.Template(
-                    '<div style="position:relative;border:1px solid #CCC;border-top:none;border-left:none;'+
+                    '<div style="position:relative;border-right:1px solid #CCC;'+
                     '${style}" class="${className}">${data}</div>');
             },
             
@@ -299,14 +312,16 @@
                     '${style}" class="${className}">${data}</div>');
             },
             
-            'table-cell-asc': function() {
+            'table-header-cell-asc': function() {
                 return new uki.theme.Template(
-                    '<div style="position:relative;border-right:1px solid #CCC;height:100%;'+
-                    '${style}" class="${className}">${data}</div>');
+                    '<div style="position:relative;border-right:1px solid #CCC;background: rgba(0,0,128,0.1);'+
+                    '${style}" class="${className}"><div style="padding-right:7px">${data}</div><span style="position:absolute;right:0;top:50%;margin-top:-7px;">&darr;</span></div>');
             },
             
-            'table-cell-desc': function() {
-                
+            'table-header-cell-desc': function() {
+                return new uki.theme.Template(
+                    '<div style="position:relative;border-right:1px solid #CCC;background: rgba(0,0,128,0.1);'+
+                    '${style}" class="${className}"><div style="padding-right:7px">${data}</div><span style="position:absolute;right:0;top:50%;margin-top:-7px;">&uarr;</span></div>');
             }
         },
         
@@ -361,10 +376,10 @@
                 return 'font-size:12px;';
             },
             'button': function() {
-                return 'color:#333;text-align:center;font-weight:bold;text-shadow:0 1px 0 rgba(255,255,255,1);';
+                return 'color:#333;text-align:center;font-weight:bold;text-shadow:0 1px 0 rgba(255,255,255,0.6);';
             },
             'input': function() {
-                return 'font-size:11px;';
+                return 'font-size:12px;';
             }
         }
     });
@@ -390,7 +405,7 @@
     }
     
     function sliderPin () {
-        return '<div style="' + uki.browser.css('position:absolute;overflow:hidden;z-index:10;left:50%;top:50%;width:2px;height:11px;margin:-6px 0 0 -1px;background:#8599AE;border-top:1px solid #6A7A8C;') + '"></div>'
+        return '<div style="' + uki.browser.css('position:absolute;overflow:hidden;z-index:10;left:50%;top:50%;width:2px;height:11px;margin:-6px 0 0 -1px;background:#8599AE;border-top:1px solid #6A7A8C;') + '"></div>';
     }
     
     uki.theme.airport.backgrounds['slider-handle-down'] = uki.theme.airport.backgrounds['slider-handle-hover'];

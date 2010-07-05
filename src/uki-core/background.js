@@ -2,9 +2,9 @@ include('uki.js');
 
 (function() {
     var nullRegexp = /^\s*null\s*$/,
-        themeRegexp  = /theme\s*\(\s*([^)]*\s*)\)/,
-        rowsRegexp = /rows\s*\(\s*([^)]*\s*)\)/,
-        cssBoxRegexp = /cssBox\s*\(\s*([^)]*\s*)\)/;
+        themeRegexp  = /theme\s*\(\s*(.*\s*)\)/,
+        rowsRegexp = /rows\s*\(\s*(.*\s*)\)/,
+        cssBoxRegexp = /cssBox\s*\(\s*(.*\s*)\)/;
         
     /**
      * Transforms a bg string into a background object
