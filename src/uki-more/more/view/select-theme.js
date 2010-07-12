@@ -1,8 +1,8 @@
 include("../view.js");
 
 (function() {
-    function selectHandle (image) {
-        return new uki.background.CssBox('background: url(' + uki.theme.imageSrc(image) + '); background-position: 100% 50%; background-repeat: no-repeat;');
+    function selectHandle (image, css) {
+        return new uki.background.CssBox((css || '') + 'background: url(' + uki.theme.imageSrc(image) + '); background-position: 100% 50%; background-repeat: no-repeat;');
     }
     
     var theme = uki.extend({}, uki.theme.Base, {
@@ -15,28 +15,31 @@ include("../view.js");
             // },
             'select-normal': function() {
                 return new uki.background.Multi(
-                    uki.theme.background('button-normal'),
-                    selectHandle('select-handle-normal')
+                    selectHandle('select-handle-normal'),
+                    uki.theme.background('button-normal')
                 );
             },
             'select-hover': function() {
                 return new uki.background.Multi(
-                    uki.theme.background('button-hover'),
-                    selectHandle('select-handle-normal')
+                    selectHandle('select-handle-normal'),
+                    uki.theme.background('button-hover')
                 );
             },
             'select-checked-normal': function() {
                 return new uki.background.Multi(
-                    uki.theme.background('button-down'),
-                    selectHandle('select-handle-normal')
+                    selectHandle('select-handle-normal'),
+                    uki.theme.background('button-down')
+                );
+            },
+            'select-disabled': function() {
+                return new uki.background.Multi(
+                    selectHandle('select-handle-normal', 'opacity:0.4;'),
+                    uki.theme.background('button-disabled')
                 );
             },
             
             'select-popup': function() {
-                return new uki.background.Multi(
-                    new uki.background.CssBox('background:#ECEDEE;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #CCC'),
-                    uki.theme.background('shadow-medium')
-                );
+                return uki.theme.background('popup-normal');
             }
         },
         
