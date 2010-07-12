@@ -13,6 +13,7 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
         this._focusable = true;
         this._options = [];
         this._maxPopupHeight = 200;
+        this._lastScroll = 0;
     };
     
     this.Render = uki.newClass(uki.view.list.Render, function(Base) {
@@ -58,11 +59,13 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
         this._popup.hide();
         
         this._list = uki('List', this._popup)[0];
+        this._scroll = uki('ScrollPane', this._popup)[0];
         
         this._popup.bind('toggle', uki.proxy(function(e) {
             this._down = this._popup.visible();
             if (this._popup.visible()) {
                 this._updateWidth();
+                this._scroll.scrollTop(this._lastScroll);
             }
             this._checked = this._popup.visible();
             this._updateBg();
@@ -80,7 +83,10 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
         
         this.bind('blur', function() { 
             setTimeout(uki.proxy(function() {
-                this._hasFocus || this._popup.hide();
+                if (!this._hasFocus && this.opened()) {
+                    this._lastScroll = this._scroll.scrollTop();
+                    this._popup.hide();
+                }
             }, this), 50)
         });
         
@@ -120,6 +126,7 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
         } else {
             this.text(this._options[this.selectedIndex()].text);
         }
+        this._lastScroll = this._scroll.scrollTop();
         this._popup.hide();
         if (e) this.trigger('change', { source: this });
     };
@@ -174,6 +181,7 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
             if (row.text.length > this._longestText.length) this._longestText = row.text;
         }, this);
         this._widthCached = false;
+        this._lastScroll = 0;
     });
     
     uki.delegateProp(this, 'selectedIndex', '_list');
@@ -184,8 +192,9 @@ uki.view.declare('uki.more.view.Select', uki.view.Checkbox, function(Base) {
     
     this._mousedown = function(e) {
         Base._mousedown.call(this, e);
-        this.trigger('toggle', { opened: this.opened() });
+        if (this.disabled()) return;
         this._popup.toggle();
+        this.trigger('toggle', { opened: this.opened() });
         // if (this._popup.visible()) this._list.focus();
     };
     
