@@ -1,5 +1,6 @@
 include('uki.js');
-
+(function() {
+    
 var toString = Object.prototype.toString,
     trim = String.prototype.trim,
     slice = Array.prototype.slice,
@@ -8,7 +9,9 @@ var toString = Object.prototype.toString,
     
 var marked = '__uki_marked';
 
- 
+// dummy subclass
+function inheritance () {}
+
 /**
  * Utility functions.
  */
@@ -299,13 +302,13 @@ var utils = {
                 this.init.apply(this, arguments);
             },
             
-			inheritance, i, startFrom = 0, tmp, baseClasses = [], base, name, copy, $arguments = arguments, length;
+			i, startFrom = 0, tmp, baseClasses = [], base, name, copy, $arguments = arguments, length;
 		
         if ((length = $arguments.length) > 1) {
 
             if ($arguments[0].prototype) { // real inheritance
                 /** @ignore */
-                inheritance = function() {};
+                // inheritance = function() {};
                 inheritance.prototype = arguments[0].prototype;
                 klass.prototype = new inheritance();
                 startFrom = 1;
@@ -427,4 +430,5 @@ var utils = {
     }
 };
 utils.extend(uki, utils);
-delete utils;
+
+})();
