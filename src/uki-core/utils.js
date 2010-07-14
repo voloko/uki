@@ -10,6 +10,7 @@ var toString = Object.prototype.toString,
 var marked = '__uki_marked';
 
 // dummy subclass
+/** @ignore */
 function inheritance () {}
 
 /**
@@ -305,19 +306,24 @@ var utils = {
 			i, startFrom = 0, tmp, baseClasses = [], base, name, copy, $arguments = arguments, length;
 		
         if ((length = $arguments.length) > 1) {
-
-            if ($arguments[0].prototype) { // real inheritance
-                /** @ignore */
-                // inheritance = function() {};
-                inheritance.prototype = arguments[0].prototype;
+            base = $arguments[0];
+            if (base.prototype) { // real inheritance
+                inheritance.prototype = base.prototype;
                 klass.prototype = new inheritance();
                 startFrom = 1;
                 baseClasses = [inheritance.prototype];
+                
+                // class method inheritance
+                for ( name in base ) {
+                    copy = base[ name ];
+                    if ( !base.hasOwnProperty(name) || copy === undefined || name == 'prototype' ) continue;
+                    klass[ name ] = copy;
+                }
             }
         }
 
         for (i=startFrom; i < length; i++) {
-            base = arguments[i];
+            base = $arguments[i];
             if (this.isFunction(base)) {
                 tmp = {};
                 base.apply(tmp, baseClasses);
@@ -325,13 +331,7 @@ var utils = {
             }
             baseClasses[ baseClasses.length ] = base;
             
-            for ( name in base ) {
-                copy = base[ name ];
-                if ( !base.hasOwnProperty(name) || copy === undefined ) continue;
-                klass.prototype[ name ] = copy;
-            }
-            
-            // uki.extend(klass.prototype, base);
+            uki.extend(klass.prototype, base);
         };
         if (!klass.prototype.init) klass.prototype.init = function() {};
         return klass;
