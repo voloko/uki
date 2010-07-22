@@ -19,7 +19,7 @@
 //   lastname: "TEXT"
 // });
 // 
-// var aUser = new User();
+// var aUser = new User({firstname: "Joe", lastname: "Doo"});
 // 
 // aUser.firstname("Mike") ;
 // 
@@ -30,46 +30,54 @@
 // persistence.flush();
 
 
-persistence.defineProp = function(scope, field, setterCallback, getterCallback) {
-    scope[field] = function(val) {
-        if (val === undefined) { 
+/**
+ * uki implementation for entity-property 
+ */
+persistence.defineProp = function(scope, fieldName, setterCallback, getterCallback) {
+    scope[fieldName] = function(value) {
+        if (value === undefined) { 
             return getterCallback();
         } else {
-            setterCallback(val); 
+            setterCallback(value); 
             return scope;
         }
     };
 };      
 
-persistence.entityPropToEntityVal = function(val) { 
-    return val(); 
+/**
+ * uki implementation for entity-property setter  
+ */
+persistence.set = function(scope, fieldName, value) { 
+    scope[fieldName](value);
+    return scope; 
+}; 
+
+/**
+ * uki implementation for entity-property getter  
+ */
+persistence.get = function(arg1, arg2) {
+    var val = (arguments.length == 1) ? arg1 : arg1[arg2];
+    return (typeof val === "function") ? val() : val; 
 };
  
-if (persistence.sync) { 
-    persistence.sync.get = function(uri, onSuccess, onError) {
-        uki.ajax({
-            url: uri,
-            type: 'GET',
-            success: function(response) {
-                if (onSuccess) onSuccess(response);
-            },
-            error: function(response) {
-                if (onError) onError(response); 
-            }
-        });
-    }
-    persistence.sync.post = function(uri, data, successCallback, errorCallback) {
-        uki.ajax({
-            url: uri,
-            type: 'POST',
-            data: data, 
-            dataType: 'json', 
-            success: function(response) {
-                if (onSuccess) onSuccess(response);
-            },
-            error: function(response) {
-                if (onError) onError(response); 
-            }
-        });
-    } 
+/**
+ * uki ajax implementation
+ */
+if (persistence.sync) {
+    uki.extend(persistence.sync, {
+        getJSON: function(url, callback) { 
+            uki.getJSON(url, null, callback); 
+        },   
+        postJSON: function(url, data, callback) {
+            uki.ajax({
+                url: url,
+                type: 'POST',
+                data: data, 
+                dataType: 'json', 
+                success: function(response) {
+                    if (callback) callback(response);
+                }
+            });
+        }
+    });
 }
