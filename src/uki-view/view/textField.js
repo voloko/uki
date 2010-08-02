@@ -26,16 +26,17 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
     function nativePlaceholder (node) {
         return typeof node.placeholder == 'string';
     }
+    
+    this._backgroundPrefix = '';
+    this._tagName = 'input';
+    this._type = 'text';
 
     this._setup = function() {
         Base._setup.apply(this, arguments);
         uki.extend(this, {
             _value: '',
             _multiline: false,
-            _placeholder: '',
-            _backgroundPrefix: '',
-            _tagName: 'input',
-            _type: 'text'
+            _placeholder: ''
         });
         this.defaultCss += "margin:0;border:none;outline:none;padding:0;left:2px;top:0;z-index:100;-moz-resize:none;resize:none;background: url(" + uki.theme.imageSrc('x') + ");" + uki.theme.style('input');
     };
@@ -181,10 +182,11 @@ uki.view.declare('uki.view.TextField', uki.view.Base, uki.view.Focusable, functi
 * @extends uki.view.TextField
 */
 uki.view.declare('uki.view.MultilineTextField', uki.view.TextField, function(Base) {
+    this._tagName = 'textarea';
+    this._type = '';
+    
     this._setup = function() {
         Base._setup.call(this);
-        this._tagName = 'textarea';
-        this._type = '';
         this._multiline = true;
     };
 });

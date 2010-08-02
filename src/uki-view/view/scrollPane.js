@@ -33,19 +33,20 @@
             return 'uki.view.ScrollPane';
         };
     
+        uki.extend(this, {
+            _scrollableV: true,
+            _scrollableH: false,
+            _scrollV: false,
+            _scrollH: false,
+            _sbV: false,
+            _sbH: false
+        });
+        
         this._setup = function() {
             Base._setup.call(this);
 
-            uki.extend(this, {
-                _clientRect: this.rect().clone(), // rect with scroll bars excluded
-                _rectForChild: this.rect().clone(),
-                _scrollableV: true,
-                _scrollableH: false,
-                _scrollV: false,
-                _scrollH: false,
-                _sbV: false,
-                _sbH: false
-            });
+            this._clientRect = this.rect().clone();
+            this._rectForChild = this.rect().clone();
         };
     
         /**
@@ -193,3 +194,10 @@
 
     uki.view.ScrollPane.initScrollWidth = initScrollWidth;
 })();
+
+uki.Collection.addAttrs(['scrollTop', 'scrollLeft']);
+uki.fn.scroll = function(dx, dy) {
+    this.each(function() {
+        this.scroll(dx, dy);
+    });
+};
