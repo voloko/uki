@@ -77,7 +77,7 @@
         * @name uki.view.ScrollPane#scroll
         */
         this.scroll = function(dx, dy) {
-            if (dx) this.scrollLeft(this.scrollLeft() + dy);
+            if (dx) this.scrollLeft(this.scrollLeft() + dx);
             if (dy) this.scrollTop(this.scrollTop() + dy);
         };
     
