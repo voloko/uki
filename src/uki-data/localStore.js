@@ -9,7 +9,7 @@ include('json.js');
  * @param {string} path 
  * @returns {object}
  */ 
-uki.data.store = function(key, value, path) {
+uki.localStore = function(key, value, path) {
     if (('localStorage' in window) && window.localStorage !== null) {
         var name = "prefs";
         if (value === undefined) {
@@ -33,5 +33,5 @@ uki.data.store = function(key, value, path) {
                 '; path=', path || '/'
             ].join("");
         }
-    }
-}
+    } 
+};

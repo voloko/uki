@@ -491,7 +491,7 @@ uki.extend(uki, {
 			data = xml ? xhr.responseXML : xhr.responseText;
 
 		if ( xml && data.documentElement.nodeName === "parsererror" ) {
-			uki.error( "parsererror" );
+			throw "parsererror";
 		}
 
 		// Allow a pre-filtering function to sanitize the response
