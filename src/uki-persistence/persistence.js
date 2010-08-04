@@ -1,8 +1,13 @@
+include('../uki-data/json.js');
+include('../uki-data/ajax.js');
+
 /**
- * persistencejs integration (http://www.persistencejs.org)
+ * persistencejs integration (http://www.persistencejs.org) 
+ *
+ * @author rsaccon
  * 
- **/ 
- 
+ **/
+
 // Example
 // =======
 // // persistence engine
@@ -33,8 +38,8 @@
 /**
  * uki implementation for entity-property 
  */
-persistence.defineProp = function(scope, fieldName, setterCallback, getterCallback) {
-    scope[fieldName] = function(value) {
+persistence.defineProp = function(scope, field, setterCallback, getterCallback) {
+    scope[field] = function(value) {
         if (value === undefined) { 
             return getterCallback();
         } else {
@@ -47,8 +52,8 @@ persistence.defineProp = function(scope, fieldName, setterCallback, getterCallba
 /**
  * uki implementation for entity-property setter  
  */
-persistence.set = function(scope, fieldName, value) { 
-    scope[fieldName](value);
+persistence.set = function(scope, field, value) { 
+    scope[field](value);
     return scope; 
 }; 
 
@@ -57,7 +62,7 @@ persistence.set = function(scope, fieldName, value) {
  */
 persistence.get = function(arg1, arg2) {
     var val = (arguments.length == 1) ? arg1 : arg1[arg2];
-    return (typeof val === "function") ? val() : val; 
+    return (typeof val === "function") ? val() : val;
 };
  
 /**
@@ -75,7 +80,7 @@ if (persistence.sync) {
                 data: data, 
                 dataType: 'json', 
                 success: function(response) {
-                    if (callback) callback(response);
+                    callback(uki.parseJSON(response));
                 }
             });
         }

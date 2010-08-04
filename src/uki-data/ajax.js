@@ -1,3 +1,5 @@
+include('json.js');
+
 /**
  * based on http://github.com/uki/uki/blob/1.4.2/src/ajax.js
  *
@@ -18,34 +20,6 @@ var jsc = +new Date,
 	
 	
 uki.extend(uki, {
-    error: function( msg ) {
-		throw msg;
-	},
-	
-	parseJSON: function( data ) {
-		if ( typeof data !== "string" || !data ) {
-			return null;
-		}
- 
-		// Make sure leading/trailing whitespace is removed (IE can't handle it)
-		data = uki.trim( data );
- 
-		// Make sure the incoming data is actual JSON
-		// Logic borrowed from http://json.org/json2.js
-		if ( /^[\],:{}\s]*$/.test(data.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@")
-			.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]")
-			.replace(/(?:^|:|,)(?:\s*\[)+/g, "")) ) {
- 
-			// Try to use the native JSON parser first
-			return window.JSON && window.JSON.parse ?
-				window.JSON.parse( data ) :
-				(new Function("return " + data))();
- 
-		} else {
-			uki.error( "Invalid JSON: " + data );
-		}
-	},	
-	
 	// Evalulates a script in a global context
 	globalEval: function( data ) {
 		if ( data && rnotwhite.test(data) ) {
