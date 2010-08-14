@@ -2,12 +2,10 @@ include('../uki-data/json.js');
 include('../uki-data/ajax.js');
 
 /**
- * persistencejs integration (http://www.persistencejs.org) 
- *
- * @author rsaccon
+ * persistencejs integration (http://www.persistencejs.org)
  * 
- **/
-
+ **/ 
+ 
 // Example
 // =======
 // // persistence engine
@@ -47,13 +45,14 @@ persistence.defineProp = function(scope, field, setterCallback, getterCallback) 
             return scope;
         }
     };
-};      
+};
 
 /**
- * uki implementation for entity-property setter  
+ * uki implementation for entity-property setter
  */
-persistence.set = function(scope, field, value) { 
-    scope[field](value);
+persistence.set = function(scope, fieldName, value) {
+    if (persistence.isImmutable(fieldName)) throw "immutable field: "+fieldName;
+    scope[fieldName](value);
     return scope; 
 }; 
 
@@ -80,7 +79,7 @@ if (persistence.sync) {
                 data: data, 
                 dataType: 'json', 
                 success: function(response) {
-                    callback(uki.parseJSON(response));
+                    callback(JSON.parse(response));
                 }
             });
         }

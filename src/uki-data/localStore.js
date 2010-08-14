@@ -28,7 +28,7 @@ uki.localStore = function(key, value, path) {
             // set expiration to far-future (one year)
             date.setTime(date.getTime()+(365*24*60*60*1000));
             document.cookie = [
-                key , '=' , escape(uki.toJSON(value)),
+                key , '=' , escape(uki.stringifyJSON(value)),
                 '; expires=', date.toUTCString(),
                 '; path=', path || '/'
             ].join("");

@@ -1,151 +1,166 @@
-include('data.js'); 
+include('data.js');
 
-/*
-JSONstring v 1.02
-copyright 2006-2010 Thomas Frank
-(Small sanitizer added to the toObject-method, May 2008)
-(Scrungus fix to some problems with quotes in strings added in July 2010)
+// JSON2 library, source: http://www.JSON.org/js.html
+// Most modern browsers already support this natively, but mobile
+// browsers often don't, hence this implementation
+// Relevant APIs:
+//    JSON.stringify(value, replacer, space)
 
-This EULA grants you the following rights:
+var JSON = (window && window.JSON) ? window.JSON : {};
+if (!JSON.stringify) {
+  (function () {
+      function f(n) {
+        return n < 10 ? '0' + n : n;
+      }
+      if (typeof Date.prototype.toJSON !== 'function') {
 
-Installation and Use. You may install and use an unlimited number of copies of the SOFTWARE PRODUCT.
+        Date.prototype.toJSON = function (key) {
 
-Reproduction and Distribution. You may reproduce and distribute an unlimited number of copies of the SOFTWARE PRODUCT either in whole or in part; each copy should include all copyright and trademark notices, and shall be accompanied by a copy of this EULA. Copies of the SOFTWARE PRODUCT may be distributed as a standalone product or included with your own product.
+          return isFinite(this.valueOf()) ?
+          this.getUTCFullYear()   + '-' +
+            f(this.getUTCMonth() + 1) + '-' +
+            f(this.getUTCDate())      + 'T' +
+            f(this.getUTCHours())     + ':' +
+            f(this.getUTCMinutes())   + ':' +
+            f(this.getUTCSeconds())   + 'Z' : null;
+        };
 
-Commercial Use. You may sell for profit and freely distribute scripts and/or compiled scripts that were created with the SOFTWARE PRODUCT.
+        String.prototype.toJSON =
+          Number.prototype.toJSON =
+          Boolean.prototype.toJSON = function (key) {
+            return this.valueOf();
+          };
+      }
 
-Based on Steve Yen's implementation:
-http://trimpath.com/project/wiki/JsonLibrary
+      var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+      escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+      gap, indent,
+      meta = { 
+        '\b': '\\b',
+        '\t': '\\t',
+        '\n': '\\n',
+        '\f': '\\f',
+        '\r': '\\r',
+        '"' : '\\"',
+        '\\': '\\\\'
+      },
+      rep;
 
-Sanitizer regExp:
-Andrea Giammarchi 2007
+      function quote(string) {
+        escapable.lastIndex = 0;
+        return escapable.test(string) ?
+        '"' + string.replace(escapable, function (a) {
+            var c = meta[a];
+            return typeof c === 'string' ? c :
+            '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+          }) + '"' :
+        '"' + string + '"';
+      }
 
-*/ 
 
-// JSONstring article: http://www.thomasfrank.se/json_stringify_revisited.html
+      function str(key, holder) {
+        var i, k, v, length, mind = gap, partial, value = holder[key];
 
-(function() {
-    
-var JSONstring={
-	compactOutput:false, 		
-	includeProtos:false, 	
-	includeFunctions: false,
-	detectCirculars:true,
-	restoreCirculars:true,
-	make:function(arg,restore) {
-		this.restore=restore;
-		this.mem=[];this.pathMem=[];
-		return this.toJsonStringArray(arg).join('');
-	},
-	toObject:function(x){
-		if(!this.cleaner){
-			try{this.cleaner=new RegExp('^("(\\\\.|[^"\\\\\\n\\r])*?"|[,:{}\\[\\]0-9.\\-+Eaeflnr-u \\n\\r\\t])+?$')}
-			catch(a){this.cleaner=/^(true|false|null|\[.*\]|\{.*\}|".*"|\d+|\d+\.\d+)$/}
-		};
-		if(!this.cleaner.test(x)){return {}};
-		eval("this.myObj="+x);
-		if(!this.restoreCirculars || !alert){return this.myObj};
-		if(this.includeFunctions){
-			var x=this.myObj;
-			for(var i in x){if(typeof x[i]=="string" && !x[i].indexOf("JSONincludedFunc:")){
-				x[i]=x[i].substring(17);
-				eval("x[i]="+x[i])
-			}}
-		};
-		this.restoreCode=[];
-		this.make(this.myObj,true);
-		var r=this.restoreCode.join(";")+";";
-		eval('r=r.replace(/\\W([0-9]{1,})(\\W)/g,"[$1]$2").replace(/\\.\\;/g,";")');
-		eval(r);
-		return this.myObj
-	}, 
-	toJsonStringArray:function(arg, out) {
-		if(!out){this.path=[]};
-		out = out || [];
-		var u; // undefined
-		switch (typeof arg) {
-		case 'object':
-			this.lastObj=arg;
-			if(this.detectCirculars){
-				var m=this.mem; var n=this.pathMem;
-				for(var i=0;i<m.length;i++){
-					if(arg===m[i]){
-						out.push('"JSONcircRef:'+n[i]+'"');return out
-					}
-				};
-				m.push(arg); n.push(this.path.join("."));
-			};
-			if (arg) {
-				if (arg.constructor == Array) {
-					out.push('[');
-					for (var i = 0; i < arg.length; ++i) {
-						this.path.push(i);
-						if (i > 0)
-							out.push(',\n');
-						this.toJsonStringArray(arg[i], out);
-						this.path.pop();
-					}
-					out.push(']');
-					return out;
-				} else if (typeof arg.toString != 'undefined') {
-					out.push('{');
-					var first = true;
-					for (var i in arg) {
-						if(!this.includeProtos && arg[i]===arg.constructor.prototype[i]){continue};
-						this.path.push(i);
-						var curr = out.length; 
-						if (!first)
-							out.push(this.compactOutput?',':',\n');
-						this.toJsonStringArray(i, out);
-						out.push(':');                    
-						this.toJsonStringArray(arg[i], out);
-						if (out[out.length - 1] == u)
-							out.splice(curr, out.length - curr);
-						else
-							first = false;
-						this.path.pop();
-					}
-					out.push('}');
-					return out;
-				}
-				return out;
-			}
-			out.push('null');
-			return out;
-		case 'unknown':
-		case 'undefined':
-		case 'function':
-			if(!this.includeFunctions){out.push(u);return out};
-			arg="JSONincludedFunc:"+arg;
-			out.push('"');
-			var a=['\\','\\\\','\n','\\n','\r','\\r','"','\\"'];arg+=""; 
-			for(var i=0;i<8;i+=2){arg=arg.split(a[i]).join(a[i+1])};
-			out.push(arg);
-			out.push('"');
-			return out;
-		case 'string':
-			if(this.restore && arg.indexOf("JSONcircRef:")==0){
-				this.restoreCode.push('this.myObj.'+this.path.join(".")+"="+arg.split("JSONcircRef:").join("this.myObj."));
-			};
-			out.push('"');
-			var a=['\n','\\n','\r','\\r','"','\\"'];
-			arg+=""; for(var i=0;i<6;i+=2){arg=arg.split(a[i]).join(a[i+1])};
-			out.push(arg);
-			out.push('"');
-			return out;
-		default:
-			out.push(String(arg));
-			return out;
-		}
-	}
-};
+        if (value && typeof value === 'object' &&
+          typeof value.toJSON === 'function') {
+          value = value.toJSON(key);
+        }
+
+        if (typeof rep === 'function') {
+          value = rep.call(holder, key, value);
+        }
+
+        switch (typeof value) {
+        case 'string':
+          return quote(value);
+        case 'number':
+          return isFinite(value) ? String(value) : 'null';
+        case 'boolean':
+        case 'null':
+          return String(value);
+        case 'object':
+          if (!value) {
+            return 'null';
+          }
+
+          gap += indent;
+          partial = [];
+
+          if (Object.prototype.toString.apply(value) === '[object Array]') {
+            length = value.length;
+            for (i = 0; i < length; i += 1) {
+              partial[i] = str(i, value) || 'null';
+            }
+
+            v = partial.length === 0 ? '[]' :
+            gap ? '[\n' + gap +
+              partial.join(',\n' + gap) + '\n' +
+              mind + ']' :
+            '[' + partial.join(',') + ']';
+            gap = mind;
+            return v;
+          }
+
+          if (rep && typeof rep === 'object') {
+            length = rep.length;
+            for (i = 0; i < length; i += 1) {
+              k = rep[i];
+              if (typeof k === 'string') {
+                v = str(k, value);
+                if (v) {
+                  partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                }
+              }
+            }
+          } else {
+            for (k in value) {
+              if (Object.hasOwnProperty.call(value, k)) {
+                v = str(k, value);
+                if (v) {
+                  partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                }
+              }
+            }
+          }
+
+          v = partial.length === 0 ? '{}' :
+          gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
+            mind + '}' : '{' + partial.join(',') + '}';
+          gap = mind;
+          return v;
+        }
+      }
+
+      if (typeof JSON.stringify !== 'function') {
+        JSON.stringify = function (value, replacer, space) {
+          var i;
+          gap = '';
+          indent = '';
+          if (typeof space === 'number') {
+            for (i = 0; i < space; i += 1) {
+              indent += ' ';
+            }
+          } else if (typeof space === 'string') {
+            indent = space;
+          }
+
+          rep = replacer;
+          if (replacer && typeof replacer !== 'function' &&
+            (typeof replacer !== 'object' ||
+              typeof replacer.length !== 'number')) {
+            throw new Error('JSON.stringify');
+          }
+
+          return str('', {'': value});
+        };
+      }
+    }());
+}
 
 
 uki.extend(uki, {
 
     parseJSON: function(data) {
-        // TODO: depending on options, use JSONstring.toObject (for handling circular references)
-        
         if ( typeof data !== "string" || !data ) {
             return null;
         }
@@ -169,15 +184,8 @@ uki.extend(uki, {
         }
     },
     
-    toJSON: function(arg, restore) {
-        if ((typeof(JSON) == 'object' && JSON.stringify) || (restore === undefined))  {
-            return JSON.stringify(arg);
-        } else {
-            return JSONstring.make(arg, restore);
-        };
-    },
-    
-    JSONstringOptions: function() { /* TODO: set/get JSONstring options  */ }
+    stringifyJSON: function(arg) { 
+        // for uki-like method naming convenicnce only
+        return JSON.stringify(arg);
+    }
 });
-
-})();
