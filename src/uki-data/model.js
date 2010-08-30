@@ -4,7 +4,7 @@ include('observable.js');
  *
  * @example
  * myModel = uki.newClass(uki.data.Model, function() {
- *     uki.data.model.addField(this, ['name', 'age', 'sex']);
+ *     uki.data.model.addFields(this, ['name', 'age', 'sex']);
  * })
  *
  * var m = new myModel({ age: 22, name: 'Jonh Smith', sex: 'm' })

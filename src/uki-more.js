@@ -1,4 +1,5 @@
 include('uki-more/more/utils.js');
+include('uki-more/more/color.js');
 include('uki-more/more/view/treeList.js');
 include('uki-more/more/view/toggleButton.js');
 include('uki-more/more/view/radioButton.js');
