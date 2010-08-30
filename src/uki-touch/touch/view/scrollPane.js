@@ -5,35 +5,11 @@ include('../const.js');
 // uki-adapted by rsaccon
 
 (function() {
-    var uid = 0,
-        scrollWidth = 0,
-        widthIncludesScrollBar = false;
-
-    function initScrollWidth () {
-        if (!scrollWidth) {
-            uki.dom.probe(
-                uki.createElement(
-                    'div',
-                    'position:absolute;left:-99em;width:100px;height:100px;overflow:scroll;',
-                    '<div style="position:absolute;left:0;width:100%;"></div>'
-                ),
-                function( probe ) {
-                    scrollWidth = probe.offsetWidth - probe.clientWidth;
-                    widthIncludesScrollBar = probe.firstChild.offsetWidth == 100;
-                }
-            );
-        }
-        return scrollWidth;
-    }
-
-    // webkit touch browsers do not have "overflow:scroll" CSS style property,
-    // we need to paint out own scrollbar
-
     var TouchScrollBar = function (dir, parent, fade, shrink) {
         this.dir = dir;
         this.fade = fade;
         this.shrink = shrink;
-        this.uid = ++uid;
+        this.uid = ++uki.guid;
 
         // Create main scrollbar
         this.bar = document.createElement('div');
@@ -147,26 +123,12 @@ include('../const.js');
     * @class
     * @extends uki.view.Container
     */
-    uki.view.declare('uki.touch.view.TouchScrollPane', uki.view.Container, function(Base) {
-        this.typeName = function() {
-            return 'uki.touch.view.ScrollPane';
-        };
-
-        uki.extend(this, {
-            _scrollableV: true,
-            _scrollableH: false,
-            _scrollV: false,
-            _scrollH: false,
-            _sbV: false,
-            _sbH: false,
-            _touchEmulate: true
-        });
+    uki.view.declare('uki.touch.view.ScrollPane', uki.view.ScrollPane, function(Base) {
+        
+        this._touch = isTouch;
 
         this._setup = function() {
             Base._setup.call(this);
-
-            this._clientRect = this.rect().clone();
-            this._rectForChild = this.rect().clone();
 
             // touch properties
             this._bounce = cssHas3d;
@@ -177,46 +139,8 @@ include('../const.js');
             this._shrinkScrollBar = isIphone || isIpad;
         };
 
-        /**
-        * Enable vertical scrolling
-        *
-        * @function
-        * @param {Boolean}
-        * @name uki.view.ScrollPane#scrollableV
-        */
-        /**
-        * Enable horizontal scrolling
-        *
-        * @function
-        * @param {Boolean}
-        * @name uki.view.ScrollPane#scrollableH
-        */
-        /**
-        * Always show vertical scrollbar
-        *
-        * @function
-        * @param {Boolean}
-        * @name uki.view.ScrollPane#scrollH
-        */
-        /**
-        * Always show horizonatl scrollbar
-        *
-        * @function
-        * @param {Boolean}
-        * @name uki.view.ScrollPane#scrollV
-        */
-        /**
-        * Emulate touch scrolling and scrollbar on non-touch browsers
-        *
-        * @function
-        * @param {Boolean}
-        * @name uki.view.TouchScrollPane#touchEmulate
-        */
-        uki.addProps(this, ['scrollableV', 'scrollableH', 'scrollH', 'scrollV', 'touchEmulate']);
-
-        this.rectForChild = function() { return this._rectForChild; };
-        this.clientRect = function() { return this._clientRect; };
-
+        uki.addProps(this, ['touch']);
+        
         /**
         * @function
         * @param {Number} dx
@@ -224,12 +148,9 @@ include('../const.js');
         * @name uki.view.ScrollPane#scroll
         */
         this.scroll = function(dx, dy, runtime) {
-            if (!isTouch && !this._touchEmulate) {
-                if (dx) this.scrollLeft(this.scrollLeft() + dx);
-                if (dy) this.scrollTop(this.scrollTop() + dy);
-            } else {
-                this._scrollTo(dx, dy, runtime);
-            }
+            if (!this._touch) return Base.scroll.call(this, dx, dy, runtime);
+            
+            return this._touchScrollTo(dx, dy, runtime);
         };
 
         /**
@@ -242,51 +163,22 @@ include('../const.js');
         */
         uki.each(['scrollTop', 'scrollLeft'], function(i, name) {
             this[name] = function(v) {
-                if (!isTouch && !this._touchEmulate) {
-                    if (v === undefined) return this._dom[name];
-                    this._dom[name] = v;
-                    this.trigger('scroll', { source: this });
-                    return this;
-                } else {
-                    if (v === undefined) return ((name == 'scrollLeft') ? this._x : this._y) || 0;
-                    this._scrollTo((name == 'scrollTop') ? v : 0, (name == 'scrollLeft') ? v : 0);
-                    this.trigger('scroll', { source: this });
-                    return this;
-                }
+                if (!this._touch) return Base[name].call(this, v);
+                
+                if (v === undefined) return ((name == 'scrollLeft') ? this._x : this._y) || 0;
+                this._touchScrollTo((name == 'scrollTop') ? v : 0, (name == 'scrollLeft') ? v : 0);
+                this.trigger('scroll', { source: this });
+                return this;
             };
         }, this);
 
-        /**
-        * @function
-        * @return {uki.geometry.Rect}
-        * @name uki.view.ScrollPane#visibleRect
-        */
-        this.visibleRect = function() {
-            var tmpRect = this._clientRect.clone();
-            tmpRect.x = this.rect().x + this.scrollLeft();
-            tmpRect.y = this.rect().y + this.scrollTop();
-            return tmpRect;
-        };
-
-        this.rect = function(newRect) {
-            if (newRect === undefined) return this._rect;
-
-            newRect = Rect.create(newRect);
-            var oldRect = this._rect;
-            this._parentRect = newRect;
-            if (!this._resizeSelf(newRect)) return this;
-            this._updateClientRects();
-            this._needsLayout = true;
-            this.trigger('resize', {oldRect: oldRect, newRect: this._rect, source: this});
-            return this;
-        };
-
         this._createDom = function() {
             Base._createDom.call(this);
-            if (ua.indexOf('Gecko/') > -1) this._dom.tabIndex = '-1';
 
-            if (isTouch || this._touchEmulate) {
-                this._scroller = uki.createElement("div", 'height:100%;z-index:100;-moz-user-focus:none;');
+            if (this._touch) {
+                this._dom.style.overflow = 'hidden';
+                this._scroller = uki.createElement("div", 'z-index:100;-moz-user-focus:none;');
+                this._scroller.className = 'uki-touch-view-ScrollPane__scroller';
                 this._scroller.style.webkitTransitionProperty = '-webkit-transform';
                 this._scroller.style.webkitTransitionTimingFunction = 'cubic-bezier(0,0,0.25,1)';
                 this._scroller.style.webkitTransitionDuration = '0';
@@ -306,78 +198,23 @@ include('../const.js');
         };
 
         this.domForChild = function(child) {
-            return (isTouch || this._touchEmulate) ? this._scroller : this._dom;
+            return this._touch ? this._scroller : this._dom;
         };
-
-        this._recalcClientRects = function() {
-            var noTouch = !isTouch && !this._touchEmulate;
-            if (noTouch) initScrollWidth();
-
-            var cw = this.contentsWidth(),
-                ch = this.contentsHeight(),
-                sh = (this._scrollableH && noTouch) ? cw > this._rect.width : false,
-                sv = (this._scrollableV && noTouch) ? ch > this._rect.height : false;
-
-            this._sbH = sh || this._scrollH;
-            this._sbV = sv || this._scrollV;
-            this._clientRect = new Rect( this._rect.width +  (sv ? -1 : 0) * scrollWidth,
-                                         this._rect.height + (sh ? -1 : 0) * scrollWidth );
-            this._rectForChild = new Rect( this._rect.width +  ((sv && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
-                                           this._rect.height + ((sh && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth );
-        };
-
+        
         this._updateClientRects = function() {
             var oldClientRect = this._clientRect;
-            this._recalcClientRects();
-
-            if (oldClientRect.width != this._clientRect.width || oldClientRect.height != this._clientRect.height) {
-                this._resizeChildViews(oldClientRect);
-            }
-        };
-
-        this._resizeChildViews = function(oldClientRect) {
-            for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-                childViews[i].parentResized(oldClientRect, this._clientRect);
-            };
-        };
-
-        this._layoutChildViews = function() {
-            for (var i=0, childViews = this.childViews(); i < childViews.length; i++) {
-                if (childViews[i]._needsLayout && childViews[i].visible()) {
-                    childViews[i].layout();
-                }
-            };
+            Base._recalcClientRects.call(this);
+            this._scroller.style.width = this.contentsWidth() + 'px';
+            this._scroller.style.height = this.contentsHeight() + 'px';
         };
 
         this._layoutDom = function(rect) {
+            if (!this._touch) return Base._layoutDom.call(this, rect);
+            
             this._updateClientRects();
-
-            if (!isTouch && !this._touchEmulate) {
-                if (this._layoutScrollH !== this._sbH) {
-                    this._dom.style.overflowX = this._sbH ? 'scroll' : 'hidden';
-                    this._layoutScrollH = this._sbH;
-                }
-                if (this._layoutScrollV !== this._sbV) {
-                    this._dom.style.overflowY = this._sbV ? 'scroll' : 'hidden';
-                    this._layoutScrollV = this._sbV;
-                }
-            } else {
-                this._dom.style.overflowX = this._dom.style.overflowY = 'hidden';
-            }
-
-            Base._layoutDom.call(this, rect);
-
-            if (isTouch || this._touchEmulate) {
-                this._refresh();
-            }
+            uki.view.Container.prototype._layoutDom.call(this, rect);
+            this._refresh();
         };
-
-        this.childResized = function() {
-            this._needsLayout = true;
-            uki.after(uki.proxy(this.layoutIfNeeded, this));
-        };
-
-        this._contentChanged = this.childResized;
 
         this._onTouchStart = function(e) {
              var matrix;
@@ -506,7 +343,7 @@ include('../const.js');
              newPositionX = this._x + momentumX.dist;
              newPositionY = this._y + momentumY.dist;
 
-             this._scrollTo(newPositionX, newPositionY, newDuration + 'ms');
+             this._touchScrollTo(newPositionX, newPositionY, newDuration + 'ms');
          };
 
          this._onTransitionEnd = function () {
@@ -544,7 +381,7 @@ include('../const.js');
              }
 
              this._scrollX = this._scrollerWidth > this._scrollWidth;
-             this._scrollY = !this._scrollX || this._scrollerHeight > this.scrollHeight;
+             this._scrollY = !this._scrollX || this._scrollerHeight > this._scrollHeight;
 
              // Update horizontal scrollbar
              if (this._hScrollbar && this._scrollX) {
@@ -616,7 +453,7 @@ include('../const.js');
              }
 
              if (resetX != this._x || resetY !=this._y) {
-                 this._scrollTo (resetX, resetY, time);
+                 this._touchScrollTo (resetX, resetY, time);
              } else if (this._touchScrollBarH) {
                  this._touchScrollBarH.hide();
              } else if (this._touchScrollBarV) {
@@ -624,7 +461,7 @@ include('../const.js');
              }
          };
 
-         this._scrollTo = function (destX, destY, runtime) {
+         this._touchScrollTo = function (destX, destY, runtime) {
              this._setTransitionTime(runtime || '450ms');
              this._setPosition(destX, destY);
 
@@ -657,13 +494,4 @@ include('../const.js');
              return { dist: Math.round(newDist), time: Math.round(newTime) };
         };
     });
-
-    uki.view.ScrollPane.initScrollWidth = initScrollWidth;
 })();
-
-uki.Collection.addAttrs(['scrollTop', 'scrollLeft']);
-uki.fn.scroll = function(dx, dy, runtime) {
-    this.each(function() {
-        this.scroll(dx, dy, runtime);
-    });
-};

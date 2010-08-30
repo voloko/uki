@@ -29,17 +29,13 @@
     * @extends uki.view.Container
     */
     uki.view.declare('uki.view.ScrollPane', uki.view.Container, function(Base) {
-        this.typeName = function() {
-            return 'uki.view.ScrollPane';
-        };
-    
         uki.extend(this, {
-            _scrollableV: true,
-            _scrollableH: false,
-            _scrollV: false,
-            _scrollH: false,
-            _sbV: false,
-            _sbH: false
+            _scrollableY: true,
+            _scrollableX: false,
+            _scrollY: false,
+            _scrollX: false,
+            _sbY: false,
+            _sbX: false
         });
         
         this._setup = function() {
@@ -51,21 +47,26 @@
     
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollableV
+        * @name uki.view.ScrollPane#scrollableY
         */
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollableH
+        * @name uki.view.ScrollPane#scrollableX
         */
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollH
+        * @name uki.view.ScrollPane#scrollX
         */
         /**
         * @function
-        * @name uki.view.ScrollPane#scrollV
+        * @name uki.view.ScrollPane#scrollY
         */
-        uki.addProps(this, ['scrollableV', 'scrollableH', 'scrollH', 'scrollV']);
+        uki.addProps(this, ['scrollableY', 'scrollableX', 'scrollX', 'scrollY']);
+        this.scrollV = this.scrollX;
+        this.scrollH = this.scrollY;
+        
+        this.scrollableV = this.scrollableY;
+        this.scrollableH = this.scrollableX;
     
         this.rectForChild = function() { return this._rectForChild; };
         this.clientRect = function() { return this._clientRect; };
@@ -133,11 +134,11 @@
 
             var cw = this.contentsWidth(),
                 ch = this.contentsHeight(),
-                sh = this._scrollableH ? cw > this._rect.width : false,
-                sv = this._scrollableV ? ch > this._rect.height : false;
+                sh = this._scrollableX ? cw > this._rect.width : false,
+                sv = this._scrollableY ? ch > this._rect.height : false;
             
-            this._sbH = sh || this._scrollH;
-            this._sbV = sv || this._scrollV;
+            this._sbH = sh || this._scrollX;
+            this._sbV = sv || this._scrollY;
             this._clientRect = new Rect( this._rect.width +  (sv ? -1 : 0) * scrollWidth,
                                          this._rect.height + (sh ? -1 : 0) * scrollWidth );
             this._rectForChild = new Rect( this._rect.width +  ((sv && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
@@ -170,14 +171,14 @@
         this._layoutDom = function(rect) {
             this._updateClientRects();
         
-            if (this._layoutScrollH !== this._sbH) {
-                this._dom.style.overflowX = this._sbH ? 'scroll' : 'hidden';
-                this._layoutScrollH = this._sbH;
+            if (this._layoutScrollX !== this._sbX) {
+                this._dom.style.overflowX = this._sbX ? 'scroll' : 'hidden';
+                this._layoutScrollX = this._sbX;
             }
 
-            if (this._layoutScrollV !== this._sbV) {
-                this._dom.style.overflowY = this._sbV ? 'scroll' : 'hidden';
-                this._layoutScrollV = this._sbV;
+            if (this._layoutScrollY !== this._sbY) {
+                this._dom.style.overflowY = this._sbY ? 'scroll' : 'hidden';
+                this._layoutScrollY = this._sbY;
             }
         
             Base._layoutDom.call(this, rect);

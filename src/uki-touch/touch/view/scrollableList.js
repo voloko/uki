@@ -4,14 +4,14 @@ include('touchScrollPane.js');
 
 /**
  * Touch scrollable List View
- * Puts a list into a TouchScrollPane
+ * Puts a list into a touch.view.ScrollPane
  * 
  * @author rsaccon
- * @name uki.touch.view.TouchScrollableList
+ * @name uki.touch.view.ScrollableList
  * @class
- * @extends uki.touch.view.TouchScrollPane
+ * @extends uki.touch.view.ScrollPane
  */
-uki.view.declare('uki.touch.view.TouchScrollableList', uki.touch.view.TouchScrollPane, function(Base) {
+uki.view.declare('uki.touch.view.ScrollableList', uki.touch.view.ScrollPane, function(Base) {
 
     this._createDom = function() {
         Base._createDom.call(this);
