@@ -28,6 +28,8 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
         return Base._style.call(this, name, value);
     };
     
+    this.adaptToContents = uki.newProp('_adaptToContents');
+    
     this.textSelectable = function(state) {
         if (state !== undefined && !this._textSelectProp) {
             this._label.unselectable = state ? '' : 'on';
@@ -44,7 +46,6 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
         uki.dom.probe(clone, function() {
             size = new Size(clone.offsetWidth + inset.width(), clone.offsetHeight + inset.height());
         });
-        
         return size;
     };
     
@@ -126,15 +127,10 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
     };
     
     this._layoutDom = function() {
-        Base._layoutDom.apply(this, arguments);
-        
-        var inset = this._inset;
-        if (!this.multiline()) {
-            var fz = parseInt(this.style('fontSize'), 10) || 12;
-            this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
-            // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
-        }
-        var l;
+        var inset = this._inset,
+            l,
+            a = this._anchors,
+            watchField = '', watchValue;
         
         if (uki.supportNativeLayout) {
             l = {
@@ -151,7 +147,38 @@ uki.view.declare('uki.view.Label', uki.view.Base, function(Base) {
                 height: this._rect.height - inset.height()
             };
         }
+        
+        if (!(a & ANCHOR_BOTTOM)) {
+            l.height = l.bottom = undefined;
+            watchField = 'offsetHeight';
+        } else if (!(a & ANCHOR_TOP)) {
+            l.height = l.bottom = undefined;
+            watchField = 'offsetHeight';
+        } else if (!(a & ANCHOR_RIGHT)) {
+            l.right = l.width = undefined;
+            watchField = 'offsetWidth';
+        } else if (!(a & ANCHOR_LEFT)) {
+            l.left = l.width = undefined;
+            watchField = 'offsetWidth';
+        }
+        
+        Base._layoutDom.apply(this, arguments);
+        
+        if (!this.multiline()) {
+            var fz = parseInt(this.style('fontSize'), 10) || 12;
+            this._label.style.lineHeight = (this._rect.height - inset.top - inset.bottom) + 'px';
+            // this._label.style.paddingTop = MAX(0, this._rect.height/2 - fz/2) + 'px';
+        }
         this._lastLabelLayout = uki.dom.layout(this._label.style, l, this._lastLabelLayout);
+        
+        if (this.adaptToContents() && watchField) {
+            watchValue = this._label[watchField];
+            if (watchValue != this._lastWatchValue && this.parent()) {
+                this.resizeToContents(watchField == 'offsetWidth' ? 'width' : 'height');
+                this.parent().childResized(this);
+            }
+            this._lastWatchValue = watchValue;
+        }
     };
     
 });

@@ -20,9 +20,20 @@ uki({
                 text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
                 inset: '3 3', id: 'target'}
         },
-        {view: 'Button', rect: '10 10 100 24', anchors: 'left top', text: 'resize', id: 'doIt' }
+        {view: 'Button', rect: '10 10 100 24', anchors: 'left top', text: 'resize', id: 'doIt' },
+        
+        { view: 'VFlow', rect: '300 10 200 100', background: '#CCC', anchors: 'left top right', childViews: [
+            { view: 'Label', rect: '0 0 200 100', anchors: 'left top right', 
+                multiline: true,
+                adaptToContents: true,
+                background: 'blue',
+                text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
+            { view: 'Label', rect: '0 0 100 100', anchors: 'left top', text: 'stop' }
+        ] }
     ]
 }).attachTo( document.getElementById('test'), '1000 600' )
+
+uki('VFlow Label').resizeToContents('height');
 
 // on click
 uki('#doIt').click(function () {
