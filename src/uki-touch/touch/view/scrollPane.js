@@ -205,6 +205,8 @@ include('../const.js');
         };
         
         this._updateClientRects = function() {
+            if (!this._touch) return Base._updateClientRects.call(this);
+            
             var oldClientRect = this._clientRect;
             Base._recalcClientRects.call(this);
             this._scroller.style.width = this.contentsWidth() + 'px';

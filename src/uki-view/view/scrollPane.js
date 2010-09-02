@@ -62,8 +62,8 @@
         * @name uki.view.ScrollPane#scrollY
         */
         uki.addProps(this, ['scrollableY', 'scrollableX', 'scrollX', 'scrollY']);
-        this.scrollV = this.scrollX;
-        this.scrollH = this.scrollY;
+        this.scrollV = this.scrollY;
+        this.scrollH = this.scrollX;
         
         this.scrollableV = this.scrollableY;
         this.scrollableH = this.scrollableX;
@@ -134,15 +134,15 @@
 
             var cw = this.contentsWidth(),
                 ch = this.contentsHeight(),
-                sh = this._scrollableX ? cw > this._rect.width : false,
-                sv = this._scrollableY ? ch > this._rect.height : false;
+                sx = this._scrollableX ? cw > this._rect.width : false,
+                sy = this._scrollableY ? ch > this._rect.height : false;
             
-            this._sbH = sh || this._scrollX;
-            this._sbV = sv || this._scrollY;
-            this._clientRect = new Rect( this._rect.width +  (sv ? -1 : 0) * scrollWidth,
-                                         this._rect.height + (sh ? -1 : 0) * scrollWidth );
-            this._rectForChild = new Rect( this._rect.width +  ((sv && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
-                                           this._rect.height + ((sh && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth );
+            this._sbX = sx || this._scrollX;
+            this._sbY = sy || this._scrollY;
+            this._clientRect = new Rect( this._rect.width +  (sy ? -1 : 0) * scrollWidth,
+                                         this._rect.height + (sx ? -1 : 0) * scrollWidth );
+            this._rectForChild = new Rect( this._rect.width +  ((sy && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth,
+                                           this._rect.height + ((sx && !widthIncludesScrollBar) ? -1 : 0) * scrollWidth );
         };
     
         this._updateClientRects = function() {

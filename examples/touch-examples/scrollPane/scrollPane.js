@@ -8,7 +8,7 @@
     <script src="scrollPane.js"></script>
 */
 
-uki.touch.view.ScrollPane.prototype._touch = true; // force touch
+uki.touch.view.ScrollPane.prototype._touch = uki.touch.view.ScrollPane.prototype._touch || /webkit/i.test(navigator.userAgent); // force touch
 uki.touch.setup({});
 
 uki([
@@ -16,7 +16,7 @@ uki([
         view: 'Label',
         rect: '0 0 1000 49',
         background: 'theme(panel)',
-        html: 'Panel' + (/webkit/i.test(navigator.userAgent) ? '' : ' <strong style="color: #C00">Works only on webkit browsers</strong>'),
+        html: 'Panel' + (uki.touch.view.ScrollPane.prototype._touch ? '' : ' <strong style="color: #C00">Works only on webkit browsers</strong>'),
         anchors: 'top left right',
         inset: '10 10'
     },

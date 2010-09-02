@@ -15,7 +15,7 @@ task :build_scripts do
   FileUtils.rm_rf('pkg')
   FileUtils.mkdir('pkg')
   
-  files = ['uki.js', 'uki-theamless.js', 'uki-more.js', 'airport.js']
+  files = ['uki.js', 'uki-theamless.js', 'uki-more.js', 'uki-touch.js', 'airport.js']
   paths = files.map { |f| File.join('src', f) }
   `uki build -o pkg -C #{paths.join(' ')}`
   files.each do |name|
