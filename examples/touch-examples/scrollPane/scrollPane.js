@@ -50,4 +50,4 @@ for (var i=0; i < 10; i++) {
         }));
     }
 };
-uki('#contents').append(uki({ view: 'Label', rect: '10 10 100 20', anchors: 'left top', html: '4000&times;4000 pane' })).layout();
+uki('#contents').append(uki({ view: 'Label', rect: '10 10 100 20', anchors: 'left top', html: '2000&times;2000 pane' })).layout();
