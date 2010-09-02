@@ -1,7 +1,5 @@
 include('../more.js');
 
-uki.more.color = {};          
-
 (function() {
     
     function rgbToHSL(r, g, b) {
@@ -74,12 +72,12 @@ uki.more.color = {};
      * Creates a HSL color from a hex string or numerical [0..255] RGB args
      *
      * @author rsaccon
-     * @param {integer | string} Red component or color hex string
-     * @param {integer} arg1 Green component 
-     * @param {integer} arg1 Blue component 
+     * @param {Number | string} Red component or color hex string
+     * @param {Number} arg1 Green component 
+     * @param {Number} arg1 Blue component 
      * @constructor
      */
-    var Color = uki.more.color.Color = function(arg1, arg2, arg3) {
+    var Color = uki.more.Color = function(arg1, arg2, arg3) {
         var r=255, g=255, b=255;
 
         if (arguments.length == 1) {
@@ -112,7 +110,7 @@ uki.more.color = {};
         this.luminance = hsl[2];
     };  
     
-    Color.prototype =  /** @lends uki.more.color.Color.prototype */ { 
+    Color.prototype =  /** @lends uki.more.Color.prototype */ { 
         /**
          * Base color
          *
@@ -127,7 +125,7 @@ uki.more.color = {};
          * Increseases the lightness of the Base color
          *
          * @author rsaccon 
-         * @param {number}  allowed values: [0.0 .. 1.0]
+         * @param {Number} val  allowed values: [0.0 .. 1.0]
          * @returns {string} Color as hex string 
          */
         lighten: function(val) { 
@@ -138,7 +136,7 @@ uki.more.color = {};
          * Decreseases the lightness of the Base color
          *
          * @author rsaccon 
-         * @param {number}  allowed values: [0.0 .. 1.0]
+         * @param {Number} val  allowed values: [0.0 .. 1.0]
          * @returns {string} Color as hex string 
          */
         darken: function(val) {
@@ -149,7 +147,7 @@ uki.more.color = {};
          * Increseases the saturation of the Base color
          *
          * @author rsaccon 
-         * @param {number}  allowed values: [0.0 .. 1.0]
+         * @param {Number} val  allowed values: [0.0 .. 1.0]
          * @returns {string} Color as hex string 
          */
         saturate: function(val) { 
@@ -160,7 +158,7 @@ uki.more.color = {};
          * Decreseases the saturation of the Base color
          *
          * @author rsaccon 
-         * @param {number}  allowed values: [0.0 .. 1.0]
+         * @param {Number} val  allowed values: [0.0 .. 1.0]
          * @returns {string} Color as hex string 
          */
         desaturate: function(val) { 
@@ -168,5 +166,3 @@ uki.more.color = {};
         }
     };
 })();
-
-uki.Color = uki.more.color.Color;

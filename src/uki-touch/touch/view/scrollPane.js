@@ -145,6 +145,7 @@ include('../const.js');
         * @function
         * @param {Number} dx
         * @param {Number} dy
+        * @param {Boolean} runtime
         * @name uki.view.ScrollPane#scroll
         */
         this.scroll = function(dx, dy, runtime) {

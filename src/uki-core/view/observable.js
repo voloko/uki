@@ -10,7 +10,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
     
     /**
      * @param {String} name Event name
-     * @param {function()}
+     * @param {function()} callback
      */
     bind: function(name, callback) {
         callback.huid = callback.huid || uki.guid++;
