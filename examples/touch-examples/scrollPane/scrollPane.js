@@ -4,35 +4,44 @@
 @example_html
     <style>body, html { overflow: hidden; margin: 0; padding: 0; }</style>
     <script src="/src/uki.cjs"></script>
-    <script src="/src/uki-touch/touch/view/scrollPane.cjs"></script>
+    <script src="/src/uki-touch.cjs"></script>
     <script src="scrollPane.js"></script>
 */
 
 uki.touch.view.ScrollPane.prototype._touch = true; // force touch
+uki.touch.setup({});
 
-
-uki({ 
-    view: 'ScrollPane', 
-    rect: '10 10 980 980', 
-    anchors: 'top left right bottom',
-    scrollableH: true, scrollableV: true, 
-    childViews: 
-        {
-            view: 'Box',
-            rect: '4000 4000',
-            anchors: 'top left',
-            background: '#CCF', 
-            id: 'contents'
-        }
+uki([
+    {
+        view: 'Label',
+        rect: '0 0 1000 49',
+        background: 'theme(panel)',
+        text: 'Panel',
+        anchors: 'top left right',
+        inset: '10 10'
+    },
+    { 
+        view: 'ScrollPane', 
+        rect: '0 50 1000 950', 
+        anchors: 'top left right bottom',
+        scrollableH: true, scrollableV: true, 
+        childViews: 
+            {
+                view: 'Box',
+                rect: '2000 2000',
+                anchors: 'top left',
+                background: '#CCF', 
+                id: 'contents'
+            }
     }
-).attachTo( window, '1000 1000' );
+]).attachTo( window, '1000 1000' );
 
 function rand () {
     return 127 + (Math.random()*127 | 0);
 }
 
-for (var i=0; i < 20; i++) {
-    for (var j=0; j < 20; j++) {
+for (var i=0; i < 10; i++) {
+    for (var j=0; j < 10; j++) {
         uki('#contents').append(uki({ 
             view: 'Box', 
             rect: new uki.geometry.Rect(i*200, j*200, 200, 200), 

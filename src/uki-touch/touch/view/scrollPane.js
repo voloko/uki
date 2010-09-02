@@ -175,7 +175,7 @@ include('../const.js');
         this._createDom = function() {
             Base._createDom.call(this);
 
-            if (this._touch) {
+            if (this._touch && this._dom.addEventListener) {
                 this._dom.style.overflow = 'hidden';
                 this._scroller = uki.createElement("div", 'z-index:100;-moz-user-focus:none;');
                 this._scroller.className = 'uki-touch-view-ScrollPane__scroller';
@@ -185,9 +185,9 @@ include('../const.js');
                 this._scroller.style.webkitTransform = cssTranslateOpen + '0,0' + cssTranslateClose;
                 this._dom.appendChild(this._scroller);
 
-                uki.dom.bind(this._scroller, touchStart, uki.proxy(this._onTouchStart, this));
-                uki.dom.bind(this._scroller, touchMove, uki.proxy(this._onTouchMove, this));
-                uki.dom.bind(this._scroller, touchEnd, uki.proxy(this._onTouchEnd, this));
+                this._scroller.addEventListener(touchStart, uki.proxy(this._onTouchStart, this), false);
+                this._scroller.addEventListener(touchMove, uki.proxy(this._onTouchMove, this), false);
+                this._scroller.addEventListener(touchEnd, uki.proxy(this._onTouchEnd, this), false);
 
                 if (!isTouch) {
                     uki.dom.bind(this._scroller, 'click', function(e) {
