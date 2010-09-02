@@ -16,7 +16,7 @@ uki([
         view: 'Label',
         rect: '0 0 1000 49',
         background: 'theme(panel)',
-        text: 'Panel',
+        html: 'Panel' + (/webkit/i.test(navigator.userAgent) ? '' : ' <strong style="color: #C00">Works only on webkit browsers</strong>'),
         anchors: 'top left right',
         inset: '10 10'
     },

@@ -175,8 +175,10 @@ include('../const.js');
 
         this._createDom = function() {
             Base._createDom.call(this);
-
-            if (this._touch && this._dom.addEventListener) {
+            
+            this._touch = this._touch && this._dom.addEventListener; // won't work without it
+            
+            if (this._touch) {
                 this._dom.style.overflow = 'hidden';
                 this._scroller = uki.createElement("div", 'z-index:100;-moz-user-focus:none;');
                 this._scroller.className = 'uki-touch-view-ScrollPane__scroller';
@@ -234,7 +236,7 @@ include('../const.js');
              if (this._momentum) {
                  matrix = new WebKitCSSMatrix(window.getComputedStyle(this._scroller).webkitTransform);
                  if (matrix.e != this._x || matrix.f != this._y) {
-                     uki.dom.unbind(this._scroller, 'webkitTransitionEnd', this._onTransitionEnd);
+                     this._scroller.removeEventListener('webkitTransitionEnd', this._onTransitionEnd, false);
                      this._setPosition(matrix.e, matrix.f);
                      this._touchMoved = true;
                  }
@@ -348,7 +350,7 @@ include('../const.js');
          };
 
          this._onTransitionEnd = function () {
-             uki.dom.unbind(this._scroller, 'webkitTransitionEnd', this._onTransitionEnd);
+             this._scroller.removeEventListener('webkitTransitionEnd', this._onTransitionEnd, false);
              this._resetPosition();
          };
 
@@ -455,10 +457,13 @@ include('../const.js');
 
              if (resetX != this._x || resetY !=this._y) {
                  this._touchScrollTo (resetX, resetY, time);
-             } else if (this._touchScrollBarH) {
-                 this._touchScrollBarH.hide();
-             } else if (this._touchScrollBarV) {
-                 this._touchScrollBarV.hide();
+             } else {
+                 if (this._touchScrollBarH) {
+                     this._touchScrollBarH.hide();
+                 }
+                 if (this._touchScrollBarV) {
+                     this._touchScrollBarV.hide();
+                 }
              }
          };
 
@@ -469,7 +474,7 @@ include('../const.js');
              if (runtime==='0' || runtime=='0s' || runtime=='0ms') {
                  this._resetPosition();
              } else {
-                 uki.dom.bind(this._scroller, 'webkitTransitionEnd', uki.proxy(this._onTransitionEnd, this));
+                 this._scroller.addEventListener('webkitTransitionEnd', uki.proxy(this._onTransitionEnd, this), false);
              }
          };
 
