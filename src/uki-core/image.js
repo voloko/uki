@@ -18,7 +18,6 @@ uki.image = function(url, dataUrl, alphaUrl) {
     result.src = uki.imageSrc(url, dataUrl, alphaUrl);
     return result;
 };
-
 /**
  * Selects image src depending on browser
  *
@@ -53,31 +52,6 @@ uki.imageHTML = function(url, dataUrl, alphaUrl, html) {
     return '<img' + (html || '') + ' src="' + url + '" />';
 };
 
-/**
- * Loads given images, callbacks after all of them loads
- *
- * @param {Array.<Element>} images Images to load
- * @param {function()} callback
- */
-// uki.image.load = function(images, callback) {
-//     
-//     var imagesToLoad = images.length;
-//     for(var img, i=0, l = images.length; i < l; i++) {
-//      
-//         if ( !(img = images[i]) || img.width ) {
-//             if (!--imagesToLoad) callback();
-//             return;
-//         }
-// 
-//         var handler = function() {
-//                 img.onload = img.onerror = img.onabort = null; // prevent memory leaks
-//                 if (!--imagesToLoad) callback();
-//             };
-//      img.onload  = handler;
-//      img.onerror = handler;
-//      img.onabort = handler;
-//     };
-// };
 
 /**
  * @type boolean
@@ -88,4 +62,4 @@ uki.image.dataUrlSupported = doc.createElement('canvas').toDataURL || (/MSIE (8)
  * @type boolean
  */
 uki.image.needAlphaFix = /MSIE 6/.test(ua);
-if(uki.image.needAlphaFix) doc.execCommand("BackgroundImageCache", false, true);
+if(uki.image.needAlphaFix) try { doc.execCommand("BackgroundImageCache", false, true); } catch(e){}
