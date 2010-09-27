@@ -35,6 +35,7 @@ uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
                 return observer != callback && observer.huid != callback.huid;
             });
             if (this._observers[name].length == 0) {
+                this._observers[name] = undefined;
                 this._unbindFromDom(name);
             }
         }, this);
