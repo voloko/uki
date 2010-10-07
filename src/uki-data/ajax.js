@@ -214,7 +214,7 @@ uki.extend(uki, {
 		}
 
 		if ( s.cache === false && type === "GET" ) {
-			var ts = now();
+			var ts = +new Date;
 
 			// try replacing _= if it is there
 			var ret = s.url.replace(rts, "$1_=" + ts + "$2");
