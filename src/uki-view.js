@@ -1,5 +1,6 @@
 include('uki-view/view/box.js');
 include('uki-view/view/image.js');
+include('uki-view/view/linkimage.js');
 include('uki-view/view/button.js');
 include('uki-view/view/checkbox.js');
 include('uki-view/view/radio.js');
