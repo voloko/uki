@@ -20,7 +20,7 @@ try {
         doc.createEvent('DragEvent').initDragEvent // w3c support
     ) {
         // Google Chrome has to many issues with native d&d. It is simpler to disable than to fix
-        dnd.nativeDnD = !ua.match(/Chrome\/4/);
+        dnd.nativeDnD = !ua.match(/Chrome\//);
     }
 } catch (e) {}
 
