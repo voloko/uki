@@ -201,7 +201,6 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         for (var i=0; i < this._selectedIndexes.length; i++) {
             this._setSelected(this._selectedIndexes[i], true);
         };
-        this.trigger('selection', {source: this});
         return this;
     };
     
@@ -335,7 +334,10 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
             y = e.pageY - o.y,
             p = y / this._rowHeight << 0;
             
-        if (this._selectionInProcess && this._lastClickIndex == p && this.isSelected(p)) this.selectedIndexes([p]);
+        if (this._selectionInProcess && this._lastClickIndex == p && this.isSelected(p)) {
+          this.selectedIndexes([p]);
+          this.trigger('selection', {source: this});
+        }
         this._selectionInProcess = false;
     };
     
@@ -358,17 +360,20 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
                         Math.max(p, indexes[indexes.length - 1])
                     ));
                 }
+                this.trigger('selection', {source: this});
             } else if (e.metaKey) {
                 this._toggleSelection(p);
             } else {
                 if (!this.isSelected(p)) {
                     this.selectedIndexes([p]);
+                    this.trigger('selection', {source: this});
                 } else {
                     this._selectionInProcess = true;
                 }
             }
         } else {
             this.selectedIndexes([p]);
+            this.trigger('selection', {source: this});
         }
         this._lastClickIndex = p;
     };    
@@ -385,6 +390,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
         } else if (this._multiselect && (e.which == 97 || e.which == 65) && e.metaKey) {
             e.preventDefault();
             this.selectedIndexes(range(0, this._data.length -1));
+            this.trigger('selection', {source: this});
         }
         if (nextIndex > -1 && nextIndex != this._lastClickIndex) {
             if (e.shiftKey && this._multiselect) {
@@ -396,6 +402,7 @@ uki.view.declare('uki.view.List', uki.view.Base, uki.view.Focusable, function(Ba
                 this._scrollToPosition(nextIndex);
             } else {
                 this.selectedIndex(nextIndex);
+                this.trigger('selection', {source: this});
             }
             this._lastClickIndex = nextIndex;
         }
