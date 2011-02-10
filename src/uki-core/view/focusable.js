@@ -7,13 +7,31 @@ uki.view.Focusable = (function() {
     this.focusableDom = function() {
         return this.dom();
     };
-
-    this.focusable = uki.newProp('_focusable', function(state) {
-        this.focusableDom().tabIndex = state ? '1' : '-1';
-    });
-
+    
+    this.tabIndex = function(value) {
+        if (value === undefined) return this.focusableDom().tabIndex;
+        this.focusableDom().tabIndex = value;
+        if (value && !this._focusableInited) this._initFocusable();
+        return this;
+    };
+    
     this._initFocusable = function() {
-        this.focusable(this.focusable());
+        this._focusableInited = true;
+        uki.dom.addListener(this.focusableDom(), 'focus', uki.bindOnce(this._focus, this));
+        uki.dom.addListener(this.focusableDom(), 'blur', uki.bindOnce(this._blur, this));
+    };
+    
+    this._destruct = function() {
+        uki.dom.removeListener(this.focusableDom(), 'focus', uki.bindOnce(this._focus, this));
+        uki.dom.removeListener(this.focusableDom(), 'blur', uki.bindOnce(this._blur, this));
+    };
+    
+    this._focus = function() {
+        if (this.focusedClass()) this.addClass(this.focusedClass());
+    };
+    
+    this._blur = function() {
+        if (this.focusedClass()) this.removeClass(this.focusedClass());
     };
 
     this.focus = function() {
@@ -29,8 +47,8 @@ uki.view.Focusable = (function() {
     this.hasFocus = function() {
         return this.focusableDom() == doc.activeElement;
     };
-
-    uki.delegateProp(this, 'tabIndex', 'focusableDom');
+    
+    this.focusedClass = uki.newProp('_focusedClass');
 
     return this;
 }).call({});

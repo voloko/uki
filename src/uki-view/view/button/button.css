@@ -1,0 +1,63 @@
+.uki-button {
+    border: 1px solid #777;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FDFEFF), color-stop(0.15, #F5F7FD), color-stop(0.8, #C9CACF), to(#C7CBD2));
+    background-image: -moz-linear-gradient(top, #FDFEFF, #F5F7FD 15%, #C9CACF 80%, #C7CBD2);
+    background-image: linear-gradient(top, #FDFEFF, #F5F7FD 15%, #C9CACF 80%, #C7CBD2);
+    padding: 4px 0;
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: top;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    outline: 0;
+
+    -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
+    -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
+    box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
+}
+
+.uki-button:hover {
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), color-stop(0.7, #D7DAE4), to(#D9DEE6));
+    background-image: -moz-linear-gradient(top, #FFFFFF, #D7DAE4 70%, #D9DEE6);
+    background-image: linear-gradient(top, #FFFFFF, #D7DAE4 70%, #D9DEE6);
+}
+
+.uki-button:active {
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#9C9DA1), color-stop(0.6, #C5C7CD), to(#CCCFD6));
+    background-image: -moz-linear-gradient(top, #9C9DA1, #C5C7CD 60%, #CCCFD6);
+    
+    -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;
+    -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;
+}
+
+.uki-button__input,
+.uki-button__input:active,
+.uki-button__input:focus,
+.uki-button__input:hover {
+    background: none;
+    border: none;
+    color: #333;
+    display: inline-block;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0 5px;
+    outline: 0;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.uki-button_focused {
+    display: block;
+    border-color: #7594D2;
+    
+    -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;
+    -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;
+    box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;
+    
+}

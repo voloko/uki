@@ -2,17 +2,18 @@
 @example_title Hello world
 @example_order 1
 @example_html
-    <div id='test' style='width: 50%; height: 100px; background: #EEE'>#test</div>
+    <div id='test' style='width: 50%; height: 100px; background: #EEE; position:relative'>#test</div>
     <script src="/src/uki.cjs"></script>
     <script src="attachment.js"></script>
 */
 
 uki({
     view: 'Button',
-    rect: '200 40 200 24',
-    text: 'uki is awesome!'
-}).attachTo( document.getElementById('test'), '600 100' );
+    pos: 'l:50% t:40px w:200px ml:-100px',
+    text: 'uki is awesome!',
+    tabIndex: 1
+}).attach( document.getElementById('test') );
 
-uki('Button[text^=uki]').bind('click', function() {
+uki('Button[text^=uki]').addListener('click', function() {
     alert('Hello world!');
 });
