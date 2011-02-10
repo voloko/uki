@@ -155,7 +155,7 @@ importScripts('collection.js');
         find: function(selector, context, skipFiltering) {
             context = context || uki.top();
             if (context.length === undefined) context = [context];
-
+            
             var tokens = self.tokenize(selector),
                 expr   = tokens[0],
                 extra  = tokens[1],

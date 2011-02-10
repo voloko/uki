@@ -3,6 +3,7 @@
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
+    background: #D7DAE4;
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FDFEFF), color-stop(0.15, #F5F7FD), color-stop(0.8, #C9CACF), to(#C7CBD2));
     background-image: -moz-linear-gradient(top, #FDFEFF, #F5F7FD 15%, #C9CACF 80%, #C7CBD2);
     background-image: linear-gradient(top, #FDFEFF, #F5F7FD 15%, #C9CACF 80%, #C7CBD2);
@@ -14,6 +15,8 @@
     position: relative;
     z-index: 10;
     outline: 0;
+    _zoom: 1;
+    _display: inline;
 
     -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
     -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
@@ -21,6 +24,7 @@
 }
 
 .uki-button:hover {
+    background: #F5F7FD;
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), color-stop(0.7, #D7DAE4), to(#D9DEE6));
     background-image: -moz-linear-gradient(top, #FFFFFF, #D7DAE4 70%, #D9DEE6);
     background-image: linear-gradient(top, #FFFFFF, #D7DAE4 70%, #D9DEE6);
@@ -53,7 +57,6 @@
 }
 
 .uki-button_focused {
-    display: block;
     border-color: #7594D2;
     
     -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;

@@ -38,7 +38,11 @@ uki.dom = {
     createStylesheet: function(code) {
         var style = doc.createElement('style');
         doc.getElementsByTagName('head')[0].appendChild(style);
-        style.appendChild(document.createTextNode(code));
+        if (style.styleSheet) { //IE
+            style.styleSheet.cssText = code;
+        } else {
+            style.appendChild(document.createTextNode(code));
+        }
         return style;
     },
 

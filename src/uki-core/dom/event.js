@@ -54,7 +54,8 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
 
                 uki.dom.special[type].setup(el);
             } else {
-                el.addEventListener(type, listener, false);
+                el.addEventListener ? el.addEventListener(type, listener, false) : 
+                    el.attachEvent('on' + type, listener);
             }
         });
     },
@@ -70,7 +71,8 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
                 specialListeners[id][type] = uki.without(specialListeners[id][type], listener);
                 uki.dom.special[type].teardown(el);
             } else {
-                el.removeEventListener(type, listener, false);
+                el.removeEventListener ? el.removeEventListener(type, listener, false) :
+                    el.detachEvent('on' + type, listener);
             }
         });
     },

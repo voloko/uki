@@ -1,5 +1,6 @@
 importScripts('uki-core/const.js');
 importScripts('uki-core/uki.js');
+importScripts('uki-core/compat.js');
 importScripts('uki-core/utils.js');
 importScripts('uki-core/function.js');
 
