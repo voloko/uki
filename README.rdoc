@@ -2,9 +2,9 @@
 Uki is a JavaScript user interface toolkit for desktop-like web applications.
 It comes with a rich view-component library ranging from Sliders to Grids and SplitPanes.
 
-    uki({ view: 'Button', text: 'Click me', rect: '10 10 100 24' }).attachTo( window );
+    uki({ view: 'Button', text: 'Click me', pos: 'l:10px t:10px w:100px' }).attach( window );
     
-    uki('Button[text^=Click]').click(function() { alert(this.text()); });
+    uki('Button[text^=Click]').addListener('click', function() { alert(this.text()); });
     
     
 == All you have to know in 5 minutes 
@@ -67,12 +67,6 @@ To install development server
     cd PATH_TO_UKI
     uki run
 
-== Image path
-For older browsers uki loads images from server.
-By default development version loads them from uki.theme.airport.imagePath. 
-To point it to your development server do
-    uki.theme.airport.imagePath = 'http://127.0.0.1:21119//src/uki-theme/airport/i/'
-
 == Simple
 The Web should be simple. 
 Adding a new library to your app should not require 
@@ -84,14 +78,7 @@ no CSS to include.
 Simple.
 
 == Cross-Browser
-I can imagine living
-in a fairy-tale world
-where any browser supports HTML 5
-and there's no such thing as IE6 :)
-Unfortunately, reality is different.
-I have to support all the browser flavors available,
-even the dinosaurs.
-That's why uki works with IE6+, Opera 9+, FF 2+, Safari 3+, and Chrome.
+Uki works with IE7+, Opera 9+, FF 2+, Safari 3+, and Chrome.
 And it looks exactly the same on any of them.
 
 == Fast
@@ -103,7 +90,7 @@ Uki uses progressive rendering and can render 30k+-row lists and tables mostly i
 
 == Small
 With all the images packed into it
-(not supported in IE6 and IE7),
+(not supported in IE7),
 a gzipped uki build is under 30kb,
 and it's a single HTTP request.
 
