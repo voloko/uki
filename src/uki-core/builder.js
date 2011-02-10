@@ -1,17 +1,12 @@
-include('uki.js');
-include('utils.js');
-include('collection.js');
+importScripts('uki.js');
+importScripts('utils.js');
+importScripts('collection.js');
 
 
 (function() {
-    
+
     /**
      * Creates uki view tree from JSON-like markup
-     *
-     * @example
-     * uki.build( {view: 'Button', rect: '100 100 100 24', text: 'Hello world' } )
-     * // Creates uki.view.Button with '100 100 100 24' passed to constructor, 
-     * // and calls text('Hello world') on it
      *
      * @function
      * @name uki.build
@@ -20,15 +15,13 @@ include('collection.js');
      * @returns {uki.view.Collection} collection of created elements
      */
     uki.build = function(ml) {
-        
         return new uki.Collection( createMulti( (ml.length === undefined) ? [ml] : ml ) );
-		
     };
-    
+
     uki.viewNamespaces = ['uki.view.', ''];
-    
+
     function createMulti (ml) {
-        return uki.map(ml, function(mlRow) { return createSingle(mlRow); });
+        return ml.map(function(mlRow) { return createSingle(mlRow); });
     }
 
     function createSingle (mlRow) {
@@ -37,23 +30,19 @@ include('collection.js');
         }
 
         var c = mlRow.view || mlRow.type,
+            initArgs = mlRow.init || {},
             result;
         if (uki.isFunction(c)) {
-            result = new c(mlRow.rect);
+            result = new c(initArgs);
         } else if (typeof c === 'string') {
             for (var i=0, ns = uki.viewNamespaces, ns$length = ns.length; i < ns$length; i++) {
-                var parts = (ns[i] + c).split('.'),
-                    obj = root;
-                
-                for (var j=0, parts$length = parts.length; obj && j < parts$length; j++) {
-                    obj = obj[parts[j]];
-                };
+                var obj = uki.path2obj(ns[i] + c);
                 if (obj) {
-                    result = new obj(mlRow.rect);
+                    result = new obj(initArgs);
                     break;
                 }
             };
-            if (!obj) throw 'No view of type ' + c + ' found';
+            if (!obj) throw "uki.Builder: Can't find view with type '" + c + "'";
         } else {
             result = c;
         }
@@ -63,12 +52,12 @@ include('collection.js');
     }
 
     function copyAttrs(comp, mlRow) {
-        uki.each(mlRow, function(name, value) {
-            if (name == 'view' || name == 'type' || name == 'rect') return;
-            uki.attr(comp, name, value);
+        uki.forEach(mlRow, function(value, name) {
+            if (name == 'view' || name == 'type' || name == 'init') return;
+            uki.prop(comp, name, value);
         });
         return comp;
     }
 
-    uki.build.copyAttrs = copyAttrs;    
+    uki.build.copyAttrs = copyAttrs;
 })();

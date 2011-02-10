@@ -1,80 +1,79 @@
-include('../view.js');
+importScripts('../view.js');
+importScripts('../observable.js');
 
 /**
  * @class
  */
-uki.view.Observable = /** @lends uki.view.Observable.prototype */ {
-    // dom: function() {
-    //     return null; // should implement
-    // },
-    
+uki.view.Observable = (function() {
+    var Base = uki.Observable;
+    uki.extend(this, Base);
+
+    this.specialEvents = [];
+
+    this.isSpecial = function(name) {
+        return name.match(/[\.:]/) || this.specialEvents.indexOf(name) > -1;
+    };
+
+    this.domForEvent = function(type) {
+        return this.dom();
+    };
+
     /**
      * @param {String} name Event name
      * @param {function()} callback
      */
-    bind: function(name, callback) {
-        callback.huid = callback.huid || uki.guid++;
-        uki.each(name.split(' '), function(i, name) {
-            if (!this._bound(name)) this._bindToDom(name);
-            this._observersFor(name).push(callback);
+    this.addListener = function(names, callback) {
+        names.split(' ').forEach(function(name) {
+            this.isSpecial(name) ?
+                Base.addListener.call(this, name, callback) :
+                this._addDomListener(name, callback);
         }, this);
         return this;
-    },
-    
-    unbind: function(name, callback) {
-        if (!this._observers) return;
-        var names;
-        if (name) {
-            names = name.split(' ');
-        } else {
-            names = [];
-            uki.each(this._observers, function(k, v) { names.push(k) });
-        }
-        uki.each(names, function(i, name) {
-            this._observers[name] = !callback ? [] : uki.grep(this._observersFor(name, true), function(observer) {
-                return observer != callback && observer.huid != callback.huid;
-            });
-            if (this._observers[name].length == 0) {
-                this._observers[name] = undefined;
-                this._unbindFromDom(name);
-            }
+    };
+
+    this.removeListener = function(names, callback) {
+        if (!this._listeners) return this;
+        names.split(' ').forEach(function(name) {
+            this.isSpecial(name) ?
+                Base.removeListener.call(this, name, callback) :
+                this._removeDomListener(name, callback);
         }, this);
         return this;
-    },
-    
-    trigger: function(name/*, data1, data2*/) {
-        var attrs = Array.prototype.slice.call(arguments, 1);
-        uki.each(this._observersFor(name, true), function(i, callback) {
-            callback.apply(this, attrs);
-        }, this);
+    };
+
+    this.trigger = function(e) {
+        return Base.trigger.call(this, e);
+    };
+
+    this._addDomListener = function(name, callback) {
+        var wrapper = uki.bindOnce(callback, this);
+        wrapper.huid = callback.huid;
+        Base.addListener.call(this, name, wrapper);
+        uki.dom.addListener(this.domForEvent(name), name, wrapper);
+    };
+
+    this._removeDomListener = function(name, callback) {
+        var wrapper = uki.bindOnce(callback, this);
+
+        Base.removeListener.call(this, name, wrapper);
+        uki.dom.removeListener(this.domForEvent(name), name, wrapper);
+    };
+
+    this.triggerDom = function(e) {
+        uki.dom.trigger(this.domForEvent(e.type), e);
         return this;
-    },
-    
-    _unbindFromDom: function(name) {
-        if (!this._domHander || !this._eventTargets[name]) return;
-        uki.dom.unbind(this._eventTargets[name], name, this._domHander);
-    },
-    
-    _bindToDom: function(name, target) {
-        if (!target && !this.dom) return false;
-        this._domHander = this._domHander || uki.proxy(function(e) {
-            e.source = this;
-            this.trigger(e.type, e);
+    };
+
+    this.destruct = function() {
+        // clean up all dom listeners, so we do not have backreferences
+        // in some closures, within uki.dom.event
+        uki.forEach(this._listeners || [], function(listeners, type) {
+            if (!this.isSpecial(type)) listeners.forEach(function(l) {
+                this._removeDomListener(type, l);
+            }, this);
         }, this);
-        this._eventTargets = this._eventTargets || {};
-        this._eventTargets[name] = target || this.dom();
-        uki.dom.bind(this._eventTargets[name], name, this._domHander);
-        return true;
-    },
-    
-    _bound: function(name) {
-        return this._observers && this._observers[name];
-    },
-    
-    _observersFor: function(name, skipCreate) {
-        if (skipCreate && (!this._observers || !this._observers[name])) return [];
-        if (!this._observers) this._observers = {};
-        if (!this._observers[name]) this._observers[name] = [];
-        return this._observers[name];
-    }
-};
+        Base.destruct.call(this);
+    };
+
+    return this;
+}).call({});

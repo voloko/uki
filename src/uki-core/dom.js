@@ -1,6 +1,6 @@
-include('const.js');
-include('uki.js');
-include('utils.js');
+importScripts('const.js');
+importScripts('uki.js');
+importScripts('utils.js');
 
 /**
  * Basic utils to work with the dom tree
@@ -17,91 +17,73 @@ uki.dom = {
      * @param {string=} innerHTML
      * @returns {Element} created element
      */
-    createElement: function(tagName, cssText, innerHTML) {
-        var e = doc.createElement(tagName);            
-        if (cssText) e.style.cssText = cssText;
-        if (innerHTML) e.innerHTML = innerHTML;
-        e[expando] = uki.guid++;
+    createElement: function(tagName, options, children) {
+        var e = doc.createElement(tagName);
+        uki.forEach(options || {}, function(value, name) {
+            if (name == 'style') e.style.cssText = value;
+            else if (name == 'html') e.innerHTML = value;
+            else if (name == 'className') e.className = value;
+            else e.setAttribute(name, value);
+        });
+        children && children.forEach(function(c) {
+            e.appendChild(c);
+        });
         return e;
     },
-    
-    /**
-     * Adds a probe element to page dom tree, callbacks, removes the element
-     *
-     * @param {Element} dom Probing dom element
-     * @param {function(Element)} callback
-     */
-    probe: function(dom, callback) {
-        var target = doc.body;
-        target.appendChild(dom);
-        var result = callback(dom);
-        target.removeChild(dom);
-        return result;
+
+    removeElement: function(element) {
+        if (element && element.parentNode) element.parentNode.removeChild(element);
     },
-    
-    /**
-     * Assigns layout style properties to an element
-     *
-     * @param {CSSStyleDeclaration} style Target declaration
-     * @param {object} layout Properties to assign
-     * @param {object=} prevLayout If given assigns only difference between layout and prevLayout
-     */
-    layout: function(style, layout, prevLayout) {
-        prevLayout = prevLayout || {};
-        if (prevLayout.left   != layout.left)   style.left   = layout.left + PX;
-        if (prevLayout.top    != layout.top)    style.top    = layout.top + PX;
-        if (prevLayout.right  != layout.right)  style.right  = layout.right + PX;
-        if (prevLayout.bottom != layout.bottom) style.bottom = layout.bottom + PX;
-        if (prevLayout.width  != layout.width)  style.width  = MAX(layout.width, 0) + PX;
-        if (prevLayout.height != layout.height) style.height = MAX(layout.height, 0) + PX;
-        return layout;
-    },
-    
-    /**
-     * Computed style for a give element
-     *
-     * @param {Element} el
-     * @returns {CSSStyleDeclaration} style declaration
-     */
-    computedStyle: function(el) {
-        if (doc && doc.defaultView && doc.defaultView.getComputedStyle) {
-            return doc.defaultView.getComputedStyle( el, null );
-        } else if (el.currentStyle) {
-            return el.currentStyle;
-        }
-    },
-    
-    /**
-     * Checks if parent contains child
-     *
-     * @param {Element} parent 
-     * @param {Element} child 
-     * @return {Boolean}
-     */
-    contains: function(parent, child) {
-        try {
-            if (parent.contains) return parent.contains(child);
-            if (parent.compareDocumentPosition) return !!(parent.compareDocumentPosition(child) & 16);
-        } catch (e) {}
-        while ( child && child != parent ) {
-            try { child = child.parentNode } catch(e) { child = null };
-        }
-        return parent == child;
-    },
-    
+
     createStylesheet: function(code) {
         var style = doc.createElement('style');
         doc.getElementsByTagName('head')[0].appendChild(style);
-        if (style.styleSheet) { //IE
-            style.styleSheet.cssText = code;
-        } else {
-            style.appendChild(document.createTextNode(code));
-        }
+        style.appendChild(document.createTextNode(code));
         return style;
+    },
+
+    fromHTML: function(html) {
+        var fragment = document.createElement('div');
+        fragment.innerHTML = html;
+        return fragment.firstChild;
+    },
+
+    // client rect adjugested to window scroll
+    clientRect: function(elem, ignoreScroll) {
+        var rect = elem.getBoundingClientRect();
+        if (ignoreScroll) return rect;
+
+        var body = doc.body,
+            scrollTop  = root.pageYOffset || body.scrollTop,
+            scrollLeft = root.pageXOffset || body.scrollLeft;
+        return {
+            top: rect.top  + scrollTop,
+            left: rect.left + scrollLeft,
+            width: rect.width,
+            height: rect.height
+        };
+    },
+
+    hasClass: function(elem, className) {
+        return (' ' + elem.className + ' ').indexOf(' ' + className + ' ') > -1;
+    },
+
+    addClass: function(elem, className) {
+        if (!this.hasClass(elem, className))
+            elem.className += (elem.className ? ' ' : '') + className;
+    },
+
+    removeClass: function(elem, className) {
+        elem.className = elem.className
+            .replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)', 'g'), ' ')
+            .replace(/\s{2,}/g, ' ');
+    },
+
+    toggleClass: function(elem, className, condition) {
+        if (condition === undefined) condition = !this.hasClass(elem, className);
+        condition ? this.addClass(elem, className) : this.removeClass(elem, className);
     }
-    
+
 };
 
-uki.each(['createElement'], function(i, name) {
-    uki[name] = uki.dom[name];
-});
+uki.extend(uki, uki.dom);

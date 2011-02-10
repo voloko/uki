@@ -1,94 +1,54 @@
-include('observable.js');
-
+importScripts('data.js');
 /**
  *
  * @example
  * myModel = uki.newClass(uki.data.Model, function() {
- *     uki.data.model.addFields(this, ['name', 'age', 'sex']);
+ *     this.name = uki.data.model.newProp('name');
+ *     this.sex = uki.data.model.newProp('sex');
  * })
  *
  * var m = new myModel({ age: 22, name: 'Jonh Smith', sex: 'm' })
- * m.bind('change.sex', function() {
+ * m.addListener('change.sex', function() {
  *     alert('omg! wtf!');
  * });
  *
- * m.bind('change', function(e) {
- *     console.log(e.fields);
+ * m.addListener('change', function(e) {
+ *     console.log(e.props); // used
  * });
  *
  * m.name('Joe Black') // triggers 'change' and 'change.name'
  * m.sex('w') // triggers'change' and 'change.sex'
  */
-uki.data.Model = uki.newClass(uki.data.Observable, function(Observable) {
-    
-    this._fields = [];
-    
-    this.init = function(values) {
-        this.update(values || {});
-    };
-    
-    this.fields = function() {
-        return this._fields;
-    };
-    
-    this.update = function(values) {
-        var fields = [], changes = {};
-        
-        uki.each(values, function(name, value) {
-            var field = uki.isFunction(this[name]) ? '_' + name : name;
-            if (this[field] != value) {
-                changes[name] = true;
-                fields.push(name);
-                this[field] = value;
-                this.trigger('change.' + name, { model: this });
-            }
-        }, this);
-        
-        if (fields.length) this.trigger('change', {changes: changes, fields: fields, model: this});
+uki.data.Model = uki.newClass(uki.Observable, function(STATIC, Observable) {
+    this.triggerChanges = function(name, source) {
+        this.trigger({ type: 'change.' + name, model: this, source: source });
+        this.trigger({ type: 'change', name: name, model: this, source: source });
         return this;
     };
-    
+
+    this.muteChanges = function(value) {
+        if (value === undefined) return this._originalTriggerChanges && this.triggerChanges === this._originalTriggerChanges;
+        if (!this._originalTriggerChanges) this._originalTriggerChanges = this.triggerChanges;
+        this.triggerChanges = value ? uki.FS : this._originalTriggerChanges;
+        return this;
+    };
 });
 
 uki.data.model = {
-    _newProp: function(name) {
-        return uki.newProp('_' + name, function(v) {
-            var changes = {};
-            changes[name] = v;
-            this.update(changes);
-        });
-    },
-    
-    addFields: function(target, names) {
-        for (var i=0; i < names.length; i++) {
-            target[names[i]] = uki.data.model._newProp(names[i]);
-        }
-        // do not break prototypes
-        target._fields = names.concat(target._fields || []);
-    },
-    
-    newLoader: function(name, options) {
-        return function(callback) {
-            callback = callback || uki.F;
-            if (this['loaded.' + name]) {
-                callback.call(this, this[name]());
+    newProp: function(name, setter) {
+        var propName = '_' + name;
+        return uki.newProp(propName, function(v, source) {
+            var oldValue = this[name](),
+                newValue;
+            if (setter) {
+                setter.call(this, v);
             } else {
-                this.bind('load.' + name, callback);
-                if (!this['loading.' + name]) {
-                    this['loading.' + name] = true;
-                    uki.ajax(uki.extend({
-                        url: uki.isFunction(options.url) ? options.url.call(this) : options.url,
-                        data: uki.isFunction(options.data) ? options.data.call(this) : options.data ? options.data : { id: this.id() },
-                        success: uki.proxy(function(val) {
-                            this['loading.' + name] = false;
-                            this['loaded.' + name] = true;
-                            options.setter ? options.setter.call(this, val) : this['_' + name] = val;
-                            this.trigger('load.' + name, val);
-                            this.unbind('load.' + name);
-                        }, this)
-                    }, options.ajaxOptions || {}));
-                }
+                this[propName] = v;
             }
-        };
+            newValue = this[name]();
+            if (oldValue !== newValue) {
+                this.triggerChanges(name, source);
+            }
+        });
     }
 };

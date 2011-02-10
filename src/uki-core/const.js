@@ -3,15 +3,14 @@
  */
 /** @ignore */
 var root = this,
-    doc  = document,
+    doc  = root.document || {},
+    docElem = doc.documentElement,
     nav = navigator,
     ua  = nav.userAgent,
+    arrayPrototype = Array.prototype,
     expando = 'uki' + (+new Date),
-    
+
     MAX = Math.max,
     MIN = Math.min,
     FLOOR = Math.floor,
-    CEIL = Math.ceil,
-    
-    PX = 'px';
-
+    CEIL = Math.ceil;
