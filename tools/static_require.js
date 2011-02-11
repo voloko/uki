@@ -17,14 +17,12 @@ var walker = pro.ast_walker(),
     walkers = {
        "call": function(expr, args) {
            if (expr[0] == 'name' && expr[1] == REQUIRE) {
-               var stack = walker.stack(),
-                   parent = stack[stack.length - 1],
-                   file = resolve_real_path(parent[2][0][1]);
+               var file = resolve_real_path(args[0][1]);
                    
                if (!included[file]) {
-                   file_to_ast(file);
+                   file_to_ast(file, true);
                }
-               return ['name', PREFIX + included[file]];
+               return [this[0], expr, [['num', included[file]]] ];
            }
            return null;
        }
@@ -63,20 +61,20 @@ function resolve_real_path (filePath) {
     return fs.realpathSync(resolvedPath);
 }
 
-function file_to_ast (filePath) {
-    included[filePath] = ++includedCount;
+function file_to_ast (filePath, wrap) {
+    included[filePath] = includedCount++;
     var oldDir = currentDir;
     currentDir = path.dirname(filePath);
     var text = fs.readFileSync(filePath, 'utf8');
-    text = '(function() {var exports = this;' +
-           text +
-           '\nreturn exports;}).call({})';
+    if (wrap) {
+        text = '(function() {var exports = this;' + text + '\nreturn exports;})';
+    }
     var ast = jsp.parse(text);
     var newAst = walker.with_walkers(walkers, function() {
         return walker.walk(ast);
     });
     currentDir = oldDir;
-    module_asts[included[filePath] - 1] = newAst;
+    module_asts[included[filePath]] = newAst;
     // return newAst;
 }
 
@@ -90,12 +88,28 @@ function static_require (filePath, options) {
     module_asts = [];
     
     file_to_ast(filePath);
-        
-    var body = [];
-    body.push([ 'var', [[ 'global', ['object', []] ]] ]);
-    for (var i=includedCount-1; i >= 0; i--) {
-        body.push([ 'var', [[ PREFIX + (i+1), module_asts[i][1][0] ]] ]);
+    
+    var code = 'function require(index) { if (!require._cache[index]) require._cache[index] = require._modules[index].call({}); return require._cache[index]; }\n';
+    code    += 'require._modules = []; require._cache = [];';
+    code    += 'var global = {};';
+    var body = jsp.parse(code)[1];
+    
+    for (var i=1; i < includedCount; i++) {
+        body[body.length] =
+            [ 'stat', 
+                ['assign', 
+                    true,
+                    ['sub',
+                        ['dot', ['name', 'require'], '_modules' ],
+                        ['num', i]
+                    ],
+                    module_asts[i][1][0][1]
+                ]
+            ];
     };
+    body = body.concat(module_asts[0][1]);
+    // body.push(['call', module_asts[0][1][0], []]);
+    
 
     return [ 'toplevel',
       [ [ 'stat',

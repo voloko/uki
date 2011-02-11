@@ -1358,7 +1358,7 @@ function gen_code(ast, beautify) {
                 },
                 "stat": function(stmt) {
                         var code = make(stmt);
-                        return needs_parens(stmt) ? code : code.replace(/;*\s*$/, ";");
+                        return code.replace(/;*\s*$/, ";");
                 },
                 "seq": function() {
                         return add_commas(MAP(slice(arguments), make));
@@ -1476,8 +1476,10 @@ function gen_code(ast, beautify) {
         function make(node) {
                 var type = node[0];
                 var gen = generators[type];
-                if (!gen)
+                if (!gen) {
+                        console.log($stack);
                         throw new Error("Can't find generator for \"" + type + "\"");
+                    }
                 $stack.push(node);
                 var ret = gen.apply(type, node.slice(1));
                 $stack.pop();
