@@ -10,7 +10,8 @@ var PREFIX  = '__module_';
 var included = {},
     includedCount = 0,
     currentDir = '',
-    searchPaths = [];
+    searchPaths = [],
+    module_asts = [];
     
 var walker = pro.ast_walker(),
     walkers = {
@@ -20,12 +21,10 @@ var walker = pro.ast_walker(),
                    parent = stack[stack.length - 1],
                    file = resolve_real_path(parent[2][0][1]);
                    
-               if (included[file]) {
-                   return ['name', PREFIX + included[file]];
-               } else {
-                   var ast = file_to_ast(file, true);
-                   return ast;
+               if (!included[file]) {
+                   file_to_ast(file);
                }
+               return ['name', PREFIX + included[file]];
            }
            return null;
        }
@@ -49,7 +48,7 @@ function resolve_path (filePath) {
     if (filePath.charAt(0) === '/') {
         filePath = filePath.substr(1);
         for (var i=0; i < searchPaths.length; i++) {
-            var tryPath = path_to_file( path.join(searchPaths[i], filePath) );
+            var tryPath = path_to_file( path.join(searchPaths[i], filePath));
             if (tryPath) return tryPath;
         };
     } else {
@@ -64,22 +63,20 @@ function resolve_real_path (filePath) {
     return fs.realpathSync(resolvedPath);
 }
 
-function file_to_ast (filePath, wrap) {
-    included[filePath] = includedCount++;
+function file_to_ast (filePath) {
+    included[filePath] = ++includedCount;
     var oldDir = currentDir;
     currentDir = path.dirname(filePath);
     var text = fs.readFileSync(filePath, 'utf8');
-    if (wrap) {
-        text = '(' + PREFIX + included[filePath] + ' = ' +
-                '(function() {var exports = this;' +
-                text +
-                '\nreturn this;}).call({}))';
-    }
+    text = '(function() {var exports = this;' +
+           text +
+           '\nreturn exports;}).call({})';
     var ast = jsp.parse(text);
     var newAst = walker.with_walkers(walkers, function() {
         return walker.walk(ast);
     });
     currentDir = oldDir;
+    module_asts[included[filePath] - 1] = newAst;
     return newAst;
 }
 
@@ -90,17 +87,16 @@ function static_require (filePath, options) {
     currentDir = path.dirname(filePath);
     options = options || {};
     searchPaths = options.searchPaths || [currentDir];
-    var ast = file_to_ast(filePath),
-        modules = [];
-        
-    for (var i=1; i < includedCount; i++) {
-        modules.push([PREFIX + (i+1)]);
-    };
+    module_asts = [];
     
+    file_to_ast(filePath);
+        
     var body = [];
     body.push([ 'var', [[ 'global', ['object', []] ]] ]);
-    if (modules.length) body.push([ 'var', modules ]);
-    body.push(ast);
+    for (var i=includedCount-1; i >= 0; i--) {
+        body.push([ 'var', [[ PREFIX + (i+1), module_asts[i] ]] ]);
+        util.puts(util.inspect( module_asts[i], null, 20 ));
+    };
     
     return [ 'toplevel',
       [ [ 'stat',

@@ -20,8 +20,8 @@ uki.Observable = {
     },
 
     trigger: function(e) {
-        var name = e.type;
-        this._listenersFor(name, true).forEach(function(callback) {
+        var type = e.type;
+        this._listenersFor(type, true).forEach(function(callback) {
             callback.call(this, e);
         }, this);
         return this;
@@ -38,3 +38,6 @@ uki.Observable = {
         this._listeners = null;
     }
 };
+
+uki.Observable.on = uki.Observable.addListener;
+uki.Observable.emit = uki.Observable.trigger;

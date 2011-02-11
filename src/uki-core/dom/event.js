@@ -98,6 +98,9 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     }
 });
 
+uki.dom.on = uki.dom.addListener;
+uki.dom.emit = uki.dom.trigger;
+
 uki.forEach({
     mouseover: 'mouseenter',
     mouseout: 'mouseleave'

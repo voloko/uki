@@ -1,66 +1,53 @@
-uki.view.declare('uki.Attachment', uki.view.Container, function(STATIC, Base) {
+var Container = require('./view/container.js').Container;
 
-    /* Class methods */
-
-    STATIC.attach = function(dom, view) {
-        dom = dom || doc.body;
-        var id = dom[expando] = dom[expando] || uki.guid++;
-        if (!STATIC._instances || !STATIC._instances[id]) {
-            STATIC._register(new uki.Attachment({ dom: dom }));
-        }
-        return STATIC._instances[id].appendChild(view);
-    };
-
-    STATIC._instances = null;
-
-    STATIC._register = function(a) {
-        if (!STATIC._instances) {
-            STATIC._instances = {};
-            var timeout = false;
-
-            uki.dom.addListener(root, 'resize', function() {
-                if (!timeout) {
-                    timeout = true;
-                    setTimeout(function(i,len) {
-                        uki.after.start();
-
-                        timeout = false;
-                        uki.forEach(STATIC._instances, function(a) {
-                           a.resized();
-                        });
-
-                        uki.after.stop();
-                    }, 1);
-                }
-            });
-        }
-        var el = a.dom(),
-            id = el[expando] = el[expando] || uki.guid++;
-
-        return (STATIC._instances[id] = a);
-    };
-
-    /* used by selectors */
-    uki.top = function() {
-        var atts = [];
-        uki.forEach(STATIC._instances || {}, function(a) {
-            atts.push(a);
-        });
-        return atts;
-    };
-
-    /* Instance methods */
-
-    this._setup = function(initArgs) {
+var Attachment = require('function').newClass(Container, {
+    _setup: function(initArgs) {
         this._dom = initArgs.dom;
         Base._setup.call(this, initArgs);
-    };
+    },
 
-    this._createDom = uki.FS;
+    _createDom: require('./function').FS,
 
-    this.parent = function() {
+    parent: function() {
         return null;
-    };
+    }
+);
 
+/* Class methods */
+Attachment.attach = function(dom, view) {
+    dom = dom || doc.body;
+    var id = dom[expando] = dom[expando] || uki.guid++;
+    if (!Attachement._instances || !Attachement._instances[id]) {
+        Attachement._register(new Attachment({ dom: dom }));
+    }
+    return Attachement._instances[id].appendChild(view);
+};
 
-});
+Attachment._instances = null;
+
+Attachment._register = function(a) {
+    if (!Attachement._instances) {
+        Attachement._instances = {};
+        var timeout = false;
+
+        require('./dom').addListener(root, 'resize', function() {
+            if (!timeout) {
+                timeout = true;
+                setTimeout(function(i,len) {
+                    require('./after').after.start();
+
+                    timeout = false;
+                    require('./utils').forEach(Attachement._instances, function(a) {
+                       a.resized();
+                    });
+
+                    require('./after').after.stop();
+                }, 1);
+            }
+        });
+    }
+    var el = a.dom(),
+        id = el[expando] = el[expando] || uki.guid++;
+
+    return (Attachement._instances[id] = a);
+};

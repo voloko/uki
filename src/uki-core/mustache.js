@@ -323,3 +323,5 @@ var Mustache = function() {
     }
   });
 }();
+
+this.Mustache = Mustache;

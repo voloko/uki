@@ -1,4 +1,3 @@
-importScripts('const.js');
 /**
  * Shortcut access to uki.build, uki.Selector.find and uki.Collection constructor
  * uki('#id') is also a shortcut for search by id
@@ -46,3 +45,10 @@ uki.unregisterId = function(comp) {
     uki._ids[ uki.prop(comp, 'id') ] = undefined;
 };
 
+uki.top = function() {
+    var atts = [];
+    uki.forEach(Attachement._instances || {}, function(a) {
+        atts.push(a);
+    });
+    return atts;
+};
