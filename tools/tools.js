@@ -2,11 +2,20 @@ require.paths.unshift(__dirname);
 
 var server = require('server'),
     sr     = require('static_require'),
-    url    = require('url');
+    url    = require('url'),
+    pro    = require('./lib/process');
     
 server.get(/\.js$/, function(req, res) {
-    var filename = url.parse(req.url).pathname.substr(1);
-    var code = sr.gen_code(filename, { beautify: true });
+    var parsedUrl = url.parse(req.url, true);
+    var filename = parsedUrl.pathname.substr(1);
+    var ast = sr.parse(filename);
+    if (parsedUrl.query.squeeze) {
+        ast = pro.ast_mangle(ast);
+        ast = pro.ast_squeeze(ast);
+        ast = pro.ast_squeeze_more(ast);
+    }
+    
+    var code = pro.gen_code(ast, !parsedUrl.query.squeeze);
     res.writeHead(200, { 
         "Content-Type": 'application/javascript',
         "Content-Length": code.length

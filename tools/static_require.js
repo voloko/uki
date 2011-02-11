@@ -77,7 +77,7 @@ function file_to_ast (filePath) {
     });
     currentDir = oldDir;
     module_asts[included[filePath] - 1] = newAst;
-    return newAst;
+    // return newAst;
 }
 
 function static_require (filePath, options) {
@@ -94,10 +94,9 @@ function static_require (filePath, options) {
     var body = [];
     body.push([ 'var', [[ 'global', ['object', []] ]] ]);
     for (var i=includedCount-1; i >= 0; i--) {
-        body.push([ 'var', [[ PREFIX + (i+1), module_asts[i] ]] ]);
-        util.puts(util.inspect( module_asts[i], null, 20 ));
+        body.push([ 'var', [[ PREFIX + (i+1), module_asts[i][1][0] ]] ]);
     };
-    
+
     return [ 'toplevel',
       [ [ 'stat',
           [ 'call',
