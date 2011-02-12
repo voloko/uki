@@ -81,7 +81,7 @@ function file_to_ast (filePath, wrap) {
     state.currentPath = filePath;
     var text = fs.readFileSync(filePath, 'utf8');
     if (wrap) {
-        text = '(function(global, module) {var exports = this;' + text + '\nreturn module.exports;})';
+        text = '(function(global, module) {var exports = this;' + text + '})';
     }
     var ast = jsp.parse(text);
     var newAst = walker.with_walkers(walkers, function() {
@@ -102,7 +102,7 @@ function static_require (filePath, options) {
     file_to_ast(filePath, true);
     
     var code = 'var global = this;';
-    code    += 'function require(index) { if (!require.cache[index]) {var module = {exports: {}}; require.cache[index] = require.modules[index].call(module.exports, global, module);} return require.cache[index]; }\n';
+    code    += 'function require(index) { if (!require.cache[index]) {var module = {exports: {}}; require.modules[index].call(module.exports, global, module); require.cache[index] = module.exports} return require.cache[index]; }\n';
     code    += 'require.modules = []; require.cache = [];';
     var body = jsp.parse(code)[1];
     
