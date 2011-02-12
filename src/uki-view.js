@@ -1,3 +1,3 @@
 require('./uki-view/view.js');
 
-global.uki.view.Button = require('./uki-view/view/button.js').Button;
+require('uki-core').view.Button = require('./uki-view/view/button.js').Button;

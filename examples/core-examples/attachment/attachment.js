@@ -3,9 +3,11 @@
 @example_order 1
 @example_html
     <div id='test' style='width: 50%; height: 100px; background: #EEE; position:relative'>#test</div>
-    <script src="/src/uki.cjs"></script>
+    <script src="/src/uki-view.js"></script>
     <script src="attachment.js"></script>
 */
+
+uki.Stylesheet.apply();
 
 uki({
     view: 'Button',
@@ -14,6 +16,6 @@ uki({
     tabIndex: 1
 }).attach( document.getElementById('test') );
 
-uki('Button[text^=uki]').addListener('click', function() {
+uki('Button[text^=uki]').on('click', function(e) {
     alert('Hello world!');
 });

@@ -1,7 +1,7 @@
 var Container = require('./view/container.js').Container,
     after = require('./after').after,
     utils = require('./utils'),
-    uki = require('./uki').uki;
+    uki = require('./uki');
 
 var Attachment = require('./function').newClass(Container, {
     typeName: 'Attachment',

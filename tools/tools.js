@@ -1,51 +1,39 @@
 require.paths.unshift(__dirname);
 
-var server = require('server'),
-    sr     = require('static_require'),
-    url    = require('url'),
-    pro    = require('./lib/process');
+var cli = require('cli'),
+    options = cli.parse(null, ['run', 'build']),
+    util = require('util');
     
-server.get(/\.js$/, function(req, res) {
-    var parsedUrl = url.parse(req.url, true);
-    var filename = parsedUrl.pathname.substr(1);
-    try {
-        var ast = sr.parse(filename);
-        if (parsedUrl.query.squeeze) {
-            ast = pro.ast_mangle(ast);
-            ast = pro.ast_squeeze(ast);
-            ast = pro.ast_squeeze_more(ast);
+if (cli.command == 'run') {
+    
+    var pair = cli.args[0],
+        host = '127.0.0.1',
+        port = 21119,
+        matches;
+    if (pair) {
+        if (pair.match(/^\d+$/)) {
+            port = pair;
+        } else if (matches = pair.match(/^(.*):(\d+)$/)) {
+            host = matches[1];
+            port = matches[2];
+        } else {
+            host = pair;
         }
+    }
     
-        var code = pro.gen_code(ast, !parsedUrl.query.squeeze);
-    } catch (e) {
-        require('util').error(e);
-        console.log(e.stack);
-        var code = 'alert(' + JSON.stringify(e.message + '. Current file ' + sr.state.currentPath) + ')';
-    }
-    res.writeHead(200, { 
-        "Content-Type": 'application/javascript',
-        "Content-Length": code.length
-    });
-    res.end(req.method === "HEAD" ? "" : code);
-});
-
-server.get(/.*/, function(req, res) {
-    server.handleStatic(req, res);
-});
-
-var pair = process.argv[2],
-    host = '127.0.0.1',
-    port = 21119,
-    matches;
-if (pair) {
-    if (pair.match(/^\d+$/)) {
-        port = pair;
-    } else if (matches = pair.match(/^(.*):(\d+)$/)) {
-        host = matches[1];
-        port = matches[2];
-    } else {
-        host = pair;
-    }
+    var dev_server = require('dev_server');
+    var fs = require('fs'),
+        path = require('path');
+        
+    try {
+        require(path.join(process.cwd(), 'express.js')).init(dev_server.app);
+        util.puts("Loaded express.js");
+    } catch(e) {}
+    
+    dev_server.init();
+    dev_server.app.listen(port, host);
+    util.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
+} else if (cli.command == 'build') {
+    
 }
-server.listen(port, host);
-
+    

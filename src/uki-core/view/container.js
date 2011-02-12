@@ -1,5 +1,5 @@
 var view  = require('../view'),
-    uki   = require('../uki').uki,
+    uki   = require('../uki'),
     fun   = require('../function'),
     dom   = require('../dom'),
     Base = require('./base').Base;

@@ -1,4 +1,4 @@
-var uki = require('./uki').uki,
+var uki = require('./uki'),
     utils = require('./utils'),
     arrayPrototype = Array.prototype;
 

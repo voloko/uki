@@ -1,1 +1,1 @@
-global.uki.Stylesheet.add(requireText('uki.css'));
+require('uki-core').Stylesheet.add(requireText('uki.css'));

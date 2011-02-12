@@ -1,4 +1,4 @@
-var uki = global.uki,
+var uki = require('uki-core'),
     Base = uki.view.Base,
     Focusable = uki.view.Focusable;
 
@@ -39,7 +39,7 @@ proto._createDom = function() {
     this._dom = uki.createElement('label', { className: 'uki-button' }, [this._input]);
 };
 
-proto.focusableDom = this.domForEvent = function(type) {
+proto.focusableDom = proto.domForEvent = function(type) {
     return this._input;
 };
 
@@ -49,12 +49,5 @@ proto.destruct = function() {
 };
 
 proto._focusedClass = 'uki-button_focused';
-
-proto._initFocusable = function() {
-    uki.dom.addListener(this._dom, 'mousedown', uki.bind(function(e) {
-        if (this.tabIndex()) uki.defer(uki.bind(this.focus, this));
-    }, this));
-    Focusable._initFocusable.call(this);
-};
 
 exports.Button = Button;

@@ -1,6 +1,6 @@
-var jsp = require('./lib/parse-js'),
-    pro = require('./lib/process'),
-    fs = require('fs'),
+var jsp  = require('uglify-js').parser,
+    pro  = require('uglify-js').uglify,
+    fs   = require('fs'),
     path = require('path'),
     util = require('util');
     
@@ -57,14 +57,14 @@ function path_to_file (filePath, extNames) {
 }
 
 function resolve_path (filePath, extNames) {
-    if (filePath.charAt(0) === '/') {
-        filePath = filePath.substr(1);
-        for (var i=0; i < state.searchPaths.length; i++) {
-            var tryPath = path_to_file( path.join(state.searchPaths[i], filePath), extNames);
+    if (filePath.charAt(0) === '.') {
+        return path_to_file( path.join(path.dirname(state.currentPath), filePath), extNames );
+    } else {
+        var searchPaths = [path.dirname(state.currentPath)].concat(state.searchPaths);
+        for (var i=0; i < searchPaths.length; i++) {
+            var tryPath = path_to_file( path.join(searchPaths[i], filePath), extNames);
             if (tryPath) return tryPath;
         };
-    } else {
-        return path_to_file( path.join(path.dirname(state.currentPath), filePath), extNames );
     }
     return false;
 }
@@ -81,7 +81,7 @@ function file_to_ast (filePath, wrap) {
     state.currentPath = filePath;
     var text = fs.readFileSync(filePath, 'utf8');
     if (wrap) {
-        text = '(function(global) {var exports = this;' + text + '\nreturn this;})';
+        text = '(function(global, module) {var exports = this;' + text + '\nreturn module.exports;})';
     }
     var ast = jsp.parse(text);
     var newAst = walker.with_walkers(walkers, function() {
@@ -102,8 +102,8 @@ function static_require (filePath, options) {
     file_to_ast(filePath);
     
     var code = 'var global = this;';
-    code    += 'function require(index) { if (!require._cache[index]) require._cache[index] = require._modules[index].call({}, global); return require._cache[index]; }\n';
-    code    += 'require._modules = []; require._cache = [];';
+    code    += 'function require(index) { if (!require.cache[index]) {var module = {exports: {}}; require.cache[index] = require.modules[index].call(module.exports, global, module);} return require.cache[index]; }\n';
+    code    += 'require.modules = []; require.cache = [];';
     var body = jsp.parse(code)[1];
     
     for (var i=1; i < state.includedCount; i++) {
@@ -112,7 +112,7 @@ function static_require (filePath, options) {
                 ['assign', 
                     true,
                     ['sub',
-                        ['dot', ['name', 'require'], '_modules' ],
+                        ['dot', ['name', 'require'], 'modules' ],
                         ['num', i]
                     ],
                     state.moduleAsts[i][1][0][1]

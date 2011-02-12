@@ -1,5 +1,5 @@
 var utils = require('./utils'),
-    uki   = require('./uki').uki;
+    uki   = require('./uki');
     
 var registry = {};
 

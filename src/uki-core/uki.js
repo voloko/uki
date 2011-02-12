@@ -51,4 +51,4 @@ uki.nav = navigator,
 uki.ua  = uki.nav.userAgent,
 uki.expando = 'uki' + (+new Date),
 
-exports.uki = uki;
+module.exports = uki;

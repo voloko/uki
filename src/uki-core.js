@@ -1,7 +1,7 @@
 require('./uki-core/compat');
 
 
-var uki = require('./uki-core/uki').uki,
+var uki = require('./uki-core/uki'),
     utils = require('./uki-core/utils'),
     dom = require('./uki-core/dom');
     
@@ -31,4 +31,4 @@ uki.Attachement = require('./uki-core/attachment').Attachement;
 uki.Mustache = require('uki-core/mustache').Mustache;
 
 
-global.uki = uki;
+module.exports = global.uki = uki;
