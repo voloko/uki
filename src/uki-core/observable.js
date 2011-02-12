@@ -1,7 +1,6 @@
-importScripts('uki.js');
+var utils = require('./utils');
 
-
-uki.Observable = {
+var Observable = {
     addListener: function(names, callback) {
         names.split(' ').forEach(function(name) {
             this._listenersFor(name).push(callback);
@@ -13,7 +12,7 @@ uki.Observable = {
         names.split(' ').forEach(function(name) {
             var listeners = this._listenersFor(name, true);
             if (listeners) {
-                this._listeners[name] = uki.without(listeners, callback);
+                this._listeners[name] = utils.without(listeners, callback);
             }
         }, this);
         return this;
@@ -39,5 +38,7 @@ uki.Observable = {
     }
 };
 
-uki.Observable.on = uki.Observable.addListener;
-uki.Observable.emit = uki.Observable.trigger;
+Observable.on = Observable.addListener;
+Observable.emit = Observable.trigger;
+
+exports.Observable = Observable;

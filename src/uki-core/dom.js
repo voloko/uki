@@ -1,13 +1,12 @@
-importScripts('const.js');
-importScripts('uki.js');
-importScripts('utils.js');
+var uki = require('./uki').uki,
+    utils = require('./utils');
 
 /**
  * Basic utils to work with the dom tree
  * @namespace
  * @author voloko
  */
-uki.dom = {
+utils.extend(exports, {
     /**
      * Convenience wrapper around document.createElement
      * Creates dom element with given tagName, cssText and innerHTML
@@ -18,8 +17,8 @@ uki.dom = {
      * @returns {Element} created element
      */
     createElement: function(tagName, options, children) {
-        var e = doc.createElement(tagName);
-        uki.forEach(options || {}, function(value, name) {
+        var e = uki.doc.createElement(tagName);
+        utils.forEach(options || {}, function(value, name) {
             if (name == 'style') e.style.cssText = value;
             else if (name == 'html') e.innerHTML = value;
             else if (name == 'className') e.className = value;
@@ -36,18 +35,18 @@ uki.dom = {
     },
 
     createStylesheet: function(code) {
-        var style = doc.createElement('style');
-        doc.getElementsByTagName('head')[0].appendChild(style);
+        var style = uki.doc.createElement('style');
+        uki.doc.getElementsByTagName('head')[0].appendChild(style);
         if (style.styleSheet) { //IE
             style.styleSheet.cssText = code;
         } else {
-            style.appendChild(document.createTextNode(code));
+            style.appendChild(uki.doc.createTextNode(code));
         }
         return style;
     },
 
     fromHTML: function(html) {
-        var fragment = document.createElement('div');
+        var fragment = uki.doc.createElement('div');
         fragment.innerHTML = html;
         return fragment.firstChild;
     },
@@ -57,9 +56,9 @@ uki.dom = {
         var rect = elem.getBoundingClientRect();
         if (ignoreScroll) return rect;
 
-        var body = doc.body,
-            scrollTop  = root.pageYOffset || body.scrollTop,
-            scrollLeft = root.pageXOffset || body.scrollLeft;
+        var body = uki.doc.body,
+            scrollTop  = window.pageYOffset || body.scrollTop,
+            scrollLeft = window.pageXOffset || body.scrollLeft;
         return {
             top: rect.top  + scrollTop,
             left: rect.left + scrollLeft,
@@ -87,7 +86,4 @@ uki.dom = {
         if (condition === undefined) condition = !this.hasClass(elem, className);
         condition ? this.addClass(elem, className) : this.removeClass(elem, className);
     }
-
-};
-
-uki.extend(uki, uki.dom);
+});

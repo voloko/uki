@@ -1,27 +1,34 @@
-importScripts('uki-core/const.js');
-importScripts('uki-core/uki.js');
-importScripts('uki-core/compat.js');
-importScripts('uki-core/utils.js');
-importScripts('uki-core/function.js');
+require('./uki-core/compat');
 
-importScripts('uki-core/builder.js');
-importScripts('uki-core/selector.js');
 
-importScripts('uki-core/dom.js');
-importScripts('uki-core/dom/event.js');
-importScripts('uki-core/dom/gesture.js');
+var uki = require('./uki-core/uki').uki,
+    utils = require('./uki-core/utils'),
+    dom = require('./uki-core/dom');
+    
+utils.extend(uki, utils);
 
-importScripts('uki-core/after.js');
+uki.dom = dom;
+utils.extend(uki, dom);
+utils.extend(dom, require('./uki-core/dom/event'));
+utils.extend(dom, require('./uki-core/dom/gesture'));
 
-importScripts('uki-core/observable.js');
-importScripts('uki-core/stylesheet.js');
+utils.extend(uki, require('./uki-core/function'));
+uki.build = require('./uki-core/builder').build;
+uki.find = require('./uki-core/selector').find;
+uki.after = require('./uki-core/after').after;
 
-importScripts('uki-core/view/observable.js');
-importScripts('uki-core/view/focusable.js');
-importScripts('uki-core/view/base.js');
-importScripts('uki-core/view/container.js');
-importScripts('uki-core/binding.js');
+uki.Observable = require('./uki-core/observable').Observable;
+uki.Stylesheet = require('./uki-core/stylesheet').Stylesheet;
 
-importScripts('uki-core/attachment.js');
+uki.view = require('./uki-core/view');
+uki.view.Observable = require('./uki-core/view/observable').Observable;
+uki.view.Focusable = require('./uki-core/view/focusable').Focusable;
+uki.view.Base = require('./uki-core/view/base').Base;
+uki.view.Container = require('./uki-core/view/container').Base;
 
-importScripts('uki-core/mustache.js');
+uki.Binding = require('./uki-core/binding').Binding;
+uki.Attachement = require('./uki-core/attachment').Attachement;
+uki.Mustache = require('uki-core/mustache').Mustache;
+
+
+global.uki = uki;

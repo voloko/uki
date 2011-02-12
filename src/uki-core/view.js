@@ -1,21 +1,22 @@
-importScripts('uki.js');
+var utils = require('./utils'),
+    uki   = require('./uki').uki;
+    
+var registry = {};
 
 /** @namespace */
-uki.view = {
-    _registry: {},
-
+utils.extend(exports, {
     register: function(view) {
-        this._registry[view.dom()[expando]] = view;
+        registry[view.dom()[uki.expando]] = view;
     },
 
     unregister: function(view) {
-        delete this._registry[view.dom()[expando]];
+        delete registry[view.dom()[uki.expando]];
     },
 
     closest: function(dom) {
         while (dom) {
-            var e = dom[expando];
-            if (this._registry[e]) return this._registry[e];
+            var e = dom[uki.expando];
+            if (registry[e]) return registry[e];
             dom = dom.parentNode;
         }
         return null;
@@ -27,30 +28,6 @@ uki.view = {
             child = child.parent();
         }
         return false;
-    },
-
-    /**
-    * The only reason this exists, is because
-    * I do not want to write typeName function manually.
-    */
-    declare: function(/*name, baseClasses, implementation*/) {
-        var args  = uki.toArray(arguments),
-            name  = args.shift(),
-            klass = uki.newClass.apply(uki, args),
-            parts = name.split('.'),
-            obj   = root,
-            i, part, l = parts.length - 1;
-
-        klass.prototype.typeName = function() { return name; };
-
-        for ( i= 0; i < l; i++ ) {
-            part = parts[i];
-            if (!obj[part]) obj[part] = {};
-            obj = obj[part];
-        };
-
-        obj[ parts[l] ] = klass;
-        return klass;
     },
 
     newToggleClassProp: function(className) {
@@ -81,7 +58,7 @@ uki.view = {
         return function(state) {
             if (state === undefined) {
                 var res;
-                uki.forEach(classMap, function(clasName, enumName) {
+                utils.forEach(classMap, function(clasName, enumName) {
                     if (this.hasClass(clasName)) {
                         res = enumName;
                         return false;
@@ -90,10 +67,10 @@ uki.view = {
                 return res;
             }
 
-            uki.forEach(classMap, function(className, enumName) {
+            utils.forEach(classMap, function(className, enumName) {
                 this.toggleClass(className, state === enumName);
             }, this);
             return this;
         };
     }
-};
+})

@@ -1,13 +1,7 @@
-importScripts('../dom.js');
-importScripts('event.js');
-
-
-(function() {
-/**
- * Drag gesture events
- * @namespace
- */
-var gesture = uki.dom.gesture = {
+var utils = require('../utils'),
+    evt = require('./event');
+ 
+var gesture = {
     draggable: null,
     position: null,
     cursor: null
@@ -23,17 +17,17 @@ var addDraggestures = {
             el.__draggesturebound++;
         } else {
             el.__draggesturebound = 1;
-            uki.dom.addListener( el, 'mousedown', dragGestureStart );
+            evt.addListener( el, 'mousedown', dragGestureStart );
         }
     },
     teardown: function(el) {
         el.__draggesturebound--;
-        if (!el.__draggesturebound) uki.dom.removeListener( el, 'mousedown', dragGestureStart );
+        if (!el.__draggesturebound) evt.removeListener( el, 'mousedown', dragGestureStart );
     }
 };
 
 // drag gestures
-uki.extend(uki.dom.special, {
+utils.extend(evt.special, {
     draggesturestart: addDraggestures,
     draggestureend: addDraggestures,
     draggesture: addDraggestures
@@ -43,26 +37,26 @@ function startGesture (el, e) {
     if (gesture.draggable) return;
     gesture.draggable = e.draggable || el;
     if (e.cursor) {
-        gesture.cursor = doc.body.style.cursor;
-        doc.body.style.cursor = e.cursor;
+        gesture.cursor = uki.doc.body.style.cursor;
+        uki.doc.body.style.cursor = e.cursor;
     }
-    uki.dom.addListener(doc, 'mousemove scroll', dragGesture);
-    uki.dom.addListener(doc, 'mouseup dragend', dragGestureEnd);
-    uki.dom.addListener(doc, 'selectstart mousedown', uki.dom.preventDefaultHandler);
+    evt.addListener(doc, 'mousemove scroll', dragGesture);
+    evt.addListener(doc, 'mouseup dragend', dragGestureEnd);
+    evt.addListener(doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
 function stopGesture () {
     gesture.draggable = null;
-    doc.body.style.cursor = gesture.cursor;
+    uki.doc.body.style.cursor = gesture.cursor;
     gesture.cursor = null;
-    uki.dom.removeListener(doc, 'mousemove scroll', dragGesture);
-    uki.dom.removeListener(doc, 'mouseup dragend', dragGestureEnd);
-    uki.dom.removeListener(doc, 'selectstart mousedown', uki.dom.preventDefaultHandler);
+    evt.removeListener(doc, 'mousemove scroll', dragGesture);
+    evt.removeListener(doc, 'mouseup dragend', dragGestureEnd);
+    evt.removeListener(doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
 function dragGestureStart (e) {
-    e = new uki.dom.Event(e, 'draggesturestart');
-    uki.dom.trigger(this, e);
+    e = new evt.Event(e, 'draggesturestart');
+    evt.trigger(this, e);
 
     if (!e.isDefaultPrevented()) {
         gesture.position = { x: e.pageX, y: e.pageY };
@@ -71,25 +65,26 @@ function dragGestureStart (e) {
 }
 
 function dragGesture (e) {
-    e = new uki.dom.Event(e, 'draggesture');
+    e = new evt.Event(e, 'draggesture');
     e.dragOffset = {
         x: e.pageX - gesture.position.x,
         y: e.pageY - gesture.position.y
     };
-    uki.dom.trigger(gesture.draggable, e);
+    evt.trigger(gesture.draggable, e);
 
     if (e.isDefaultPrevented()) stopGesture(gesture.draggable);
 }
 
 function dragGestureEnd (e) {
-    e = new uki.dom.Event(e, 'draggestureend');
+    e = new evt.Event(e, 'draggestureend');
     e.dragOffset = {
         x: e.pageX - gesture.position.x,
         y: e.pageY - gesture.position.y
     };
-    uki.dom.trigger(gesture.draggable, e);
+    evt.trigger(gesture.draggable, e);
 
     stopGesture(gesture.draggable);
 }
 
-})();
+
+utils.extend(exports, gesture);

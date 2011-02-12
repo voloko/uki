@@ -8,14 +8,20 @@ var server = require('server'),
 server.get(/\.js$/, function(req, res) {
     var parsedUrl = url.parse(req.url, true);
     var filename = parsedUrl.pathname.substr(1);
-    var ast = sr.parse(filename);
-    if (parsedUrl.query.squeeze) {
-        ast = pro.ast_mangle(ast);
-        ast = pro.ast_squeeze(ast);
-        ast = pro.ast_squeeze_more(ast);
-    }
+    try {
+        var ast = sr.parse(filename);
+        if (parsedUrl.query.squeeze) {
+            ast = pro.ast_mangle(ast);
+            ast = pro.ast_squeeze(ast);
+            ast = pro.ast_squeeze_more(ast);
+        }
     
-    var code = pro.gen_code(ast, !parsedUrl.query.squeeze);
+        var code = pro.gen_code(ast, !parsedUrl.query.squeeze);
+    } catch (e) {
+        require('util').error(e);
+        console.log(e.stack);
+        var code = 'alert(' + JSON.stringify(e.message + '. Current file ' + sr.state.currentPath) + ')';
+    }
     res.writeHead(200, { 
         "Content-Type": 'application/javascript',
         "Content-Length": code.length

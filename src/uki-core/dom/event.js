@@ -1,41 +1,42 @@
-importScripts('../dom.js');
-
-uki.dom.special = {};
+var uki = require('../uki').uki,
+    utils = require('../utils'),
+    evt = exports;
 
 /**
  * Thin wrapper to support missing events (like dnd or mouseout)
  */
-uki.dom.Event = function( domEvent, type ) {
-    domEvent = domEvent || {};
-    this.domEvent = domEvent.domEvent || domEvent;
+var Event = require('../function').newClass({
+    init: function( domEvent, type ) {
+        domEvent = domEvent || {};
+        this.domEvent = domEvent.domEvent || domEvent;
 
-    for ( var i = uki.dom.props.length, prop; i; ){
-        prop = uki.dom.props[ --i ];
-        this[ prop ] = domEvent[ prop ];
-    }
-    if ( type ) this.type = type;
-};
+        for ( var i = evt.props.length, prop; i; ){
+            prop = evt.props[ --i ];
+            this[ prop ] = domEvent[ prop ];
+        }
+        if ( type ) this.type = type;
+    },
 
-uki.dom.Event.prototype = new function() {
-    function returnTrue () {
-        return true;
-    }
-
-    this.preventDefault = function() {
+    preventDefault: function() {
         this.domEvent.preventDefault();
-        this.isDefaultPrevented = returnTrue;
-    };
+        this.isDefaultPrevented = uki.FT;
+    },
 
-    this.stopPropagation = function() {
+    stopPropagation: function() {
         this.domEvent.stopPropagation();
-        this.isPropagationStopped = returnTrue;
-    };
+        this.isPropagationStopped = uki.FT;
+    },
 
-    this.isDefaultPrevented = this.isPropagationStopped = uki.FF;
-};
+    isDefaultPrevented: uki.FF,
+    isPropagationStopped: uki.FF
+});
 
 
-uki.extend(uki.dom, /** @lends uki.dom */ {
+utils.extend(evt, {
+    Event: Event,
+    
+    special: {},
+    
     props: "type altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which dragOffset dataTransfer".split(" "),
 
     events: "blur focus load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error draggesturestart draggestureend draggesture dragstart dragend drag drop dragenter dragleave dragover".split(" "),
@@ -44,15 +45,15 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
 
     addListener: function(el, types, listener) {
         types.split(' ').forEach(function(type) {
-            if ( uki.dom.special[type] ) {
-                var id = el[expando] = el[expando] || uki.guid++,
-                    specialListeners = uki.dom.specialListeners;
+            if ( evt.special[type] ) {
+                var id = el[uki.expando] = el[uki.expando] || uki.guid++,
+                    specialListeners = evt.specialListeners;
 
                 specialListeners[id] = specialListeners[id] || [];
                 specialListeners[id][type] = specialListeners[id][type] || [];
                 specialListeners[id][type].push(listener);
 
-                uki.dom.special[type].setup(el);
+                evt.special[type].setup(el);
             } else {
                 el.addEventListener ? el.addEventListener(type, listener, false) : 
                     el.attachEvent('on' + type, listener);
@@ -62,14 +63,14 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
 
     removeListener: function(el, types, listener) {
         types.split(' ').forEach(function(type) {
-            if ( uki.dom.special[type] ) {
-                var id = el[expando],
-                    specialListeners = uki.dom.specialListeners;
+            if ( evt.special[type] ) {
+                var id = el[uki.expando],
+                    specialListeners = evt.specialListeners;
 
                 if (!id || !specialListeners[id] || !specialListeners[id][type]) return;
 
-                specialListeners[id][type] = uki.without(specialListeners[id][type], listener);
-                uki.dom.special[type].teardown(el);
+                specialListeners[id][type] = utils.without(specialListeners[id][type], listener);
+                evt.special[type].teardown(el);
             } else {
                 el.removeEventListener ? el.removeEventListener(type, listener, false) :
                     el.detachEvent('on' + type, listener);
@@ -78,11 +79,11 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     },
 
     trigger: function(el, event) {
-        var specialListeners = uki.dom.specialListeners,
+        var specialListeners = evt.specialListeners,
             id;
 
         while (el) {
-            id = el[expando];
+            id = el[uki.expando];
             if (specialListeners[id] && specialListeners[id][event.type]) {
                 specialListeners[id][event.type].forEach(function(listener) {
                     listener.call(el, event);
@@ -98,25 +99,25 @@ uki.extend(uki.dom, /** @lends uki.dom */ {
     }
 });
 
-uki.dom.on = uki.dom.addListener;
-uki.dom.emit = uki.dom.trigger;
+evt.on = evt.addListener;
+evt.emit = evt.trigger;
 
-uki.forEach({
+utils.forEach({
     mouseover: 'mouseenter',
     mouseout: 'mouseleave'
 }, function( specialName, origName ){
     function handler (e) {
         if (!this.contains( e.relatedTarget )) {
-            uki.dom.trigger(this, e);
+            evt.trigger(this, e);
         }
     }
 
-    uki.dom.special[ specialName ] = {
+    evt.special[ specialName ] = {
         setup: function( el, listener ) {
-            uki.dom.addListener( el, origName, handler );
+            evt.addListener( el, origName, handler );
         },
         teardown: function( el, listener ){
-            uki.dom.removeListener( el, origName, handler );
+            evt.removeListener( el, origName, handler );
         }
     };
 });

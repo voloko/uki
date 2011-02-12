@@ -5,35 +5,49 @@ var jsp = require('./lib/parse-js'),
     util = require('util');
     
 var REQUIRE = 'require';
+var REQUIRE_TEXT = 'requireText';
 var PREFIX  = '__module_';
 
-var included = {},
-    includedCount = 0,
-    currentDir = '',
-    searchPaths = [],
-    module_asts = [];
+var JS_EXTS = ['.js'];
+var CSS_EXTS = ['.css'];
+
+
+function new_sate () {
+    return {
+        included: {},
+        includedCount: 0,
+        currentPath: '',
+        searchPaths: [],
+        moduleAsts: [],
+        options: {}
+    };
+}
+
+var sate = exports.state = null;
     
 var walker = pro.ast_walker(),
     walkers = {
        "call": function(expr, args) {
-           if (expr[0] == 'name' && expr[1] == REQUIRE) {
-               var file = resolve_real_path(args[0][1]);
+           if (expr[0] === 'name' && expr[1] === REQUIRE) {
+               var file = resolve_real_path(args[0][1], JS_EXTS);
                    
-               if (!included[file]) {
+               if (!state.included[file]) {
                    file_to_ast(file, true);
                }
-               return [this[0], expr, [['num', included[file]]] ];
+               return [this[0], expr, [['num', state.included[file]]] ];
+           } else if (expr[0] === 'name' && expr[1] === REQUIRE_TEXT) {
+               var file = resolve_real_path(args[0][1], CSS_EXTS);
+               return ['string', fs.readFileSync(file, 'utf8')];
            }
            return null;
        }
     };
     
-function path_to_file (filePath) {
+function path_to_file (filePath, extNames) {
     var ext = path.extname(filePath);
     if (ext) {
         return path.existsSync(filePath) ? filePath : false;
     } else {
-        var extNames = ['.js'];
         for (var i=0; i < extNames.length; i++) {
             var tryPath = filePath + extNames[i];
             if (path.existsSync(tryPath)) return tryPath;
@@ -42,59 +56,57 @@ function path_to_file (filePath) {
     return false;
 }
 
-function resolve_path (filePath) {
+function resolve_path (filePath, extNames) {
     if (filePath.charAt(0) === '/') {
         filePath = filePath.substr(1);
-        for (var i=0; i < searchPaths.length; i++) {
-            var tryPath = path_to_file( path.join(searchPaths[i], filePath));
+        for (var i=0; i < state.searchPaths.length; i++) {
+            var tryPath = path_to_file( path.join(state.searchPaths[i], filePath), extNames);
             if (tryPath) return tryPath;
         };
     } else {
-        return path_to_file( path.join(currentDir, filePath) );
+        return path_to_file( path.join(path.dirname(state.currentPath), filePath), extNames );
     }
     return false;
 }
 
-function resolve_real_path (filePath) {
-    var resolvedPath = resolve_path(filePath);
-    if (!resolvedPath) throw new Error('Path ' + filePath + ' not found');
+function resolve_real_path (filePath, extNames) {
+    var resolvedPath = resolve_path(filePath, extNames);
+    if (!resolvedPath) throw new Error('Path ' + filePath + ' not found.');
     return fs.realpathSync(resolvedPath);
 }
 
 function file_to_ast (filePath, wrap) {
-    included[filePath] = includedCount++;
-    var oldDir = currentDir;
-    currentDir = path.dirname(filePath);
+    state.included[filePath] = state.includedCount++;
+    var oldPath = state.currentPath;
+    state.currentPath = filePath;
     var text = fs.readFileSync(filePath, 'utf8');
     if (wrap) {
-        text = '(function() {var exports = this;' + text + '\nreturn exports;})';
+        text = '(function(global) {var exports = this;' + text + '\nreturn this;})';
     }
     var ast = jsp.parse(text);
     var newAst = walker.with_walkers(walkers, function() {
         return walker.walk(ast);
     });
-    currentDir = oldDir;
-    module_asts[included[filePath]] = newAst;
-    // return newAst;
+    state.currentPath = oldPath;
+    state.moduleAsts[state.included[filePath]] = newAst;
 }
 
 function static_require (filePath, options) {
+    state = exports.state = new_sate();
     filePath = fs.realpathSync(filePath);
-    included = {};
-    includedCount = 0;
-    currentDir = path.dirname(filePath);
-    options = options || {};
-    searchPaths = options.searchPaths || [currentDir];
-    module_asts = [];
+    state.currentPath = filePath;
+    state.options = options || {};
+    state.searchPaths = state.options.searchPaths || [path.dirname(state.currentPath)];
+    state.moduleAsts = [];
     
     file_to_ast(filePath);
     
-    var code = 'function require(index) { if (!require._cache[index]) require._cache[index] = require._modules[index].call({}); return require._cache[index]; }\n';
+    var code = 'var global = this;';
+    code    += 'function require(index) { if (!require._cache[index]) require._cache[index] = require._modules[index].call({}, global); return require._cache[index]; }\n';
     code    += 'require._modules = []; require._cache = [];';
-    code    += 'var global = {};';
     var body = jsp.parse(code)[1];
     
-    for (var i=1; i < includedCount; i++) {
+    for (var i=1; i < state.includedCount; i++) {
         body[body.length] =
             [ 'stat', 
                 ['assign', 
@@ -103,14 +115,12 @@ function static_require (filePath, options) {
                         ['dot', ['name', 'require'], '_modules' ],
                         ['num', i]
                     ],
-                    module_asts[i][1][0][1]
+                    state.moduleAsts[i][1][0][1]
                 ]
             ];
     };
-    body = body.concat(module_asts[0][1]);
-    // body.push(['call', module_asts[0][1][0], []]);
+    body = body.concat(state.moduleAsts[0][1]);
     
-
     return [ 'toplevel',
       [ [ 'stat',
           [ 'call',

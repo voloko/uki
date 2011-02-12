@@ -1,54 +1,55 @@
-importScripts('../view.js');
+var dom = require('../dom'),
+    fun = require('../function');
 
+var Focusable = {};
 
-uki.view.Focusable = (function() {
-    this._focusable = true;
+Focusable._focusable = true;
 
-    this.focusableDom = function() {
-        return this.dom();
-    };
-    
-    this.tabIndex = function(value) {
-        if (value === undefined) return this.focusableDom().tabIndex;
-        this.focusableDom().tabIndex = value;
-        if (value && !this._focusableInited) this._initFocusable();
-        return this;
-    };
-    
-    this._initFocusable = function() {
-        this._focusableInited = true;
-        uki.dom.addListener(this.focusableDom(), 'focus', uki.bindOnce(this._focus, this));
-        uki.dom.addListener(this.focusableDom(), 'blur', uki.bindOnce(this._blur, this));
-    };
-    
-    this._destruct = function() {
-        uki.dom.removeListener(this.focusableDom(), 'focus', uki.bindOnce(this._focus, this));
-        uki.dom.removeListener(this.focusableDom(), 'blur', uki.bindOnce(this._blur, this));
-    };
-    
-    this._focus = function() {
-        if (this.focusedClass()) this.addClass(this.focusedClass());
-    };
-    
-    this._blur = function() {
-        if (this.focusedClass()) this.removeClass(this.focusedClass());
-    };
+Focusable.focusableDom = function() {
+    return this.dom();
+};
 
-    this.focus = function() {
-        this.focusableDom().focus();
-        return this;
-    };
-
-    this.blur = function() {
-        this.focusableDom().blur();
-        return this;
-    };
-
-    this.hasFocus = function() {
-        return this.focusableDom() == doc.activeElement;
-    };
-    
-    this.focusedClass = uki.newProp('_focusedClass');
-
+Focusable.tabIndex = function(value) {
+    if (value === undefined) return this.focusableDom().tabIndex;
+    this.focusableDom().tabIndex = value;
+    if (value && !this._focusableInited) this._initFocusable();
     return this;
-}).call({});
+};
+
+Focusable._initFocusable = function() {
+    this._focusableInited = true;
+    dom.addListener(this.focusableDom(), 'focus', fun.bindOnce(this._focus, this));
+    dom.addListener(this.focusableDom(), 'blur', fun.bindOnce(this._blur, this));
+};
+
+Focusable._destruct = function() {
+    dom.removeListener(this.focusableDom(), 'focus', fun.bindOnce(this._focus, this));
+    dom.removeListener(this.focusableDom(), 'blur', fun.bindOnce(this._blur, this));
+};
+
+Focusable._focus = function() {
+    if (this.focusedClass()) this.addClass(this.focusedClass());
+};
+
+Focusable._blur = function() {
+    if (this.focusedClass()) this.removeClass(this.focusedClass());
+};
+
+Focusable.focus = function() {
+    this.focusableDom().focus();
+    return this;
+};
+
+Focusable.blur = function() {
+    this.focusableDom().blur();
+    return this;
+};
+
+Focusable.hasFocus = function() {
+    return this.focusableDom() == uki.doc.activeElement;
+};
+
+Focusable.focusedClass = fun.newProp('_focusedClass');
+
+
+exports.Focusable = Focusable;

@@ -1,6 +1,7 @@
 var toString = Object.prototype.toString,
     arrayPrototype = Array.prototype,
-    slice = arrayPrototype.slice;
+    slice = arrayPrototype.slice,
+    utils = exports;
 var marked = '__uki_marked';
 // dummy subclass
 /** @ignore */
@@ -20,7 +21,7 @@ function inheritance () {}
  * @param {object=} value Value to set
  * @returns {object} target if value is being set, retrieved value otherwise
  */
-this.prop = function(target, attr, value, extra) {
+utils.prop = function(target, attr, value, extra) {
     if (value !== undefined) {
         if (target[attr] && target[attr].apply) {
         // if (uki.isFunction(target[attr])) {
@@ -45,7 +46,7 @@ this.prop = function(target, attr, value, extra) {
  * @param {object} object Object to check
  * @returns {boolean}
  */
-this.isFunction = function( obj ) {
+utils.isFunction = function( obj ) {
     return toString.call(obj) === "[object Function]";
 };
 
@@ -55,11 +56,11 @@ this.isFunction = function( obj ) {
  * @param {object} object Object to check
  * @returns {boolean}
  */
-this.isArray = function( obj ) {
+utils.isArray = function( obj ) {
     return toString.call(obj) === "[object Array]";
 };
 
-this.toArray = function(arr) {
+utils.toArray = function(arr) {
     return slice.call(arr, 0);
 };
 
@@ -69,7 +70,7 @@ this.toArray = function(arr) {
  * @param {string} html
  * @returns {string} escaped html
  */
-this.escapeHTML = function( html ) {
+utils.escapeHTML = function( html ) {
     var trans = {
         '&': '&amp;',
         '<': '&lt;',
@@ -80,13 +81,13 @@ this.escapeHTML = function( html ) {
     return (html + '').replace(/[&<>\"\']/g, function(c) { return trans[c]; });
 };
 
-this.pluck = function( array, attr ) {
+utils.pluck = function( array, attr ) {
     return array.map(function(v) {
         return uki.prop(v, attr);
     });
 };
 
-this.without = function( array, value ) {
+utils.without = function( array, value ) {
     return array.filter(function(v) {
         return v !== value;
     });
@@ -101,7 +102,7 @@ this.without = function( array, value ) {
  *                         current item
  * @returns {object}
  */
-this.forEach = function( object, callback, context ) {
+utils.forEach = function( object, callback, context ) {
     var name, i = 0, length = object.length;
 
     if ( length === undefined ) {
@@ -121,7 +122,7 @@ this.forEach = function( object, callback, context ) {
  * @param {Array} array
  * @returns {Array}
  */
-this.unique = function( array ) {
+utils.unique = function( array ) {
     var result = [],
         i;
 
@@ -161,7 +162,7 @@ this.unique = function( array ) {
  * @param {...object} sources Objects to take properties from
  * @returns Describe what it returns
  */
-this.extend = function() {
+utils.extend = function() {
     var target = arguments[0] || {}, i = 1, length = arguments.length, options;
 
     for ( ; i < length; i++ ) {
@@ -187,7 +188,7 @@ this.extend = function() {
  * @param {array} array sorted array
  * @returns {number} index of closest value
  */
-this.binarySearch = function (value, array) {
+utils.binarySearch = function (value, array) {
     var low = 0, high = array.length, mid;
 
     while (low < high) {
@@ -199,26 +200,26 @@ this.binarySearch = function (value, array) {
 };
 
 
-this.firstToLower = function(string) {
+utils.firstToLower = function(string) {
     return string.substr(0, 1).toLowerCase() + string.substr(1);
 };
 
-this.camalize = function(string) {
+utils.camalize = function(string) {
     return string.replace(/[-_]\S/g, function(v) {
         return v.substr(1).toUpperCase();
     });
 };
 
-this.dasherize = function(string) {
+utils.dasherize = function(string) {
     return string.replace(/[A-Z]/g, function(v) {
         return '-' + v.toLowerCase();
     });
 };
 
-this.path2obj = function(path, context) {
+utils.path2obj = function(path, context) {
     var parts = path.split('.');
 
-    context = context || root;
+    context = context || global;
 
     for (var i=0, l = parts.length; context && i < l; i++) {
         context = context[parts[i]];

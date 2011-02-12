@@ -1,6 +1,6 @@
 /**#@+ @ignore */
-var prop = require('./function').prop,
-    utils = require('./utils'),
+var utils = require('./utils'),
+    Collection = require('./collection').Collection,
     chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
     regexps = [ // enforce order
         { name: 'ID', regexp: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/ },
@@ -40,7 +40,7 @@ var prop = require('./function').prop,
         TYPE: function(comp, match) {
             var expected = match[1];
             if (expected == '*') return true;
-            var typeName = prop(comp, 'typeName');
+            var typeName = utils.prop(comp, 'typeName');
             return typeName && typeName.length >= expected.length &&
                    ('.' + typeName).indexOf('.' + expected) == (typeName.length - expected.length);
         },
@@ -51,7 +51,7 @@ var prop = require('./function').prop,
         },
 
         PROP: function(comp, match) {
-            var result = prop(comp, match[1]),
+            var result = utils.prop(comp, match[1]),
                 value = result + '',
                 type = match[2],
                 check = match[4];
@@ -104,7 +104,7 @@ var prop = require('./function').prop,
 
 function mapAccessor (prop) {
     return function(elem) {
-        return  prop(elem, prop);
+        return  utils.prop(elem, prop);
     };
 }
 
@@ -114,7 +114,7 @@ function nextViews (view) {
 
 function recChildren (comps) {
     return flatten(comps.map(function(comp) {
-        return [comp].concat( recChildren(prop(comp, 'childViews')) );
+        return [comp].concat( recChildren(utils.prop(comp, 'childViews')) );
     }));
 }
 
@@ -148,7 +148,7 @@ var Selector = {
      * @return {uki.Collection} found views
      */
     find: function(selector, context, skipFiltering) {
-        context = context || uki.top();
+        context = context || require('./attachment').instances();
         if (context.length === undefined) context = [context];
         
         var tokens = Selector.tokenize(selector),
@@ -167,8 +167,8 @@ var Selector = {
         if (extra) {
             result = result.concat(Selector.find(extra, context, true));
         }
-
-        return skipFiltering ? result : new uki.Collection(uki.unique(result));
+        
+        return skipFiltering ? result : new Collection(utils.unique(result));
     },
 
     /** @ignore */
@@ -216,4 +216,4 @@ var Selector = {
     }
 };
 
-this.Selector = Selector;
+exports.find = Selector.find;

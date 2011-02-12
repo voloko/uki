@@ -9,15 +9,15 @@
  * @name uki
  * @return {uki.Collection}
  */
-root.uki = root.uki || function(val, context) {
+function uki(val, context) {
     if (typeof val === "string") {
 
         var m = val.match(/^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/),
             e = m && uki._ids[m[1]];
         if (m && !context) {
-            return new uki.Collection( e ? [e] : [] );
+            return new require('./collection').Collection( e ? [e] : [] );
         }
-        return uki.find(val, context);
+        return require('./selector').find(val, context);
 
     }
     if (val.length === undefined) val = [val];
@@ -45,10 +45,10 @@ uki.unregisterId = function(comp) {
     uki._ids[ uki.prop(comp, 'id') ] = undefined;
 };
 
-uki.top = function() {
-    var atts = [];
-    uki.forEach(Attachement._instances || {}, function(a) {
-        atts.push(a);
-    });
-    return atts;
-};
+uki.doc  = window.document || {},
+uki.docElem = uki.doc.documentElement,
+uki.nav = navigator,
+uki.ua  = uki.nav.userAgent,
+uki.expando = 'uki' + (+new Date),
+
+exports.uki = uki;

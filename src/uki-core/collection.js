@@ -1,4 +1,6 @@
-importScripts('uki.js');
+var fun = require('./function'),
+    utils = require('./utils'),
+    arrayPrototype = Array.prototype;
 
 /**
  * Collection performs group operations on uki.view objects.
@@ -11,12 +13,12 @@ importScripts('uki.js');
  * @constructor
  * @class
  */
-uki.Collection = uki.newClass(function(self) {
+var Collection = fun.newClass({
 
-    this.init = function( elems ) {
+    init: function( elems ) {
         this.length = 0;
         arrayPrototype.push.apply( this, elems );
-    };
+    },
 
     /**#@+ @memberOf uki.Collection# */
     /**
@@ -27,9 +29,9 @@ uki.Collection = uki.newClass(function(self) {
      * @param {function(this:uki.view.Base, number, uki.view.Base)} callback Callback to call for every item
      * @returns {uki.view.Collection} self
      */
-    this.forEach = function( callback, context ) {
+    forEach: function( callback, context ) {
         return arrayPrototype.forEach.call( this, callback, context );
-    };
+    },
 
     /**
      * Creates a new uki.Collection populated with found items
@@ -39,13 +41,13 @@ uki.Collection = uki.newClass(function(self) {
      * @param {function(uki.view.Base, number):boolean} callback Callback to call for every item
      * @returns {uki.view.Collection} created collection
      */
-    this.filter = function( callback, context ) {
-        return new uki.Collection( arrayPrototype.filter.call(this, callback, context) );
-    };
+    filter: function( callback, context ) {
+        return new Collection( arrayPrototype.filter.call(this, callback, context) );
+    },
 
-    this.map = function( callback, context ) {
+    map: function( callback, context ) {
         return arrayPrototype.map.call(this, callback, context);
-    };
+    },
 
     /**
      * Sets an attribute on all views or gets the value of the attribute on the first view
@@ -60,16 +62,16 @@ uki.Collection = uki.newClass(function(self) {
      * @param {object=} value Value to set
      * @returns {uki.view.Collection|Object} Self or attribute value
      */
-    this.prop = function( name, value ) {
+    prop: function( name, value ) {
         if (value !== undefined) {
             for (var i=this.length-1; i >= 0; i--) {
-                uki.prop( this[i], name, value );
+                utils.prop( this[i], name, value );
             };
             return this;
         } else {
-            return this[0] ? uki.prop( this[0], name ) : "";
+            return this[0] ? utils.prop( this[0], name ) : "";
         }
-    };
+    },
 
     /**
      * Finds views within collection context
@@ -81,9 +83,9 @@ uki.Collection = uki.newClass(function(self) {
      * @param {string} selector
      * @returns {uki.view.Collection} Collection of found items
      */
-    this.find = function( selector ) {
-        return uki.find( selector, this );
-    };
+    find: function( selector ) {
+        return require('./selector').find( selector, this );
+    },
 
     /**
      * Appends views to the first item in collection
@@ -93,7 +95,7 @@ uki.Collection = uki.newClass(function(self) {
      * @param {Array.<uki.view.Base>} views Views to append
      * @returns {uki.view.Collection} self
      */
-    this.append = function( views ) {
+    append: function( views ) {
         var target = this[0];
         if (!target) return this;
 
@@ -104,74 +106,76 @@ uki.Collection = uki.newClass(function(self) {
         };
 
         return this;
-    };
+    },
 
-    this.appendTo = function( target ) {
-        target = uki(target)[0];
+    appendTo: function( target ) {
+        target = require('./builder').build(target)[0];
         this.forEach(function(view) {
             target.appendChild(view);
         });
         return this;
-    };
+    },
 
-    this.attach = function( target ) {
+    attach: function( target ) {
         this.forEach(function(view) {
-            uki.Attachment.attach( target, view );
+            require('./attachment').attach( target, view );
             view.resized();
         });
         return this;
-    };
-
-    /**#@-*/
-
-    var proto = this;
-
-    /** @function
-    @name uki.Collection#parent */
-    /** @function
-    @name uki.Collection#next */
-    /** @function
-    @name uki.Collection#prev */
-    [
-        ['parent', 'parent'],
-        ['next', 'nextView'],
-        ['prev', 'prevView']
-    ].forEach(function(i, desc) {
-        proto[ desc[0] ] = function() {
-            return new uki.Collection(
-                uki.unique(
-                    this.map(this, function(view) {
-                        return uki.prop(view, desc[1]);
-                    })
-                )
-            );
-        };
-    });
-
-
-    /** @function
-    @name uki.Collection#addListener */
-    /** @function
-    @name uki.Collection#unload */
-    /** @function
-    @name uki.Collection#trigger */
-    /** @function
-    @name uki.Collection#layout */
-    /** @function
-    @name uki.Collection#appendChild */
-    /** @function
-    @name uki.Collection#removeChild */
-    /** @function
-    @name uki.Collection#insertBefore */
-    /** @function
-    @name uki.Collection#toggle */
-    'addListener removeListener trigger appendChild removeChild insertBefore toggle'.split(' ').forEach(function(name) {
-        proto[name] = function() {
-            for (var i=this.length-1; i >=0; i--) {
-                this[i][name].apply(this[i], arguments);
-            };
-            return this;
-        };
-    });
-
+    }
 });
+
+/**#@-*/
+
+var proto = Collection.prototype;
+
+/** @function
+@name uki.Collection#parent */
+/** @function
+@name uki.Collection#next */
+/** @function
+@name uki.Collection#prev */
+[
+    ['parent', 'parent'],
+    ['next', 'nextView'],
+    ['prev', 'prevView']
+].forEach(function(i, desc) {
+    proto[ desc[0] ] = function() {
+        return new Collection(
+            utils.unique(
+                this.map(this, function(view) {
+                    return utils.prop(view, desc[1]);
+                })
+            )
+        );
+    };
+});
+
+
+/** @function
+@name uki.Collection#addListener */
+/** @function
+@name uki.Collection#unload */
+/** @function
+@name uki.Collection#trigger */
+/** @function
+@name uki.Collection#layout */
+/** @function
+@name uki.Collection#appendChild */
+/** @function
+@name uki.Collection#removeChild */
+/** @function
+@name uki.Collection#insertBefore */
+/** @function
+@name uki.Collection#toggle */
+'addListener removeListener trigger on emit appendChild removeChild insertBefore toggle'.split(' ').forEach(function(name) {
+    proto[name] = function() {
+        for (var i=this.length-1; i >=0; i--) {
+            this[i][name].apply(this[i], arguments);
+        };
+        return this;
+    };
+});
+
+
+exports.Collection = Collection;

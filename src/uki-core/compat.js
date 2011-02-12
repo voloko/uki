@@ -1,3 +1,5 @@
+var arrayPrototype = Array.prototype;
+
 if (!arrayPrototype.indexOf) {
     arrayPrototype.indexOf = function(find, i) {
         if (i === undefined) i = 0;
