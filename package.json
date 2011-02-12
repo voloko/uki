@@ -15,9 +15,10 @@
 	"directories": {
 		"lib": "./src",
 		"spec": "./spec",
-		"example": "./examples"
+		"example": "./examples",
+		"bin": "./tools/bin"
 	},
-	"main": "./index.js",
+	"main": "./src/uki.js",
 	"engines": {
 		"node": ">=0.2.0"
 	},

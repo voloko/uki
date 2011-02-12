@@ -31,4 +31,4 @@ uki.Attachement = require('./uki-core/attachment').Attachement;
 uki.Mustache = require('uki-core/mustache').Mustache;
 
 
-module.exports = global.uki = uki;
+module.exports = uki;

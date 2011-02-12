@@ -99,14 +99,14 @@ function static_require (filePath, options) {
     state.searchPaths = state.options.searchPaths || [path.dirname(state.currentPath)];
     state.moduleAsts = [];
     
-    file_to_ast(filePath);
+    file_to_ast(filePath, true);
     
     var code = 'var global = this;';
     code    += 'function require(index) { if (!require.cache[index]) {var module = {exports: {}}; require.cache[index] = require.modules[index].call(module.exports, global, module);} return require.cache[index]; }\n';
     code    += 'require.modules = []; require.cache = [];';
     var body = jsp.parse(code)[1];
     
-    for (var i=1; i < state.includedCount; i++) {
+    for (var i=0; i < state.includedCount; i++) {
         body[body.length] =
             [ 'stat', 
                 ['assign', 
@@ -119,7 +119,7 @@ function static_require (filePath, options) {
                 ]
             ];
     };
-    body = body.concat(state.moduleAsts[0][1]);
+    body.push(['stat', ['call', ['name', 'require'], [['num', '0']]]]);
     
     return [ 'toplevel',
       [ [ 'stat',

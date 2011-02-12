@@ -1,4 +1,5 @@
 v0.4a
+- Nodejs tool chain
 - Remove IE6 support
 - Replace 2 phase layout with default css based layout
 - Support css inlining
