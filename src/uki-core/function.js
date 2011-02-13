@@ -225,3 +225,5 @@ fun.defer = function( fn, timeout ) {
     timeout = timeout || 0;
     setTimeout(fn, timeout);
 };
+
+utils.extend(uki, fun);

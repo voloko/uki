@@ -324,4 +324,4 @@ var Mustache = function() {
   });
 }();
 
-this.Mustache = Mustache;
+require('uki').Mustache = exports.Mustache = Mustache;

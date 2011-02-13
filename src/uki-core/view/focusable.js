@@ -52,4 +52,4 @@ Focusable.hasFocus = function() {
 Focusable.focusedClass = fun.newProp('_focusedClass');
 
 
-exports.Focusable = Focusable;
+require('../view').Focusable = exports.Focusable = Focusable;

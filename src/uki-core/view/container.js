@@ -9,7 +9,7 @@ var view  = require('../view'),
  * @augments uki.view.Base
  * @name uki.view.Container
  */
-exports.Container = fun.newClass(Base, {});
+view.Container = exports.Container = fun.newClass(Base, {});
 
 var proto = exports.Container.prototype;
  

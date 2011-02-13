@@ -9,7 +9,7 @@ var utils = require('./utils'),
  * @param {object} ml JSON-like markup
  * @returns {uki.view.Collection} collection of created elements
  */
-exports.build = function(ml) {
+require('uki').build = exports.build = function(ml) {
     return new Collection( createMulti( (ml.length === undefined) ? [ml] : ml ) );
 };
 

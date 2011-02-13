@@ -226,3 +226,5 @@ utils.path2obj = function(path, context) {
     };
     return context;
 };
+
+utils.extend(require('uki'), utils);

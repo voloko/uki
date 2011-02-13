@@ -18,7 +18,7 @@ var Attachment = require('./function').newClass(Container, {
     }
 });
 
-exports.Attachment = Attachment;
+uki.Attachment = exports.Attachment = Attachment;
 
 var instances = null;
 

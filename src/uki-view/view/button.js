@@ -5,7 +5,7 @@ var uki = require('uki-core'),
 var Button = uki.newClass(Base, Focusable, {});
 var proto = Button.prototype;
 
-uki.Stylesheet.add(requireText('./button/button.css'));
+requireCss('./button/button.css')
 
 proto.typeName = 'Button';
 
@@ -50,4 +50,4 @@ proto.destruct = function() {
 
 proto._focusedClass = 'uki-button_focused';
 
-exports.Button = Button;
+uki.view.Button = exports.Button = Button;

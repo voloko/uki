@@ -216,4 +216,4 @@ var Selector = {
     }
 };
 
-exports.find = Selector.find;
+require('uki').find = exports.find = Selector.find;

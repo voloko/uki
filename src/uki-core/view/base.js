@@ -5,7 +5,7 @@ var view  = require('../view'),
     dom   = require('../dom'),
     Observable = require('./observable').Observable;
     
-exports.Base = fun.newClass(Observable, {});
+view.Base = exports.Base = fun.newClass(Observable, {});
 
 var proto = exports.Base.prototype;
 

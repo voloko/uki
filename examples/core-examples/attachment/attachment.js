@@ -7,8 +7,6 @@
     <script src="attachment.js"></script>
 */
 
-uki.Stylesheet.apply();
-
 uki({
     view: 'Button',
     pos: 'l:50% t:40px w:200px ml:-100px',

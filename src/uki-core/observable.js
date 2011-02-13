@@ -41,4 +41,4 @@ var Observable = {
 Observable.on = Observable.addListener;
 Observable.emit = Observable.trigger;
 
-exports.Observable = Observable;
+require('uki').Observable = exports.Observable = Observable;

@@ -1,6 +1,5 @@
 var uki = require('../uki'),
-    utils = require('../utils'),
-    evt = exports;
+    utils = require('../utils');
 
 /**
  * Thin wrapper to support missing events (like dnd or mouseout)
@@ -32,7 +31,7 @@ var Event = require('../function').newClass({
 });
 
 
-utils.extend(evt, {
+var evt = module.exports = {
     Event: Event,
     
     special: {},
@@ -97,7 +96,7 @@ utils.extend(evt, {
         e && e.preventDefault();
         return false;
     }
-});
+};
 
 evt.on = evt.addListener;
 evt.emit = evt.trigger;
@@ -121,3 +120,5 @@ utils.forEach({
         }
     };
 });
+
+utils.extend(require('../dom'), evt);

@@ -4,7 +4,7 @@ var utils = require('./utils'),
 var registry = {};
 
 /** @namespace */
-utils.extend(exports, {
+uki.view = module.exports = {
     register: function(view) {
         registry[view.dom()[uki.expando]] = view;
     },
@@ -73,4 +73,4 @@ utils.extend(exports, {
             return this;
         };
     }
-})
+};

@@ -78,4 +78,4 @@ Observable.emit = Observable.trigger;
 
 
 
-exports.Observable = Observable;
+require('../view').Observable = exports.Observable = Observable;

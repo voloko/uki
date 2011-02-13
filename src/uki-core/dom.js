@@ -6,7 +6,7 @@ var uki = require('./uki'),
  * @namespace
  * @author voloko
  */
-utils.extend(exports, {
+uki.dom = module.exports = {
     /**
      * Convenience wrapper around document.createElement
      * Creates dom element with given tagName, cssText and innerHTML
@@ -86,4 +86,5 @@ utils.extend(exports, {
         if (condition === undefined) condition = !this.hasClass(elem, className);
         condition ? this.addClass(elem, className) : this.removeClass(elem, className);
     }
-});
+};
+utils.extend(uki, module.exports);
