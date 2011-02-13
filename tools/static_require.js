@@ -4,7 +4,8 @@ var jsp  = require('uglify-js').parser,
     path = require('path'),
     util = require('util'),
     cssom = require('cssom'),
-    mime = require('connect').utils.mime;
+    mime = require('connect').utils.mime,
+    url = require('url');
     
 var REQUIRE = 'require';
 var REQUIRE_TEXT = 'requireText';
@@ -75,6 +76,10 @@ function imagePathToDataUri (filePath) {
         buffer = fs.readFileSync(filePath);
     return 'data:' + contentType + ';base64,' + buffer.toString('base64');
 }
+
+function absoluteImagePath (filePath) {
+    return filePath.substring(state.options.serverRoot.length);
+}
     
 function dataUriCssImages (cssPath, string) {
     return string.replace(/url\(([^)]+)\)/, function(_, filePath) {
@@ -82,14 +87,34 @@ function dataUriCssImages (cssPath, string) {
         return 'url(' + imagePathToDataUri(imagePath) + ')';
     });
 }
+
+function addIEBackground (cssPath, style, sourceValue) {
+    if (style['*background-image']) return;
+    var filePath = sourceValue.match(/url\(([^)]+)\)/)[1],
+        url = path.join( path.dirname(cssPath), filePath );
+        
+    style.setProperty('*background-image', 'url(' + absoluteImagePath(url) + ')');
+}
     
 function processCssIncludes (cssPath) {
     var code = fs.readFileSync(cssPath, 'utf8');
     var styleSheet = cssom.parse(code);
     styleSheet.cssRules.forEach(function(rule) {
         var style = rule.style;
-        if (style.background) style.background = dataUriCssImages(cssPath, style.background);
-        if (style['background-image']) style['background-image'] = dataUriCssImages(cssPath, style['background-image']);
+        if (style.background) {
+            var newBg = dataUriCssImages(cssPath, style.background);
+            if (newBg != style.background) {
+                addIEBackground(cssPath, style, style.background);
+                style.background = newBg;
+            }
+        }
+        if (style['background-image']) {
+            var newBg = dataUriCssImages(cssPath, style['background-image']);
+            if (newBg != style['background-image']) {
+                addIEBackground(cssPath, stle, style['background-image']);
+                style['background-image'] = newBg;
+            };
+        }
     });
     return styleSheet + '';
 }
@@ -111,7 +136,7 @@ function resolvePath (filePath, extNames) {
     if (filePath.charAt(0) === '.') {
         return tryFileExtensions( path.join(path.dirname(state.currentPath), filePath), extNames );
     } else {
-        var searchPaths = [path.dirname(state.currentPath)].concat(state.searchPaths);
+        var searchPaths = [path.dirname(state.currentPath)].concat(state.options.searchPaths);
         for (var i=0; i < searchPaths.length; i++) {
             var tryPath = tryFileExtensions( path.join(searchPaths[i], filePath), extNames);
             if (tryPath) return tryPath;
@@ -146,8 +171,18 @@ function staticRequire (filePath, options) {
     state = exports.state = new_sate();
     filePath = fs.realpathSync(filePath);
     state.currentPath = filePath;
-    state.options = options || {};
-    state.searchPaths = state.options.searchPaths || [path.dirname(state.currentPath)];
+    options = options || {};
+    
+    options.searchPaths = options.searchPaths ? 
+        options.searchPaths.map(fs.realpathSync) : [];
+    options.searchPaths.unshift(path.dirname(state.currentPath));
+    
+    options.serverRoot = options.serverRoot ? 
+        fs.realpathSync(options.serverRoot) : 
+        path.dirname(currentPath);
+        
+    state.options = options;
+        
     state.requiredAsts = [];
     
     addFileToAstList(filePath, true);
@@ -200,7 +235,8 @@ exports.getHandler = function(options) {
 
 exports.handle = function(req, res, options) {
     options = options || {};
-    var filePath = options.filePath || (req.param(0) + '.js');
+    var filePath = options.filePath || (url.parse(req.url).pathname.substr(1));
+    if (!options.serverRoot) options.serverRoot = process.cwd();
     try {
         var ast = staticRequire(filePath, options);
         if (req.param('squeeze')) {
