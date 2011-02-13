@@ -24,6 +24,7 @@ function new_sate () {
         
         requiredCss: {},
         requiredCssFiles: [],
+        requiredCssUsed: false,
         
         currentPath: '',
         searchPaths: [],
@@ -61,6 +62,9 @@ var walker = pro.ast_walker(),
                return ['string', path.dirname(state.currentPath)];
            } else if (name === '__filename') {
                return ['string', state.currentPath];
+           } else if (name === '__requiredCss') {
+               state.requiredCssUsed = true;
+               return null;
            }
            return null;
        }
@@ -153,7 +157,7 @@ function staticRequire (filePath, options) {
     code    += 'require.modules = []; require.cache = [];';
     var body = jsp.parse(code)[1];
     
-    if (state.requiredCssFiles.length) {
+    if (state.requiredCssUsed) {
         var code = state.requiredCssFiles.map(function(filePath) {
             return processCssIncludes(filePath);
         }).join('\n');
