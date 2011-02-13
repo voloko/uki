@@ -2,11 +2,14 @@ var jsp  = require('uglify-js').parser,
     pro  = require('uglify-js').uglify,
     fs   = require('fs'),
     path = require('path'),
-    util = require('util');
+    util = require('util'),
+    cssom = require('cssom'),
+    mime = require('connect').utils.mime;
     
 var REQUIRE = 'require';
 var REQUIRE_TEXT = 'requireText';
 var REQUIRE_CSS  = 'requireCss';
+var TO_DATA_URI  = 'toDataUri';
 var PREFIX  = '__module_';
 
 var JS_EXTS = ['.js'];
@@ -34,17 +37,17 @@ var walker = pro.ast_walker(),
     walkers = {
        "call": function(expr, args) {
            if (expr[0] === 'name' && expr[1] === REQUIRE) {
-               var file = resolve_real_path(args[0][1], JS_EXTS);
+               var file = resolvePathReal(args[0][1], JS_EXTS);
                    
                if (!state.required[file]) {
-                   file_to_ast(file, true);
+                   addFileToAstList(file, true);
                }
                return [this[0], expr, [['num', state.required[file]]] ];
            } else if (expr[0] === 'name' && expr[1] === REQUIRE_TEXT) {
-               var file = resolve_real_path(args[0][1], []);
+               var file = resolvePathReal(args[0][1], []);
                return ['string', fs.readFileSync(file, 'utf8')];
            } else if (expr[0] === 'name' && expr[1] === REQUIRE_CSS) {
-               var file = resolve_real_path(args[0][1], CSS_EXTS);
+               var file = resolvePathReal(args[0][1], CSS_EXTS);
                if (!state.requiredCss[file]) {
                    state.requiredCss[file] = true;
                    state.requiredCssFiles.push(file);
@@ -63,7 +66,31 @@ var walker = pro.ast_walker(),
        }
     };
     
-function path_to_file (filePath, extNames) {
+function imagePathToDataUri (filePath) {
+    var contentType = mime.type( path.extname(filePath) ),
+        buffer = fs.readFileSync(filePath);
+    return 'data:' + contentType + ';base64,' + buffer.toString('base64');
+}
+    
+function dataUriCssImages (cssPath, string) {
+    return string.replace(/url\(([^)]+)\)/, function(_, filePath) {
+        var imagePath = path.join( path.dirname(cssPath), filePath );
+        return 'url(' + imagePathToDataUri(imagePath) + ')';
+    });
+}
+    
+function processCssIncludes (cssPath) {
+    var code = fs.readFileSync(cssPath, 'utf8');
+    var styleSheet = cssom.parse(code);
+    styleSheet.cssRules.forEach(function(rule) {
+        var style = rule.style;
+        if (style.background) style.background = dataUriCssImages(cssPath, style.background);
+        if (style['background-image']) style['background-image'] = dataUriCssImages(cssPath, style['background-image']);
+    });
+    return styleSheet + '';
+}
+    
+function tryFileExtensions (filePath, extNames) {
     var ext = path.extname(filePath);
     if (ext) {
         return path.existsSync(filePath) ? filePath : false;
@@ -76,26 +103,26 @@ function path_to_file (filePath, extNames) {
     return false;
 }
 
-function resolve_path (filePath, extNames) {
+function resolvePath (filePath, extNames) {
     if (filePath.charAt(0) === '.') {
-        return path_to_file( path.join(path.dirname(state.currentPath), filePath), extNames );
+        return tryFileExtensions( path.join(path.dirname(state.currentPath), filePath), extNames );
     } else {
         var searchPaths = [path.dirname(state.currentPath)].concat(state.searchPaths);
         for (var i=0; i < searchPaths.length; i++) {
-            var tryPath = path_to_file( path.join(searchPaths[i], filePath), extNames);
+            var tryPath = tryFileExtensions( path.join(searchPaths[i], filePath), extNames);
             if (tryPath) return tryPath;
         };
     }
     return false;
 }
 
-function resolve_real_path (filePath, extNames) {
-    var resolvedPath = resolve_path(filePath, extNames);
+function resolvePathReal (filePath, extNames) {
+    var resolvedPath = resolvePath(filePath, extNames);
     if (!resolvedPath) throw new Error('Path ' + filePath + ' not found.');
     return fs.realpathSync(resolvedPath);
 }
 
-function file_to_ast (filePath, wrap) {
+function addFileToAstList (filePath, wrap) {
     state.required[filePath] = state.requiredCount++;
     var oldPath = state.currentPath;
     state.currentPath = filePath;
@@ -111,7 +138,7 @@ function file_to_ast (filePath, wrap) {
     state.requiredAsts[state.required[filePath]] = newAst;
 }
 
-function static_require (filePath, options) {
+function staticRequire (filePath, options) {
     state = exports.state = new_sate();
     filePath = fs.realpathSync(filePath);
     state.currentPath = filePath;
@@ -119,7 +146,7 @@ function static_require (filePath, options) {
     state.searchPaths = state.options.searchPaths || [path.dirname(state.currentPath)];
     state.requiredAsts = [];
     
-    file_to_ast(filePath, true);
+    addFileToAstList(filePath, true);
     
     var code = 'var global = this;';
     code    += 'function require(index) { if (!require.cache[index]) {var module = {exports: {}}; require.modules[index].call(module.exports, global, module); require.cache[index] = module.exports} return require.cache[index]; }\n';
@@ -128,7 +155,7 @@ function static_require (filePath, options) {
     
     if (state.requiredCssFiles.length) {
         var code = state.requiredCssFiles.map(function(filePath) {
-            return fs.readFileSync(filePath, 'utf8');
+            return processCssIncludes(filePath);
         }).join('\n');
         body.push( ['var', [['__requiredCss', ['string', code]]]] );
     }
@@ -159,10 +186,34 @@ function static_require (filePath, options) {
     
 }
 
-exports.parse = static_require;
-exports.gen_code = function(filePath, options) {
-    return pro.gen_code(
-        static_require(filePath, options),
-        options && options.beautify
-    );
+exports.parse = staticRequire;
+
+exports.getHandler = function(options) {
+    return function(req, res) {
+        exports.handle(req, res, options);
+    };
+};
+
+exports.handle = function(req, res, options) {
+    options = options || {};
+    var filePath = options.filePath || (req.param(0) + '.js');
+    try {
+        var ast = staticRequire(filePath, options);
+        if (req.param('squeeze')) {
+            ast = pro.ast_mangle(ast);
+            ast = pro.ast_squeeze(ast);
+            ast = pro.ast_squeeze_more(ast);
+        }
+
+        var code = pro.gen_code(ast, !req.param('squeeze'));
+    } catch (e) {
+        require('util').error(e);
+        console.log(e.stack);
+        var code = 'alert(' + JSON.stringify(e.message + '. Current file ' + exports.state.currentPath) + ')';
+    }
+    res.writeHead(200, { 
+        "Content-Type": 'application/javascript',
+        "Content-Length": code.length
+    });
+    res.end(req.method === "HEAD" ? "" : code);
 };
