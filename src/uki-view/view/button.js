@@ -10,8 +10,8 @@ requireCss('./button/button.css')
 proto.typeName = 'Button';
 
 proto.label = function(v) {
-    if (v === undefined) return this._input.value;
-    this._input.value = v;
+    if (v === undefined) return this._text.innerHTML;
+    this._text.innerHTML = v;
     this.toggleClass('uki-button_image-only', !v);
     return this;
 };
@@ -19,8 +19,8 @@ proto.label = function(v) {
 proto.text = proto.label;
 
 proto.disabled = function(state) {
-    if (state === undefined) return this._input.disabled;
-    this._input.disabled = state;
+    if (state === undefined) return this._dom.disabled;
+    this._dom.disabled = state;
     this.toggleClass('uki-button_disabled', state);
     return this;
 };
@@ -30,17 +30,13 @@ proto.iconSrc = uki.newProp('_icon', function(src) {
     this._iconSrc = src;
     if (src) {
         this._iconDom = uki.createElement('img', { className: 'uki-button__icon', src: src });
-        this._dom().insertBefore(this._iconDom, this._input);
+        this._dom().insertBefore(this._iconDom, this._text);
     }
 });
 
 proto._createDom = function() {
-    this._input = uki.createElement('input', { type: 'button', className: 'uki-button__input', tabIndex: -1 });
-    this._dom = uki.createElement('label', { className: 'uki-button' }, [this._input]);
-};
-
-proto.focusableDom = proto.domForEvent = function(type) {
-    return this._input;
+    this._text = uki.createElement('span', { className: 'uki-button__text' });
+    this._dom = uki.createElement('button', { className: 'uki-button', tabIndex: -1 }, [this._text]);
 };
 
 proto.destruct = function() {
@@ -48,6 +44,6 @@ proto.destruct = function() {
     Base.destruct.call(this);
 };
 
-proto._focusedClass = 'uki-button_focused';
+// proto._focusedClass = 'uki-button_focused';
 
 uki.view.Button = exports.Button = Button;

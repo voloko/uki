@@ -5,10 +5,15 @@
     border-radius: 3px;
     background: #D7DAE4 url(button.png) repeat-x 0 0;
     padding: 4px 0;
-    display: inline-block;
+    
     white-space: nowrap;
+    font-weight: bold;
     vertical-align: top;
     text-align: center;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    
     position: relative;
     z-index: 10;
     outline: 0;
@@ -34,28 +39,19 @@
     box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;
 }
 
-.uki-button__input,
-.uki-button__input:active,
-.uki-button__input:focus,
-.uki-button__input:hover {
-    background: none;
-    border: none;
-    color: #333;
-    display: inline-block;
-    font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0;
-    padding: 0 5px;
-    outline: 0;
-    white-space: nowrap;
-    font-weight: bold;
+.uki-button__text {
+    margin: 0 5px;
 }
 
-.uki-button_focused {
+.uki-button:focus {
     border-color: #7594D2;
     
     -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;
     -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;
     box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;
-    
+}
+
+
+.uki-button_image-only .uki-button__text {
+    display: none;
 }

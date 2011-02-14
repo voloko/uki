@@ -14,6 +14,6 @@ uki({
     tabIndex: 1
 }).attach( document.getElementById('test') );
 
-uki('Button[text^=uki]').on('click', function(e) {
+uki('Button[text~=awesome]').on('click', function(e) {
     alert('Hello world!');
 });
