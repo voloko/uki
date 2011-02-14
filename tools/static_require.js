@@ -5,16 +5,14 @@ var jsp  = require('uglify-js').parser,
     util = require('util'),
     cssom = require('cssom'),
     mime = require('connect').utils.mime,
-    url = require('url');
+    url = require('url'),
+    mod = require('module');
     
 var REQUIRE = 'require';
 var REQUIRE_TEXT = 'requireText';
 var REQUIRE_CSS  = 'requireCss';
 var TO_DATA_URI  = 'toDataUri';
 var PREFIX  = '__module_';
-
-var JS_EXTS = ['.js'];
-var CSS_EXTS = ['.css'];
 
 
 function new_sate () {
@@ -39,17 +37,17 @@ var walker = pro.ast_walker(),
     walkers = {
        "call": function(expr, args) {
            if (expr[0] === 'name' && expr[1] === REQUIRE) {
-               var file = resolvePathReal(args[0][1], JS_EXTS);
+               var file = resolvePath(args[0][1]);
                    
                if (!state.required[file]) {
                    addFileToAstList(file, true);
                }
                return [this[0], expr, [['num', state.required[file]]] ];
            } else if (expr[0] === 'name' && expr[1] === REQUIRE_TEXT) {
-               var file = resolvePathReal(args[0][1], []);
+               var file = resolvePath(args[0][1]);
                return ['string', fs.readFileSync(file, 'utf8')];
            } else if (expr[0] === 'name' && expr[1] === REQUIRE_CSS) {
-               var file = resolvePathReal(args[0][1], CSS_EXTS);
+               var file = resolvePath(args[0][1]);
                if (!state.requiredCss[file]) {
                    state.requiredCss[file] = true;
                    state.requiredCssFiles.push(file);
@@ -119,34 +117,9 @@ function processCssIncludes (cssPath) {
     return styleSheet + '';
 }
     
-function tryFileExtensions (filePath, extNames) {
-    var ext = path.extname(filePath);
-    if (ext) {
-        return path.existsSync(filePath) ? filePath : false;
-    } else {
-        for (var i=0; i < extNames.length; i++) {
-            var tryPath = filePath + extNames[i];
-            if (path.existsSync(tryPath)) return tryPath;
-        };
-    }
-    return false;
-}
-
-function resolvePath (filePath, extNames) {
-    if (filePath.charAt(0) === '.') {
-        return tryFileExtensions( path.join(path.dirname(state.currentPath), filePath), extNames );
-    } else {
-        var searchPaths = [path.dirname(state.currentPath)].concat(state.options.searchPaths);
-        for (var i=0; i < searchPaths.length; i++) {
-            var tryPath = tryFileExtensions( path.join(searchPaths[i], filePath), extNames);
-            if (tryPath) return tryPath;
-        };
-    }
-    return false;
-}
-
-function resolvePathReal (filePath, extNames) {
-    var resolvedPath = resolvePath(filePath, extNames);
+function resolvePath (filePath) {
+    var resolvedPath = mod._findPath(filePath, 
+        [path.dirname(state.currentPath)].concat(state.options.searchPaths));
     if (!resolvedPath) throw new Error('Path ' + filePath + ' not found.');
     return fs.realpathSync(resolvedPath);
 }
@@ -171,11 +144,11 @@ function staticRequire (filePath, options) {
     state = exports.state = new_sate();
     filePath = fs.realpathSync(filePath);
     state.currentPath = filePath;
-    options = options || {};
+    var newOptions = {};
+    options = Object.create(options || {});
     
-    options.searchPaths = options.searchPaths ? 
-        options.searchPaths.map(fs.realpathSync) : [];
-    options.searchPaths.unshift(path.dirname(state.currentPath));
+    options.searchPaths = options.searchPaths ? options.searchPaths : [];
+    options.searchPaths = [path.dirname(state.currentPath)].concat(options.searchPaths);
     
     options.serverRoot = options.serverRoot ? 
         fs.realpathSync(options.serverRoot) : 
@@ -188,7 +161,7 @@ function staticRequire (filePath, options) {
     addFileToAstList(filePath, true);
     
     var code = 'var global = this;';
-    code    += 'function require(index) { if (!require.cache[index]) {var module = {exports: {}}; require.modules[index].call(module.exports, global, module); require.cache[index] = module.exports} return require.cache[index]; }\n';
+    code    += 'function require(index) { if (!require.cache[index]) {var module = require.cache[index] = {exports: {}}; require.modules[index].call(module.exports, global, module);} return require.cache[index].exports; }\n';
     code    += 'require.modules = []; require.cache = [];';
     var body = jsp.parse(code)[1];
     
@@ -248,7 +221,6 @@ exports.handle = function(req, res, options) {
         var code = pro.gen_code(ast, !req.param('squeeze'));
     } catch (e) {
         require('util').error(e);
-        console.log(e.stack);
         var code = 'alert(' + JSON.stringify(e.message + '. Current file ' + exports.state.currentPath) + ')';
     }
     res.writeHead(200, { 

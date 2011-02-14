@@ -74,3 +74,5 @@ uki.view = module.exports = {
         };
     }
 };
+
+require('builder').viewNamespaces.unshift(module.exports);

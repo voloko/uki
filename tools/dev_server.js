@@ -5,7 +5,9 @@ var express = require('express'),
     app     = express.createServer();
     
 exports.init = function() {
-    app.get('/*.js', sr.getHandler({}));
+    app.get('/*.js', sr.getHandler({
+        searchPaths: []
+    }));
 
     app.get('/*', function(req, res) {
         res.sendfile(req.param(0))
