@@ -8,7 +8,7 @@ var nc = module.exports = view.nativeControl = {};
 var NativeControl = nc.NativeControl = uki.newClass(uki.view.Base, {}),
     ncProto = NativeControl.prototype;
     
-uki.delegateProp(ncProto, ['name', 'checked', 'disabled', 'value'], '_input');
+uki.delegateProp(ncProto, ['name', 'checked', 'disabled', 'value', 'type'], '_input');
 
 ncProto._bindingOptions = {};
 
@@ -65,3 +65,5 @@ textProto._createDom = function(initArgs) {
     this._input = uki.createElement('input', { className: 'uki-nc-text__input', type: 'text', name: initArgs.name });
     this._dom = uki.createElement(initArgs.tagName || 'spab', { className: 'uki-nc-text' }, [this._input]);
 };
+
+uki.delegateProp(textProto, 'placeholder', '_input');
