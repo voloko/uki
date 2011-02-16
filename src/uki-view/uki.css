@@ -1,10 +1,4 @@
-body {
+.uki-attachment {
     font-size: 11px;
-    font-family: Arial, Helvetica, sans-seri;;
-}
-
-ul, li {
-    padding: 0;
-    margin: 0;
-    list-style: none;
+    font-family: Arial, Helvetica, sans-serif;
 }

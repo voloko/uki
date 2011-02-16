@@ -129,6 +129,8 @@ function addFileToAstList (filePath, wrap) {
     var oldPath = state.currentPath;
     state.currentPath = filePath;
     var text = fs.readFileSync(filePath, 'utf8');
+    // remove shebang
+    text = text.replace(/^\#\!.*/, '');
     if (wrap) {
         text = '(function(global, module) {var exports = this;' + text + '})';
     }

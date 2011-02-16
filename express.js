@@ -1,4 +1,5 @@
 var path = require('path'),
+    sr   = require('static_require'),
     fs   = require('fs');
     
 var examplesPath = path.join(__dirname, 'examples');
@@ -48,6 +49,11 @@ exports.init = function(app) {
             });
         }
     });
+    
+    app.get('/*.js', sr.getHandler({
+        searchPaths: [fs.realpathSync(path.join(__dirname, 'src'))]
+    }));
+    
 };
 
 function getExamplePage (filePath) {

@@ -8,6 +8,7 @@ var Attachment = require('./function').newClass(Container, {
     
     _setup: function(initArgs) {
         this._dom = initArgs.dom;
+        uki.addClass(this._dom, 'uki-attachment');
         Container.prototype._setup.call(this, initArgs);
     },
 

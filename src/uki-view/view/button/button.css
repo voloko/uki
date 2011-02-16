@@ -51,7 +51,51 @@
     box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;
 }
 
+.uki-button__icon {
+    vertical-align: top;
+    /* convert 16x16 to 16x14 */
+    margin-top: -1px;
+    margin-bottom: -1px;
+}
+
+.uki-button_disabled,
+.uki-button_disabled:active,
+.uki-button_disabled:hover {
+    color: #999;
+    background-color: #eee;
+    background-image: none;
+    
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    
+    border-color: #AAA;
+}
+
+.uki-button_disabled .uki-button__icon {
+    opacity: 0.5;
+}
 
 .uki-button_image-only .uki-button__text {
     display: none;
+}
+
+.uki-button_confirm {
+    background-position: 0 -120px;
+    border-color: #77C;
+}
+
+.uki-button_confirm:hover {
+    background-position: 0 -160px;
+}
+
+.uki-button_confirm:active {
+    background-position: 0 -200px;
+}
+
+.uki-button_confirm.uki-button_disabled,
+.uki-button_confirm.uki-button_disabled:active,
+.uki-button_confirm.uki-button_disabled:hover {
+    background-color: #EEEEFA;
+    border-color: #AAC;
 }
