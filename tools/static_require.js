@@ -202,6 +202,16 @@ function staticRequire (filePath, options) {
 
 exports.parse = staticRequire;
 
+exports.getAppHandler = function(title, src) {
+    return function(req, res) {
+        res.send('<!DOCTYPE html><head><title>' + title + '</title>' + 
+            '<style>body { overflow: hidden; width: 100%; hieght: 100%; }</style>' + 
+            '</head><body>' +
+            '<script src="' + src + '"></script>' +
+        '</body>');
+    };
+};
+
 exports.getHandler = function(options) {
     return function(req, res) {
         exports.handle(req, res, options);
