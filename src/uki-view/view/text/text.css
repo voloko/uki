@@ -4,16 +4,16 @@
 }
 
 .uki-header {
-    margin: 0 0 1em 0;
+    margin: 0 0 5px 0;
     font-weight: normal;
 } 
 
 .uki-header_size_large {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .uki-header_size_medium {
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .uki-header_size_small {
