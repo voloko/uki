@@ -1,6 +1,6 @@
 /**
 @example_title Text
-@example_order 30
+@example_order 40
 @example_html
     <script src="text.js"></script>
 */

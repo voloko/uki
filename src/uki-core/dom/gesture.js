@@ -17,12 +17,12 @@ var addDraggestures = {
             el.__draggesturebound++;
         } else {
             el.__draggesturebound = 1;
-            evt.addListener( el, 'mousedown', dragGestureStart );
+            evt.addListener(el, 'mousedown', dragGestureStart);
         }
     },
     teardown: function(el) {
         el.__draggesturebound--;
-        if (!el.__draggesturebound) evt.removeListener( el, 'mousedown', dragGestureStart );
+        if (!el.__draggesturebound) evt.removeListener(el, 'mousedown', dragGestureStart);
     }
 };
 
@@ -40,24 +40,23 @@ function startGesture (el, e) {
         gesture.cursor = uki.doc.body.style.cursor;
         uki.doc.body.style.cursor = e.cursor;
     }
-    evt.addListener(doc, 'mousemove scroll', dragGesture);
-    evt.addListener(doc, 'mouseup dragend', dragGestureEnd);
-    evt.addListener(doc, 'selectstart mousedown', evt.preventDefaultHandler);
+    evt.addListener(uki.doc, 'mousemove scroll', dragGesture);
+    evt.addListener(uki.doc, 'mouseup dragend', dragGestureEnd);
+    evt.addListener(uki.doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
 function stopGesture () {
     gesture.draggable = null;
     uki.doc.body.style.cursor = gesture.cursor;
     gesture.cursor = null;
-    evt.removeListener(doc, 'mousemove scroll', dragGesture);
-    evt.removeListener(doc, 'mouseup dragend', dragGestureEnd);
-    evt.removeListener(doc, 'selectstart mousedown', evt.preventDefaultHandler);
+    evt.removeListener(uki.doc, 'mousemove scroll', dragGesture);
+    evt.removeListener(uki.doc, 'mouseup dragend', dragGestureEnd);
+    evt.removeListener(uki.doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
 function dragGestureStart (e) {
-    e = new evt.Event(e, 'draggesturestart');
-    evt.trigger(this, e);
-
+    e = evt.createEvent(e, {type:'draggesturestart'});
+    evt.trigger.call(this, e);
     if (!e.isDefaultPrevented()) {
         gesture.position = { x: e.pageX, y: e.pageY };
         startGesture(this, e);
@@ -65,23 +64,23 @@ function dragGestureStart (e) {
 }
 
 function dragGesture (e) {
-    e = new evt.Event(e, 'draggesture');
+    e = evt.createEvent(e, {type:'draggesture'});
     e.dragOffset = {
         x: e.pageX - gesture.position.x,
         y: e.pageY - gesture.position.y
     };
-    evt.trigger(gesture.draggable, e);
+    evt.trigger.call(gesture.draggable, e);
 
     if (e.isDefaultPrevented()) stopGesture(gesture.draggable);
 }
 
 function dragGestureEnd (e) {
-    e = new evt.Event(e, 'draggestureend');
+    e = evt.createEvent(e, {type:'draggestureend'});
     e.dragOffset = {
         x: e.pageX - gesture.position.x,
         y: e.pageY - gesture.position.y
     };
-    evt.trigger(gesture.draggable, e);
+    evt.trigger.call(gesture.draggable, e);
 
     stopGesture(gesture.draggable);
 }

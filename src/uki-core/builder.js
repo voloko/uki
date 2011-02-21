@@ -21,7 +21,7 @@ function createMulti (ml) {
 }
 
 function createSingle (mlRow) {
-    if (utils.isFunction(mlRow.typeName)) {
+    if (mlRow.typeName) {
         return mlRow;
     }
 

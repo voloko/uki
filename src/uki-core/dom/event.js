@@ -15,19 +15,21 @@ EventWrapper.prototype = {
     simulateBubbles: false,
 
     preventDefault: function() {
-        if (this.preventDefault) {
-            this.preventDefault();
+        var e = this.baseEvent;
+        if (e.preventDefault) {
+            e.preventDefault();
         } else {
-            this.baseEvent.returnValue = false;
+            e.baseEvent.returnValue = false;
         }
         this.isDefaultPrevented = uki.FT;
     },
 
     stopPropagation: function() {
-        if (this.stopPropagation) {
-            this.stopPropagation();
+        var e = this.baseEvent;
+        if (e.stopPropagation) {
+            e.stopPropagation();
         } else {
-            this.baseEvent.cancelBubble = true;
+            e.baseEvent.cancelBubble = true;
         }
         this.isPropagationStopped = uki.FT;
     },
@@ -141,7 +143,7 @@ var evt = module.exports = {
 
         listenersForType && listenersForType.forEach(function(l) {
             l.call(this, e);
-        });
+        }, this);
 
         if (e.simulateBubbles && !e.isPropagationStopped() && this.parentNode) {
             evt.trigger(this.parentNode, e);
@@ -184,13 +186,14 @@ var evt = module.exports = {
             listeners[id][type] = utils.without(listeners[id][type], listener);
 
             // when removing the last listener also remove listener from the dom
-            if (!listener[id][type].length) {
+            if (!listeners[id][type].length) {
                 if (evt.special[type]) {
                     evt.special[type].teardown(el);
                 } else {
                     el.removeEventListener ? el.removeEventListener(type, domHandlers[id], false) :
                         el.detachEvent('on' + type, domHandlers[id]);
                 }
+                delete listeners[id][type];
             }
         });
     },
