@@ -44,6 +44,14 @@ uki.dom = module.exports = {
         }
         return style;
     },
+    
+    computedStyle: function(el) {
+        if (uki.doc.defaultView && uki.doc.defaultView.getComputedStyle) {
+            return uki.doc.defaultView.getComputedStyle( el, null );
+        } else if (el.currentStyle) {
+            return el.currentStyle;
+        }
+    },    
 
     fromHTML: function(html) {
         var fragment = uki.doc.createElement('div');

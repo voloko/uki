@@ -5,6 +5,11 @@ var path = require('path'),
 var examplesPath = path.join(__dirname, 'examples');
 
 exports.init = function(app) {
+    app.get('/perf', sr.getAppHandler('Benchmark runner', '/perf/runner.js'));
+    
+    
+    
+    
     app.set('views', path.join(examplesPath, 'views'));
     
     app.get('/', function(req, res) {

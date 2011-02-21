@@ -19,7 +19,7 @@ proto.horizontal = uki.view.newToggleClassProp('uki-flow_horizontal');
 
 proto._createDom = function() {
     this._dom = uki.createElement('ul', {
-        className: 'uki-flow uki-flow_spacing-small uki-flow_border-none'
+        className: 'uki-flow uki-flow_spacing-small'
     });
 };
 

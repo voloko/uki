@@ -57,3 +57,15 @@ if (!arrayPrototype.reduce) {
         return accumulator;
     };
 }
+
+if (!Object.keys) {
+    Object.keys = function(o){
+        var ret = [], p;
+        for (p in o) {
+            if (o.hasOwnProperty.call(p)) {
+                ret.push(p);
+            }
+        }
+        return ret;
+    }
+}

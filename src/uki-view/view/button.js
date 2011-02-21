@@ -5,7 +5,7 @@ var uki = require('uki-core'),
 var Button = uki.newClass(Base, Focusable, {}),
     proto = Button.prototype;
 
-requireCss('./button/button.css')
+requireCss('./button/button.css');
 
 proto.typeName = 'Button';
 

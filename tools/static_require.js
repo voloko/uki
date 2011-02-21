@@ -205,7 +205,7 @@ exports.parse = staticRequire;
 exports.getAppHandler = function(title, src) {
     return function(req, res) {
         res.send('<!DOCTYPE html><head><title>' + title + '</title>' + 
-            '<style>body { overflow: hidden; width: 100%; hieght: 100%; }</style>' + 
+            '<style>body, html { overflow: hidden; width: 100%; hieght: 100%; padding: 0; margin: 0; }</style>' + 
             '</head><body>' +
             '<script src="' + src + '"></script>' +
         '</body>');

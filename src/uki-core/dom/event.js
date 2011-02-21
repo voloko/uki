@@ -1,95 +1,198 @@
 var uki = require('../uki'),
-    utils = require('../utils');
+    utils = require('../utils'),
+    fun = require('../function'),
+    dom = require('../dom'),
+    expando = uki.expando;
 
-/**
- * Thin wrapper to support missing events (like dnd or mouseout)
- */
-var Event = require('../function').newClass({
-    init: function( domEvent, type ) {
-        domEvent = domEvent || {};
-        this.domEvent = domEvent.domEvent || domEvent;
+// base class
+function EventWrapper () {}
 
-        for ( var i = evt.props.length, prop; i; ){
-            prop = evt.props[ --i ];
-            this[ prop ] = domEvent[ prop ];
-        }
-        if ( type ) this.type = type;
+EventWrapper.prototype = {
+    targetView: function() {
+        return require('../view').closest(this.target);
     },
 
+    simulateBubbles: false,
+
     preventDefault: function() {
-        this.domEvent.preventDefault();
+        if (this.preventDefault) {
+            this.preventDefault();
+        } else {
+            this.baseEvent.returnValue = false;
+        }
         this.isDefaultPrevented = uki.FT;
     },
 
     stopPropagation: function() {
-        this.domEvent.stopPropagation();
+        if (this.stopPropagation) {
+            this.stopPropagation();
+        } else {
+            this.baseEvent.cancelBubble = true;
+        }
         this.isPropagationStopped = uki.FT;
     },
 
     isDefaultPrevented: uki.FF,
     isPropagationStopped: uki.FF
-});
+};
 
+
+function normalize(e) {
+	// Fix target property, if necessary
+	if (!e.target) {
+		e.target = e.srcElement || uki.doc;
+	}
+
+	// check if target is a textnode (safari)
+	if (e.target.nodeType === 3) {
+		e.target = e.target.parentNode;
+	}
+
+	// Add relatedTarget, if necessary
+	if (!e.relatedTarget && e.fromElement) {
+		e.relatedTarget = e.fromElement === e.target ? e.toElement : e.fromElement;
+	}
+
+	// Calculate pageX/Y if missing and clientX/Y available
+	if (e.pageX == null && e.clientX != null) {
+		var doc = uki.doc,
+		    body = doc.body;
+
+		e.pageX = e.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
+		e.pageY = e.clientY + (doc && doc.scrollTop  || body && body.scrollTop  || 0) - (doc && doc.clientTop  || body && body.clientTop  || 0);
+	}
+
+	// Add which for key events
+	if (e.which == null && (e.charCode != null || e.keyCode != null)) {
+		e.which = e.charCode != null ? e.charCode : e.keyCode;
+	}
+
+	// Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
+	e.metaKey = e.metaKey || e.ctrlKey;
+
+	// Add which for click: 1 === left; 2 === middle; 3 === right
+	// Note: button is not normalized, so don't use it
+	if (!e.which && e.button !== undefined) {
+		e.which = (e.button & 1 ? 1 : (e.button & 2 ? 3 : (e.button & 4 ? 2 : 0 )));
+	}
+
+    return e;
+};
+
+/**
+* Store all the handlers manually so we can override event behaviour
+* {
+*   node_expando_1: {
+*     click: [...],
+*     change: [...],
+*     selection: [...]
+*   }
+*   node_expando_2: {
+*     click: [...]
+*   }
+* }
+*/
+var listeners = {};
+
+/**
+* Need a connection between node on which addListener was called an it's listeners,
+* so this is a hash of
+* {
+*   node_expando_1: bound domHandler
+*   node_expando_2: bound domHandler
+* }
+*/
+var domHandlers = {};
+
+/**
+* Handle all listener calls. Should be called with dom element as this
+*/
+function domHandler(e) {
+    e = e || window.event;
+    var wrapped = evt.createEvent(e);
+    evt.trigger.call(this, normalize(wrapped));
+}
+
+function createEvent(baseEvent, options) {
+    e = new EventWrapper();
+    e.baseEvent = baseEvent;
+    // this is rather expensive, unfortunately it's impossible
+    // to use prototype chain instead of simple inheritance, since
+    // firefox uses read only properties on event, thus preventing
+    // their modification even in descendants
+    for (var i in baseEvent) e[i] = e[i] || baseEvent[i];
+    utils.extend(e, options);
+    return e;
+}
 
 var evt = module.exports = {
-    Event: Event,
-    
+
+    createEvent: createEvent,
+
     special: {},
-    
-    props: "type altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which dragOffset dataTransfer".split(" "),
 
-    events: "blur focus load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup error draggesturestart draggestureend draggesture dragstart dragend drag drop dragenter dragleave dragover".split(" "),
+    listeners: listeners,
 
-    specialListeners: {},
+    domHandlers: domHandlers,
+
+    trigger: function(e) {
+        var listenerForEl = evt.listeners[this[expando]] || {},
+            listenersForType = listenerForEl[e.type];
+
+        listenersForType && listenersForType.forEach(function(l) {
+            l.call(this, e);
+        });
+
+        if (e.simulateBubbles && !e.isPropagationStopped() && this.parentNode) {
+            evt.trigger(this.parentNode, e);
+        }
+    },
 
     addListener: function(el, types, listener) {
+        var id = el[uki.expando] = el[uki.expando] || uki.guid++;
+
+        if (!types) {
+            types = Object.keys(listeners[id]).join(' ');
+        }
+
         types.split(' ').forEach(function(type) {
-            if ( evt.special[type] ) {
-                var id = el[uki.expando] = el[uki.expando] || uki.guid++,
-                    specialListeners = evt.specialListeners;
+            listeners[id] = listeners[id] || {};
 
-                specialListeners[id] = specialListeners[id] || [];
-                specialListeners[id][type] = specialListeners[id][type] || [];
-                specialListeners[id][type].push(listener);
-
-                evt.special[type].setup(el);
-            } else {
-                el.addEventListener ? el.addEventListener(type, listener, false) : 
-                    el.attachEvent('on' + type, listener);
+            // if this is the first listener added to el for type
+            // then create a handler
+            if (!listeners[id][type]) {
+                if (evt.special[type]) {
+                    evt.special[type].setup(el);
+                } else {
+                    domHandlers[id] = domHandlers[id] || uki.bind(domHandler, el);
+                    el.addEventListener ? el.addEventListener(type, domHandlers[id], false) :
+                        el.attachEvent('on' + type, domHandlers[id]);
+                }
             }
+
+            listeners[id][type] = listeners[id][type] || [];
+            listeners[id][type].push(listener);
         });
     },
 
     removeListener: function(el, types, listener) {
         types.split(' ').forEach(function(type) {
-            if ( evt.special[type] ) {
-                var id = el[uki.expando],
-                    specialListeners = evt.specialListeners;
+            var id = el[uki.expando];
 
-                if (!id || !specialListeners[id] || !specialListeners[id][type]) return;
+            if (!id || !listeners[id] || !listeners[id][type]) return;
 
-                specialListeners[id][type] = utils.without(specialListeners[id][type], listener);
-                evt.special[type].teardown(el);
-            } else {
-                el.removeEventListener ? el.removeEventListener(type, listener, false) :
-                    el.detachEvent('on' + type, listener);
+            listeners[id][type] = utils.without(listeners[id][type], listener);
+
+            // when removing the last listener also remove listener from the dom
+            if (!listener[id][type].length) {
+                if (evt.special[type]) {
+                    evt.special[type].teardown(el);
+                } else {
+                    el.removeEventListener ? el.removeEventListener(type, domHandlers[id], false) :
+                        el.detachEvent('on' + type, domHandlers[id]);
+                }
             }
         });
-    },
-
-    trigger: function(el, event) {
-        var specialListeners = evt.specialListeners,
-            id;
-
-        while (el) {
-            id = el[uki.expando];
-            if (specialListeners[id] && specialListeners[id][event.type]) {
-                specialListeners[id][event.type].forEach(function(listener) {
-                    listener.call(el, event);
-                });
-            }
-            el = !event.isPropagationStopped() && el.parentNode;
-        }
     },
 
     preventDefaultHandler: function(e) {
@@ -104,21 +207,22 @@ evt.emit = evt.trigger;
 utils.forEach({
     mouseover: 'mouseenter',
     mouseout: 'mouseleave'
-}, function( specialName, origName ){
-    function handler (e) {
-        if (!this.contains( e.relatedTarget )) {
-            evt.trigger(this, e);
+}, function(specialName, origName){
+    function handler(e) {
+        if (!dom.contains(e.relatedTarget)) {
+            var wrapped = evt.createEvent(e, { type: specialName, simulateBubbling: true });
+            evt.trigger.call(this, wrapped);
         }
     }
 
-    evt.special[ specialName ] = {
-        setup: function( el, listener ) {
-            evt.addListener( el, origName, handler );
+    evt.special[specialName] = {
+        setup: function(el, listener) {
+            evt.addListener(el, origName, handler);
         },
         teardown: function( el, listener ){
-            evt.removeListener( el, origName, handler );
+            evt.removeListener(el, origName, handler);
         }
     };
 });
 
-utils.extend(require('../dom'), evt);
+utils.extend(dom, evt);

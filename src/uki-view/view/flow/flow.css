@@ -32,7 +32,7 @@
 	*zoom: 1%;
 }
 
-.uki-flow_horizontal .uki-flow-item {
+.uki-flow_horizontal > .uki-flow-item {
     float: left;
 }
 
@@ -41,15 +41,15 @@
     margin: 0;
 }
 
-.uki-flow_spacing-small .uki-flow-item {
+.uki-flow_spacing-small > .uki-flow-item {
     margin: 5px 0 0 0;
 }
 
-.uki-flow_spacing-medium .uki-flow-item {
+.uki-flow_spacing-medium > .uki-flow-item {
     margin: 10px 0 0 0;
 }
 
-.uki-flow_spacing-large .uki-flow-item {
+.uki-flow_spacing-large > .uki-flow-item {
     margin: 20px 0 0 0;
 }
 
@@ -59,18 +59,18 @@
 
 
 /* Spacing for horizontal */
-.uki-flow_horizontal.uki-flow_spacing-small .uki-flow-item {
+.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {
     margin: 0 0 0 5px;
 }
 
-.uki-flow_horizontal.uki-flow_spacing-medium .uki-flow-item {
+.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {
     margin: 0 0 0 10px;
 }
 
-.uki-flow_horizontal.uki-flow_spacing-large .uki-flow-item {
+.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {
     margin: 0 0 0 20px;
 }
 
-.uki-flow_horizontal.uki-flow .uki-flow-item:first-child {
+.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {
     margin-left: 0;
 }

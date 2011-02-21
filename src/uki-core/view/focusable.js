@@ -3,28 +3,27 @@ var dom = require('../dom'),
 
 var Focusable = {};
 
-Focusable._focusable = true;
-
 Focusable.focusableDom = function() {
     return this.dom();
 };
 
-Focusable.tabIndex = function(value) {
-    if (value === undefined) return this.focusableDom().tabIndex;
-    this.focusableDom().tabIndex = value;
-    if (value && !this._focusableInited) this._initFocusable();
-    return this;
+Focusable.domForEvent = function(type) {
+    if (type == 'focus' || type == 'blur') return this.focusableDom();
+    return false;
 };
 
-Focusable._initFocusable = function() {
-    this._focusableInited = true;
-    dom.addListener(this.focusableDom(), 'focus', fun.bindOnce(this._focus, this));
-    dom.addListener(this.focusableDom(), 'blur', fun.bindOnce(this._blur, this));
+fun.delegateProp(Focusable, 'tabIndex', 'focusableDom');
+
+
+Focusable._initFocusEvents = function() {
+    this._focusEventsInited = true;
+    this.on('focus', fun.bindOnce(this._focus, this));
+    this.on('blur', fun.bindOnce(this._blur, this));
 };
 
 Focusable._destruct = function() {
-    dom.removeListener(this.focusableDom(), 'focus', fun.bindOnce(this._focus, this));
-    dom.removeListener(this.focusableDom(), 'blur', fun.bindOnce(this._blur, this));
+    this.removeListener('focus', fun.bindOnce(this._focus, this));
+    this.removeListener('blur', fun.bindOnce(this._blur, this));
 };
 
 Focusable._focus = function() {

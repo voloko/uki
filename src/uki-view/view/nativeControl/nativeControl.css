@@ -1,0 +1,8 @@
+.uki-nc-text_with-placeholder {
+    position: relative;
+}
+
+.uki-nc-text__placholder {
+    position: absolute;
+    color: #888;
+}

@@ -1,0 +1,22 @@
+.uki-text {
+    line-height: 1.3;
+    margin: 0 0 1em 0;
+}
+
+.uki-header {
+    margin: 0 0 1em 0;
+    font-weight: normal;
+} 
+
+.uki-header_size_large {
+    font-size: 16px;
+}
+
+.uki-header_size_medium {
+    font-size: 14px;
+}
+
+.uki-header_size_small {
+    font-size: 11px;
+    font-weight: bold;
+}

@@ -1,16 +1,9 @@
-var dom = require('../dom'),
+var evt = require('../dom/event'),
     fun = require('../function'),
-    utils = require('../utils'),
-    Base = require('../observable').Observable;
+    utils = require('../utils');
 
 
-var Observable = utils.extend({}, Base);
-
-Observable.specialEvents = [];
-
-Observable.isSpecial = function(name) {
-    return name.match(/[\.:]/) || this.specialEvents.indexOf(name) > -1;
-};
+var Observable = {};
 
 Observable.domForEvent = function(type) {
     return this.dom();
@@ -21,61 +14,32 @@ Observable.domForEvent = function(type) {
  * @param {function()} callback
  */
 Observable.addListener = function(names, callback) {
+    var wrapper = fun.bindOnce(callback, this);
     names.split(' ').forEach(function(name) {
-        this.isSpecial(name) ?
-            Base.addListener.call(this, name, callback) :
-            this._addDomListener(name, callback);
+        evt.addListener(this.domForEvent(name), name, wrapper);
     }, this);
     return this;
 };
 
 Observable.removeListener = function(names, callback) {
-    if (!this._listeners) return this;
+    var wrapper = fun.bindOnce(callback, this);
     names.split(' ').forEach(function(name) {
-        this.isSpecial(name) ?
-            Base.removeListener.call(this, name, callback) :
-            this._removeDomListener(name, callback);
+        evt.removeListener(this.domForEvent(name), name, wrapper);
     }, this);
     return this;
 };
 
 Observable.trigger = function(e) {
-    return Base.trigger.call(this, e);
-};
-
-Observable._addDomListener = function(name, callback) {
-    var wrapper = fun.bindOnce(callback, this);
-    wrapper.huid = callback.huid;
-    Base.addListener.call(this, name, wrapper);
-    dom.addListener(this.domForEvent(name), name, wrapper);
-};
-
-Observable._removeDomListener = function(name, callback) {
-    var wrapper = fun.bindOnce(callback, this);
-
-    Base.removeListener.call(this, name, wrapper);
-    dom.removeListener(this.domForEvent(name), name, wrapper);
-};
-
-Observable.triggerDom = function(e) {
-    dom.trigger(this.domForEvent(e.type), e);
-    return this;
+    var wrapped = evt.createEvent(e, { target: this.domForEvent(e.type) });
+    return evt.trigger.call(this, e);
 };
 
 Observable.destruct = function() {
-    // clean up all dom listeners, so we do not have backreferences
-    // in some closures, within uki.dom.event
-    utils.forEach(this._listeners || [], function(listeners, type) {
-        if (!this.isSpecial(type)) listeners.forEach(function(l) {
-            this._removeDomListener(type, l);
-        }, this);
-    }, this);
-    Base.destruct.call(this);
+    evt.removeListener();
 };
 
 Observable.on = Observable.addListener;
 Observable.emit = Observable.trigger;
-
 
 
 require('../view').Observable = exports.Observable = Observable;
