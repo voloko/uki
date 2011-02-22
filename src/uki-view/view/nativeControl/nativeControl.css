@@ -1,9 +1,11 @@
+.uki-nc-select,
 .uki-nc-text {
     display: inline-block;
     *display: inline;
     *zoom: 1;
 }
 
+.uki-nc-select__input,
 .uki-nc-text__input {
     margin: 0;
     width: 100%;
