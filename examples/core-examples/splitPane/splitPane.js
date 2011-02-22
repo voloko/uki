@@ -1,5 +1,5 @@
 /**
-@example_title SplitPane
+@example_title Split Pane
 @example_order 50
 @example_html
     <script src="splitPane.js"></script>

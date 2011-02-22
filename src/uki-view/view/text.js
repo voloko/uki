@@ -8,7 +8,15 @@ txt.Text = uki.newClass(Base, {
     typeName: 'Text',
     
     _createDom: function() {
-        this._dom = uki.createElement('p', { className: 'uki-text' });
+        this._dom = uki.createElement('div', { className: 'uki-text' });
+    }
+});
+
+txt.P = uki.newClass(Base, {
+    typeName: 'P',
+    
+    _createDom: function() {
+        this._dom = uki.createElement('p', { className: 'uki-text-p' });
     }
 });
 

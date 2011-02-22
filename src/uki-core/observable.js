@@ -41,13 +41,13 @@ var Observable = {
     destruct: function() {
         this._listeners = null;
     },
-    
+
     triggerChanges: function(name, source) {
         this.trigger({ type: 'change.' + name, model: this, source: source });
         this.trigger({ type: 'change', name: name, model: this, source: source });
         return this;
     },
-    
+
     muteEvents: function(value) {
         if (value === undefined) {
             return this._originalTrigger && this.trigger !== this._originalTrigger;
@@ -67,7 +67,7 @@ function addProp (proto, prop, setter) {
     var propName = '_' + prop;
     proto[prop] = function(value, source) {
         if (value === undefined) return this[propName];
-        
+
         var oldValue = this[prop](),
             newValue;
         if (setter) {
@@ -83,7 +83,8 @@ function addProp (proto, prop, setter) {
     };
 }
 
-uki.addOProp = Observable.addProp = function(proto, prop, setter) {
+uki.addOProps = Observable.addProps =
+    uki.addOProp = Observable.addProp = function(proto, prop, setter) {
     if (utils.isArray(prop)) {
         for (var i =0, len = prop.length; i < len; i++) {
             addProp(proto, prop[i], setter && setter[i]);

@@ -199,7 +199,7 @@ uki.addProp(sProto, 'options', function(val) {
 function appendOptions (root, options) {
     var node;
     options.forEach(function(option) {
-        if (typeof option === 'string') {
+        if (typeof option === 'string' || typeof option === 'number') {
             option = { text: option, value: option };
         }
         if (option.options) {
