@@ -29,7 +29,7 @@ exports.init = function(app) {
         }).filter(function(a) {
             return a.order > 0;
         }).sort(function(a, b) {
-            return o.order - b.order;
+            return a.order*1 - b.order*1;
         });
         res.render('exampleList.jade', { 
             layout: false,
