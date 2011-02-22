@@ -227,4 +227,12 @@ utils.path2obj = function(path, context) {
     return context;
 };
 
+utils.range = function(from, to) {
+    var result = new Array(to - from);
+    for (var idx = 0; from <= to; from++, idx++) {
+        result[idx] = from;
+    };
+    return result;
+}
+
 utils.extend(require('uki'), utils);

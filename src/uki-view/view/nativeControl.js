@@ -33,7 +33,7 @@ ncProto.focusableDom = function() {
 };
 
 ncProto.domForEvent = function(type) {
-    return uki.view.Focusable.domForEvent.call(this, type) ||
+    return uki.view.Focusable._domForEvent.call(this, type) ||
         uki.view.Base.prototype.domForEvent.call(this, type);
 };
 
@@ -137,14 +137,14 @@ textProto._updatePlaceholderHeight = function() {
         sourceStyle = uki.dom.computedStyle(this._input);
 
     ['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'].forEach(function(name) {
-        targetStyle[name] = sourceStyle[name];
+        if (sourceStyle[name] !== undefined) {
+            targetStyle[name] = sourceStyle[name];
+        }
     });
-    targetStyle.lineHeight = this._input.offsetHeight + parseInt(sourceStyle.marginTop)*2 + 'px';
-    targetStyle.marginLeft = parseInt(sourceStyle.marginLeft) + parseInt(sourceStyle.borderLeftWidth) + 'px';
+    targetStyle.lineHeight = this._input.offsetHeight + (parseInt(sourceStyle.marginTop) || 0)*2 + 'px';
+    targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft) || 0) + (parseInt(sourceStyle.borderLeftWidth) || 0) + 'px';
     textProto._updatePlaceholderHeight = uki.FS;
 };
-
-// uki.delegateProp(textProto, 'placeholder', '_input');
 
 
 

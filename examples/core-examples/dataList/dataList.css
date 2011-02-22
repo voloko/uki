@@ -1,0 +1,19 @@
+.scrollable { 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.help {
+    line-height: 18px;
+}
+
+.keyboard {
+    background-color: #EEE;
+    border: 1px solid #BBB;
+    border-top-color: #CCC;
+    border-left-color: #BBB;
+    border-right-color: #BBB;
+    border-bottom-color: #AAA;
+    padding: 0px 3px;
+    border-radius: 1px;
+}

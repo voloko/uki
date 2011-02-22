@@ -19,7 +19,7 @@ EventWrapper.prototype = {
         if (e.preventDefault) {
             e.preventDefault();
         } else {
-            e.baseEvent.returnValue = false;
+            e.returnValue = false;
         }
         this.isDefaultPrevented = uki.FT;
     },
@@ -29,7 +29,7 @@ EventWrapper.prototype = {
         if (e.stopPropagation) {
             e.stopPropagation();
         } else {
-            e.baseEvent.cancelBubble = true;
+            e.cancelBubble = true;
         }
         this.isPropagationStopped = uki.FT;
     },

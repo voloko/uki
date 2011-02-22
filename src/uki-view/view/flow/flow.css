@@ -2,7 +2,6 @@
     display: block;
     padding: 0;
     margin: 0;
-    flow-style: none;
 }
 
 .uki-flow-item {
@@ -28,8 +27,7 @@
 }
 
 .uki-flow_horizontal {
-	display: inline-block;
-	*zoom: 1%;
+    *zoom: 1;
 }
 
 .uki-flow_horizontal > .uki-flow-item {

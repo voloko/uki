@@ -1,0 +1,55 @@
+.uki-dataList {
+    position: relative;
+    outline: none;
+    -moz-user-select: -moz-none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.uki-dataList-pack {
+    left: 0;
+    width: 100%;
+    display: block;
+    list-style: none;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+}
+
+.uki-dataList-row {
+    cursor: default;
+    display: block;
+    padding: 5px;
+    margin: 0;
+    height: 14px;
+    font-size: 11px;
+    line-height: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.uki-dataList-row_odd {
+    background-color: #F1F1F1;
+}
+
+.uki-dataList-row_selected {
+    background-color: #3875D7;
+    color: #FFF;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border: 1px solid #2760C0;
+    border-left: none;
+    border-right: none;
+}
+
+.uki-dataList-row_selected + .uki-dataList-row_selected {
+    border-top: none;
+    padding-top: 5px;
+}
+
+.uki-dataList_blured .uki-dataList-row_selected {
+    background-color: #CCC;
+    border-color: #AAA;
+    color: #000;
+}

@@ -7,7 +7,7 @@ Focusable.focusableDom = function() {
     return this.dom();
 };
 
-Focusable.domForEvent = function(type) {
+Focusable._domForEvent = function(type) {
     if (type == 'focus' || type == 'blur') return this.focusableDom();
     return false;
 };
