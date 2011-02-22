@@ -11,7 +11,7 @@ var DataList = uki.newClass(uki.view.Base, uki.view.Focusable, Selectable, {}),
 /**
 * Do not redraw more often then in value ms
 */
-proto.throttle = uki.newProp('_throttle', function(v) {
+proto.throttle = uki.newProp('throttle', function(v) {
     this._throttle = v;
     if (v > 0) {
         this._visChanged = uki.trottle(this._originalVisChanged, this._throttle);
@@ -24,7 +24,7 @@ proto._throttle = 0;
 /**
 * Do redraw only after value ms after last scroll/update
 */
-proto.debounce = uki.newProp('_debounce', function(v) {
+proto.debounce = uki.newProp('debounce', function(v) {
     this._debounce = v;
     if (v > 0) {
         this._visChanged = uki.debounce(this._originalVisChanged, this._debounce);
@@ -95,7 +95,7 @@ proto._rowHeight = 0;
 * row hight if rowHeight is not provided. 
 * If there's no sampleRow slice(0, 1)[0] will be used.
 */
-proto.data = uki.newProp('_data', function(d) {
+proto.data = uki.newProp('data', function(d) {
     this._data = d;
     this._reset();
 });
@@ -124,7 +124,7 @@ proto._changeOnKeys = [];
 * Bind representation to colleciton.
 * #TBD
 */
-proto.binding = uki.newProp('_binding', function(val) {
+proto.binding = uki.newProp('binding', function(val) {
     if (this._binding) this._binding.destruct();
     this._binding = val && new uki.view.dataList.Binding(this, val.model, uki.extend({ viewEvent: 'change.item' }, val));
     if (val) this.data(val.model);
@@ -154,7 +154,7 @@ proto.shouldRedrawOnPropChange = function(key) {
 * @function
 * @name lastClickIndex
 */
-proto.lastClickIndex = uki.newProp('_lastClickIndex');
+proto.lastClickIndex = uki.newProp('lastClickIndex');
 
 /**
 * Actual row selected.
@@ -236,7 +236,7 @@ proto.scrollToPosition = function(position) {
 * @function
 * @name editor
 */
-proto.editor = uki.newProp('_editor', function(e) {
+proto.editor = uki.newProp('editor', function(e) {
     this._editor = uki.build(e)[0];
 });
 

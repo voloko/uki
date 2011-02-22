@@ -125,7 +125,7 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
  * @returns {function(object=):object}
  */
 fun.newProp = function(prop, setter) {
-    var propName = '_' + name;
+    var propName = '_' + prop;
     if (setter) {
         return function(value) {
             if (value === undefined) return this[propName];

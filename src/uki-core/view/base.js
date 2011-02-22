@@ -2,12 +2,12 @@ var view  = require('../view'),
     uki   = require('../uki'),
     utils = require('../utils'),
     fun   = require('../function'),
-    dom   = require('../dom')
+    dom   = require('../dom'),
     evt   = require('../dom/event');
     
-view.Base = exports.Base = fun.newClass({});
+var Base = view.Base = exports.Base = fun.newClass({});
 
-var proto = exports.Base.prototype;
+var proto = Base.prototype;
 
 proto.typeName = 'Base';
 

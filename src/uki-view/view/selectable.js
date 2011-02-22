@@ -17,7 +17,7 @@ Selectable._initSelectable = function() {
     this._addSelectionEvents();
 };
 
-Selectable.multiselect = uki.newProp('_multiselect');
+Selectable.multiselect = uki.newProp('multiselect');
 
 Selectable._setSelected = function(index, state) {
     // abstract

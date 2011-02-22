@@ -55,7 +55,7 @@ proto.bottomSpeed = proto.rightSpeed;
 * @fires event:handleMove
 * @name uki.view.HSplitPane#handlePosition
 */
-proto.handlePosition = uki.newProp('_handlePosition', function(val) {
+proto.handlePosition = uki.newProp('handlePosition', function(val) {
     if (this._x_width()) {
         // store width after manual (drag or program) position change
         this._prevWidth = this._x_width();

@@ -2,7 +2,7 @@ var view  = require('../view'),
     uki   = require('../uki'),
     fun   = require('../function'),
     dom   = require('../dom'),
-    Base = require('./base').Base;
+    Base  = require('./base').Base;
 
 /**
  * @class

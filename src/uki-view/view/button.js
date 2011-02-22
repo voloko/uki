@@ -29,7 +29,7 @@ proto.disabled = function(state) {
     return this;
 };
 
-proto.iconSrc = uki.newProp('_iconSrc', function(src) {
+proto.iconSrc = uki.newProp('iconSrc', function(src) {
     uki.removeElement(this._iconDom);
     this._iconSrc = src;
     if (src) {
