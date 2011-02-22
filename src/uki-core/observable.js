@@ -63,24 +63,34 @@ var Observable = {
 Observable.on = Observable.addListener;
 Observable.emit = Observable.trigger;
 
-uki.newOProp = Observable.newProp = function(name, setter) {
-    var propName = '_' + name;
-    return function(value, source) {
+function addProp (proto, prop, setter) {
+    var propName = '_' + prop;
+    proto[prop] = function(value, source) {
         if (value === undefined) return this[propName];
         
-        var oldValue = this[name](),
+        var oldValue = this[prop](),
             newValue;
         if (setter) {
             setter.call(this, value);
         } else {
             this[propName] = value;
         }
-        newValue = this[name]();
+        newValue = this[prop]();
         if (oldValue !== newValue) {
-            this.triggerChanges(name, source);
+            this.triggerChanges(prop, source);
         }
         return this;
     };
+}
+
+uki.addOProp = Observable.addProp = function(proto, prop, setter) {
+    if (utils.isArray(prop)) {
+        for (var i =0, len = prop.length; i < len; i++) {
+            addProp(proto, prop[i], setter && setter[i]);
+        }
+    } else {
+        addProp(proto, prop, setter);
+    }
 };
 
 uki.Observable = exports.Observable = Observable;

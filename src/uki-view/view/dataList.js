@@ -11,7 +11,7 @@ var DataList = uki.newClass(uki.view.Base, uki.view.Focusable, Selectable, {}),
 /**
 * Do not redraw more often then in value ms
 */
-proto.throttle = uki.newProp('throttle', function(v) {
+uki.addProp(proto, 'throttle', function(v) {
     this._throttle = v;
     if (v > 0) {
         this._visChanged = uki.trottle(this._originalVisChanged, this._throttle);
@@ -24,7 +24,7 @@ proto._throttle = 0;
 /**
 * Do redraw only after value ms after last scroll/update
 */
-proto.debounce = uki.newProp('debounce', function(v) {
+uki.addProp(proto, 'debounce', function(v) {
     this._debounce = v;
     if (v > 0) {
         this._visChanged = uki.debounce(this._originalVisChanged, this._debounce);
@@ -95,7 +95,7 @@ proto._rowHeight = 0;
 * row hight if rowHeight is not provided. 
 * If there's no sampleRow slice(0, 1)[0] will be used.
 */
-proto.data = uki.newProp('data', function(d) {
+uki.addProp(proto, 'data', function(d) {
     this._data = d;
     this._reset();
 });
@@ -124,7 +124,7 @@ proto._changeOnKeys = [];
 * Bind representation to colleciton.
 * #TBD
 */
-proto.binding = uki.newProp('binding', function(val) {
+uki.addProp(proto, 'binding', function(val) {
     if (this._binding) this._binding.destruct();
     this._binding = val && new uki.view.dataList.Binding(this, val.model, uki.extend({ viewEvent: 'change.item' }, val));
     if (val) this.data(val.model);
@@ -154,7 +154,7 @@ proto.shouldRedrawOnPropChange = function(key) {
 * @function
 * @name lastClickIndex
 */
-proto.lastClickIndex = uki.newProp('lastClickIndex');
+uki.addProp(proto, 'lastClickIndex');
 
 /**
 * Actual row selected.
@@ -236,7 +236,7 @@ proto.scrollToPosition = function(position) {
 * @function
 * @name editor
 */
-proto.editor = uki.newProp('editor', function(e) {
+uki.addProp(proto, 'editor', function(e) {
     this._editor = uki.build(e)[0];
 });
 
@@ -456,7 +456,7 @@ proto._updatePack = function(packN, revision, rows) {
 
 proto._renderPack = function(rows) {
     var formated = rows.map(function(r, i) {
-        return { value: this._formatRow(r), index: i, even: i & 1 }
+        return { value: this._formatRow(r), index: i, even: i & 1 };
     }, this);
 
     return uki.fromHTML(uki.Mustache.to_html(

@@ -17,7 +17,7 @@ uki.delegateProp(ncProto, ['name', 'checked', 'disabled', 'value', 'type'], '_in
 
 ncProto._bindingOptions = {};
 
-ncProto.binding = uki.newProp('binding', function(val) {
+uki.addProp(ncProto, 'binding', function(val) {
     if (this._binding) this._binding.destruct();
 
     this._binding = val && new uki.Binding(this, val.model,
@@ -97,7 +97,7 @@ textProto._createDom = function(initArgs) {
     this._dom = uki.createElement(initArgs.tagName || 'span', { className: 'uki-nc-text' }, [this._input]);
 };
 
-textProto.placeholder = uki.newProp('placeholder', function(v) {
+uki.addProp(textProto, 'placeholder', function(v) {
     this._placeholder = v;
     if (this._input.placeholder !== undefined) {
         this._input.placeholder = v;
@@ -189,7 +189,7 @@ sProto._createDom = function(initArgs) {
     this._input = this._dom = uki.createElement('select', { className: 'uki-nc-select uki-nc-select__input' });
 };
 
-sProto.options = uki.newProp('options', function(val) {
+uki.addProp(sProto, 'options', function(val) {
     this._options = val;
     this._input.innerHTML = '';
     appendOptions(this._input, val);

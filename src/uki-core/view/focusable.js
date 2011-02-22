@@ -48,7 +48,7 @@ Focusable.hasFocus = function() {
     return this.focusableDom() == uki.doc.activeElement;
 };
 
-Focusable.focusedClass = fun.newProp('focusedClass');
+fun.addProp(Focusable, 'focusedClass');
 
 
 require('../view').Focusable = exports.Focusable = Focusable;

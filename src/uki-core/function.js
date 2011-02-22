@@ -105,6 +105,23 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
     return klass;
 };
 
+
+function addProp (proto, prop, setter) {
+    var propName = '_' + prop;
+    if (setter) {
+        proto[prop] = function(value) {
+            if (value === undefined) return this[propName];
+            setter.apply(this, arguments);
+            return this;
+        };
+    } else {
+        proto[prop] = function(value) {
+            if (value === undefined) return this[propName];
+            this[propName] = value;
+            return this;
+        };
+    }
+}
 /**
  * Creates default uki property function
  * <p>If value is given to this function it sets property to value
@@ -116,44 +133,24 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
  * <p>If used as setter function returns self</p>
  *
  * @example
- *   x.width = uki.newProp('width');
+ *   uki.addProp(x, 'width');
  *   x.width(12); // x._width = 12
  *   x.width();   // return 12
+ *   uki.addProp(x, ['width', 'height'])
  *
+ * @param {Object} proto Prototype of the object to add property to
  * @param {string} prop Prop name
  * @param {function(object)=} setter
  * @returns {function(object=):object}
  */
-fun.newProp = function(prop, setter) {
-    var propName = '_' + prop;
-    if (setter) {
-        return function(value) {
-            if (value === undefined) return this[propName];
-            setter.apply(this, arguments);
-            return this;
-        };
+fun.addProp = fun.addProps = function(proto, prop, setter) {
+    if (utils.isArray(prop)) {
+        for (var i =0, len = prop.length; i < len; i++) {
+            addProp(proto, prop[i], setter && setter[i]);
+        }
     } else {
-        return function(value) {
-            if (value === undefined) return this[propName];
-            this[propName] = value;
-            return this;
-        };
+        addProp(proto, prop, setter);
     }
-};
-
-/**
- * Adds several properties (uki.newProp) to a given object.
- * <p>Prop name equals to '_' + property name</p>
- *
- * @example
- *   uki.addProps(x, ['width', 'height'])
- *
- * @param {object} proto Object to add properties to
- * @param {Array.<string>} props Property names
- */
-fun.addProps = function(proto, props) {
-    for (var i =0, len = props.length; i<len; i++)
-        proto[ props[i] ] = uki.newProp(props[i]);
 };
 
 fun.delegateProp = function(proto, name, target, targetName) {
