@@ -105,7 +105,6 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
     return klass;
 };
 
-
 /**
  * Creates default uki property function
  * <p>If value is given to this function it sets property to value
@@ -117,7 +116,7 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
  * <p>If used as setter function returns self</p>
  *
  * @example
- *   x.width = uki.newProperty('_width');
+ *   x.width = uki.newProp('width');
  *   x.width(12); // x._width = 12
  *   x.width();   // return 12
  *
@@ -126,16 +125,17 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
  * @returns {function(object=):object}
  */
 fun.newProp = function(prop, setter) {
+    var propName = '_' + name;
     if (setter) {
         return function(value) {
-            if (value === undefined) return this[prop];
+            if (value === undefined) return this[propName];
             setter.apply(this, arguments);
             return this;
         };
     } else {
         return function(value) {
-            if (value === undefined) return this[prop];
-            this[prop] = value;
+            if (value === undefined) return this[propName];
+            this[propName] = value;
             return this;
         };
     }
@@ -153,7 +153,7 @@ fun.newProp = function(prop, setter) {
  */
 fun.addProps = function(proto, props) {
     for (var i =0, len = props.length; i<len; i++)
-        proto[ props[i] ] = uki.newProp('_' + props[i]);
+        proto[ props[i] ] = uki.newProp(props[i]);
 };
 
 fun.delegateProp = function(proto, name, target, targetName) {

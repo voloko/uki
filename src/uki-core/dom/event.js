@@ -153,10 +153,6 @@ var evt = module.exports = {
     addListener: function(el, types, listener) {
         var id = el[uki.expando] = el[uki.expando] || uki.guid++;
 
-        if (!types) {
-            types = Object.keys(listeners[id]).join(' ');
-        }
-
         types.split(' ').forEach(function(type) {
             listeners[id] = listeners[id] || {};
 
@@ -178,12 +174,16 @@ var evt = module.exports = {
     },
 
     removeListener: function(el, types, listener) {
+        if (!types) {
+            types = Object.keys(listeners[id]).join(' ');
+        }
+
         types.split(' ').forEach(function(type) {
             var id = el[uki.expando];
 
             if (!id || !listeners[id] || !listeners[id][type]) return;
 
-            listeners[id][type] = utils.without(listeners[id][type], listener);
+            listeners[id][type] = listener ? utils.without(listeners[id][type], listener) : [];
 
             // when removing the last listener also remove listener from the dom
             if (!listeners[id][type].length) {

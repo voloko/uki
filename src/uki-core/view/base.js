@@ -2,10 +2,10 @@ var view  = require('../view'),
     uki   = require('../uki'),
     utils = require('../utils'),
     fun   = require('../function'),
-    dom   = require('../dom'),
-    Events = require('./events').Events;
+    dom   = require('../dom')
+    evt   = require('../dom/event');
     
-view.Base = exports.Base = fun.newClass(Events, {});
+view.Base = exports.Base = fun.newClass({});
 
 var proto = exports.Base.prototype;
 
@@ -22,7 +22,7 @@ proto.init = function(initArgs) {
 proto.destruct = function() {
     uki.unregisterId(this);
     view.unregister(this);
-    Events.destruct.call(this);
+    this.removeListener();
     this.destructed = true;
 };
 
@@ -95,6 +95,46 @@ proto.toggleClass = function(className, condition) {
     dom.toggleClass(this.dom(), className, condition);
     return this;
 };
+
+
+
+
+proto.domForEvent = function(type) {
+    return this.dom();
+};
+
+/**
+ * @param {String} name Event name, or space separated names 
+ * @param {function()} callback
+ */
+proto.addListener = function(names, callback) {
+    var wrapper = fun.bindOnce(callback, this);
+    names.split(' ').forEach(function(name) {
+        evt.addListener(this.domForEvent(name), name, wrapper);
+    }, this);
+    return this;
+};
+
+/**
+ * @param {String} name Event name, or space separated names, or null to remove from all types
+ * @param {function()} callback or null to remove all callbacks
+ */
+proto.removeListener = function(names, callback) {
+    var wrapper = fun.bindOnce(callback, this);
+    names.split(' ').forEach(function(name) {
+        evt.removeListener(this.domForEvent(name), name, wrapper);
+    }, this);
+    return this;
+};
+
+proto.trigger = function(e) {
+    var wrapped = evt.createEvent(e, { target: this.domForEvent(e.type) });
+    return evt.trigger.call(this, e);
+};
+
+proto.on = proto.addListener;
+proto.emit = proto.trigger;
+
 
 /**
 * Shortcut to set absolute positioning props
