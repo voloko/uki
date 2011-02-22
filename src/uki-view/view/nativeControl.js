@@ -94,7 +94,8 @@ textProto.typeName = 'nativeControl.Text';
 
 textProto._createDom = function(initArgs) {
     this._input = uki.createElement('input', { className: 'uki-nc-text__input', type: 'text' });
-    this._dom = uki.createElement(initArgs.tagName || 'span', { className: 'uki-nc-text' }, [this._input]);
+    this._dom = uki.createElement(initArgs.tagName || 'span', { className: 'uki-nc-text' });
+    this._dom.appendChild(this._input);
 };
 
 uki.addProp(textProto, 'placeholder', function(v) {
@@ -107,9 +108,14 @@ uki.addProp(textProto, 'placeholder', function(v) {
     }
 });
 
+var ieResize = uki.ua.match(/MSIE 6|7/);
 textProto.resized = function() {
     NativeControl.prototype.resized.call(this);
     this._updatePlaceholderHeight();
+    // manual resize box-sizing: border-box for ie 6,7
+    if (ieResize) {
+        this._input.style.width = this._dom.offsetWidth - 6;
+    }
 };
 
 textProto._initPlaceholder = function() {
@@ -117,7 +123,7 @@ textProto._initPlaceholder = function() {
     this._initedPlaceholder = true;
     this.addClass('uki-nc-text_with-placeholder');
     this._placeholderDom = uki.createElement('span', { className: 'uki-nc-text__placholder' });
-    this._dom.insertBefore(this._placeholderDom, this._input);
+    this._dom.insertBefore(this._placeholderDom, this._dom.firstChild);
     uki.dom.addListener(this._placeholderDom, 'click', uki.bindOnce(function() {
         this.focus();
     }, this));
