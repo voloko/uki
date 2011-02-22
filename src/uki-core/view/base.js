@@ -3,9 +3,9 @@ var view  = require('../view'),
     utils = require('../utils'),
     fun   = require('../function'),
     dom   = require('../dom'),
-    Observable = require('./observable').Observable;
+    Events = require('./events').Events;
     
-view.Base = exports.Base = fun.newClass(Observable, {});
+view.Base = exports.Base = fun.newClass(Events, {});
 
 var proto = exports.Base.prototype;
 
@@ -22,7 +22,7 @@ proto.init = function(initArgs) {
 proto.destruct = function() {
     uki.unregisterId(this);
     view.unregister(this);
-    Observable.destruct.call(this);
+    Events.destruct.call(this);
     this.destructed = true;
 };
 

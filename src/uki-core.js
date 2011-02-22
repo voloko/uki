@@ -15,7 +15,6 @@ require('./uki-core/after');
 require('./uki-core/observable');
 
 require('./uki-core/view');
-require('./uki-core/view/observable');
 require('./uki-core/view/focusable');
 
 require('./uki-core/view/base');
