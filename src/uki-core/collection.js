@@ -5,9 +5,11 @@ var fun = require('./function'),
 /**
  * Collection performs group operations on uki.view objects.
  * <p>Behaves much like result jQuery(dom nodes).
- * Most methods are chainable like .prop('text', 'somevalue').addListener('click', function() { ... })</p>
+ * Most methods are chainable like
+ *   .prop('text', 'somevalue').on('click', function() { ... })</p>
  *
- * <p>Its easier to call uki([view1, view2]) or uki('selector') instead of creating collection directly</p>
+ * <p>Its easier to call uki([view1, view2]) or uki('selector')
+ * instead of creating collection directly</p>
  *
  * @author voloko
  * @constructor
@@ -15,9 +17,9 @@ var fun = require('./function'),
  */
 var Collection = fun.newClass({
 
-    init: function( elems ) {
+    init: function(elems) {
         this.length = 0;
-        arrayPrototype.push.apply( this, elems );
+        arrayPrototype.push.apply(this, elems);
     },
 
     /**#@+ @memberOf uki.Collection# */
@@ -26,10 +28,10 @@ var Collection = fun.newClass({
      *
      * @function
      *
-     * @param {function(this:uki.view.Base, number, uki.view.Base)} callback Callback to call for every item
+     * @param {function(this:uki.view.Base, number, uki.view.Base)} callback
      * @returns {uki.view.Collection} self
      */
-    forEach: function( callback, context ) {
+    forEach: function(callback, context) {
         return utils.forEach(this, callback, context);
     },
 
@@ -38,22 +40,24 @@ var Collection = fun.newClass({
      *
      * @function
      *
-     * @param {function(uki.view.Base, number):boolean} callback Callback to call for every item
+     * @param {function(uki.view.Base, number):boolean} callback
      * @returns {uki.view.Collection} created collection
      */
-    filter: function( callback, context ) {
+    filter: function(callback, context) {
         return new Collection(utils.filter(this, callback, context));
     },
 
-    map: function( callback, context ) {
+    map: function(callback, context) {
         return utils.map(this, callback, context);
     },
 
     /**
-     * Sets an attribute on all views or gets the value of the attribute on the first view
+     * Sets an attribute on all views or gets the value of the attribute
+     * on the first view
      *
      * @example
-     * c.prop('text', 'my text') // sets text to 'my text' on all collection views
+     * c.prop('text', 'my text') // sets text to 'my text' on all
+     *                           // collection views
      * c.prop('name') // gets name attribute on the first view
      *
      * @function
@@ -62,14 +66,14 @@ var Collection = fun.newClass({
      * @param {object=} value Value to set
      * @returns {uki.view.Collection|Object} Self or attribute value
      */
-    prop: function( name, value ) {
+    prop: function(name, value) {
         if (value !== undefined) {
-            for (var i=this.length-1; i >= 0; i--) {
-                utils.prop( this[i], name, value );
-            };
+            for (var i = this.length - 1; i >= 0; i--) {
+                utils.prop(this[i], name, value);
+            }
             return this;
         } else {
-            return this[0] ? utils.prop( this[0], name ) : "";
+            return this[0] ? utils.prop(this[0], name) : "";
         }
     },
 
@@ -83,8 +87,8 @@ var Collection = fun.newClass({
      * @param {string} selector
      * @returns {uki.view.Collection} Collection of found items
      */
-    find: function( selector ) {
-        return require('./selector').find( selector, this );
+    find: function(selector) {
+        return require('./selector').find(selector, this);
     },
 
     /**
@@ -95,20 +99,20 @@ var Collection = fun.newClass({
      * @param {Array.<uki.view.Base>} views Views to append
      * @returns {uki.view.Collection} self
      */
-    append: function( views ) {
+    append: function(views) {
         var target = this[0];
-        if (!target) return this;
+        if (!target) { return this; }
 
         views = views.length !== undefined ? views : [views];
 
-        for (var i = views.length-1; i >= 0; i--) {
+        for (var i = views.length - 1; i >= 0; i--) {
             target.appendChild(views[i]);
-        };
+        }
 
         return this;
     },
 
-    appendTo: function( target ) {
+    appendTo: function(target) {
         target = require('./builder').build(target)[0];
         this.forEach(function(view) {
             target.appendChild(view);
@@ -116,9 +120,9 @@ var Collection = fun.newClass({
         return this;
     },
 
-    attach: function( target ) {
+    attach: function(target) {
         this.forEach(function(view) {
-            require('./attachment').attach( target, view );
+            require('./attachment').attach(target, view);
             view.resized();
         });
         return this;
@@ -140,7 +144,7 @@ utils.forEach([
     ['next', 'nextView'],
     ['prev', 'prevView']
 ], function(i, desc) {
-    proto[ desc[0] ] = function() {
+    proto[desc[0]] = function() {
         return new Collection(
             utils.unique(
                 this.map(this, function(view) {
@@ -168,11 +172,14 @@ utils.forEach([
 @name uki.Collection#insertBefore */
 /** @function
 @name uki.Collection#toggle */
-utils.forEach('addListener removeListener trigger on emit appendChild removeChild insertBefore toggle'.split(' '), function(name) {
+utils.forEach([
+    'addListener', 'removeListener', 'trigger', 'on', 'emit',
+    'appendChild', 'removeChild', 'insertBefore', 'toggle'
+], function(name) {
     proto[name] = function() {
-        for (var i=this.length-1; i >=0; i--) {
+        for (var i = this.length - 1; i >= 0; i--) {
             this[i][name].apply(this[i], arguments);
-        };
+        }
         return this;
     };
 });

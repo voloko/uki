@@ -3,16 +3,18 @@ var toString = Object.prototype.toString,
     slice = arrayPrototype.slice,
     utils = exports,
     compat = require('./compat');
-    
+
 var marked = '__uki_marked';
 // dummy subclass
 /** @ignore */
-function inheritance () {}
+function inheritance() {}
 
 /**
  * Sets or retrieves attribute on an object.
- * <p>If target has function with attr it will be called target[attr](value=)
- * If no function present attribute will be set/get directly: target[attr] = value or return target[attr]</p>
+ *
+ * If target has function with attr it will be called target[attr](value=)
+ * If no function present attribute will be set/get directly:
+ *   target[attr] = value or return target[attr]</p>
  *
  * @example
  *   uki.prop(view, 'name', 'funny') // sets name to funny on view
@@ -26,7 +28,6 @@ function inheritance () {}
 utils.prop = function(target, attr, value, extra) {
     if (value !== undefined) {
         if (target[attr] && target[attr].apply) {
-        // if (uki.isFunction(target[attr])) {
             target[attr](value, extra);
         } else {
             target[attr] = value;
@@ -34,7 +35,6 @@ utils.prop = function(target, attr, value, extra) {
         return target;
     } else {
         if (target[attr] && target[attr].apply) {
-        // if (uki.isFunction(target[attr])) {
             return target[attr]();
         } else {
             return target[attr];
@@ -48,7 +48,7 @@ utils.prop = function(target, attr, value, extra) {
  * @param {object} object Object to check
  * @returns {boolean}
  */
-utils.isFunction = function( obj ) {
+utils.isFunction = function(obj) {
     return toString.call(obj) === "[object Function]";
 };
 
@@ -58,7 +58,7 @@ utils.isFunction = function( obj ) {
  * @param {object} object Object to check
  * @returns {boolean}
  */
-utils.isArray = function( obj ) {
+utils.isArray = function(obj) {
     return toString.call(obj) === "[object Array]";
 };
 
@@ -72,7 +72,7 @@ utils.toArray = function(arr) {
  * @param {string} html
  * @returns {string} escaped html
  */
-utils.escapeHTML = function( html ) {
+utils.escapeHTML = function(html) {
     var trans = {
         '&': '&amp;',
         '<': '&lt;',
@@ -83,13 +83,13 @@ utils.escapeHTML = function( html ) {
     return (html + '').replace(/[&<>\"\']/g, function(c) { return trans[c]; });
 };
 
-utils.pluck = function( array, attr ) {
+utils.pluck = function(array, attr) {
     return compat.map(array, function(v) {
         return uki.prop(v, attr);
     });
 };
 
-utils.without = function( array, value ) {
+utils.without = function(array, value) {
     return compat.filter(array, function(v) {
         return v !== value;
     });
@@ -99,18 +99,23 @@ utils.without = function( array, value ) {
  * Iterates through all non empty values of object or an Array
  *
  * @param {object|Array} object Object to iterate through
- * @param {function(object, number):boolean} callback Called for every item, may return false to stop iteration
- * @param {object} context Context in which callback should called. If not specified context will be set to
- *                         current item
+ * @param {function(object, number):boolean} callback Called for every item,
+ *                                           may return false to stop iteration
+ * @param {object} context Context in which callback should called.
+ *                         If not specified context will be set to current item
  * @returns {object}
  */
-utils.forEach = function( object, callback, context ) {
+utils.forEach = function(object, callback, context) {
     var name, i = 0, length = object.length;
 
-    if ( length === undefined ) {
-        for ( name in object ) {
-            if ( !name || object[ name ] === undefined || !object.hasOwnProperty(name) ) continue;
-            if ( callback.call( context || object[ name ], object[ name ], name ) === false ) { break; }
+    if (length === undefined) {
+        for (name in object) {
+            if (!name || object[name] === undefined ||
+                !object.hasOwnProperty(name)) {
+                continue;
+            }
+            if (callback.call(context || object[name],
+                object[name], name) === false) { break; }
         }
     } else {
         compat.forEach.call(object, callback, context);
@@ -124,29 +129,30 @@ utils.forEach = function( object, callback, context ) {
  * @param {Array} array
  * @returns {Array}
  */
-utils.unique = function( array ) {
+utils.unique = function(array) {
     var result = [],
-        i;
+        i, length;
 
-    if (array.length && (typeof array[0] == 'object' || typeof array[0] == 'function')) {
+    if (array.length && (typeof array[0] == 'object' ||
+        typeof array[0] == 'function')) {
 
         for (i = 0; i < array.length; i++) {
             if (!array[i][marked]) { result[result.length] = array[i]; }
             array[i][marked] = true;
-        };
+        }
         for (i = 0; i < result.length; i++) {
             delete result[i][marked];
-        };
+        }
         return result;
 
     } else {
 
         var done = {};
-        for ( i = 0, length = array.length; i < length; i++ ) {
-            var id = array[ i ];
-            if ( !done[ id ] ) {
-                done[ id ] = true;
-                result.push( array[ i ] );
+        for (i = 0, length = array.length; i < length; i++) {
+            var id = array[i];
+            if (!done[id]) {
+                done[id] = true;
+                result.push(array[i]);
             }
         }
 
@@ -157,7 +163,8 @@ utils.unique = function( array ) {
 /**
  * Copies properties from one object to another
  * @example
- *   uki.extend(x, { width: 13, height: 14 }) // sets x.width = 13, x.height = 14
+ *   uki.extend(x, { width: 13, height: 14 }) // sets x.width = 13,
+ *                                            // x.height = 14
  *   options = uki.extend({}, defaultOptions, options)
  *
  * @param {object} target Object to copy properties into
@@ -167,14 +174,14 @@ utils.unique = function( array ) {
 utils.extend = function() {
     var target = arguments[0] || {}, i = 1, length = arguments.length, options;
 
-    for ( ; i < length; i++ ) {
-        if ( (options = arguments[i]) != null ) {
+    for (; i < length; i++) {
+        if ((options = arguments[i]) != null) {
 
-            for ( var name in options ) {
-                var copy = options[ name ];
+            for (var name in options) {
+                var copy = options[name];
 
-                if ( copy !== undefined ) {
-                    target[ name ] = copy;
+                if (copy !== undefined) {
+                    target[name] = copy;
                 }
 
             }
@@ -190,7 +197,7 @@ utils.extend = function() {
  * @param {array} array sorted array
  * @returns {number} index of closest value
  */
-utils.binarySearch = function (value, array) {
+utils.binarySearch = function(value, array) {
     var low = 0, high = array.length, mid;
 
     while (low < high) {
@@ -207,7 +214,7 @@ utils.firstToLower = function(string) {
 };
 
 utils.camalize = function(string) {
-    return string.replace(/[-_]\S/g, function(v) {
+    return string.replace(/[_-]\S/g, function(v) {
         return v.substr(1).toUpperCase();
     });
 };
@@ -223,9 +230,9 @@ utils.path2obj = function(path, context) {
 
     context = context || global;
 
-    for (var i=0, l = parts.length; context && i < l; i++) {
+    for (var i = 0, l = parts.length; context && i < l; i++) {
         context = context[parts[i]];
-    };
+    }
     return context;
 };
 
@@ -233,7 +240,7 @@ utils.range = function(from, to) {
     var result = new Array(to - from);
     for (var idx = 0; from <= to; from++, idx++) {
         result[idx] = from;
-    };
+    }
     return result;
 };
 

@@ -11,38 +11,39 @@ var utils = require('./utils'),
     ],
     posRegexp = regexps.POS,
     posFilters = {
-        first: function(i){
+        first: function(i) {
             return i === 0;
         },
-        last: function(i, match, array){
+        last: function(i, match, array) {
             return i === array.length - 1;
         },
-        even: function(i){
+        even: function(i) {
             return i % 2 === 0;
         },
-        odd: function(i){
+        odd: function(i) {
             return i % 2 === 1;
         },
-        lt: function(i, match){
+        lt: function(i, match) {
             return i < match[2] - 0;
         },
-        gt: function(i, match){
+        gt: function(i, match) {
             return i > match[2] - 0;
         },
-        nth: function(i, match){
+        nth: function(i, match) {
             return match[2] - 0 == i;
         },
-        eq: function(i, match){
+        eq: function(i, match) {
             return match[2] - 0 == i;
         }
     },
     reducers = {
         TYPE: function(comp, match) {
             var expected = match[1];
-            if (expected == '*') return true;
+            if (expected == '*') { return true; }
             var typeName = utils.prop(comp, 'typeName');
             return typeName && typeName.length >= expected.length &&
-                   ('.' + typeName).indexOf('.' + expected) == (typeName.length - expected.length);
+                ('.' + typeName).indexOf('.' + expected) ==
+                    (typeName.length - expected.length);
         },
 
         INST: function(comp, match) {
@@ -73,56 +74,56 @@ var utils = require('./utils'),
 
         POS: function(comp, match, i, array) {
             var filter = posFilters[match[1]];
-            return filter ? filter( i, match, array ) : false;
+            return filter ? filter(i, match, array) : false;
         }
     },
     mappers = {
-        "+": function(context){
+        "+": function(context) {
             return utils.unique(
-                utils.map(context, mapAccessor('nextView') )
+                utils.map(context, mapAccessor('nextView'))
             );
         },
 
-        ">": function(context){
-            return utils.unique( flatten(
-                utils.map(context, mapAccessor('childViews') )
-            ) );
+        ">": function(context) {
+            return utils.unique(flatten(
+                utils.map(context, mapAccessor('childViews'))
+            ));
         },
 
         "": function(context) {
-            return utils.unique( recChildren( flatten(
-                utils.map(context, mapAccessor('childViews') )
-            ) ) );
+            return utils.unique(recChildren(flatten(
+                utils.map(context, mapAccessor('childViews'))
+            )));
         },
 
-        "~": function(context){
-            return utils.unique( flatten(
-                utils.map(context, mapAccessor('nextView') )
-            ) );
+        "~": function(context) {
+            return utils.unique(flatten(
+                utils.map(context, mapAccessor('nextView'))
+            ));
         }
     };
 
-function mapAccessor (prop) {
+function mapAccessor(prop) {
     return function(elem) {
         return utils.prop(elem, prop);
     };
 }
 
-function nextViews (view) {
+function nextViews(view) {
     return view.parent().childViews().slice((view._viewIndex || 0) + 1);
 }
 
-function recChildren (comps) {
+function recChildren(comps) {
     return flatten(utils.map(comps, function(comp) {
         return [comp].concat(recChildren(utils.prop(comp, 'childViews')));
     }));
 }
 
-function flatten (array) {
+function flatten(array) {
    return utils.reduce(array, reduceFlatten, []);
 }
 
-function reduceFlatten (x, e) {
+function reduceFlatten(x, e) {
    return x.concat(e);
 }
 /**#@-*/
@@ -133,12 +134,15 @@ function reduceFlatten (x, e) {
 var Selector = {
     /**
      * Finds views by CSS3 selectors in view tree.
-     * <p>Can be called as uki(selector) instead of uki.Selector.find(selector)</p>
+     * <p>Can be called as uki(selector) instead of
+     * uki.Selector.find(selector)</p>
      *
      * @example
      *   uki('Label') find all labels on page
-     *   uki('Box[name=main] > Label') find all immediate descendant Labels in a box with name = "main"
-     *   uki('> Slider', context) find all direct descendant Sliders within given context
+     *   uki('Box[name=main] > Label') find all immediate descendant
+     *                                 Labels in a box with name = "main"
+     *   uki('> Slider', context) find all direct descendant
+     *                            Sliders within given context
      *   uki('Slider,Checkbox') find all Sliders and Checkboxes
      *   uki('Slider:eq(3)') find 3-d slider
      *
@@ -149,8 +153,8 @@ var Selector = {
      */
     find: function(selector, context, skipFiltering) {
         context = context || require('./attachment').instances();
-        if (context.length === undefined) context = [context];
-        
+        if (context.length === undefined) { context = [context]; }
+
         var tokens = Selector.tokenize(selector),
             expr   = tokens[0],
             extra  = tokens[1],
@@ -160,24 +164,24 @@ var Selector = {
         while (expr.length > 0) {
             mapper = mappers[expr[0]] ? mappers[expr.shift()] : mappers[''];
             result = mapper(result);
-            if (expr.length == 0) break;
+            if (expr.length === 0) { break; }
             result = Selector.reduce(expr.shift(), result);
         }
 
         if (extra) {
             result = result.concat(Selector.find(extra, context, true));
         }
-        
+
         return skipFiltering ? result : new Collection(utils.unique(result));
     },
 
     /** @ignore */
     reduce: function(exprItem, context) {
-        if (!context || !context.length) return [];
+        if (!context || !context.length) { return []; }
 
         var match, found;
 
-        while (exprItem != '') {
+        while (exprItem) {
             found = false;
             uki.forEach(regexps, function(row, index) {
 
@@ -192,7 +196,7 @@ var Selector = {
                     return false;
                 }
             });
-            if (!found) break;
+            if (!found) { break; }
         }
         return context;
     },
@@ -203,10 +207,10 @@ var Selector = {
 
         chunker.lastIndex = 0;
 
-        while ( (match = chunker.exec(expr)) !== null ) {
-            parts.push( match[1] );
+        while ((match = chunker.exec(expr)) !== null) {
+            parts.push(match[1]);
 
-            if ( match[2] ) {
+            if (match[2]) {
                 extra = RegExp.rightContext;
                 break;
             }

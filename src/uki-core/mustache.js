@@ -2,7 +2,7 @@
 * Copyright (c) 2009 Chris Wanstrath (Ruby)
 * Copyright (c) 2010 Jan Lehnardt (JavaScript)
 * mustache.js - Logic-less templates in JavaScript
-* 
+*
 * @option preserve-header
 **/
 

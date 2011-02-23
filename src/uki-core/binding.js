@@ -52,7 +52,9 @@ require('uki').Binding = exports.Binding = fun.newClass({
     },
 
     updateView: function(e) {
-        if ((!e || e.source !== this) && this.viewValue() !== this.modelValue()) {
+        if ((!e || e.source !== this) &&
+            this.viewValue() !== this.modelValue()) {
+
             this.viewValue(this.modelValue());
         }
     }

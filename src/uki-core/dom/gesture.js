@@ -1,6 +1,6 @@
 var utils = require('../utils'),
     evt = require('./event');
- 
+
 var gesture = module.exports = {
     draggable: null,
     position: null,

@@ -1,6 +1,6 @@
 var utils = require('./utils'),
     uki   = require('./uki');
-    
+
 var registry = {};
 
 /** @namespace */
@@ -16,7 +16,7 @@ uki.view = module.exports = {
     closest: function(dom) {
         while (dom) {
             var e = dom[uki.expando];
-            if (registry[e]) return registry[e];
+            if (registry[e]) { return registry[e]; }
             dom = dom.parentNode;
         }
         return null;
@@ -24,7 +24,7 @@ uki.view = module.exports = {
 
     contains: function(parent, child) {
         while (child) {
-            if (child == parent) return true;
+            if (child == parent) { return true; }
             child = child.parent();
         }
         return false;
@@ -32,7 +32,7 @@ uki.view = module.exports = {
 
     newToggleClassProp: function(className) {
         return function(state) {
-            if (state === undefined) return this.hasClass(className);
+            if (state === undefined) { return this.hasClass(className); }
             return this.toggleClass(className, state);
         };
     },

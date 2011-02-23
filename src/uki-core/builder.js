@@ -11,36 +11,40 @@ var utils = require('./utils'),
  * @returns {uki.view.Collection} collection of created elements
  */
 uki.build = exports.build = function(ml) {
-    return new Collection( createMulti( (ml.length === undefined) ? [ml] : ml ) );
+    return new Collection(createMulti((ml.length === undefined) ? [ml] : ml));
 };
 
 uki.viewNamespaces = exports.viewNamespaces = [global];
 
-function createMulti (ml) {
+function createMulti(ml) {
     return utils.map(ml, function(mlRow) { return createSingle(mlRow); });
 }
 
-function createSingle (mlRow) {
+function createSingle(mlRow) {
     if (mlRow.typeName) {
         return mlRow;
     }
 
-    var c = mlRow.view || mlRow.type,
+    var C = mlRow.view || mlRow.type,
         initArgs = mlRow.init || {},
-        result;
-    if (utils.isFunction(c)) {
-        result = new c(initArgs);
-    } else if (typeof c === 'string') {
-        for (var i=0, ns = exports.viewNamespaces, length = ns.length; i < length; i++) {
-            var obj = utils.path2obj(c, ns[i]);
-            if (obj) {
-                result = new obj(initArgs);
+        result, Obj;
+    if (utils.isFunction(C)) {
+        result = new C(initArgs);
+    } else if (typeof C === 'string') {
+        for (var i = 0, ns = exports.viewNamespaces, length = ns.length;
+            i < length; i++) {
+
+            Obj = utils.path2obj(C, ns[i]);
+            if (Obj) {
+                result = new Obj(initArgs);
                 break;
             }
-        };
-        if (!obj) throw "uki.Builder: Can't find view with type '" + c + "'";
+        }
+        if (!Obj) {
+            throw "uki.Builder: Can't find view with type '" + C + "'";
+        }
     } else {
-        result = c;
+        result = C;
     }
 
     copyAttrs(result, mlRow);
@@ -49,7 +53,7 @@ function createSingle (mlRow) {
 
 function copyAttrs(comp, mlRow) {
     utils.forEach(mlRow, function(value, name) {
-        if (name == 'view' || name == 'type' || name == 'init') return;
+        if (name == 'view' || name == 'type' || name == 'init') { return; }
         utils.prop(comp, name, value);
     });
     return comp;

@@ -2,16 +2,16 @@ var arrayPrototype = Array.prototype;
 
 var arrayFunctions = ['indexOf', 'lastIndexOf', 'forEach', 'map',
     'filter', 'reduce'];
-    
+
 exports.arrayFunctions = arrayFunctions;
-    
+
 exports.applyCompat = function() {
     exports.forEach.call(arrayFunctions, function(name) {
         if (!arrayPrototype[name]) {
             arrayPrototype[name] = exports[name];
         }
     });
-    
+
     if (!Object.keys) {
         Object.keys = exports.keys;
     }
@@ -32,7 +32,7 @@ exports.indexOf = arrayPrototype.indexOf || function(find, i) {
 exports.lastIndexOf = arrayPrototype.lastIndexOf || function(find, i) {
     if (i === undefined) { i = this.length - 1; }
     if (i < 0) { i += this.length; }
-    if (i > this.length-1) { i = this.length - 1; }
+    if (i > this.length - 1) { i = this.length - 1; }
     i++; /* i++ because from-argument is sadly inclusive */
     while (i-- > 0) {
         if (i in this && this[i] === find) {
@@ -80,7 +80,7 @@ exports.reduce = arrayPrototype.reduce || function(fun, accumulator) {
     return accumulator;
 };
 
-exports.keys = Object.keys || function(o){
+exports.keys = Object.keys || function(o) {
     var ret = [], p;
     for (p in o) {
         if (o.hasOwnProperty.call(p)) {

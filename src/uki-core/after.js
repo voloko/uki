@@ -8,11 +8,11 @@
  */
 function after(callback) {
     callback.huid = callback.huid || uki.guid++;
-    if (after._bound[callback.huid]) return;
+    if (after._bound[callback.huid]) { return; }
     after._bound[callback.huid] = true;
     after._queue.push(callback);
-    if (!after._running) after._startTimer();
-};
+    if (!after._running) { after._startTimer(); }
+}
 
 after._bound = {};
 after._running = false;
@@ -25,7 +25,7 @@ after.start = function() {
 };
 
 after.stop = function() {
-    if (--after._running) return;
+    if (--after._running) { return; }
     after._runCallbacks();
 };
 
@@ -34,17 +34,18 @@ after._runCallbacks = function() {
     var queue = after._queue;
     after._queue = [];
     after._bound = {};
-    for (var i=0; i < queue.length; i++)
+    for (var i = 0; i < queue.length; i++) {
         queue[i]();
+    }
 };
 
 after._startTimer = function() {
-    if (after._timer) return;
+    if (after._timer) { return; }
     after._timer = setTimeout(after._runCallbacks, 1);
 };
 
 after._clearTimer = function() {
-    if (!after._timer) return;
+    if (!after._timer) { return; }
     clearTimeout(after._timer);
     after._timer = 0;
 };

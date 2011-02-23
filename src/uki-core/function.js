@@ -6,18 +6,19 @@ var uki = require('./uki'),
 /**
  * Class and function utility functions.
  */
- 
+
 // dummy subclass
 /** @ignore */
-function inheritance () {}
+function inheritance() {}
 
 var fun = exports;
 
-fun.bind = function( fn, context ) {
+fun.bind = function(fn, context) {
     var args = arrayPrototype.slice.call(arguments, 2),
         result = args.length ?
             function() {
-                return fn.apply(context || this, args.concat(utils.toArray(arguments)));
+                return fn.apply(context || this,
+                    args.concat(utils.toArray(arguments)));
             } :
             function() {
                 return fn.apply(context || this, arguments);
@@ -25,15 +26,16 @@ fun.bind = function( fn, context ) {
     return result;
 };
 
-fun.bindOnce = function( fn, context ) {
+fun.bindOnce = function(fn, context) {
     fn.huid = fn.huid || uki.guid++;
     var bindingName = '__binding_' + fn.huid;
-    context[bindingName] = context[bindingName] || fun.bind( fn, context );
+    context[bindingName] = context[bindingName] || fun.bind(fn, context);
     return context[bindingName];
 };
 
 /**
- * Creates a new class inherited from base classes. Init function is used as constructor
+ * Creates a new class inherited from base classes.
+ * Init function is used as constructor
  * @example
  *   baseClass = uki.newClass({
  *      init: function() { this.x = 3 }
@@ -42,35 +44,39 @@ fun.bindOnce = function( fn, context ) {
  *   childClass = uki.newClass(baseClass, {
  *      getSqrt: function() { return this.x*this.x }
  *   });
- * 
+ *
  *   someMixin = {
  *      happines: function() {
  *          return 'happines';
  *      }
  *   }
- * 
- *   childNinja = uki.newClass(baseClass, someMixin, function(STATIC, Base, Mixin) {
+ *
+ *   childNinja = uki.newClass(baseClass, someMixin,
+ *      function(STATIC, Base, Mixin) {
+ *
  *      this.init = function() {
  *          Base.init.call(this);
  *      };
- * 
+ *
  *      this.happines = function() {
  *          return 'Ninja ' + Mixin.happines.call(this);
  *      }
- * 
+ *
  *      this.publicMethod = function() {
  *          // do some public work
  *          privateMethod.call(this);
  *          return this.happines();
  *      };
- * 
+ *
  *      function privateMethod() {
  *          // do some private stuff
  *      }
  *   });
  *
- * @param {object=} superClass If superClass has prototype "real" prototype base inheritance is used,
- *                             otherwise superClass properties are simply copied to newClass prototype
+ * @param {object=} superClass If superClass has prototype "real" prototype
+ *                             base inheritance is used, otherwise superClass
+ *                             properties are simply copied to newClass
+ *                             prototype
  * @param {Array.<object>=} mixins
  * @param {object} methods
  * @returns Describe what it returns
@@ -79,7 +85,8 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
     var klass = function() {
             this.init.apply(this, arguments);
         },
-        i, definition, definitionArgs = [klass], base, length = arguments.length;
+        i, definition, definitionArgs = [klass], base,
+        length = arguments.length;
 
     for (i = 0; i < length; i++) {
         base = arguments[i];
@@ -100,23 +107,25 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
             definitionArgs.push(base);
         }
 
-    };
-    if (!klass.prototype.init) klass.prototype.init = function() {};
+    }
+    if (!klass.prototype.init) {
+        klass.prototype.init = function() {};
+    }
     return klass;
 };
 
 
-function addProp (proto, prop, setter) {
+function addProp(proto, prop, setter) {
     var propName = '_' + prop;
     if (setter) {
         proto[prop] = function(value) {
-            if (value === undefined) return this[propName];
+            if (value === undefined) { return this[propName]; }
             setter.apply(this, arguments);
             return this;
         };
     } else {
         proto[prop] = function(value) {
-            if (value === undefined) return this[propName];
+            if (value === undefined) { return this[propName]; }
             this[propName] = value;
             return this;
         };
@@ -145,7 +154,7 @@ function addProp (proto, prop, setter) {
  */
 fun.addProp = fun.addProps = function(proto, prop, setter) {
     if (utils.isArray(prop)) {
-        for (var i =0, len = prop.length; i < len; i++) {
+        for (var i = 0, len = prop.length; i < len; i++) {
             addProp(proto, prop[i], setter && setter[i]);
         }
     } else {
@@ -164,8 +173,9 @@ fun.delegateProp = function(proto, name, target, targetName) {
 
         proto[name] = function(value) {
             if (value === undefined) {
-                if (utils.prop(this, target))
+                if (utils.prop(this, target)) {
                     return utils.prop(utils.prop(this, target), targetName);
+                }
                 return this[propName];
             }
             if (utils.prop(this, target)) {
@@ -193,7 +203,7 @@ fun.delegateCall = function(proto, name, target, targetName) {
     }
 };
 
-function timer ( fn, timeout, debounce ) {
+function timer(fn, timeout, debounce) {
     var running;
 
     return function() {
@@ -201,7 +211,9 @@ function timer ( fn, timeout, debounce ) {
         var context = this,
             args = arguments;
 
-        if (debounce && running) running = clearTimeout(running);
+        if (debounce && running) {
+            running = clearTimeout(running);
+        }
         running = running || setTimeout(function() {
             running = null;
             fn.apply(context, args);
@@ -210,15 +222,15 @@ function timer ( fn, timeout, debounce ) {
     };
 }
 
-fun.trottle = function( fn, timeout ) {
+fun.trottle = function(fn, timeout) {
     return timer(fn, timeout);
 };
 
-fun.debounce = function( fn, timeout ) {
+fun.debounce = function(fn, timeout) {
     return timer(fn, timeout, true);
 };
 
-fun.defer = function( fn, timeout ) {
+fun.defer = function(fn, timeout) {
     timeout = timeout || 0;
     setTimeout(fn, timeout);
 };

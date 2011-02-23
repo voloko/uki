@@ -5,7 +5,7 @@ var Container = require('./view/container.js').Container,
 
 var Attachment = require('./function').newClass(Container, {
     typeName: 'Attachment',
-    
+
     _setup: function(initArgs) {
         this._dom = initArgs.dom;
         uki.addClass(this._dom, 'uki-attachment');
@@ -50,7 +50,7 @@ function register(a) {
         require('./dom/event').addListener(window, 'resize', function() {
             if (!timeout) {
                 timeout = true;
-                setTimeout(function(i,len) {
+                setTimeout(function(i, len) {
                     after.start();
 
                     timeout = false;
@@ -67,4 +67,4 @@ function register(a) {
         id = el[uki.expando] = el[uki.expando] || uki.guid++;
 
     return (instances[id] = a);
-};
+}

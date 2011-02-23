@@ -49,14 +49,24 @@ var Observable = {
     },
 
     triggerChanges: function(name, source) {
-        this.trigger({ type: 'change.' + name, model: this, source: source });
-        this.trigger({ type: 'change', name: name, model: this, source: source });
+        this.trigger({
+            type: 'change.' + name,
+            model: this,
+            source: source
+        });
+        this.trigger({
+            type: 'change',
+            name: name,
+            model: this,
+            source: source
+        });
         return this;
     },
 
     muteEvents: function(value) {
         if (value === undefined) {
-            return this._originalTrigger && this.trigger !== this._originalTrigger;
+            return this._originalTrigger &&
+                this.trigger !== this._originalTrigger;
         }
         if (!this._originalTrigger) {
             this._originalTrigger = this.trigger;
@@ -69,10 +79,10 @@ var Observable = {
 Observable.on = Observable.addListener;
 Observable.emit = Observable.trigger;
 
-function addProp (proto, prop, setter) {
+function addProp(proto, prop, setter) {
     var propName = '_' + prop;
     proto[prop] = function(value, source) {
-        if (value === undefined) return this[propName];
+        if (value === undefined) { return this[propName]; }
 
         var oldValue = this[prop](),
             newValue;
@@ -92,7 +102,7 @@ function addProp (proto, prop, setter) {
 uki.addOProps = Observable.addProps =
     uki.addOProp = Observable.addProp = function(proto, prop, setter) {
     if (utils.isArray(prop)) {
-        for (var i =0, len = prop.length; i < len; i++) {
+        for (var i = 0, len = prop.length; i < len; i++) {
             addProp(proto, prop[i], setter && setter[i]);
         }
     } else {

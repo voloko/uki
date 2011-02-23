@@ -19,10 +19,10 @@ uki.dom = module.exports = {
     createElement: function(tagName, options, children) {
         var e = uki.doc.createElement(tagName);
         utils.forEach(options || {}, function(value, name) {
-            if (name == 'style') e.style.cssText = value;
-            else if (name == 'html') e.innerHTML = value;
-            else if (name == 'className') e.className = value;
-            else e.setAttribute(name, value);
+            if (name == 'style') { e.style.cssText = value; }
+            else if (name == 'html') { e.innerHTML = value; }
+            else if (name == 'className') { e.className = value; }
+            else { e.setAttribute(name, value); }
         });
         children && utils.forEach(children, function(c) {
             e.appendChild(c);
@@ -31,7 +31,9 @@ uki.dom = module.exports = {
     },
 
     removeElement: function(element) {
-        if (element && element.parentNode) element.parentNode.removeChild(element);
+        if (element && element.parentNode) {
+            element.parentNode.removeChild(element);
+        }
     },
 
     createStylesheet: function(code) {
@@ -44,14 +46,14 @@ uki.dom = module.exports = {
         }
         return style;
     },
-    
+
     computedStyle: function(el) {
         if (uki.doc.defaultView && uki.doc.defaultView.getComputedStyle) {
-            return uki.doc.defaultView.getComputedStyle( el, null );
+            return uki.doc.defaultView.getComputedStyle(el, null);
         } else if (el.currentStyle) {
             return el.currentStyle;
         }
-    },    
+    },
 
     fromHTML: function(html) {
         var fragment = uki.doc.createElement('div');
@@ -62,7 +64,7 @@ uki.dom = module.exports = {
     // client rect adjugested to window scroll
     clientRect: function(elem, ignoreScroll) {
         var rect = elem.getBoundingClientRect();
-        if (ignoreScroll) return rect;
+        if (ignoreScroll) { return rect; }
 
         var body = uki.doc.body,
             scrollTop  = window.pageYOffset || body.scrollTop,
@@ -80,8 +82,9 @@ uki.dom = module.exports = {
     },
 
     addClass: function(elem, className) {
-        if (!this.hasClass(elem, className))
+        if (!this.hasClass(elem, className)) {
             elem.className += (elem.className ? ' ' : '') + className;
+        }
     },
 
     removeClass: function(elem, className) {
@@ -91,8 +94,12 @@ uki.dom = module.exports = {
     },
 
     toggleClass: function(elem, className, condition) {
-        if (condition === undefined) condition = !this.hasClass(elem, className);
-        condition ? this.addClass(elem, className) : this.removeClass(elem, className);
+        if (condition === undefined) {
+            condition = !this.hasClass(elem, className);
+        }
+        condition ? this.addClass(elem, className) :
+            this.removeClass(elem, className);
     }
 };
+
 utils.extend(uki, module.exports);
