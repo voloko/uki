@@ -24,7 +24,7 @@ uki.dom = module.exports = {
             else if (name == 'className') e.className = value;
             else e.setAttribute(name, value);
         });
-        children && children.forEach(function(c) {
+        children && utils.forEach(children, function(c) {
             e.appendChild(c);
         });
         return e;

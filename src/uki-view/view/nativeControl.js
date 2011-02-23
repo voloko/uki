@@ -142,7 +142,7 @@ textProto._updatePlaceholderHeight = function() {
     var targetStyle = this._placeholderDom.style,
         sourceStyle = uki.dom.computedStyle(this._input);
 
-    ['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'].forEach(function(name) {
+    uki.forEach(['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'], function(name) {
         if (sourceStyle[name] !== undefined) {
             targetStyle[name] = sourceStyle[name];
         }
@@ -204,7 +204,7 @@ uki.addProp(sProto, 'options', function(val) {
 
 function appendOptions (root, options) {
     var node;
-    options.forEach(function(option) {
+    uki.forEach(options, function(option) {
         if (typeof option === 'string' || typeof option === 'number') {
             option = { text: option, value: option };
         }

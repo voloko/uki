@@ -79,32 +79,32 @@ var utils = require('./utils'),
     mappers = {
         "+": function(context){
             return utils.unique(
-                context.map( mapAccessor('nextView') )
+                utils.map(context, mapAccessor('nextView') )
             );
         },
 
         ">": function(context){
             return utils.unique( flatten(
-                context.map( mapAccessor('childViews') )
+                utils.map(context, mapAccessor('childViews') )
             ) );
         },
 
         "": function(context) {
             return utils.unique( recChildren( flatten(
-                context.map( mapAccessor('childViews') )
+                utils.map(context, mapAccessor('childViews') )
             ) ) );
         },
 
         "~": function(context){
             return utils.unique( flatten(
-                context.map( mapAccessor('nextView') )
+                utils.map(context, mapAccessor('nextView') )
             ) );
         }
     };
 
 function mapAccessor (prop) {
     return function(elem) {
-        return  utils.prop(elem, prop);
+        return utils.prop(elem, prop);
     };
 }
 
@@ -113,13 +113,13 @@ function nextViews (view) {
 }
 
 function recChildren (comps) {
-    return flatten(comps.map(function(comp) {
-        return [comp].concat( recChildren(utils.prop(comp, 'childViews')) );
+    return flatten(utils.map(comps, function(comp) {
+        return [comp].concat(recChildren(utils.prop(comp, 'childViews')));
     }));
 }
 
 function flatten (array) {
-   return array.reduce( reduceFlatten, [] );
+   return utils.reduce(array, reduceFlatten, []);
 }
 
 function reduceFlatten (x, e) {
@@ -179,13 +179,13 @@ var Selector = {
 
         while (exprItem != '') {
             found = false;
-            regexps.forEach(function(row, index) {
+            uki.forEach(regexps, function(row, index) {
 
                 /*jsl:ignore*/
                 if (!found && (match = exprItem.match(row.regexp))) {
                 /*jsl:end*/
                     found = true;
-                    context = context.filter(function(comp, index) {
+                    context = utils.filter(context, function(comp, index) {
                         return reducers[row.name](comp, match, index, context);
                     });
                     exprItem = exprItem.replace(row.regexp, '');

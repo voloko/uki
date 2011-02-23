@@ -141,7 +141,7 @@ var evt = module.exports = {
         var listenerForEl = evt.listeners[this[expando]] || {},
             listenersForType = listenerForEl[e.type];
 
-        listenersForType && listenersForType.forEach(function(l) {
+        listenersForType && utils.forEach(listenersForType, function(l) {
             l.call(this, e);
         }, this);
 
@@ -153,7 +153,7 @@ var evt = module.exports = {
     addListener: function(el, types, listener) {
         var id = el[uki.expando] = el[uki.expando] || uki.guid++;
 
-        types.split(' ').forEach(function(type) {
+        utils.forEach(types.split(' '), function(type) {
             listeners[id] = listeners[id] || {};
 
             // if this is the first listener added to el for type
@@ -178,7 +178,7 @@ var evt = module.exports = {
             types = Object.keys(listeners[id]).join(' ');
         }
 
-        types.split(' ').forEach(function(type) {
+        utils.forEach(types.split(' '), function(type) {
             var id = el[uki.expando];
 
             if (!id || !listeners[id] || !listeners[id][type]) return;

@@ -1,5 +1,6 @@
 var view  = require('../view'),
     uki   = require('../uki'),
+    utils = require('../utils'),
     fun   = require('../function'),
     dom   = require('../dom'),
     Base  = require('./base').Base;
@@ -34,14 +35,14 @@ proto.resized = function() {
 proto._resizeSelf = uki.FS;
 
 proto._resizeChildViews = function() {
-    this.childViews().forEach(function(view) {
+    utils.forEach(this.childViews(), function(view) {
         // do not resize invisible views, save time
         view.visible() && view.resized();
     });
 };
 
 proto.clear = function(destruct) {
-    this._childViews.forEach(function(child) {
+    utils.forEach(this.childViews(), function(child) {
         this.removeChild(child);
         if (destruct!==false) child.destruct();
     }, this);
@@ -81,7 +82,7 @@ proto.removeChild = function(child) {
     for (i=index+1, l = this._childViews.length; i < l; i++) {
         this._childViews[i]._viewIndex--;
     };
-    this._childViews = this._childViews.filter(function(elem) { return elem != child; });
+    this._childViews = utils.without(this._childViews, child);
     this._removeChildFromDom(child);
     this._childrenChanged();
     return this;

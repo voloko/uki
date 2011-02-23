@@ -155,7 +155,7 @@ fun.addProp = fun.addProps = function(proto, prop, setter) {
 
 fun.delegateProp = function(proto, name, target, targetName) {
     if (utils.isArray(name)) {
-        name.forEach(function(n, i) {
+        utils.forEach(name, function(n, i) {
             fun.delegateProp(proto, n, target, targetName && targetName[i]);
         });
     } else {
@@ -180,7 +180,7 @@ fun.delegateProp = function(proto, name, target, targetName) {
 
 fun.delegateCall = function(proto, name, target, targetName) {
     if (utils.isArray(name)) {
-        name.forEach(function(n, i) {
+        utils.forEach(name, function(n, i) {
             fun.delegateCall(proto, n, target, targetName && targetName[i]);
         });
         return;

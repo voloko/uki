@@ -8,7 +8,7 @@
 var uki = require('uki');
 requireCss('./dataList.css');
 
-var data = uki.range(1, 10000).map(function(i) {
+var data = uki.map(uki.range(1, 10000), function(i) {
     return 'row #' + i;
 });
 

@@ -4,7 +4,7 @@ var utils = require('./utils'),
 
 var Observable = {
     addListener: function(names, callback) {
-        names.split(' ').forEach(function(name) {
+        utils.forEach(names.split(' '), function(name) {
             this._listenersFor(name).push(callback);
         }, this);
         return this;
@@ -12,9 +12,9 @@ var Observable = {
 
     removeListener: function(names, callback) {
         if (names) {
-            names = Object.keys(this._listeners || {}).join(' ');
+            names = utils.keys(this._listeners || {}).join(' ');
         }
-        names.split(' ').forEach(function(name) {
+        utils.forEach(names.split(' '), function(name) {
             var listeners = this._listenersFor(name, true);
             if (listeners) {
                 this._listeners[name] = utils.without(listeners, callback);
@@ -25,16 +25,22 @@ var Observable = {
 
     trigger: function(e) {
         var type = e.type;
-        this._listenersFor(type, true).forEach(function(callback) {
+        utils.forEach(this._listenersFor(type, true), function(callback) {
             callback.call(this, e);
         }, this);
         return this;
     },
 
     _listenersFor: function(name, skipCreate) {
-        if (skipCreate && (!this._listeners || !this._listeners[name])) return [];
-        if (!this._listeners) this._listeners = {};
-        if (!this._listeners[name]) this._listeners[name] = [];
+        if (skipCreate && (!this._listeners || !this._listeners[name])) {
+            return [];
+        }
+        if (!this._listeners) {
+            this._listeners = {};
+        }
+        if (!this._listeners[name]) {
+            this._listeners[name] = [];
+        }
         return this._listeners[name];
     },
 

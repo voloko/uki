@@ -17,7 +17,7 @@ uki.build = exports.build = function(ml) {
 uki.viewNamespaces = exports.viewNamespaces = [global];
 
 function createMulti (ml) {
-    return ml.map(function(mlRow) { return createSingle(mlRow); });
+    return utils.map(ml, function(mlRow) { return createSingle(mlRow); });
 }
 
 function createSingle (mlRow) {

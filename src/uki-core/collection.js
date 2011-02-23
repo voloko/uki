@@ -30,7 +30,7 @@ var Collection = fun.newClass({
      * @returns {uki.view.Collection} self
      */
     forEach: function( callback, context ) {
-        return arrayPrototype.forEach.call( this, callback, context );
+        return utils.forEach(this, callback, context);
     },
 
     /**
@@ -42,11 +42,11 @@ var Collection = fun.newClass({
      * @returns {uki.view.Collection} created collection
      */
     filter: function( callback, context ) {
-        return new Collection( arrayPrototype.filter.call(this, callback, context) );
+        return new Collection(utils.filter(this, callback, context));
     },
 
     map: function( callback, context ) {
-        return arrayPrototype.map.call(this, callback, context);
+        return utils.map(this, callback, context);
     },
 
     /**
@@ -135,11 +135,11 @@ var proto = Collection.prototype;
 @name uki.Collection#next */
 /** @function
 @name uki.Collection#prev */
-[
+utils.forEach([
     ['parent', 'parent'],
     ['next', 'nextView'],
     ['prev', 'prevView']
-].forEach(function(i, desc) {
+], function(i, desc) {
     proto[ desc[0] ] = function() {
         return new Collection(
             utils.unique(
@@ -168,7 +168,7 @@ var proto = Collection.prototype;
 @name uki.Collection#insertBefore */
 /** @function
 @name uki.Collection#toggle */
-'addListener removeListener trigger on emit appendChild removeChild insertBefore toggle'.split(' ').forEach(function(name) {
+utils.forEach('addListener removeListener trigger on emit appendChild removeChild insertBefore toggle'.split(' '), function(name) {
     proto[name] = function() {
         for (var i=this.length-1; i >=0; i--) {
             this[i][name].apply(this[i], arguments);

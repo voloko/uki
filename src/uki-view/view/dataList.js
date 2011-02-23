@@ -137,7 +137,7 @@ uki.addProp(proto, 'binding', function(val) {
 * @name shouldRedrawOnPropChange
 */
 proto.shouldRedrawOnPropChange = function(key) {
-    return this.key() === key || this.changeOnKeys().indexOf(key) > -1;
+    return this.key() === key || uki.indexOf(this.changeOnKeys(), key) > -1;
 };
 
 
@@ -455,7 +455,7 @@ proto._updatePack = function(packN, revision, rows) {
 };
 
 proto._renderPack = function(rows) {
-    var formated = rows.map(function(r, i) {
+    var formated = uki.map(rows, function(r, i) {
         return { value: this._formatRow(r), index: i, even: i & 1 };
     }, this);
 

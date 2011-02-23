@@ -2,7 +2,7 @@ var uki = require('uki-core');
 
 var SplitPane = uki.newClass(uki.view.Container, uki.view.Focusable, {}),
     proto = SplitPane.prototype;
-    
+
 requireCss('./splitPane/splitPane.css');
 
 proto.typeName = 'SplitPane';
@@ -82,11 +82,13 @@ proto._moveHandle = function() {
  * Positions of additional drag zones
  */
 proto.extPositions = function(positions) {
-    if (positions === undefined) return this._exts.map(function(ext) {
-        return this._styleToPos(ext.style);
-    }, this);
+    if (positions === undefined) {
+        return uki.map(this._exts, function(ext) {
+            return this._styleToPos(ext.style);
+        }, this);
+    }
 
-    this._exts.forEach(function(ext) {
+    uki.forEach(this._exts, function(ext) {
         this._handle.removeChild(ext);
     }, this);
 
@@ -150,7 +152,7 @@ proto._createHandle = function() {
         handle.className += ' ' + /*!css-class*/'uki-splitPane-handle_thin';
     }
 
-    ['draggesturestart', 'draggesture', 'draggestureend'].forEach(function(name) {
+    uki.forEach(['draggesturestart', 'draggesture', 'draggestureend'], function(name) {
         uki.dom.addListener(handle, name, uki.bind(this['_' + name], this));
     }, this);
 

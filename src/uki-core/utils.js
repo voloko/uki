@@ -1,7 +1,9 @@
 var toString = Object.prototype.toString,
     arrayPrototype = Array.prototype,
     slice = arrayPrototype.slice,
-    utils = exports;
+    utils = exports,
+    compat = require('./compat');
+    
 var marked = '__uki_marked';
 // dummy subclass
 /** @ignore */
@@ -82,13 +84,13 @@ utils.escapeHTML = function( html ) {
 };
 
 utils.pluck = function( array, attr ) {
-    return array.map(function(v) {
+    return compat.map(array, function(v) {
         return uki.prop(v, attr);
     });
 };
 
 utils.without = function( array, value ) {
-    return array.filter(function(v) {
+    return compat.filter(array, function(v) {
         return v !== value;
     });
 };
@@ -111,7 +113,7 @@ utils.forEach = function( object, callback, context ) {
             if ( callback.call( context || object[ name ], object[ name ], name ) === false ) { break; }
         }
     } else {
-        arrayPrototype.forEach.call(object, callback, context);
+        compat.forEach.call(object, callback, context);
     }
     return object;
 };
@@ -233,6 +235,20 @@ utils.range = function(from, to) {
         result[idx] = from;
     };
     return result;
-}
+};
+
+utils.applyCompat = compat.applyCompat;
+
+utils.forEach(compat.arrayFunctions, function(name) {
+    if (!utils[name]) {
+        // using temp argument is faster than slicing
+        // arguments object
+        utils[name] = function(array, a, b) {
+            return compat[name].call(array, a, b);
+        };
+    }
+});
+
+utils.keys = compat.keys;
 
 utils.extend(require('uki'), utils);

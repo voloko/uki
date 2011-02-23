@@ -4,7 +4,7 @@ var view  = require('../view'),
     fun   = require('../function'),
     dom   = require('../dom'),
     evt   = require('../dom/event');
-    
+
 var Base = view.Base = exports.Base = fun.newClass({});
 
 var proto = Base.prototype;
@@ -104,12 +104,12 @@ proto.domForEvent = function(type) {
 };
 
 /**
- * @param {String} name Event name, or space separated names 
+ * @param {String} name Event name, or space separated names
  * @param {function()} callback
  */
 proto.addListener = function(names, callback) {
     var wrapper = fun.bindOnce(callback, this);
-    names.split(' ').forEach(function(name) {
+    utils.forEach(names.split(' '), function(name) {
         evt.addListener(this.domForEvent(name), name, wrapper);
     }, this);
     return this;
@@ -121,7 +121,7 @@ proto.addListener = function(names, callback) {
  */
 proto.removeListener = function(names, callback) {
     var wrapper = fun.bindOnce(callback, this);
-    names.split(' ').forEach(function(name) {
+    utils.forEach(names.split(' '), function(name) {
         evt.removeListener(this.domForEvent(name), name, wrapper);
     }, this);
     return this;
@@ -162,8 +162,10 @@ ruleMap = {
 
 proto._styleToPos = function(style) {
     var res = {};
-    rules.forEach(function(rule) {
-        if (style[rule]) res[rule] = style[rule];
+    utils.forEach(rules, function(rule) {
+        if (style[rule]) {
+            res[rule] = style[rule];
+        }
     });
     return res;
 };
@@ -172,7 +174,7 @@ proto._expandPos = function(pos) {
     if (typeof pos === 'string') {
         var p = pos;
         pos = {};
-        p.split(/\s+/).forEach(function(rule) {
+        utils.forEach(p.split(/\s+/), function(rule) {
             var parts = rule.split(':');
             pos[parts[0]] = parts[1];
         });
@@ -185,7 +187,7 @@ proto._expandPos = function(pos) {
 
 proto._applyPosToStyle = function(pos, style) {
     style.position = 'absolute';
-    rules.forEach(function(rule) {
+    utils.forEach(rules, function(rule) {
         style[rule] = pos[rule] || '';
     });
 };

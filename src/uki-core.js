@@ -1,5 +1,3 @@
-require('./uki-core/compat');
-
 module.exports = require('./uki-core/uki');
 require('./uki-core/utils');
 require('./uki-core/dom');
