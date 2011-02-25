@@ -1,15 +1,18 @@
-var uki = require('uki-core'),
-    Base = uki.view.Base,
-    Focusable = uki.view.Focusable;
+var fun  = require('uki-core/function'),
+    view = require('uki-core/view'),
+    dom  = require('uki-core/dom'),
+    uki  = require('uki-core/uki'),
+    Base = require('uki-core/view/base').Base,
+    Focusable = require('uki-core/view/focusable').Focusable;
 
-var Button = uki.newClass(Base, Focusable, {}),
+var Button = fun.newClass(Base, Focusable, {}),
     proto = Button.prototype;
 
 requireCss('./button/button.css');
 
 proto.typeName = 'Button';
 
-proto.confirm = uki.view.newToggleClassProp('uki-button_confirm');
+proto.confirm = view.newToggleClassProp('uki-button_confirm');
 
 function updateImageOnly () {
     this.toggleClass('uki-button_image-only', !!(this.iconSrc() && !this.html()));
@@ -29,19 +32,19 @@ proto.disabled = function(state) {
     return this;
 };
 
-uki.addProp(proto, 'iconSrc', function(src) {
-    uki.removeElement(this._iconDom);
+fun.addProp(proto, 'iconSrc', function(src) {
+    dom.removeElement(this._iconDom);
     this._iconSrc = src;
     if (src) {
-        this._iconDom = uki.createElement('img', { className: 'uki-button__icon', src: src });
+        this._iconDom = dom.createElement('img', { className: 'uki-button__icon', src: src });
         this.dom().insertBefore(this._iconDom, this._text);
     }
     updateImageOnly.call(this);
 });
 
 proto._createDom = function() {
-    this._text = uki.createElement('span', { className: 'uki-button__text' });
-    this._dom = uki.createElement('button', { className: 'uki-button', tabIndex: -1 }, [this._text]);
+    this._text = dom.createElement('span', { className: 'uki-button__text' });
+    this._dom = dom.createElement('button', { className: 'uki-button', tabIndex: -1 }, [this._text]);
 };
 
 proto.destruct = function() {
@@ -49,6 +52,4 @@ proto.destruct = function() {
     Base.destruct.call(this);
 };
 
-// proto._focusedClass = 'uki-button_focused';
-
-uki.view.Button = exports.Button = Button;
+exports.Button = Button;

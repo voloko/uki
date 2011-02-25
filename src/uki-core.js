@@ -2,8 +2,8 @@ var uki        = require('./uki-core/uki'),
     utils      = require('./uki-core/utils'),
     fun        = require('./uki-core/function'),
     dom        = require('./uki-core/dom'),
-    evt        = require('./uki-core/dom/event'),
-    gesture    = require('./uki-core/dom/gesture'),
+    evt        = require('./uki-core/event'),
+    gesture    = require('./uki-core/gesture'),
     builder    = require('./uki-core/builder'),
     selector   = require('./uki-core/selector'),
     after      = require('./uki-core/after'),
@@ -18,8 +18,8 @@ utils.forEach([
     utils, fun, dom, evt, gesture, builder, selector, 
     after, observable, binding, attachment, collection,
     mustache
-], function(ns) {
-    utils.extend(uki, ns);
+], function(mod) {
+    utils.extend(uki, mod);
 });
 
 var view      = require('./uki-core/view'),
@@ -34,8 +34,8 @@ uki.view = view;
 builder.viewNamespaces.unshift(view);
 
 // copy views from default view namespaces into view
-utils.forEach([focusable, base, container], function(ns) {
-    utils.extend(view, ns);
+utils.forEach([focusable, base, container], function(mod) {
+    utils.extend(view, mod);
 });
 
 // export uki

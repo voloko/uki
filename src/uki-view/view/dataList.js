@@ -1,9 +1,16 @@
-var uki = require('uki-core'),
-    Selectable = require('./selectable').Selectable;
-
 requireCss('./dataList/dataList.css');
 
-var DataList = uki.newClass(uki.view.Base, uki.view.Focusable, Selectable, {}),
+var uki = require('uki-core/uki'),
+    fun = require('uki-core/function'),
+    utils = require('uki-core/utils'),
+    dom = require('uki-core/dom'),
+    evt = require('uki-core/event'),
+    Mustache = require('./uki-core/mustache').Mustache;
+    Base = require('./uki-core/view/base').Base;
+    Focusable = require('./uki-core/view/focusable').Focusable;
+    Selectable = require('./selectable').Selectable;
+
+var DataList = fun.newClass(Base, Focusable, Selectable, {}),
     proto = DataList.prototype;
     
 
@@ -11,10 +18,10 @@ var DataList = uki.newClass(uki.view.Base, uki.view.Focusable, Selectable, {}),
 /**
 * Do not redraw more often then in value ms
 */
-uki.addProp(proto, 'throttle', function(v) {
+fun.addProp(proto, 'throttle', function(v) {
     this._throttle = v;
     if (v > 0) {
-        this._visChanged = uki.trottle(this._originalVisChanged, this._throttle);
+        this._visChanged = fun.trottle(this._originalVisChanged, this._throttle);
     } else {
         this._visChanged = this._originalVisChanged;
     }
@@ -24,10 +31,10 @@ proto._throttle = 0;
 /**
 * Do redraw only after value ms after last scroll/update
 */
-uki.addProp(proto, 'debounce', function(v) {
+fun.addProp(proto, 'debounce', function(v) {
     this._debounce = v;
     if (v > 0) {
-        this._visChanged = uki.debounce(this._originalVisChanged, this._debounce);
+        this._visChanged = fun.debounce(this._originalVisChanged, this._debounce);
     } else {
         this._visChanged = this._originalVisChanged;
     }
@@ -65,11 +72,11 @@ proto._debounce = 0;
 * @function
 * @name rowHeight
 */
-uki.addProps(proto, ['template', 'formatter', 'packSize', 'renderMoreRows', 'rowHeight']);
+fun.addProps(proto, ['template', 'formatter', 'packSize', 'renderMoreRows', 'rowHeight']);
 
 proto._template = requireText('dataList/dataList.html');
 
-proto._formatter = uki.escapeHTML;
+proto._formatter = utils.escapeHTML;
 
 proto._packSize = 100;
 
@@ -95,7 +102,7 @@ proto._rowHeight = 0;
 * row hight if rowHeight is not provided. 
 * If there's no sampleRow slice(0, 1)[0] will be used.
 */
-uki.addProp(proto, 'data', function(d) {
+fun.addProp(proto, 'data', function(d) {
     this._data = d;
     this._reset();
 });
@@ -114,7 +121,7 @@ uki.addProp(proto, 'data', function(d) {
 * @function
 * @name changeOnKeys
 */
-uki.addProps(proto, ['key', 'changeOnKeys']);
+fun.addProps(proto, ['key', 'changeOnKeys']);
 
 proto._key = null;
 
@@ -124,9 +131,9 @@ proto._changeOnKeys = [];
 * Bind representation to colleciton.
 * #TBD
 */
-uki.addProp(proto, 'binding', function(val) {
+fun.addProp(proto, 'binding', function(val) {
     if (this._binding) this._binding.destruct();
-    this._binding = val && new uki.view.dataList.Binding(this, val.model, uki.extend({ viewEvent: 'change.item' }, val));
+    this._binding = val && new require('./dataList/binding').Binding(this, val.model, utils.extend({ viewEvent: 'change.item' }, val));
     if (val) this.data(val.model);
 });
 
@@ -137,7 +144,7 @@ uki.addProp(proto, 'binding', function(val) {
 * @name shouldRedrawOnPropChange
 */
 proto.shouldRedrawOnPropChange = function(key) {
-    return this.key() === key || uki.indexOf(this.changeOnKeys(), key) > -1;
+    return this.key() === key || utils.indexOf(this.changeOnKeys(), key) > -1;
 };
 
 
@@ -154,7 +161,7 @@ proto.shouldRedrawOnPropChange = function(key) {
 * @function
 * @name lastClickIndex
 */
-uki.addProp(proto, 'lastClickIndex');
+fun.addProp(proto, 'lastClickIndex');
 
 /**
 * Actual row selected.
@@ -236,8 +243,8 @@ proto.scrollToPosition = function(position) {
 * @function
 * @name editor
 */
-uki.addProp(proto, 'editor', function(e) {
-    this._editor = uki.build(e)[0];
+fun.addProp(proto, 'editor', function(e) {
+    this._editor = require('uki-core/builder').build(e)[0];
 });
 
 /**
@@ -266,8 +273,8 @@ proto.editSelected = function() {
     this.dom().appendChild(this.editor().dom());
 
     this.editor()
-        .addListener('finishEdit', uki.bindOnce(this._editorBlur, this))
-        .addListener('move', uki.bindOnce(this._editorMove, this))
+        .addListener('finishEdit', fun.bindOnce(this._editorBlur, this))
+        .addListener('move', fun.bindOnce(this._editorMove, this))
         .pos({ top: t+'px', left: 0+'px', right: 0+'px', height: this.rowHeight() + 'px' })
         .visible(true)
         .parent(this)
@@ -292,12 +299,12 @@ proto.resized = function() {
 };
 
 proto._reset = function() {
-    uki.forEach(this._packs, uki.removeElement);
+    utils.forEach(this._packs, dom.removeElement);
     this._packs = [];
     this.clearSelection();
     this._allreadyResized = false;
     if (this._scrollableParent())
-        this._scrollableParent().removeListener('scroll', uki.bindOnce(this._scroll, this));
+        this._scrollableParent().removeListener('scroll', utils.bindOnce(this._scroll, this));
 };
 
 proto._setup = function(initArgs) {
@@ -307,16 +314,16 @@ proto._setup = function(initArgs) {
     this._packSize  = initArgs.packSize || this._packSize;
     this._rowTemplate = initArgs.rowTemplate || this._rowTemplate;
 
-    uki.view.Base.prototype._setup.call(this, initArgs);
+    Base.prototype._setup.call(this, initArgs);
 };
 
 proto._createDom = function(initArgs) {
-    this._dom = uki.createElement('div', { className: 'uki-dataList uki-dataList_blured' });
+    this._dom = dom.createElement('div', { className: 'uki-dataList uki-dataList_blured' });
     this.tabIndex(1);
     this._initSelectable();
 
     // prevent dragging of selection
-    this.addListener('selectstart dragstart', uki.preventDefaultHandler);
+    this.addListener('selectstart dragstart', evt.preventDefaultHandler);
 };
 
 proto.triggerSelection = function() {
@@ -333,10 +340,10 @@ proto._editorBlur = function(e) {
 
         this.editor()
             .parent(null)
-            .removeListener('move', uki.bindOnce(this._editorMove, this))
-            .removeListener('finishEdit', uki.bindOnce(this._editorBlur, this));
+            .removeListener('move', fun.bindOnce(this._editorMove, this))
+            .removeListener('finishEdit', fun.bindOnce(this._editorBlur, this));
 
-        uki.removeElement(this.editor().dom());
+        dom.removeElement(this.editor().dom());
         if (e && e.remainFocused) this.focus();
     }
 };
@@ -360,7 +367,7 @@ proto._firstResize = function() {
     this._calcRowHeight();
     if (this.rowHeight()) {
         this._allreadyResized = true;
-        this._scrollableParent().on('scroll', uki.bindOnce(this._scroll, this));
+        this._scrollableParent().on('scroll', fun.bindOnce(this._scroll, this));
         this._updateHeight();
     }
     return true;
@@ -370,7 +377,7 @@ proto._calcRowHeight = function() {
     if (!this.data().length) {
         this._rowHeight = 0;
     } else {
-        var sample = uki.prop(this.data(), 'sampleRow') || (this.data().slice && this.data().slice(0, 1)[0]) || '',
+        var sample = utils.prop(this.data(), 'sampleRow') || (this.data().slice && this.data().slice(0, 1)[0]) || '',
             p = this._renderPack([sample]);
 
         this.dom().appendChild(p);
@@ -428,7 +435,7 @@ proto._schedulePackRender = function(packN, revision) {
     if (this.data().loadRange) {
         this.data().loadRange(
             from, this.packSize() + from,
-            uki.bind(this._updatePack, this, packN, revision)
+            fun.bind(this._updatePack, this, packN, revision)
         );
     } else {
         this._updatePack(packN, revision, this.data().slice(from, from + this.packSize()));
@@ -438,11 +445,11 @@ proto._schedulePackRender = function(packN, revision) {
 proto._removePack = function(packN) {
     var pack = this._packs[packN];
     delete this._packs[packN];
-    uki.removeElement(pack);
+    dom.removeElement(pack);
 };
 
 proto._formatRow = function(row, pos) {
-    return this._formatter(this._key ? uki.prop(row, this._key) : row, row, pos);
+    return this._formatter(this._key ? utils.prop(row, this._key) : row, row, pos);
 };
 
 proto._updatePack = function(packN, revision, rows) {
@@ -455,11 +462,11 @@ proto._updatePack = function(packN, revision, rows) {
 };
 
 proto._renderPack = function(rows) {
-    var formated = uki.map(rows, function(r, i) {
+    var formated = utils.map(rows, function(r, i) {
         return { value: this._formatRow(r), index: i, even: i & 1 };
     }, this);
 
-    return uki.fromHTML(uki.Mustache.to_html(
+    return dom.fromHTML(Mustache.to_html(
         this._template,
         { rows: formated }
     ));
@@ -470,7 +477,7 @@ proto._restorePackSelection = function(packN) {
         from = packN * this.packSize(),
         to   = from + this.packSize();
 
-    var currentSelection = uki.binarySearch(from, indexes);
+    var currentSelection = utils.binarySearch(from, indexes);
     currentSelection = Math.max(currentSelection, 0);
 
     while(indexes[currentSelection] !== null && indexes[currentSelection] < to) {
@@ -495,7 +502,7 @@ proto._selectionBlur = function(e) {
 proto._setSelected = function(position, state) {
     var item = this._itemAt(position);
     if (item) {
-        uki.toggleClass(item, 'uki-dataList-row_selected', state);
+        dom.toggleClass(item, 'uki-dataList-row_selected', state);
     }
 };
 
@@ -523,7 +530,7 @@ proto._visChanged = function() {
         }
     };
 
-    uki.forEach(this._packs, function(p, packN) {
+    utils.forEach(this._packs, function(p, packN) {
         if (p.__revision != revision) this._removePack(packN);
     }, this);
 };
@@ -533,9 +540,9 @@ proto._visChanged = function() {
 proto._originalVisChanged = proto._visChanged;
 
 proto.domForEvent = function(type) {
-    return uki.view.Focusable._domForEvent.call(this, type) ||
-        uki.view.Base.prototype.domForEvent.call(this, type);
+    return Focusable._domForEvent.call(this, type) ||
+        Base.prototype.domForEvent.call(this, type);
 };
 
 
-uki.view.DataList = exports.DataList = DataList;
+exports.DataList = DataList;

@@ -1,9 +1,16 @@
-var uki = require('uki-core');
-
-var SplitPane = uki.newClass(uki.view.Container, uki.view.Focusable, {}),
-    proto = SplitPane.prototype;
-
 requireCss('./splitPane/splitPane.css');
+
+var fun       = require('uki-core/function'),
+    utils     = require('uki-core/utils'),
+    view      = require('uki-core/view'),
+    evt       = require('uki-core/event'),
+    dom       = require('uki-core/dom'),
+    Mustache  = require('uki-core/mustache').Mustache,
+    Container = require('uki-core/view/container').Container,
+    Focusable = require('uki-core/view/focusable').Focusable;
+
+var SplitPane = fun.newClass(Container, Focusable, {}),
+    proto = SplitPane.prototype;
 
 proto.typeName = 'SplitPane';
 
@@ -21,30 +28,30 @@ proto._setup = function(initArgs) {
     this._handleWidth = initArgs.handleWidth || this._handleWidth;
     this._originalWidth = 0;
     this._exts = [];
-    uki.view.Container.prototype._setup.call(this, initArgs);
+    Container.prototype._setup.call(this, initArgs);
 };
 
 /**
 * @function
-* @name uki.view.HSplitPane#leftMin
+* @name view.HSplitPane#leftMin
 */
 /**
 * @function
-* @name uki.view.HSplitPane#rightMin
+* @name view.HSplitPane#rightMin
 */
 /**
 * @function
-* @name uki.view.HSplitPane#autogrowLeft
+* @name view.HSplitPane#autogrowLeft
 */
 /**
 * @function
-* @name uki.view.HSplitPane#autogrowRight
+* @name view.HSplitPane#autogrowRight
 */
 /**
 * @function
-* @name uki.view.HSplitPane#throttle
+* @name view.HSplitPane#throttle
 */
-uki.addProps(proto, ['leftMin', 'rightMin', 'leftSpeed', 'rightSpeed', 'throttle']);
+fun.addProps(proto, ['leftMin', 'rightMin', 'leftSpeed', 'rightSpeed', 'throttle']);
 proto.topMin = proto.leftMin;
 proto.bottomMin = proto.rightMin;
 proto.topSpeed = proto.leftSpeed;
@@ -53,9 +60,9 @@ proto.bottomSpeed = proto.rightSpeed;
 /**
 * @function
 * @fires event:handleMove
-* @name uki.view.HSplitPane#handlePosition
+* @name view.HSplitPane#handlePosition
 */
-uki.addProp(proto, 'handlePosition', function(val) {
+fun.addProp(proto, 'handlePosition', function(val) {
     if (this._x_width()) {
         // store width after manual (drag or program) position change
         this._prevWidth = this._x_width();
@@ -83,17 +90,17 @@ proto._moveHandle = function() {
  */
 proto.extPositions = function(positions) {
     if (positions === undefined) {
-        return uki.map(this._exts, function(ext) {
+        return utils.map(this._exts, function(ext) {
             return this._styleToPos(ext.style);
         }, this);
     }
 
-    uki.forEach(this._exts, function(ext) {
+    utils.forEach(this._exts, function(ext) {
         this._handle.removeChild(ext);
     }, this);
 
     this._exts = positions.map(function(pos) {
-        var ext = uki.createElement('div', {
+        var ext = dom.createElement('div', {
             className: 'uki-splitPane-handle-ext'
         });
         pos = this._expandPos(pos);
@@ -106,7 +113,7 @@ proto.extPositions = function(positions) {
 
 /**
 * @function
-* @name uki.view.HSplitPane#handleWidth
+* @name view.HSplitPane#handleWidth
 */
 proto.handleWidth = function() {
     return this._handleWidth;
@@ -141,7 +148,7 @@ proto._x_xName = function() {
 };
 
 proto._createHandle = function() {
-    var handle = uki.fromHTML(uki.Mustache.to_html(
+    var handle = dom.fromHTML(Mustache.to_html(
         requireText('splitPane/handle.html'),
         { type: this._x_type() }
     ));
@@ -152,15 +159,15 @@ proto._createHandle = function() {
         handle.className += ' ' + /*!css-class*/'uki-splitPane-handle_thin';
     }
 
-    uki.forEach(['draggesturestart', 'draggesture', 'draggestureend'], function(name) {
-        uki.addListener(handle, name, uki.bind(this['_' + name], this));
+    utils.forEach(['draggesturestart', 'draggesture', 'draggestureend'], function(name) {
+        evt.addListener(handle, name, fun.bind(this['_' + name], this));
     }, this);
 
     return handle;
 };
 
 proto._createDom = function() {
-    this._dom = uki.createElement('div', { className: 'splitPane' });
+    this._dom = dom.createElement('div', { className: 'splitPane' });
 
     uki([
         { view: 'Container', addClass: 'uki-splitPane-container uki-splitPane-container_left' },
@@ -198,7 +205,7 @@ proto._calcDesiredPosition = function() {
 };
 
 proto._draggesturestart = function(e) {
-    e.cursor = uki.computedStyle(this._handle, null).cursor;
+    e.cursor = dom.computedStyle(this._handle, null).cursor;
     this._positionBeforeDrag = this.handlePosition();
 };
 
@@ -230,11 +237,11 @@ proto._updatePositionOnDrag = function(e, stop) {
 
 /**
 * @function
-* @name uki.view.HSplitPane#topChildViews
+* @name view.HSplitPane#topChildViews
 */
 /**
 * @function
-* @name uki.view.HSplitPane#leftChildViews
+* @name view.HSplitPane#leftChildViews
 */
 proto.topChildViews = proto.leftChildViews = function(views) {
     return this._childViewsAt(0, views);
@@ -242,11 +249,11 @@ proto.topChildViews = proto.leftChildViews = function(views) {
 
 /**
 * @function
-* @name uki.view.HSplitPane#rightChildViews
+* @name view.HSplitPane#rightChildViews
 */
 /**
 * @function
-* @name uki.view.HSplitPane#bottomChildViews
+* @name view.HSplitPane#bottomChildViews
 */
 proto.bottomChildViews = proto.rightChildViews = function(views) {
     return this._childViewsAt(1, views);
@@ -277,4 +284,4 @@ proto._resizeChildViews = function() {
     this._childViews[1].pos(this._rightPos()).resized();
 };
 
-uki.view.SplitPane = exports.SplitPane = SplitPane;
+exports.SplitPane = SplitPane;

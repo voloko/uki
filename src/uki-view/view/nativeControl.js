@@ -1,27 +1,33 @@
-var uki = require('uki-core'),
-    view = uki.view;
+var uki       = require('uki-core/uki'),
+    fun       = require('uki-core/function'),
+    utils     = require('uki-core/utils'),
+    dom       = require('uki-core/dom'),
+    evt       = require('uki-core/event'),
+    Binding   = require('uki-core/binding').Binding,
+    Focusable = require('uki-core/view/focusable').Focusable,
+    Base      = require('uki-core/view/base').Base;
 
 requireCss('./nativeControl/nativeControl.css');
 
-var nc = module.exports = view.nativeControl = {};
+var nc = {};
 
 
 /**
 * Base class for native control wrappers.
 * Map common dom attributes and add binding
 */
-var NativeControl = nc.NativeControl = uki.newClass(uki.view.Base, uki.view.Focusable, {}),
+var NativeControl = nc.NativeControl = fun.newClass(Base, Focusable, {}),
     ncProto = NativeControl.prototype;
 
-uki.delegateProp(ncProto, ['name', 'checked', 'disabled', 'value', 'type'], '_input');
+fun.delegateProp(ncProto, ['name', 'checked', 'disabled', 'value', 'type'], '_input');
 
 ncProto._bindingOptions = {};
 
-uki.addProp(ncProto, 'binding', function(val) {
+fun.addProp(ncProto, 'binding', function(val) {
     if (this._binding) this._binding.destruct();
 
-    this._binding = val && new uki.Binding(this, val.model,
-        uki.extend(this._bindingOptions, val));
+    this._binding = val && new Binding(this, val.model,
+        utils.extend(this._bindingOptions, val));
 });
 
 ncProto.domForEvent = function(type) {
@@ -33,8 +39,8 @@ ncProto.focusableDom = function() {
 };
 
 ncProto.domForEvent = function(type) {
-    return uki.view.Focusable._domForEvent.call(this, type) ||
-        uki.view.Base.prototype.domForEvent.call(this, type);
+    return Focusable._domForEvent.call(this, type) ||
+        Base.prototype.domForEvent.call(this, type);
 };
 
 
@@ -43,19 +49,19 @@ ncProto.domForEvent = function(type) {
 * Radio button with a label
 * uki({ view: 'nativeControl.Radio', name: 'color', value: 'red', text: 'Red' })
 */
-var Radio = nc.Radio = uki.newClass(NativeControl, {}),
+var Radio = nc.Radio = fun.newClass(NativeControl, {}),
     radioProto = Radio.prototype;
 
 radioProto.typeName = 'nativeControl.Radio';
 
 radioProto._createDom = function(initArgs) {
-    this._input = uki.createElement('input', { className: 'uki-nc-radio__input', type: 'radio' });
-    this._label = uki.createElement('span', { className: 'uki-nc-radio__label' });
-    this._dom = uki.createElement(initArgs.tagName || 'label', { className: 'uki-nc-radio' }, [this._input, this._label]);
+    this._input = dom.createElement('input', { className: 'uki-nc-radio__input', type: 'radio' });
+    this._label = dom.createElement('span', { className: 'uki-nc-radio__label' });
+    this._dom = dom.createElement(initArgs.tagName || 'label', { className: 'uki-nc-radio' }, [this._input, this._label]);
 };
 
 radioProto._bindingOptions = { viewEvent: 'click', viewProp: 'checked', commitChangesViewEvent: 'click' };
-uki.delegateProp(radioProto, 'html', '_label', 'innerHTML');
+fun.delegateProp(radioProto, 'html', '_label', 'innerHTML');
 
 
 
@@ -65,19 +71,19 @@ uki.delegateProp(radioProto, 'html', '_label', 'innerHTML');
 * Checkbox with a label
 * uki({ view: 'nativeControl.Checkbox', name: 'color', value: 'red', text: 'Red' })
 */
-var Checkbox = nc.Checkbox = uki.newClass(NativeControl, {}),
+var Checkbox = nc.Checkbox = fun.newClass(NativeControl, {}),
     cbProto = Checkbox.prototype;
 
 cbProto.typeName = 'nativeControl.Checkbox';
 
 cbProto._createDom = function(initArgs) {
-    this._input = uki.createElement('input', { className: 'uki-nc-checkbox__input', type: 'checkbox' });
-    this._label = uki.createElement('span', { className: 'uki-nc-checkbox__label' });
-    this._dom = uki.createElement(initArgs.tagName || 'label', { className: 'uki-nc-checkbox' }, [this._input, this._label]);
+    this._input = dom.createElement('input', { className: 'uki-nc-checkbox__input', type: 'checkbox' });
+    this._label = dom.createElement('span', { className: 'uki-nc-checkbox__label' });
+    this._dom = dom.createElement(initArgs.tagName || 'label', { className: 'uki-nc-checkbox' }, [this._input, this._label]);
 };
 
 cbProto._bindingOptions = radioProto._bindingOptions;
-uki.delegateProp(cbProto, 'html', '_label', 'innerHTML');
+fun.delegateProp(cbProto, 'html', '_label', 'innerHTML');
 
 
 
@@ -87,24 +93,24 @@ uki.delegateProp(cbProto, 'html', '_label', 'innerHTML');
 * Text input
 * uki({ view: 'nativeControl.Text', value: 'John Smith', placeholder: 'Name?' })
 */
-var Text = nc.Text = uki.newClass(NativeControl, {}),
+var Text = nc.Text = fun.newClass(NativeControl, {}),
     textProto = Text.prototype;
 
 textProto.typeName = 'nativeControl.Text';
 
 textProto._createDom = function(initArgs) {
-    this._input = uki.createElement('input', { className: 'uki-nc-text__input', type: 'text' });
-    this._dom = uki.createElement(initArgs.tagName || 'span', { className: 'uki-nc-text' });
+    this._input = dom.createElement('input', { className: 'uki-nc-text__input', type: 'text' });
+    this._dom = dom.createElement(initArgs.tagName || 'span', { className: 'uki-nc-text' });
     this._dom.appendChild(this._input);
 };
 
-uki.addProp(textProto, 'placeholder', function(v) {
+fun.addProp(textProto, 'placeholder', function(v) {
     this._placeholder = v;
     if (this._input.placeholder !== undefined) {
         this._input.placeholder = v;
     } else {
         this._initPlaceholder();
-        this._placeholderDom.innerHTML = uki.escapeHTML(v);
+        this._placeholderDom.innerHTML = utils.escapeHTML(v);
     }
 });
 
@@ -122,9 +128,9 @@ textProto._initPlaceholder = function() {
     if (this._initedPlaceholder) return;
     this._initedPlaceholder = true;
     this.addClass('uki-nc-text_with-placeholder');
-    this._placeholderDom = uki.createElement('span', { className: 'uki-nc-text__placholder' });
+    this._placeholderDom = dom.createElement('span', { className: 'uki-nc-text__placholder' });
     this._dom.insertBefore(this._placeholderDom, this._dom.firstChild);
-    uki.addListener(this._placeholderDom, 'click', uki.bindOnce(function() {
+    evt.addListener(this._placeholderDom, 'click', fun.bindOnce(function() {
         this.focus();
     }, this));
     this.on('focus blur change keyup', this._updatePlaceholderVis);
@@ -140,9 +146,9 @@ textProto._updatePlaceholderVis = function() {
 textProto._updatePlaceholderHeight = function() {
     if (!this._placeholderDom) return;
     var targetStyle = this._placeholderDom.style,
-        sourceStyle = uki.computedStyle(this._input);
+        sourceStyle = dom.computedStyle(this._input);
 
-    uki.forEach(['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'], function(name) {
+    utils.forEach(['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'], function(name) {
         if (sourceStyle[name] !== undefined) {
             targetStyle[name] = sourceStyle[name];
         }
@@ -159,13 +165,13 @@ textProto._updatePlaceholderHeight = function() {
 * Native browser button
 * uki({ view: 'nativeControl.Button', value: 'Work!'})
 */
-var Button = nc.Button = uki.newClass(NativeControl, {}),
+var Button = nc.Button = fun.newClass(NativeControl, {}),
     bProto = Button.prototype;
 
 bProto.typeName = 'nativeControl.Button';
 
 bProto._createDom = function(initArgs) {
-    this._dom = this._input = uki.createElement('input', { className: 'uki-nc-button', type: 'button' });
+    this._dom = this._input = dom.createElement('input', { className: 'uki-nc-button', type: 'button' });
 };
 
 
@@ -186,16 +192,16 @@ bProto._createDom = function(initArgs) {
 *   { text: 'Custom', value: '' }
 * ]})
 */
-var Select = nc.Select = uki.newClass(NativeControl, {}),
+var Select = nc.Select = fun.newClass(NativeControl, {}),
     sProto = Select.prototype;
 
 sProto.typeName = 'nativeControl.Select';
 
 sProto._createDom = function(initArgs) {
-    this._input = this._dom = uki.createElement('select', { className: 'uki-nc-select uki-nc-select__input' });
+    this._input = this._dom = dom.createElement('select', { className: 'uki-nc-select uki-nc-select__input' });
 };
 
-uki.addProp(sProto, 'options', function(val) {
+fun.addProp(sProto, 'options', function(val) {
     this._options = val;
     this._input.innerHTML = '';
     appendOptions(this._input, val);
@@ -204,18 +210,18 @@ uki.addProp(sProto, 'options', function(val) {
 
 function appendOptions (root, options) {
     var node;
-    uki.forEach(options, function(option) {
+    utils.forEach(options, function(option) {
         if (typeof option === 'string' || typeof option === 'number') {
             option = { text: option, value: option };
         }
         if (option.options) {
-            node = uki.createElement('optgroup', {
-                label: option.html ? option.html : uki.escapeHTML(option.text)
+            node = dom.createElement('optgroup', {
+                label: option.html ? option.html : utils.escapeHTML(option.text)
             });
             appendOptions(node, option.options);
         } else {
-            node = uki.createElement('option', {
-                html: option.html ? option.html : uki.escapeHTML(option.text),
+            node = dom.createElement('option', {
+                html: option.html ? option.html : utils.escapeHTML(option.text),
                 value: option.value,
                 selected: option.selected
             });
@@ -224,3 +230,4 @@ function appendOptions (root, options) {
     });
 }
 
+exports.nativeControl = nc;

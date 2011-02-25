@@ -1,5 +1,5 @@
-var utils = require('../utils'),
-    uki = require('../uki'),
+var utils = require('./utils'),
+    uki = require('./uki'),
     evt = require('./event');
 
 var gesture = {

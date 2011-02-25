@@ -1,24 +1,27 @@
-var uki = require('uki-core'),
-    Container = uki.view.Container;
-
-var Flow = uki.newClass(Container, {}),
-    proto = Flow.prototype;
-
 requireCss('./flow/flow.css');
+
+var fun       = require('uki-core/function'),
+    utils     = require('uki-core/utils'),
+    view      = require('uki-core/view'),
+    dom       = require('uki-core/dom'),
+    Container = require('uki-core/view/container').Container;
+
+var Flow = fun.newClass(Container, {}),
+    proto = Flow.prototype;
 
 proto.typeName = 'Flow';
 
-proto.spacing = uki.view.newClassMapProp({
+proto.spacing = view.newClassMapProp({
     none: 'uki-flow_spacing-none',
     small: 'uki-flow_spacing-small',
     medium: 'uki-flow_spacing-medium',
     large: 'uki-flow_spacing-large'
 });
 
-proto.horizontal = uki.view.newToggleClassProp('uki-flow_horizontal');
+proto.horizontal = view.newToggleClassProp('uki-flow_horizontal');
 
 proto._createDom = function() {
-    this._dom = uki.createElement('ul', {
+    this._dom = dom.createElement('ul', {
         className: 'uki-flow uki-flow_spacing-small'
     });
 };
@@ -29,8 +32,8 @@ proto._removeChildFromDom = function(child) {
 };
 
 proto._appendChildToDom = function(child) {
-    var flowClass = uki.prop(child, 'flowRowClass');
-    var li = uki.createElement('li', {
+    var flowClass = utils.prop(child, 'flowRowClass');
+    var li = dom.createElement('li', {
         className: 'uki-flow-item' + (flowClass ? ' ' + flowClass : '')
     });
     li.appendChild(child.dom());
@@ -44,4 +47,4 @@ proto._insertBeforeInDom = function(child, beforeChild) {
     );
 };
 
-uki.view.Flow = exports.Flow = Flow;
+exports.Flow = Flow;

@@ -3,7 +3,7 @@ var view  = require('../view'),
     utils = require('../utils'),
     fun   = require('../function'),
     dom   = require('../dom'),
-    evt   = require('../dom/event');
+    evt   = require('../event');
 
 var Base = view.Base = exports.Base = fun.newClass({});
 
@@ -224,8 +224,8 @@ proto.visible = function(state) {
 * Accessor attribute for parent view. When parent is set view appends its #dom
 * to parents #dom
 *
-* @param {?uki.view.Base=} parent
-* @returns {uki.view.Base} parent or self
+* @param {?view.Base=} parent
+* @returns {view.Base} parent or self
 */
 proto.parent = function(parent) {
     if (parent === undefined) {
@@ -238,7 +238,7 @@ proto.parent = function(parent) {
 
 /**
 * Reader for previous view
-* @returns {uki.view.Base}
+* @returns {view.Base}
 */
 proto.prevView = function() {
     if (!this.parent()) { return null; }
@@ -247,7 +247,7 @@ proto.prevView = function() {
 
 /**
 * Reader for next view
-* @returns {uki.view.Base}
+* @returns {view.Base}
 */
 proto.nextView = function() {
     if (!this.parent()) { return null; }

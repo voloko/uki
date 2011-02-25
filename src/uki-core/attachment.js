@@ -47,7 +47,7 @@ function register(a) {
         instances = {};
         var timeout = false;
 
-        require('./dom/event').addListener(window, 'resize', function() {
+        require('./event').addListener(window, 'resize', function() {
             if (!timeout) {
                 timeout = true;
                 setTimeout(function(i, len) {

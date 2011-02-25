@@ -23,11 +23,12 @@ function uki(val, context) {
 
     }
     if (val.length === undefined) { val = [val]; }
-    if (val.length > 0 && uki.isFunction(val[0].typeName)) {
-        return new uki.Collection(val);
+    if (val.length > 0 && require('./utils').isFunction(val[0].typeName)) {
+        var Collection = require('./collection').Collection;
+        return new Collection(val);
     }
 
-    return uki.build(val);
+    return require('./builder').build(val);
 }
 
 uki.version = '0.4.0-css';
@@ -43,10 +44,10 @@ uki.FS = function() { return this; };
 uki._ids = {};
 
 uki.registerId = function(comp) {
-    uki._ids[uki.prop(comp, 'id')] = comp;
+    uki._ids[require('./utils').prop(comp, 'id')] = comp;
 };
 uki.unregisterId = function(comp) {
-    uki._ids[uki.prop(comp, 'id')] = undefined;
+    uki._ids[require('./utils').prop(comp, 'id')] = undefined;
 };
 
 uki.doc  = window.document || {};

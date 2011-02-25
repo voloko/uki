@@ -1,11 +1,14 @@
-var uki = require('uki-core');
+var uki = require('uki-core/uki'),
+    fun = require('uki-core/function'),
+    utils = require('uki-core/utils'),
+    dom = require('uki-core/dom');
 
 /**
 * @mixin fb.view.Selectable
 * @author voloko
 * @version alpha
 */
-var Selectable = exports.Selectable = uki.view.Selectable = {};
+var Selectable = {};
 
 Selectable.specialEvents = ['selection'];
 
@@ -17,7 +20,7 @@ Selectable._initSelectable = function() {
     this._addSelectionEvents();
 };
 
-uki.addProp(Selectable, 'multiselect');
+fun.addProp(Selectable, 'multiselect');
 
 Selectable._setSelected = function(index, state) {
     // abstract
@@ -31,7 +34,7 @@ Selectable.scrollToPosition = function(pos) {
 * Read/write current selected index for selectable lists
 * @function
 * @param {Number} position
-* @name uki.view.List#selectedIndex
+* @name view.List#selectedIndex
 */
 Selectable.selectedIndex = function(position) {
     if (position === undefined) return this._selectedIndexes.length ? this._selectedIndexes[0] : -1;
@@ -43,7 +46,7 @@ Selectable.selectedIndex = function(position) {
 * Read/write all selected indexes for multiselectable lists
 * @function
 * @param {Array.<Number>} position
-* @name uki.view.List#selectedIndex
+* @name view.List#selectedIndex
 */
 Selectable.selectedIndexes = function(indexes) {
     if (indexes === undefined) return this._selectedIndexes;
@@ -68,7 +71,7 @@ Selectable.moveSelectedIndex = function(offset) {
 
 /**
 * @function
-* @name uki.view.List#clearSelection
+* @name view.List#clearSelection
 */
 Selectable.clearSelection = function(skipClickIndex) {
     for (var i=0; i < this._selectedIndexes.length; i++) {
@@ -81,16 +84,16 @@ Selectable.clearSelection = function(skipClickIndex) {
 /**
 * @function
 * @param {Number} index
-* @name uki.view.List#isSelected
+* @name view.List#isSelected
 */
 Selectable.isSelected = function(index) {
-    var found = uki.binarySearch(index, this._selectedIndexes);
+    var found = utils.binarySearch(index, this._selectedIndexes);
     return this._selectedIndexes[found] == index;
 };
 
 Selectable._toggleSelection = function(p) {
     var indexes = [].concat(this._selectedIndexes);
-    var addTo = uki.binarySearch(p, indexes);
+    var addTo = utils.binarySearch(p, indexes);
     if (indexes[addTo] == p) {
         indexes.splice(addTo, 1);
     } else {
@@ -115,14 +118,14 @@ Selectable._addSelectionEvents = function() {
 };
 
 function removeRange (array, from, to) {
-    var p = uki.binarySearch(from, array),
+    var p = utils.binarySearch(from, array),
         initialP = p;
     while (array[p] <= to) p++;
     if (p > initialP) array.splice(initialP, p - initialP);
 }
 
 Selectable._itemUnderCursor = function(e) {
-    var o = uki.clientRect(this.dom()),
+    var o = dom.clientRect(this.dom()),
         y = e.pageY - o.top;
 
     return y / this._rowHeight << 0;
@@ -177,7 +180,7 @@ Selectable._selectionMousedown = function(e) {
                     Math.max(p-1, this._lastClickIndex)
                 );
             } else {
-                this.selectedIndexes(uki.range(
+                this.selectedIndexes(utils.range(
                     Math.min(p, indexes[0]),
                     Math.max(p, indexes[indexes.length - 1])
                 ));
@@ -215,7 +218,7 @@ Selectable._selectionKeypress = function(e) {
         e.preventDefault();
     } else if (this._multiselect && (e.which == 97 || e.which == 65) && e.metaKey) {
         e.preventDefault();
-        this.selectedIndexes(uki.range(0, this.data().length -1));
+        this.selectedIndexes(utils.range(0, this.data().length -1));
         this._triggerSelection();
     }
     if (nextIndex > -1 && nextIndex != this._lastClickIndex) {
@@ -259,3 +262,5 @@ Selectable._triggerSelection = function(force) {
         this._deferedTriggerSelection = true;
     }
 };
+
+exports.Selectable = Selectable;

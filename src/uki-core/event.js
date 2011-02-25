@@ -1,7 +1,7 @@
-var uki = require('../uki'),
-    utils = require('../utils'),
-    fun = require('../function'),
-    dom = require('../dom'),
+var uki = require('./uki'),
+    utils = require('./utils'),
+    fun = require('./function'),
+    dom = require('./dom'),
     expando = uki.expando;
 
 // base class
@@ -9,7 +9,7 @@ function EventWrapper () {}
 
 EventWrapper.prototype = {
     targetView: function() {
-        return require('../view').closest(this.target);
+        return require('./view').closest(this.target);
     },
 
     simulateBubbles: false,
