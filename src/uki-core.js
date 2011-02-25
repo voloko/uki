@@ -23,7 +23,6 @@ utils.forEach([
 });
 
 var view      = require('./uki-core/view'),
-    focusable = require('./uki-core/view/focusable'),
     base      = require('./uki-core/view/base'),
     container = require('./uki-core/view/container');
 
@@ -34,7 +33,7 @@ uki.view = view;
 builder.viewNamespaces.unshift(view);
 
 // copy views from default view namespaces into view
-utils.forEach([focusable, base, container], function(mod) {
+utils.forEach([base, container], function(mod) {
     utils.extend(view, mod);
 });
 

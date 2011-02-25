@@ -1,6 +1,6 @@
-var uki = require('../uki'),
-    dom = require('../dom'),
-    fun = require('../function');
+var uki = require('uki-core/uki'),
+    dom = require('uki-core/dom'),
+    fun = require('uki-core/function');
 
 var Focusable = {};
 
@@ -57,5 +57,4 @@ Focusable.hasFocus = function() {
 
 fun.addProp(Focusable, 'focusedClass');
 
-
-require('../view').Focusable = exports.Focusable = Focusable;
+exports.Focusable = Focusable;

@@ -7,7 +7,7 @@ var fun       = require('uki-core/function'),
     dom       = require('uki-core/dom'),
     Mustache  = require('uki-core/mustache').Mustache,
     Container = require('uki-core/view/container').Container,
-    Focusable = require('uki-core/view/focusable').Focusable;
+    Focusable = require('./focusable').Focusable;
 
 var SplitPane = fun.newClass(Container, Focusable, {}),
     proto = SplitPane.prototype;

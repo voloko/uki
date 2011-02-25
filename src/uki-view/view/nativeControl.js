@@ -4,7 +4,7 @@ var uki       = require('uki-core/uki'),
     dom       = require('uki-core/dom'),
     evt       = require('uki-core/event'),
     Binding   = require('uki-core/binding').Binding,
-    Focusable = require('uki-core/view/focusable').Focusable,
+    Focusable = require('./focusable').Focusable,
     Base      = require('uki-core/view/base').Base;
 
 requireCss('./nativeControl/nativeControl.css');

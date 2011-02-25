@@ -3,7 +3,7 @@ var fun  = require('uki-core/function'),
     dom  = require('uki-core/dom'),
     uki  = require('uki-core/uki'),
     Base = require('uki-core/view/base').Base,
-    Focusable = require('uki-core/view/focusable').Focusable;
+    Focusable = require('./focusable').Focusable;
 
 var Button = fun.newClass(Base, Focusable, {}),
     proto = Button.prototype;

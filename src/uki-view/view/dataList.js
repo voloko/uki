@@ -7,7 +7,7 @@ var uki = require('uki-core/uki'),
     evt = require('uki-core/event'),
     Mustache = require('./uki-core/mustache').Mustache;
     Base = require('./uki-core/view/base').Base;
-    Focusable = require('./uki-core/view/focusable').Focusable;
+    Focusable = require('./focusable').Focusable;
     Selectable = require('./selectable').Selectable;
 
 var DataList = fun.newClass(Base, Focusable, Selectable, {}),
