@@ -151,7 +151,7 @@ var evt = module.exports = {
     },
 
     addListener: function(el, types, listener) {
-        var id = el[uki.expando] = el[uki.expando] || uki.guid++;
+        var id = el[expando] = el[expando] || uki.guid++;
 
         utils.forEach(types.split(' '), function(type) {
             listeners[id] = listeners[id] || {};
@@ -179,7 +179,7 @@ var evt = module.exports = {
         }
 
         utils.forEach(types.split(' '), function(type) {
-            var id = el[uki.expando];
+            var id = el[expando];
 
             if (!id || !listeners[id] || !listeners[id][type]) return;
 

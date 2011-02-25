@@ -129,8 +129,9 @@ proto.removeListener = function(names, callback) {
 };
 
 proto.trigger = function(e) {
-    var wrapped = evt.createEvent(e, { target: this.domForEvent(e.type) });
-    return evt.trigger.call(this, e);
+    var node = this.domForEvent(e.type);
+    var wrapped = evt.createEvent(e, { target: node });
+    return evt.trigger.call(node, e);
 };
 
 proto.on = proto.addListener;
