@@ -4,7 +4,7 @@ var utils = require('./utils'),
 var registry = {};
 
 /** @namespace */
-uki.view = module.exports = {
+module.exports = {
     register: function(view) {
         registry[view.dom()[uki.expando]] = view;
     },
@@ -74,5 +74,3 @@ uki.view = module.exports = {
         };
     }
 };
-
-require('builder').viewNamespaces.unshift(module.exports);

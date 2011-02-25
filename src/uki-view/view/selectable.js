@@ -122,21 +122,29 @@ function removeRange (array, from, to) {
 }
 
 Selectable._itemUnderCursor = function(e) {
-    var o = uki.dom.clientRect(this.dom()),
+    var o = uki.clientRect(this.dom()),
         y = e.pageY - o.top;
 
     return y / this._rowHeight << 0;
 };
 
 Selectable._selectionMouseup = function(e) {
-    if (!this._multiselect || !this._selectionInProcess) return;
-
     var p = this._itemUnderCursor(e);
+
+    if (!this._multiselect || !this._selectionInProcess) {
+        if (this._lastClickIndex == p && !this._multiselect) {
+            if (this._hadFocusOnSelectionStart) {
+                this._selectionEdit(e);
+            }
+        }
+        return;
+    };
 
     if (this._lastClickIndex == p && this.isSelected(p)) {
         if (this.selectedIndexes().length === 1) {
-            if (this._hadFocusOnSelectionStart)
+            if (this._hadFocusOnSelectionStart) {
                 this._selectionEdit(e);
+            }
         } else {
             this.selectedIndexes([p]);
             this._triggerSelection();
@@ -156,6 +164,9 @@ Selectable._removeFromSelection = function(from, to) {
 Selectable._selectionMousedown = function(e) {
     var p = this._itemUnderCursor(e),
         indexes = this._selectedIndexes;
+
+    this._hadFocusOnSelectionStart = this.hasFocus() &&
+        this.isSelected(p);
 
     if (this._multiselect) {
         this._selectionInProcess = false;

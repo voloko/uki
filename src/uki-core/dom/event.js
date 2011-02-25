@@ -227,5 +227,3 @@ utils.forEach({
         }
     };
 });
-
-utils.extend(dom, evt);

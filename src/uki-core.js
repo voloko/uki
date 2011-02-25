@@ -1,23 +1,42 @@
-module.exports = require('./uki-core/uki');
-require('./uki-core/utils');
-require('./uki-core/dom');
-    
-require('./uki-core/dom/event');
-require('./uki-core/dom/gesture');
+var uki        = require('./uki-core/uki'),
+    utils      = require('./uki-core/utils'),
+    fun        = require('./uki-core/function'),
+    dom        = require('./uki-core/dom'),
+    evt        = require('./uki-core/dom/event'),
+    gesture    = require('./uki-core/dom/gesture'),
+    builder    = require('./uki-core/builder'),
+    selector   = require('./uki-core/selector'),
+    after      = require('./uki-core/after'),
+    observable = require('./uki-core/observable'),
+    binding    = require('./uki-core/binding'),
+    attachment = require('./uki-core/attachment'),
+    collection = require('./uki-core/collection'),
+    mustache   = require('./uki-core/mustache');
 
-require('./uki-core/function');
-require('./uki-core/builder');
-require('./uki-core/selector');
-require('./uki-core/after');
+// push everything into core namespace
+utils.forEach([
+    utils, fun, dom, evt, gesture, builder, selector, 
+    after, observable, binding, attachment, collection,
+    mustache
+], function(ns) {
+    utils.extend(uki, ns);
+});
 
-require('./uki-core/observable');
+var view      = require('./uki-core/view'),
+    focusable = require('./uki-core/view/focusable'),
+    base      = require('./uki-core/view/base'),
+    container = require('./uki-core/view/container');
 
-require('./uki-core/view');
-require('./uki-core/view/focusable');
+// add view as uki.view namespace
+uki.view = view;
 
-require('./uki-core/view/base');
-require('./uki-core/view/container');
+// register view as default search path for views
+builder.viewNamespaces.unshift(view);
 
-require('./uki-core/binding');
-require('./uki-core/attachment');
-require('uki-core/mustache');
+// copy views from default view namespaces into view
+utils.forEach([focusable, base, container], function(ns) {
+    utils.extend(view, ns);
+});
+
+// export uki
+module.exports = uki;

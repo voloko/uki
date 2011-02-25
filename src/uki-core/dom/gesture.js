@@ -2,7 +2,7 @@ var utils = require('../utils'),
     uki = require('../uki'),
     evt = require('./event');
 
-var gesture = module.exports = {
+var gesture = {
     draggable: null,
     position: null,
     cursor: null
@@ -86,5 +86,4 @@ function dragGestureEnd (e) {
     stopGesture(gesture.draggable);
 }
 
-
-utils.extend(require('../dom'), gesture);
+module.exports = gesture;

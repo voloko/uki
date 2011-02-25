@@ -152,7 +152,7 @@ var Selector = {
      * @return {uki.Collection} found views
      */
     find: function(selector, context, skipFiltering) {
-        context = context || require('./attachment').instances();
+        context = context || require('./attachment').Attachment.instances();
         if (context.length === undefined) { context = [context]; }
 
         var tokens = Selector.tokenize(selector),
@@ -220,4 +220,4 @@ var Selector = {
     }
 };
 
-require('uki').find = exports.find = Selector.find;
+exports.find = Selector.find;

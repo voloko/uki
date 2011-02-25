@@ -153,7 +153,7 @@ proto._createHandle = function() {
     }
 
     uki.forEach(['draggesturestart', 'draggesture', 'draggestureend'], function(name) {
-        uki.dom.addListener(handle, name, uki.bind(this['_' + name], this));
+        uki.addListener(handle, name, uki.bind(this['_' + name], this));
     }, this);
 
     return handle;
@@ -198,7 +198,7 @@ proto._calcDesiredPosition = function() {
 };
 
 proto._draggesturestart = function(e) {
-    e.cursor = uki.dom.computedStyle(this._handle, null).cursor;
+    e.cursor = uki.computedStyle(this._handle, null).cursor;
     this._positionBeforeDrag = this.handlePosition();
 };
 

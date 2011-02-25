@@ -10,11 +10,11 @@ var utils = require('./utils'),
  * @param {object} ml JSON-like markup
  * @returns {uki.view.Collection} collection of created elements
  */
-uki.build = exports.build = function(ml) {
+exports.build = function(ml) {
     return new Collection(createMulti((ml.length === undefined) ? [ml] : ml));
 };
 
-uki.viewNamespaces = exports.viewNamespaces = [global];
+exports.viewNamespaces = [global];
 
 function createMulti(ml) {
     return utils.map(ml, function(mlRow) { return createSingle(mlRow); });

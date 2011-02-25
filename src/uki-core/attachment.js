@@ -19,11 +19,11 @@ var Attachment = require('./function').newClass(Container, {
     }
 });
 
-uki.Attachment = exports.Attachment = Attachment;
+exports.Attachment = Attachment;
 
 var instances = null;
 
-exports.attach = function(dom, view) {
+Attachment.attach = function(dom, view) {
     dom = dom || uki.doc.body;
     var id = dom[uki.expando] = dom[uki.expando] || uki.guid++;
     if (!instances || !instances[id]) {
@@ -32,7 +32,7 @@ exports.attach = function(dom, view) {
     return instances[id].appendChild(view);
 };
 
-exports.instances = function() {
+Attachment.instances = function() {
     var atts = [];
     utils.forEach(instances || {}, function(a) {
         atts.push(a);

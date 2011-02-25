@@ -122,7 +122,7 @@ var Collection = fun.newClass({
 
     attach: function(target) {
         this.forEach(function(view) {
-            require('./attachment').attach(target, view);
+            require('./attachment').Attachment.attach(target, view);
             view.resized();
         });
         return this;

@@ -2,7 +2,7 @@ var fun = require('./function'),
     utils = require('./utils');
 
 
-require('uki').Binding = exports.Binding = fun.newClass({
+exports.Binding = fun.newClass({
     view: null,
     model: null,
     modelProp: 'value',

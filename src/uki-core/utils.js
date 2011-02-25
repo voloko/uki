@@ -257,5 +257,3 @@ utils.forEach(compat.arrayFunctions, function(name) {
 });
 
 utils.keys = compat.keys;
-
-utils.extend(require('uki'), utils);

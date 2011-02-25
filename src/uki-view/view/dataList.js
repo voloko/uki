@@ -316,7 +316,7 @@ proto._createDom = function(initArgs) {
     this._initSelectable();
 
     // prevent dragging of selection
-    this.addListener('selectstart dragstart', uki.dom.preventDefaultHandler);
+    this.addListener('selectstart dragstart', uki.preventDefaultHandler);
 };
 
 proto.triggerSelection = function() {

@@ -124,7 +124,7 @@ textProto._initPlaceholder = function() {
     this.addClass('uki-nc-text_with-placeholder');
     this._placeholderDom = uki.createElement('span', { className: 'uki-nc-text__placholder' });
     this._dom.insertBefore(this._placeholderDom, this._dom.firstChild);
-    uki.dom.addListener(this._placeholderDom, 'click', uki.bindOnce(function() {
+    uki.addListener(this._placeholderDom, 'click', uki.bindOnce(function() {
         this.focus();
     }, this));
     this.on('focus blur change keyup', this._updatePlaceholderVis);
@@ -140,7 +140,7 @@ textProto._updatePlaceholderVis = function() {
 textProto._updatePlaceholderHeight = function() {
     if (!this._placeholderDom) return;
     var targetStyle = this._placeholderDom.style,
-        sourceStyle = uki.dom.computedStyle(this._input);
+        sourceStyle = uki.computedStyle(this._input);
 
     uki.forEach(['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'], function(name) {
         if (sourceStyle[name] !== undefined) {

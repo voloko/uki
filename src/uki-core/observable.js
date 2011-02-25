@@ -79,9 +79,9 @@ var Observable = {
 Observable.on = Observable.addListener;
 Observable.emit = Observable.trigger;
 
-function addProp(proto, prop, setter) {
+function newProp(prop, setter) {
     var propName = '_' + prop;
-    proto[prop] = function(value, source) {
+    return function(value, source) {
         if (value === undefined) { return this[propName]; }
 
         var oldValue = this[prop](),
@@ -99,15 +99,17 @@ function addProp(proto, prop, setter) {
     };
 }
 
+uki.newOProp = Observable.newProp = newProp;
+
 uki.addOProps = Observable.addProps =
     uki.addOProp = Observable.addProp = function(proto, prop, setter) {
     if (utils.isArray(prop)) {
         for (var i = 0, len = prop.length; i < len; i++) {
-            addProp(proto, prop[i], setter && setter[i]);
+            proto[prop[i]] = newProp(prop[i], setter && setter[i]);
         }
     } else {
-        addProp(proto, prop, setter);
+        proto[prop] = newProp(prop, setter);
     }
 };
 
-uki.Observable = exports.Observable = Observable;
+exports.Observable = Observable;

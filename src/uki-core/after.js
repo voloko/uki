@@ -50,4 +50,4 @@ after._clearTimer = function() {
     after._timer = 0;
 };
 
-require('uki').after = exports.after = after;
+exports.after = after;
