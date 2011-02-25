@@ -1,4 +1,5 @@
 var utils = require('../utils'),
+    uki = require('../uki'),
     evt = require('./event');
 
 var gesture = module.exports = {
@@ -40,9 +41,9 @@ function startGesture (el, e) {
         gesture.cursor = uki.doc.body.style.cursor;
         uki.doc.body.style.cursor = e.cursor;
     }
-    evt.addListener(uki.doc, 'mousemove scroll', dragGesture);
-    evt.addListener(uki.doc, 'mouseup dragend', dragGestureEnd);
-    evt.addListener(uki.doc, 'selectstart mousedown', evt.preventDefaultHandler);
+    evt.on(uki.doc, 'mousemove scroll', dragGesture);
+    evt.on(uki.doc, 'mouseup dragend', dragGestureEnd);
+    evt.on(uki.doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
 function stopGesture () {
