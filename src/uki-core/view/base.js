@@ -258,3 +258,8 @@ proto.scroll = function(dx, dy) {
 proto.clientRect = function(ignoreScroll) {
     return dom.clientRect(this.dom(), ignoreScroll);
 };
+
+
+proto.childViews = function() {
+    return [];
+};

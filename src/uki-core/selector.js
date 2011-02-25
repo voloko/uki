@@ -183,7 +183,7 @@ var Selector = {
 
         while (exprItem) {
             found = false;
-            uki.forEach(regexps, function(row, index) {
+            utils.forEach(regexps, function(row, index) {
 
                 /*jsl:ignore*/
                 if (!found && (match = exprItem.match(row.regexp))) {
