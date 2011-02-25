@@ -84,13 +84,13 @@ utils.escapeHTML = function(html) {
 };
 
 utils.pluck = function(array, attr) {
-    return compat.map(array, function(v) {
+    return compat.map.call(array, function(v) {
         return uki.prop(v, attr);
     });
 };
 
 utils.without = function(array, value) {
-    return compat.filter(array, function(v) {
+    return compat.filter.call(array, function(v) {
         return v !== value;
     });
 };
