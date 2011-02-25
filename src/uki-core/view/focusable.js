@@ -1,4 +1,5 @@
-var dom = require('../dom'),
+var uki = require('../uki'),
+    dom = require('../dom'),
     fun = require('../function');
 
 var Focusable = {};
