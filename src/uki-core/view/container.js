@@ -13,9 +13,9 @@ var view  = require('../view'),
 view.Container = exports.Container = fun.newClass(Base, {});
 
 var proto = exports.Container.prototype;
- 
+
 proto.typeName = 'Container';
- 
+
 /** @private */
 proto._setup = function(initArgs) {
     Base.prototype._setup.call(this, initArgs);
@@ -44,7 +44,7 @@ proto._resizeChildViews = function() {
 proto.clear = function(destruct) {
     utils.forEach(this.childViews(), function(child) {
         this.removeChild(child);
-        if (destruct!==false) child.destruct();
+        if (destruct !== false) child.destruct();
     }, this);
 };
 
@@ -79,7 +79,7 @@ proto.removeChild = function(child) {
 
     var index = child._viewIndex,
         i, l;
-    for (i=index+1, l = this._childViews.length; i < l; i++) {
+    for (i = index+1, l = this._childViews.length; i < l; i++) {
         this._childViews[i]._viewIndex--;
     };
     this._childViews = utils.without(this._childViews, child);
@@ -116,7 +116,7 @@ proto._appendChildToDom = function(child) {
 proto.insertBefore = function(child, beforeChild) {
     var i, l;
     child._viewIndex = beforeChild._viewIndex;
-    for (i=beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
+    for (i = beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
         this._childViews[i]._viewIndex++;
     };
     this._childViews.splice(beforeChild._viewIndex-1, 0, child);

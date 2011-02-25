@@ -9,7 +9,9 @@ Focusable.focusableDom = function() {
 };
 
 Focusable._domForEvent = function(type) {
-    if (type == 'focus' || type == 'blur') return this.focusableDom();
+    if (type == 'focus' || type == 'blur') {
+        return this.focusableDom();
+    }
     return false;
 };
 
@@ -28,11 +30,15 @@ Focusable._destruct = function() {
 };
 
 Focusable._focus = function() {
-    if (this.focusedClass()) this.addClass(this.focusedClass());
+    if (this.focusedClass()) {
+        this.addClass(this.focusedClass());
+    }
 };
 
 Focusable._blur = function() {
-    if (this.focusedClass()) this.removeClass(this.focusedClass());
+    if (this.focusedClass()) {
+        this.removeClass(this.focusedClass());
+    }
 };
 
 Focusable.focus = function() {

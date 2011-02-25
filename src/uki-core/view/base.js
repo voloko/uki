@@ -51,7 +51,7 @@ proto.dom = function() {
 fun.delegateProp(proto, 'html', '_dom', 'innerHTML');
 
 proto.text = function(v) {
-    return this.html( v && utils.escapeHTML(v) );
+    return this.html(v && utils.escapeHTML(v));
 };
 
 /* ------------------------------- Common settings --------------------------------*/
@@ -62,8 +62,8 @@ proto.text = function(v) {
 * @returns {string|uki.view.Base} current id or self
 */
 proto.id = function(id) {
-    if (id === undefined) return this._dom.id;
-    if (this._dom.id) uki.unregisterId(this);
+    if (id === undefined) { return this._dom.id; }
+    if (this._dom.id) { uki.unregisterId(this); }
     this._dom.id = id;
     uki.registerId(this);
     return this;
@@ -116,7 +116,8 @@ proto.addListener = function(names, callback) {
 };
 
 /**
- * @param {String} name Event name, or space separated names, or null to remove from all types
+ * @param {String} name Event name, or space separated names,
+ *                      or null to remove from all types
  * @param {function()} callback or null to remove all callbacks
  */
 proto.removeListener = function(names, callback) {
@@ -142,15 +143,17 @@ proto.emit = proto.trigger;
 *                          'l:10px t:10px r:30% h:200px'
 */
 proto.pos = function(pos) {
-    if (pos === undefined) return this._styleToPos(this.dom().style);
+    if (pos === undefined) {
+        return this._styleToPos(this.dom().style);
+    }
     pos = this._expandPos(pos);
     this._applyPosToStyle(pos, this.dom().style);
     return this;
 };
 
 var rules = [
-'top', 'right', 'left', 'bottom', 'width', 'height',
-'marginLeft', 'marginTop', 'marginBottom', 'marginRight'
+    'top', 'right', 'left', 'bottom', 'width', 'height',
+    'marginLeft', 'marginTop', 'marginBottom', 'marginRight'
 ],
 ruleMap = {
     t: 'top', r: 'right',
@@ -199,14 +202,18 @@ proto._applyPosToStyle = function(pos, style) {
 * @returns {boolean|uki.view.Base} current visibility state of self
 */
 proto.visible = function(state) {
-    if (state === undefined) return this._dom.style.display != 'none';
+    if (state === undefined) {
+        return this._dom.style.display != 'none';
+    }
 
     var origState = this.visible();
     this._dom.style.display = state ? '' : 'none';
 
     // if we change from invis to vis, and we have dom, and we're attached
     // redraw
-    if (state && !origState && this.dom() && this.dom().offsetWidth) this.resized();
+    if (state && !origState && this.dom() && this.dom().offsetWidth) {
+        this.resized();
+    }
     return this;
 };
 
@@ -220,7 +227,9 @@ proto.visible = function(state) {
 * @returns {uki.view.Base} parent or self
 */
 proto.parent = function(parent) {
-    if (parent === undefined) return this._parent;
+    if (parent === undefined) {
+        return this._parent;
+    }
 
     this._parent = parent;
     return this;
@@ -231,7 +240,7 @@ proto.parent = function(parent) {
 * @returns {uki.view.Base}
 */
 proto.prevView = function() {
-    if (!this.parent()) return null;
+    if (!this.parent()) { return null; }
     return this.parent().childViews()[this._viewIndex - 1] || null;
 };
 
@@ -240,15 +249,15 @@ proto.prevView = function() {
 * @returns {uki.view.Base}
 */
 proto.nextView = function() {
-    if (!this.parent()) return null;
+    if (!this.parent()) { return null; }
     return this.parent().childViews()[this._viewIndex + 1] || null;
 };
 
 fun.delegateProp(proto, ['scrollTop', 'scrollLeft', 'title', 'alt'], 'dom');
 
 proto.scroll = function(dx, dy) {
-    if (dx) this.scrollLeft(this.scrollLeft() + dx);
-    if (dy) this.scrollTop(this.scrollTop() + dy);
+    dx && this.scrollLeft(this.scrollLeft() + dx);
+    dy && this.scrollTop(this.scrollTop() + dy);
 };
 
 /* ----------------------------- Layout ------------------------------*/
