@@ -114,23 +114,24 @@ fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
     return klass;
 };
 
-
-function addProp(proto, prop, setter) {
+function newProp(prop, setter) {
     var propName = '_' + prop;
     if (setter) {
-        proto[prop] = function(value) {
+        return function(value) {
             if (value === undefined) { return this[propName]; }
             setter.apply(this, arguments);
             return this;
         };
     } else {
-        proto[prop] = function(value) {
+        return function(value) {
             if (value === undefined) { return this[propName]; }
             this[propName] = value;
             return this;
         };
     }
 }
+fun.newProp = newProp;
+
 /**
  * Creates default uki property function
  * <p>If value is given to this function it sets property to value
@@ -155,10 +156,10 @@ function addProp(proto, prop, setter) {
 fun.addProp = fun.addProps = function(proto, prop, setter) {
     if (utils.isArray(prop)) {
         for (var i = 0, len = prop.length; i < len; i++) {
-            addProp(proto, prop[i], setter && setter[i]);
+            proto[prop] = newProp(prop[i], setter && setter[i]);
         }
     } else {
-        addProp(proto, prop, setter);
+        proto[prop] = newProp(prop, setter);
     }
 };
 

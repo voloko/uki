@@ -227,14 +227,6 @@ proto.parent = function(parent) {
 };
 
 /**
-* Accessor for childViews. @see uki.view.Container for implementation
-* @returns {Array.<uki.view.Base>}
-*/
-proto.childViews = function() {
-    return [];
-};
-
-/**
 * Reader for previous view
 * @returns {uki.view.Base}
 */

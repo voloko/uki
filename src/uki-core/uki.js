@@ -16,7 +16,8 @@ function uki(val, context) {
         var m = val.match(/^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/),
             e = m && uki._ids[m[1]];
         if (m && !context) {
-            return new require('./collection').Collection(e ? [e] : []);
+            var Collection = require('./collection').Collection;
+            return new Collection(e ? [e] : []);
         }
         return require('./selector').find(val, context);
 

@@ -1,38 +1,15 @@
 {
-	"name": "ukijs",
-	"description": "Simple client side app framework",
-	"keywords": ["uki", "ukijs", "widgets", "mvc", 'view'],
-	"version": "0.4.0",
-	"homepage": "http://ukijs.org/",
-	"author": "Vladimir Kolesnikov <voloko@gmail.com>",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/voloko/uki"
-	},
-	"bugs": {
-		"web": "https://github.com/voloko/uki/issues"
-	},
-	"directories": {
-		"lib": "./src",
-		"spec": "./spec",
-		"example": "./examples",
-		"bin": "./tools/bin"
-	},
-	"main": "./src/uki.js",
-	"engines": {
-		"node": ">=0.2.0"
-	},
-	"dependencies": {
-	    "uglify-js": ">=0.0.1",
-	    "cssom": ">=0.0.1",
-	    "cli": ">=0.2.6",
-	    "express": ">=1.0.0",
-	    "jade": ">=0.6.3"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://ukijs.org/LICENSE"
-		}
-	]
+    "name":"ukijs",
+    "description":"Simple client side app framework",
+    "keywords":["uki","ukijs","widgets","mvc","view"],
+    "version":"0.4.2",
+    "homepage":"http://ukijs.org/",
+    "author":"Vladimir Kolesnikov <voloko@gmail.com>",
+    "repository":{"type":"git","url":"git://github.com/voloko/uki"},
+    "bugs":{"web":"https://github.com/voloko/uki/issues"},
+    "directories":{"lib":"./src","spec":"./spec","example":"./examples","bin":"./tools/bin"},
+    "main":"./src/uki.js",
+    "engines":{"node":">=0.2.0"},
+    "dependencies":{"uglify-js":">=0.0.1","cssom":">=0.0.1","cli":">=0.2.6","express":">=1.0.0","jade":">=0.6.3"},
+    "licenses":[{"type":"MIT","url":"http://ukijs.org/LICENSE"}]
 }

@@ -7,6 +7,7 @@ var examplesPath = path.join(__dirname, 'examples');
 exports.init = function(app) {
     app.get('/perf', sr.getAppHandler('Benchmark runner', '/perf/runner.js'));
     
+    app.get('/client', sr.getAppHandler('Client', '/client/app.js'));
     
     
     
