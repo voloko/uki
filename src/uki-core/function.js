@@ -156,7 +156,7 @@ fun.newProp = newProp;
 fun.addProp = fun.addProps = function(proto, prop, setter) {
     if (utils.isArray(prop)) {
         for (var i = 0, len = prop.length; i < len; i++) {
-            proto[prop] = newProp(prop[i], setter && setter[i]);
+            proto[prop[i]] = newProp(prop[i], setter && setter[i]);
         }
     } else {
         proto[prop] = newProp(prop, setter);
