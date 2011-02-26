@@ -20,9 +20,9 @@ exports.Binding = fun.newClass({
         }
 
         if (this.model && this.view) {
-            this.view.addListener(this.viewEvent,
+            this.view.on(this.viewEvent,
                 fun.bindOnce(this.updateModel, this));
-            this.model.addListener(this.modelEvent,
+            this.model.on(this.modelEvent,
                 fun.bindOnce(this.updateView, this));
             if (this.sync !== false) {
                 this.updateView();

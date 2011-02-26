@@ -130,7 +130,7 @@ textProto._initPlaceholder = function() {
     this.addClass('uki-nc-text_with-placeholder');
     this._placeholderDom = dom.createElement('span', { className: 'uki-nc-text__placholder' });
     this._dom.insertBefore(this._placeholderDom, this._dom.firstChild);
-    evt.addListener(this._placeholderDom, 'click', fun.bindOnce(function() {
+    evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
         this.focus();
     }, this));
     this.on('focus blur change keyup', this._updatePlaceholderVis);

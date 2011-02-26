@@ -2,6 +2,7 @@ var Container = require('./view/container.js').Container,
     after     = require('./after').after,
     utils     = require('./utils'),
     env       = require('./env'),
+    evt       = require('./event'),
     dom       = require('./dom'),
     fun       = require('./function');
 
@@ -45,7 +46,7 @@ function register(a) {
         instances = {};
         var timeout = false;
 
-        require('./event').addListener(window, 'resize', function() {
+        evt.on(env.root, 'resize', function() {
             if (!timeout) {
                 timeout = true;
                 setTimeout(function(i, len) {

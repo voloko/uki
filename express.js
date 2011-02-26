@@ -1,22 +1,19 @@
 var path = require('path'),
     sr   = require('static_require'),
     fs   = require('fs');
-    
+
 var examplesPath = path.join(__dirname, 'examples');
 
 exports.init = function(app) {
-    app.get('/perf', sr.getAppHandler('Benchmark runner', '/perf/runner.js'));
-    
-    app.get('/client', sr.getAppHandler('Client', '/client/app.js'));
-    
-    
-    
     app.set('views', path.join(examplesPath, 'views'));
-    
+
+
+    app.get('/perf', sr.getAppHandler('Benchmark runner', '/perf/runner.js'));
+
     app.get('/', function(req, res) {
         res.redirect('/examples/');
     });
-    
+
     app.get('/examples/', function(req, res) {
         var exampleList = listExamples(examplesPath).map(function(name) {
             var filePath = path.join(examplesPath, name),
@@ -32,21 +29,21 @@ exports.init = function(app) {
         }).sort(function(a, b) {
             return a.order*1 - b.order*1;
         });
-        res.render('exampleList.jade', { 
+        res.render('exampleList.jade', {
             layout: false,
-            locals: { exampleList: exampleList } 
+            locals: { exampleList: exampleList }
         });
     });
-    
+
     app.get('/examples/:type/:example/', function(req, res) {
         var filePath = path.join(examplesPath, req.param('type'), req.param('example')),
             page = getExamplePage(filePath);
-            
+
         if (page) {
             res.send(page);
         } else {
             var code = getExampleCode(filePath);
-            res.render('example.jade', { 
+            res.render('example.jade', {
                 layout: false,
                 locals: {
                     html: extractExampleHtml(code),
@@ -55,11 +52,11 @@ exports.init = function(app) {
             });
         }
     });
-    
+
     app.get('/*.js', sr.getHandler({
         searchPaths: [fs.realpathSync(path.join(__dirname, 'src'))]
     }));
-    
+
 };
 
 function getExamplePage (filePath) {
@@ -89,7 +86,7 @@ function listExamples (filePath) {
 function getExampleCode (filePath) {
     var name = path.basename(filePath),
         jsPath = path.join(filePath, name + '.js');
-    
+
     return fs.readFileSync(jsPath, 'utf8');
 }
 

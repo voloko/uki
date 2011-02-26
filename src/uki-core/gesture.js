@@ -18,12 +18,14 @@ var addDraggestures = {
             el.__draggesturebound++;
         } else {
             el.__draggesturebound = 1;
-            evt.addListener(el, 'mousedown', dragGestureStart);
+            evt.on(el, 'mousedown', dragGestureStart);
         }
     },
     teardown: function(el) {
         el.__draggesturebound--;
-        if (!el.__draggesturebound) evt.removeListener(el, 'mousedown', dragGestureStart);
+        if (!el.__draggesturebound) {
+            evt.removeListener(el, 'mousedown', dragGestureStart);
+        }
     }
 };
 

@@ -274,8 +274,8 @@ proto.editSelected = function() {
     this.dom().appendChild(this.editor().dom());
 
     this.editor()
-        .addListener('finishEdit', fun.bindOnce(this._editorBlur, this))
-        .addListener('move', fun.bindOnce(this._editorMove, this))
+        .on('finishEdit', fun.bindOnce(this._editorBlur, this))
+        .on('move', fun.bindOnce(this._editorMove, this))
         .pos({ top: t+'px', left: 0+'px', right: 0+'px', height: this.rowHeight() + 'px' })
         .visible(true)
         .parent(this)
@@ -324,7 +324,7 @@ proto._createDom = function(initArgs) {
     this._initSelectable();
 
     // prevent dragging of selection
-    this.addListener('selectstart dragstart', evt.preventDefaultHandler);
+    this.on('selectstart dragstart', evt.preventDefaultHandler);
 };
 
 proto.triggerSelection = function() {

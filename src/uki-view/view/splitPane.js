@@ -161,7 +161,7 @@ proto._createHandle = function() {
     }
 
     utils.forEach(['draggesturestart', 'draggesture', 'draggestureend'], function(name) {
-        evt.addListener(handle, name, fun.bind(this['_' + name], this));
+        evt.on(handle, name, fun.bind(this['_' + name], this));
     }, this);
 
     return handle;
