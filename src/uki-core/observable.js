@@ -1,5 +1,4 @@
 var utils = require('./utils'),
-    uki = require('./uki'),
     fun = require('./function');
 
 var Observable = {
@@ -71,7 +70,7 @@ var Observable = {
         if (!this._originalTrigger) {
             this._originalTrigger = this.trigger;
         }
-        this.trigger = value ? uki.FS : this._originalTrigger;
+        this.trigger = value ? fun.FS : this._originalTrigger;
         return this;
     }
 };
@@ -99,10 +98,11 @@ function newProp(prop, setter) {
     };
 }
 
-uki.newOProp = Observable.newProp = newProp;
+Observable.newProp = newProp;
 
-uki.addOProps = Observable.addProps =
-    uki.addOProp = Observable.addProp = function(proto, prop, setter) {
+Observable.addProps = Observable.addProp =
+    function(proto, prop, setter) {
+
     if (utils.isArray(prop)) {
         for (var i = 0, len = prop.length; i < len; i++) {
             proto[prop[i]] = newProp(prop[i], setter && setter[i]);

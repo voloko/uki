@@ -3,12 +3,12 @@ var fun = require('./function'),
     arrayPrototype = Array.prototype;
 
 /**
- * Collection performs group operations on uki.view objects.
+ * Collection performs group operations on view objects.
  * <p>Behaves much like result jQuery(dom nodes).
  * Most methods are chainable like
  *   .prop('text', 'somevalue').on('click', function() { ... })</p>
  *
- * <p>Its easier to call uki([view1, view2]) or uki('selector')
+ * <p>Its easier to call build([view1, view2]) or find('selector')
  * instead of creating collection directly</p>
  *
  * @author voloko
@@ -22,26 +22,26 @@ var Collection = fun.newClass({
         arrayPrototype.push.apply(this, elems);
     },
 
-    /**#@+ @memberOf uki.Collection# */
+    /**#@+ @memberOf Collection# */
     /**
      * Iterates trough all items within itself
      *
      * @function
      *
-     * @param {function(this:uki.view.Base, number, uki.view.Base)} callback
-     * @returns {uki.view.Collection} self
+     * @param {function(this:view.Base, number, view.Base)} callback
+     * @returns {view.Collection} self
      */
     forEach: function(callback, context) {
         return utils.forEach(this, callback, context);
     },
 
     /**
-     * Creates a new uki.Collection populated with found items
+     * Creates a new Collection populated with found items
      *
      * @function
      *
-     * @param {function(uki.view.Base, number):boolean} callback
-     * @returns {uki.view.Collection} created collection
+     * @param {function(view.Base, number):boolean} callback
+     * @returns {view.Collection} created collection
      */
     filter: function(callback, context) {
         return new Collection(utils.filter(this, callback, context));
@@ -64,7 +64,7 @@ var Collection = fun.newClass({
      *
      * @param {string} name Name of the attribute
      * @param {object=} value Value to set
-     * @returns {uki.view.Collection|Object} Self or attribute value
+     * @returns {view.Collection|Object} Self or attribute value
      */
     prop: function(name, value) {
         if (value !== undefined) {
@@ -85,7 +85,7 @@ var Collection = fun.newClass({
      * @function
      *
      * @param {string} selector
-     * @returns {uki.view.Collection} Collection of found items
+     * @returns {view.Collection} Collection of found items
      */
     find: function(selector) {
         return require('./selector').find(selector, this);
@@ -96,8 +96,8 @@ var Collection = fun.newClass({
      *
      * @function
      *
-     * @param {Array.<uki.view.Base>} views Views to append
-     * @returns {uki.view.Collection} self
+     * @param {Array.<view.Base>} views Views to append
+     * @returns {view.Collection} self
      */
     append: function(views) {
         var target = this[0];
@@ -134,11 +134,11 @@ var Collection = fun.newClass({
 var proto = Collection.prototype;
 
 /** @function
-@name uki.Collection#parent */
+@name Collection#parent */
 /** @function
-@name uki.Collection#next */
+@name Collection#next */
 /** @function
-@name uki.Collection#prev */
+@name Collection#prev */
 utils.forEach([
     ['parent', 'parent'],
     ['next', 'nextView'],
@@ -157,21 +157,21 @@ utils.forEach([
 
 
 /** @function
-@name uki.Collection#addListener */
+@name Collection#addListener */
 /** @function
-@name uki.Collection#unload */
+@name Collection#unload */
 /** @function
-@name uki.Collection#trigger */
+@name Collection#trigger */
 /** @function
-@name uki.Collection#layout */
+@name Collection#layout */
 /** @function
-@name uki.Collection#appendChild */
+@name Collection#appendChild */
 /** @function
-@name uki.Collection#removeChild */
+@name Collection#removeChild */
 /** @function
-@name uki.Collection#insertBefore */
+@name Collection#insertBefore */
 /** @function
-@name uki.Collection#toggle */
+@name Collection#toggle */
 utils.forEach([
     'addListener', 'removeListener', 'trigger', 'on', 'emit',
     'appendChild', 'removeChild', 'insertBefore', 'toggle'

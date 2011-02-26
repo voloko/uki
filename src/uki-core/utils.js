@@ -17,8 +17,8 @@ function inheritance() {}
  *   target[attr] = value or return target[attr]</p>
  *
  * @example
- *   uki.prop(view, 'name', 'funny') // sets name to funny on view
- *   uki.prop(view, 'id') // gets id attribute of view
+ *   utils.prop(view, 'name', 'funny') // sets name to funny on view
+ *   utils.prop(view, 'id') // gets id attribute of view
  *
  * @param {object} target
  * @param {string} attr Attribute name
@@ -85,7 +85,7 @@ utils.escapeHTML = function(html) {
 
 utils.pluck = function(array, attr) {
     return compat.map.call(array, function(v) {
-        return uki.prop(v, attr);
+        return utils.prop(v, attr);
     });
 };
 
@@ -163,9 +163,9 @@ utils.unique = function(array) {
 /**
  * Copies properties from one object to another
  * @example
- *   uki.extend(x, { width: 13, height: 14 }) // sets x.width = 13,
+ *   utils.extend(x, { width: 13, height: 14 }) // sets x.width = 13,
  *                                            // x.height = 14
- *   options = uki.extend({}, defaultOptions, options)
+ *   options = utils.extend({}, defaultOptions, options)
  *
  * @param {object} target Object to copy properties into
  * @param {...object} sources Objects to take properties from

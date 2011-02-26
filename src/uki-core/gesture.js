@@ -1,5 +1,5 @@
 var utils = require('./utils'),
-    uki = require('./uki'),
+    env = require('./env'),
     evt = require('./event');
 
 var gesture = {
@@ -38,21 +38,21 @@ function startGesture (el, e) {
     if (gesture.draggable) return;
     gesture.draggable = e.draggable || el;
     if (e.cursor) {
-        gesture.cursor = uki.doc.body.style.cursor;
-        uki.doc.body.style.cursor = e.cursor;
+        gesture.cursor = env.doc.body.style.cursor;
+        env.doc.body.style.cursor = e.cursor;
     }
-    evt.on(uki.doc, 'mousemove scroll', dragGesture);
-    evt.on(uki.doc, 'mouseup dragend', dragGestureEnd);
-    evt.on(uki.doc, 'selectstart mousedown', evt.preventDefaultHandler);
+    evt.on(env.doc, 'mousemove scroll', dragGesture);
+    evt.on(env.doc, 'mouseup dragend', dragGestureEnd);
+    evt.on(env.doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
 function stopGesture () {
     gesture.draggable = null;
-    uki.doc.body.style.cursor = gesture.cursor;
+    env.doc.body.style.cursor = gesture.cursor;
     gesture.cursor = null;
-    evt.removeListener(uki.doc, 'mousemove scroll', dragGesture);
-    evt.removeListener(uki.doc, 'mouseup dragend', dragGestureEnd);
-    evt.removeListener(uki.doc, 'selectstart mousedown', evt.preventDefaultHandler);
+    evt.removeListener(env.doc, 'mousemove scroll', dragGesture);
+    evt.removeListener(env.doc, 'mouseup dragend', dragGestureEnd);
+    evt.removeListener(env.doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
 function dragGestureStart (e) {

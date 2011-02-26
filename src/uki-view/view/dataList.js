@@ -1,10 +1,11 @@
 requireCss('./dataList/dataList.css');
 
-var uki = require('uki-core/uki'),
-    fun = require('uki-core/function'),
+var env   = require('uki-core/env'),
+    fun   = require('uki-core/function'),
     utils = require('uki-core/utils'),
-    dom = require('uki-core/dom'),
-    evt = require('uki-core/event'),
+    dom   = require('uki-core/dom'),
+    evt   = require('uki-core/event'),
+    build = require('uki-core/builder').build,
     Mustache = require('./uki-core/mustache').Mustache;
     Base = require('./uki-core/view/base').Base;
     Focusable = require('./focusable').Focusable;
@@ -154,7 +155,7 @@ proto.shouldRedrawOnPropChange = function(key) {
 
 
 /* --------------- Selection API -------------- 
-* @see uki.view.Selectable for more info
+* @see view.Selectable for more info
 */
 /**
 * Index of the row the user either clicked or used keyborad to focus on
@@ -238,13 +239,13 @@ proto.scrollToPosition = function(position) {
 /* --------------- Inline editing -------------- */
 /**
 * Either a view or view description of the row inline editor. 
-* See uki.view.dataList.Editor for example.
+* See view.dataList.Editor for example.
 * 
 * @function
 * @name editor
 */
 fun.addProp(proto, 'editor', function(e) {
-    this._editor = require('uki-core/builder').build(e)[0];
+    this._editor = build(e)[0];
 });
 
 /**
@@ -520,7 +521,7 @@ proto._itemWithinPack = function(pack, packPos) {
 
 proto._visChanged = function() {
     var packNs = this._packsToRender(),
-        revision = uki.guid++;
+        revision = env.guid++;
 
     for (var packN=packNs[0]; packN <= packNs[1]; packN++) {
         if (!this._packs[packN]) {

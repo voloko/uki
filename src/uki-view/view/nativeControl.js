@@ -1,7 +1,7 @@
-var uki       = require('uki-core/uki'),
-    fun       = require('uki-core/function'),
+var fun       = require('uki-core/function'),
     utils     = require('uki-core/utils'),
     dom       = require('uki-core/dom'),
+    env       = require('uki-core/env'),
     evt       = require('uki-core/event'),
     Binding   = require('uki-core/binding').Binding,
     Focusable = require('./focusable').Focusable,
@@ -47,7 +47,7 @@ ncProto.domForEvent = function(type) {
 
 /**
 * Radio button with a label
-* uki({ view: 'nativeControl.Radio', name: 'color', value: 'red', text: 'Red' })
+* build({ view: 'nativeControl.Radio', name: 'color', value: 'red', text: 'Red' })
 */
 var Radio = nc.Radio = fun.newClass(NativeControl, {}),
     radioProto = Radio.prototype;
@@ -69,7 +69,7 @@ fun.delegateProp(radioProto, 'html', '_label', 'innerHTML');
 
 /**
 * Checkbox with a label
-* uki({ view: 'nativeControl.Checkbox', name: 'color', value: 'red', text: 'Red' })
+* build({ view: 'nativeControl.Checkbox', name: 'color', value: 'red', text: 'Red' })
 */
 var Checkbox = nc.Checkbox = fun.newClass(NativeControl, {}),
     cbProto = Checkbox.prototype;
@@ -91,7 +91,7 @@ fun.delegateProp(cbProto, 'html', '_label', 'innerHTML');
 
 /**
 * Text input
-* uki({ view: 'nativeControl.Text', value: 'John Smith', placeholder: 'Name?' })
+* build({ view: 'nativeControl.Text', value: 'John Smith', placeholder: 'Name?' })
 */
 var Text = nc.Text = fun.newClass(NativeControl, {}),
     textProto = Text.prototype;
@@ -114,7 +114,7 @@ fun.addProp(textProto, 'placeholder', function(v) {
     }
 });
 
-var ieResize = uki.ua.match(/MSIE 6|7/);
+var ieResize = env.ua.match(/MSIE 6|7/);
 textProto.resized = function() {
     NativeControl.prototype.resized.call(this);
     this._updatePlaceholderHeight();
@@ -153,9 +153,9 @@ textProto._updatePlaceholderHeight = function() {
             targetStyle[name] = sourceStyle[name];
         }
     });
-    targetStyle.lineHeight = this._input.offsetHeight + (parseInt(sourceStyle.marginTop) || 0)*2 + 'px';
-    targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft) || 0) + (parseInt(sourceStyle.borderLeftWidth) || 0) + 'px';
-    textProto._updatePlaceholderHeight = uki.FS;
+    targetStyle.lineHeight = this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2 + 'px';
+    targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
+    textProto._updatePlaceholderHeight = fun.FS;
 };
 
 
@@ -163,7 +163,7 @@ textProto._updatePlaceholderHeight = function() {
 
 /**
 * Native browser button
-* uki({ view: 'nativeControl.Button', value: 'Work!'})
+* build({ view: 'nativeControl.Button', value: 'Work!'})
 */
 var Button = nc.Button = fun.newClass(NativeControl, {}),
     bProto = Button.prototype;
@@ -179,7 +179,7 @@ bProto._createDom = function(initArgs) {
 
 /**
 * Native browser select
-* uki({ view: 'nativeControl.Select', options: [
+* build({ view: 'nativeControl.Select', options: [
 *   { text: 'Default', options: [
 *       'red',
 *       'blue',

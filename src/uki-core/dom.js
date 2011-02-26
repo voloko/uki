@@ -1,4 +1,4 @@
-var uki = require('./uki'),
+var env = require('./env'),
     utils = require('./utils');
 
 /**
@@ -17,7 +17,7 @@ module.exports = {
      * @returns {Element} created element
      */
     createElement: function(tagName, options, children) {
-        var e = uki.doc.createElement(tagName);
+        var e = env.doc.createElement(tagName);
         utils.forEach(options || {}, function(value, name) {
             if (name == 'style') { e.style.cssText = value; }
             else if (name == 'html') { e.innerHTML = value; }
@@ -37,26 +37,26 @@ module.exports = {
     },
 
     createStylesheet: function(code) {
-        var style = uki.doc.createElement('style');
-        uki.doc.getElementsByTagName('head')[0].appendChild(style);
+        var style = env.doc.createElement('style');
+        env.doc.getElementsByTagName('head')[0].appendChild(style);
         if (style.styleSheet) { //IE
             style.styleSheet.cssText = code;
         } else {
-            style.appendChild(uki.doc.createTextNode(code));
+            style.appendChild(env.doc.createTextNode(code));
         }
         return style;
     },
 
     computedStyle: function(el) {
-        if (uki.doc.defaultView && uki.doc.defaultView.getComputedStyle) {
-            return uki.doc.defaultView.getComputedStyle(el, null);
+        if (env.doc.defaultView && env.doc.defaultView.getComputedStyle) {
+            return env.doc.defaultView.getComputedStyle(el, null);
         } else if (el.currentStyle) {
             return el.currentStyle;
         }
     },
 
     fromHTML: function(html) {
-        var fragment = uki.doc.createElement('div');
+        var fragment = env.doc.createElement('div');
         fragment.innerHTML = html;
         return fragment.firstChild;
     },
@@ -66,7 +66,7 @@ module.exports = {
         var rect = elem.getBoundingClientRect();
         if (ignoreScroll) { return rect; }
 
-        var body = uki.doc.body,
+        var body = env.doc.body,
             scrollTop  = window.pageYOffset || body.scrollTop,
             scrollLeft = window.pageXOffset || body.scrollLeft;
         return {

@@ -134,22 +134,20 @@ function reduceFlatten(x, e) {
 var Selector = {
     /**
      * Finds views by CSS3 selectors in view tree.
-     * <p>Can be called as uki(selector) instead of
-     * uki.Selector.find(selector)</p>
      *
      * @example
-     *   uki('Label') find all labels on page
-     *   uki('Box[name=main] > Label') find all immediate descendant
+     *   find('Label') find all labels on page
+     *   find('Box[name=main] > Label') find all immediate descendant
      *                                 Labels in a box with name = "main"
-     *   uki('> Slider', context) find all direct descendant
+     *   find('> Slider', context) find all direct descendant
      *                            Sliders within given context
-     *   uki('Slider,Checkbox') find all Sliders and Checkboxes
-     *   uki('Slider:eq(3)') find 3-d slider
+     *   find('Slider,Checkbox') find all Sliders and Checkboxes
+     *   find('Slider:eq(3)') find 3-d slider
      *
      * @param {string} selector
-     * @param {Array.<uki.view.Base>} context to search in
+     * @param {Array.<view.Base>} context to search in
      *
-     * @return {uki.Collection} found views
+     * @return {Collection} found views
      */
     find: function(selector, context, skipFiltering) {
         context = context || require('./attachment').Attachment.instances();

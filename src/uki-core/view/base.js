@@ -1,7 +1,8 @@
 var view  = require('../view'),
-    uki   = require('../uki'),
     utils = require('../utils'),
     fun   = require('../function'),
+    view  = require('../view'),
+    env   = require('../env'),
     dom   = require('../dom'),
     evt   = require('../event');
 
@@ -15,20 +16,20 @@ proto.init = function(initArgs) {
     initArgs = initArgs || {};
     this._setup(initArgs);
     this._createDom(initArgs);
-    this.dom()[uki.expando] = this.dom()[uki.expando] || uki.guid++;
+    this.dom()[env.expando] = this.dom()[env.expando] || env.guid++;
     view.register(this);
 };
 
 proto.destruct = function() {
-    uki.unregisterId(this);
+    view.unregisterId(this);
     view.unregister(this);
     this.removeListener();
     this.destructed = true;
 };
 
-proto._setup = uki.FS;
+proto._setup = fun.FS;
 
-/**#@+ @memberOf uki.view.Base# */
+/**#@+ @memberOf view.Base# */
 
 proto._createDom = function(initArgs) {
     this._dom = dom.createElement(initArgs.tagName || 'div');
@@ -37,7 +38,7 @@ proto._createDom = function(initArgs) {
 /**
 * Called when view was resized
 */
-proto.resized = uki.FS;
+proto.resized = fun.FS;
 
 /**
 * Get views container dom node.
@@ -56,16 +57,16 @@ proto.text = function(v) {
 
 /* ------------------------------- Common settings --------------------------------*/
 /**
-* Used for fast (on hash lookup) view searches: uki('#view_id');
+* Used for fast (on hash lookup) view searches: build('#view_id');
 *
 * @param {string=} id New id value
-* @returns {string|uki.view.Base} current id or self
+* @returns {string|view.Base} current id or self
 */
 proto.id = function(id) {
     if (id === undefined) { return this._dom.id; }
-    if (this._dom.id) { uki.unregisterId(this); }
+    if (this._dom.id) { view.unregisterId(this); }
     this._dom.id = id;
-    uki.registerId(this);
+    view.registerId(this);
     return this;
 };
 
@@ -73,7 +74,7 @@ proto.id = function(id) {
 * Accessor for dom().className
 * @param {string=} className
 *
-* @returns {string|uki.view.Base} className or self
+* @returns {string|view.Base} className or self
 */
 fun.delegateProp(proto, 'className', 'dom');
 
@@ -200,7 +201,7 @@ proto._applyPosToStyle = function(pos, style) {
 * Accessor for view visibility.
 *
 * @param {boolean=} state
-* @returns {boolean|uki.view.Base} current visibility state of self
+* @returns {boolean|view.Base} current visibility state of self
 */
 proto.visible = function(state) {
     if (state === undefined) {

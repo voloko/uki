@@ -1,8 +1,8 @@
-var uki = require('./uki'),
-    utils = require('./utils'),
-    fun = require('./function'),
-    dom = require('./dom'),
-    expando = uki.expando;
+var utils = require('./utils'),
+    fun   = require('./function'),
+    dom   = require('./dom'),
+    env   = require('./env'),
+    expando = env.expando;
 
 // base class
 function EventWrapper () {}
@@ -21,7 +21,7 @@ EventWrapper.prototype = {
         } else {
             e.returnValue = false;
         }
-        this.isDefaultPrevented = uki.FT;
+        this.isDefaultPrevented = fun.FT;
     },
 
     stopPropagation: function() {
@@ -31,18 +31,18 @@ EventWrapper.prototype = {
         } else {
             e.cancelBubble = true;
         }
-        this.isPropagationStopped = uki.FT;
+        this.isPropagationStopped = fun.FT;
     },
 
-    isDefaultPrevented: uki.FF,
-    isPropagationStopped: uki.FF
+    isDefaultPrevented: fun.FF,
+    isPropagationStopped: fun.FF
 };
 
 
 function normalize(e) {
 	// Fix target property, if necessary
 	if (!e.target) {
-		e.target = e.srcElement || uki.doc;
+		e.target = e.srcElement || env.doc;
 	}
 
 	// check if target is a textnode (safari)
@@ -57,7 +57,7 @@ function normalize(e) {
 
 	// Calculate pageX/Y if missing and clientX/Y available
 	if (e.pageX == null && e.clientX != null) {
-		var doc = uki.doc,
+		var doc = env.doc,
 		    body = doc.body;
 
 		e.pageX = e.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
@@ -151,7 +151,7 @@ var evt = module.exports = {
     },
 
     addListener: function(el, types, listener) {
-        var id = el[expando] = el[expando] || uki.guid++;
+        var id = el[expando] = el[expando] || env.guid++;
 
         utils.forEach(types.split(' '), function(type) {
             listeners[id] = listeners[id] || {};
@@ -162,7 +162,7 @@ var evt = module.exports = {
                 if (evt.special[type]) {
                     evt.special[type].setup(el);
                 } else {
-                    domHandlers[id] = domHandlers[id] || uki.bind(domHandler, el);
+                    domHandlers[id] = domHandlers[id] || fun.bind(domHandler, el);
                     el.addEventListener ? el.addEventListener(type, domHandlers[id], false) :
                         el.attachEvent('on' + type, domHandlers[id]);
                 }

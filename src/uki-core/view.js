@@ -1,21 +1,34 @@
 var utils = require('./utils'),
-    uki   = require('./uki');
+    env   = require('./env');
 
-var registry = {};
+var registry = {},
+    ids = {};
 
 /** @namespace */
 module.exports = {
     register: function(view) {
-        registry[view.dom()[uki.expando]] = view;
+        registry[view.dom()[env.expando]] = view;
     },
 
     unregister: function(view) {
-        delete registry[view.dom()[uki.expando]];
+        delete registry[view.dom()[env.expando]];
+    },
+
+    registerId: function(comp) {
+        ids[utils.prop(comp, 'id')] = comp;
+    },
+    
+    unregisterId: function(comp) {
+        delete ids[utils.prop(comp, 'id')];
+    },
+    
+    byId: function(id) {
+        return ids[id];
     },
 
     closest: function(dom) {
         while (dom) {
-            var e = dom[uki.expando];
+            var e = dom[env.expando];
             if (registry[e]) { return registry[e]; }
             dom = dom.parentNode;
         }
@@ -41,7 +54,7 @@ module.exports = {
     /**
      * @example
      *   newClass({...
-     *      this.border = uki.view.newClassMapProp({
+     *      this.border = view.newClassMapProp({
      *          wide: 'my-border-wide'
      *          none: 'my-border-none'
      *          thin: 'my-border-thin'

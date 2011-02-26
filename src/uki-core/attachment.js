@@ -1,31 +1,31 @@
 var Container = require('./view/container.js').Container,
-    after = require('./after').after,
-    utils = require('./utils'),
-    uki = require('./uki');
+    after     = require('./after').after,
+    utils     = require('./utils'),
+    env       = require('./env'),
+    dom       = require('./dom'),
+    fun       = require('./function');
 
-var Attachment = require('./function').newClass(Container, {
+var Attachment = fun.newClass(Container, {
     typeName: 'Attachment',
 
     _setup: function(initArgs) {
         this._dom = initArgs.dom;
-        uki.addClass(this._dom, 'uki-attachment');
+        dom.addClass(this._dom, 'uki-attachment');
         Container.prototype._setup.call(this, initArgs);
     },
 
-    _createDom: uki.FS,
+    _createDom: fun.FS,
 
     parent: function() {
         return null;
     }
 });
 
-exports.Attachment = Attachment;
-
 var instances = null;
 
 Attachment.attach = function(dom, view) {
-    dom = dom || uki.doc.body;
-    var id = dom[uki.expando] = dom[uki.expando] || uki.guid++;
+    dom = dom || env.doc.body;
+    var id = dom[env.expando] = dom[env.expando] || env.guid++;
     if (!instances || !instances[id]) {
         register(new Attachment({ dom: dom }));
     }
@@ -39,8 +39,6 @@ Attachment.instances = function() {
     });
     return atts;
 };
-
-
 
 function register(a) {
     if (!instances) {
@@ -64,7 +62,9 @@ function register(a) {
         });
     }
     var el = a.dom(),
-        id = el[uki.expando] = el[uki.expando] || uki.guid++;
+        id = el[env.expando] = el[env.expando] || env.guid++;
 
     return (instances[id] = a);
 }
+
+exports.Attachment = Attachment;

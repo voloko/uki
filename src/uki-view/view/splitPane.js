@@ -5,6 +5,7 @@ var fun       = require('uki-core/function'),
     view      = require('uki-core/view'),
     evt       = require('uki-core/event'),
     dom       = require('uki-core/dom'),
+    build     = require('uki-core/builder').build,
     Mustache  = require('uki-core/mustache').Mustache,
     Container = require('uki-core/view/container').Container,
     Focusable = require('./focusable').Focusable;
@@ -156,7 +157,7 @@ proto._createHandle = function() {
     if (this.handleWidth() > 1) {
         handle.style[this._x_widthName()] = this.handleWidth() + 'px';
     } else {
-        handle.className += ' ' + /*!css-class*/'uki-splitPane-handle_thin';
+        handle.className += ' ' + 'uki-splitPane-handle_thin';
     }
 
     utils.forEach(['draggesturestart', 'draggesture', 'draggestureend'], function(name) {
@@ -169,7 +170,7 @@ proto._createHandle = function() {
 proto._createDom = function() {
     this._dom = dom.createElement('div', { className: 'splitPane' });
 
-    uki([
+    build([
         { view: 'Container', addClass: 'uki-splitPane-container uki-splitPane-container_left' },
         { view: 'Container', addClass: 'uki-splitPane-container uki-splitPane-container_right' }
     ]).appendTo(this);

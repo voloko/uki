@@ -1,3 +1,5 @@
+var env = require('./env');
+
 /**
  * Executes callback at or after the end of processing.
  * Example: execute flow layout after all child views were added.
@@ -7,7 +9,7 @@
  * @param {function()} callback
  */
 function after(callback) {
-    callback.huid = callback.huid || uki.guid++;
+    callback.huid = callback.huid || env.guid++;
     if (after._bound[callback.huid]) { return; }
     after._bound[callback.huid] = true;
     after._queue.push(callback);

@@ -1,4 +1,4 @@
-var uki = require('./uki'),
+var env = require('./env'),
     utils = require('./utils'),
     arrayPrototype = Array.prototype;
 
@@ -27,7 +27,7 @@ fun.bind = function(fn, context) {
 };
 
 fun.bindOnce = function(fn, context) {
-    fn.huid = fn.huid || uki.guid++;
+    fn.huid = fn.huid || env.guid++;
     var bindingName = '__binding_' + fn.huid;
     context[bindingName] = context[bindingName] || fun.bind(fn, context);
     return context[bindingName];
@@ -37,11 +37,11 @@ fun.bindOnce = function(fn, context) {
  * Creates a new class inherited from base classes.
  * Init function is used as constructor
  * @example
- *   baseClass = uki.newClass({
+ *   baseClass = fun.newClass({
  *      init: function() { this.x = 3 }
  *   });
  *
- *   childClass = uki.newClass(baseClass, {
+ *   childClass = fun.newClass(baseClass, {
  *      getSqrt: function() { return this.x*this.x }
  *   });
  *
@@ -51,7 +51,7 @@ fun.bindOnce = function(fn, context) {
  *      }
  *   }
  *
- *   childNinja = uki.newClass(baseClass, someMixin,
+ *   childNinja = fun.newClass(baseClass, someMixin,
  *      function(STATIC, Base, Mixin) {
  *
  *      this.init = function() {
@@ -133,7 +133,7 @@ function newProp(prop, setter) {
 fun.newProp = newProp;
 
 /**
- * Creates default uki property function
+ * Creates default property function
  * <p>If value is given to this function it sets property to value
  * If no arguments given than function returns current property value</p>
  *
@@ -143,10 +143,10 @@ fun.newProp = newProp;
  * <p>If used as setter function returns self</p>
  *
  * @example
- *   uki.addProp(x, 'width');
+ *   fun.addProp(x, 'width');
  *   x.width(12); // x._width = 12
  *   x.width();   // return 12
- *   uki.addProp(x, ['width', 'height'])
+ *   fun.addProp(x, ['width', 'height'])
  *
  * @param {Object} proto Prototype of the object to add property to
  * @param {string} prop Prop name
@@ -235,3 +235,12 @@ fun.defer = function(fn, timeout) {
     timeout = timeout || 0;
     setTimeout(fn, timeout);
 };
+
+
+/**
+ * Empty function
+ * @type function():boolean
+ */
+fun.FF = function() { return false; };
+fun.FT = function() { return true; };
+fun.FS = function() { return this; };

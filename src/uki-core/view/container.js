@@ -1,5 +1,4 @@
 var view  = require('../view'),
-    uki   = require('../uki'),
     utils = require('../utils'),
     fun   = require('../function'),
     dom   = require('../dom'),
@@ -7,8 +6,8 @@ var view  = require('../view'),
 
 /**
  * @class
- * @augments uki.view.Base
- * @name uki.view.Container
+ * @augments view.Base
+ * @name view.Container
  */
 view.Container = exports.Container = fun.newClass(Base, {});
 
@@ -32,7 +31,7 @@ proto.resized = function() {
     this._resizeChildViews();
 };
 
-proto._resizeSelf = uki.FS;
+proto._resizeSelf = fun.FS;
 
 proto._resizeChildViews = function() {
     utils.forEach(this.childViews(), function(view) {
@@ -50,7 +49,7 @@ proto.clear = function(destruct) {
 
 /**
  * Sets or retrieves view child view.
- * @param anything uki.build can parse
+ * @param anything build can parse
  *
  * Note: if setting on view with child views, all child view will be removed
  */
@@ -110,8 +109,8 @@ proto._appendChildToDom = function(child) {
 
 /**
  * Insert child before target beforeChild
- * @param {uki.view.Base} child Child to insert
- * @param {uki.view.Base} beforeChild Existent child before which we should insert
+ * @param {view.Base} child Child to insert
+ * @param {view.Base} beforeChild Existent child before which we should insert
  */
 proto.insertBefore = function(child, beforeChild) {
     var i, l;

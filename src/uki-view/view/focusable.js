@@ -1,4 +1,4 @@
-var uki = require('uki-core/uki'),
+var env = require('uki-core/env'),
     dom = require('uki-core/dom'),
     fun = require('uki-core/function');
 
@@ -52,7 +52,7 @@ Focusable.blur = function() {
 };
 
 Focusable.hasFocus = function() {
-    return this.focusableDom() == uki.doc.activeElement;
+    return this.focusableDom() == env.doc.activeElement;
 };
 
 fun.addProp(Focusable, 'focusedClass');

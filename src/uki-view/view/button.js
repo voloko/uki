@@ -1,7 +1,6 @@
 var fun  = require('uki-core/function'),
     view = require('uki-core/view'),
     dom  = require('uki-core/dom'),
-    uki  = require('uki-core/uki'),
     Base = require('uki-core/view/base').Base,
     Focusable = require('./focusable').Focusable;
 

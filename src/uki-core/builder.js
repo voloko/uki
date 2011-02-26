@@ -1,14 +1,13 @@
 var utils = require('./utils'),
-    uki   = require('./uki'),
     Collection = require('./collection').Collection;
 
 /**
- * Creates uki view tree from JSON-like markup
+ * Creates view tree from JSON-like markup
  *
  * @function
  *
  * @param {object} ml JSON-like markup
- * @returns {uki.view.Collection} collection of created elements
+ * @returns {view.Collection} collection of created elements
  */
 exports.build = function(ml) {
     return new Collection(createMulti((ml.length === undefined) ? [ml] : ml));
@@ -41,7 +40,7 @@ function createSingle(mlRow) {
             }
         }
         if (!Obj) {
-            throw "uki.Builder: Can't find view with type '" + C + "'";
+            throw "build: Can't find view with type '" + C + "'";
         }
     } else {
         result = C;

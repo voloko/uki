@@ -1,4 +1,4 @@
-var uki = require('uki-core/uki'),
+var env = require('uki-core/env'),
     fun = require('uki-core/function'),
     utils = require('uki-core/utils'),
     dom = require('uki-core/dom');
@@ -105,7 +105,7 @@ Selectable._toggleSelection = function(p) {
 /** ---------- Selection Events -------------- **/
 
 Selectable.keyPressEvent = function() {
-    var useKeyPress = window.opera || (/mozilla/i.test(uki.ua) && !(/(compatible|webkit)/i).test(uki.ua));
+    var useKeyPress = window.opera || (/mozilla/i.test(env.ua) && !(/(compatible|webkit)/i).test(env.ua));
     return useKeyPress ? 'keypress' : 'keydown';
 };
 
