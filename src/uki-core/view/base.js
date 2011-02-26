@@ -52,7 +52,7 @@ proto.dom = function() {
 fun.delegateProp(proto, 'html', '_dom', 'innerHTML');
 
 proto.text = function(v) {
-    return this.html(v && utils.escapeHTML(v));
+    return this.html(v && dom.escapeHTML(v));
 };
 
 /* ------------------------------- Common settings --------------------------------*/

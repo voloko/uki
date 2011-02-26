@@ -1,22 +1,21 @@
-var fun       = require('uki-core/function'),
-    utils     = require('uki-core/utils'),
-    dom       = require('uki-core/dom'),
-    env       = require('uki-core/env'),
-    evt       = require('uki-core/event'),
+requireCss('./nativeControl/nativeControl.css');
+
+var fun   = require('uki-core/function'),
+    utils = require('uki-core/utils'),
+    dom   = require('uki-core/dom'),
+    env   = require('uki-core/env'),
+    evt   = require('uki-core/event'),
+    
     Binding   = require('uki-core/binding').Binding,
     Focusable = require('./focusable').Focusable,
     Base      = require('uki-core/view/base').Base;
-
-requireCss('./nativeControl/nativeControl.css');
-
-var nc = {};
 
 
 /**
 * Base class for native control wrappers.
 * Map common dom attributes and add binding
 */
-var NativeControl = nc.NativeControl = fun.newClass(Base, Focusable, {}),
+var NativeControl = fun.newClass(Base, Focusable, {}),
     ncProto = NativeControl.prototype;
 
 fun.delegateProp(ncProto, ['name', 'checked', 'disabled', 'value', 'type'], '_input');
@@ -44,12 +43,11 @@ ncProto.domForEvent = function(type) {
 };
 
 
-
 /**
 * Radio button with a label
 * build({ view: 'nativeControl.Radio', name: 'color', value: 'red', text: 'Red' })
 */
-var Radio = nc.Radio = fun.newClass(NativeControl, {}),
+var Radio = fun.newClass(NativeControl, {}),
     radioProto = Radio.prototype;
 
 radioProto.typeName = 'nativeControl.Radio';
@@ -64,14 +62,11 @@ radioProto._bindingOptions = { viewEvent: 'click', viewProp: 'checked', commitCh
 fun.delegateProp(radioProto, 'html', '_label', 'innerHTML');
 
 
-
-
-
 /**
 * Checkbox with a label
 * build({ view: 'nativeControl.Checkbox', name: 'color', value: 'red', text: 'Red' })
 */
-var Checkbox = nc.Checkbox = fun.newClass(NativeControl, {}),
+var Checkbox = fun.newClass(NativeControl, {}),
     cbProto = Checkbox.prototype;
 
 cbProto.typeName = 'nativeControl.Checkbox';
@@ -86,14 +81,11 @@ cbProto._bindingOptions = radioProto._bindingOptions;
 fun.delegateProp(cbProto, 'html', '_label', 'innerHTML');
 
 
-
-
-
 /**
 * Text input
 * build({ view: 'nativeControl.Text', value: 'John Smith', placeholder: 'Name?' })
 */
-var Text = nc.Text = fun.newClass(NativeControl, {}),
+var Text = fun.newClass(NativeControl, {}),
     textProto = Text.prototype;
 
 textProto.typeName = 'nativeControl.Text';
@@ -110,7 +102,7 @@ fun.addProp(textProto, 'placeholder', function(v) {
         this._input.placeholder = v;
     } else {
         this._initPlaceholder();
-        this._placeholderDom.innerHTML = utils.escapeHTML(v);
+        this._placeholderDom.innerHTML = dom.escapeHTML(v);
     }
 });
 
@@ -159,13 +151,11 @@ textProto._updatePlaceholderHeight = function() {
 };
 
 
-
-
 /**
 * Native browser button
 * build({ view: 'nativeControl.Button', value: 'Work!'})
 */
-var Button = nc.Button = fun.newClass(NativeControl, {}),
+var Button = fun.newClass(NativeControl, {}),
     bProto = Button.prototype;
 
 bProto.typeName = 'nativeControl.Button';
@@ -173,8 +163,6 @@ bProto.typeName = 'nativeControl.Button';
 bProto._createDom = function(initArgs) {
     this._dom = this._input = dom.createElement('input', { className: 'uki-nc-button', type: 'button' });
 };
-
-
 
 
 /**
@@ -192,7 +180,7 @@ bProto._createDom = function(initArgs) {
 *   { text: 'Custom', value: '' }
 * ]})
 */
-var Select = nc.Select = fun.newClass(NativeControl, {}),
+var Select = fun.newClass(NativeControl, {}),
     sProto = Select.prototype;
 
 sProto.typeName = 'nativeControl.Select';
@@ -216,12 +204,12 @@ function appendOptions (root, options) {
         }
         if (option.options) {
             node = dom.createElement('optgroup', {
-                label: option.html ? option.html : utils.escapeHTML(option.text)
+                label: option.html ? option.html : dom.escapeHTML(option.text)
             });
             appendOptions(node, option.options);
         } else {
             node = dom.createElement('option', {
-                html: option.html ? option.html : utils.escapeHTML(option.text),
+                html: option.html ? option.html : dom.escapeHTML(option.text),
                 value: option.value,
                 selected: option.selected
             });
@@ -230,4 +218,12 @@ function appendOptions (root, options) {
     });
 }
 
-exports.nativeControl = nc;
+
+exports.nativeControl = {
+    NativeControl: NativeControl,
+    Radio:         Radio,
+    Checkbox:      Checkbox,
+    Text:          Text,
+    Button:        Button,
+    Select:        Select
+};

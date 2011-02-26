@@ -1,7 +1,7 @@
-var env = require('uki-core/env'),
-    fun = require('uki-core/function'),
+var env   = require('uki-core/env'),
+    fun   = require('uki-core/function'),
     utils = require('uki-core/utils'),
-    dom = require('uki-core/dom');
+    dom   = require('uki-core/dom');
 
 /**
 * @mixin fb.view.Selectable
@@ -262,5 +262,6 @@ Selectable._triggerSelection = function(force) {
         this._deferedTriggerSelection = true;
     }
 };
+
 
 exports.Selectable = Selectable;

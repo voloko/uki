@@ -6,10 +6,12 @@ var env   = require('uki-core/env'),
     dom   = require('uki-core/dom'),
     evt   = require('uki-core/event'),
     build = require('uki-core/builder').build,
-    Mustache = require('./uki-core/mustache').Mustache;
-    Base = require('./uki-core/view/base').Base;
-    Focusable = require('./focusable').Focusable;
+    
+    Mustache   = require('./uki-core/mustache').Mustache;
+    Base       = require('./uki-core/view/base').Base;
+    Focusable  = require('./focusable').Focusable;
     Selectable = require('./selectable').Selectable;
+    
 
 var DataList = fun.newClass(Base, Focusable, Selectable, {}),
     proto = DataList.prototype;
@@ -77,7 +79,7 @@ fun.addProps(proto, ['template', 'formatter', 'packSize', 'renderMoreRows', 'row
 
 proto._template = requireText('dataList/dataList.html');
 
-proto._formatter = utils.escapeHTML;
+proto._formatter = dom.escapeHTML;
 
 proto._packSize = 100;
 

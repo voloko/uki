@@ -66,23 +66,6 @@ utils.toArray = function(arr) {
     return slice.call(arr, 0);
 };
 
-/**
- * Converts unsafe symbols to entities
- *
- * @param {string} html
- * @returns {string} escaped html
- */
-utils.escapeHTML = function(html) {
-    var trans = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#x27;'
-    };
-    return (html + '').replace(/[&<>\"\']/g, function(c) { return trans[c]; });
-};
-
 utils.pluck = function(array, attr) {
     return compat.map.call(array, function(v) {
         return utils.prop(v, attr);

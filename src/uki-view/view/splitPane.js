@@ -1,14 +1,16 @@
 requireCss('./splitPane/splitPane.css');
 
-var fun       = require('uki-core/function'),
-    utils     = require('uki-core/utils'),
-    view      = require('uki-core/view'),
-    evt       = require('uki-core/event'),
-    dom       = require('uki-core/dom'),
-    build     = require('uki-core/builder').build,
+var fun   = require('uki-core/function'),
+    utils = require('uki-core/utils'),
+    view  = require('uki-core/view'),
+    evt   = require('uki-core/event'),
+    dom   = require('uki-core/dom'),
+    build = require('uki-core/builder').build,
+    
     Mustache  = require('uki-core/mustache').Mustache,
     Container = require('uki-core/view/container').Container,
     Focusable = require('./focusable').Focusable;
+
 
 var SplitPane = fun.newClass(Container, Focusable, {}),
     proto = SplitPane.prototype;
