@@ -67,8 +67,8 @@ module.exports = {
         if (ignoreScroll) { return rect; }
 
         var body = env.doc.body,
-            scrollTop  = window.pageYOffset || body.scrollTop,
-            scrollLeft = window.pageXOffset || body.scrollLeft;
+            scrollTop  = env.root.pageYOffset || body.scrollTop,
+            scrollLeft = env.root.pageXOffset || body.scrollLeft;
         return {
             top: rect.top  + scrollTop,
             left: rect.left + scrollLeft,

@@ -110,7 +110,7 @@ var domHandlers = {};
 * Handle all listener calls. Should be called with dom element as this
 */
 function domHandler(e) {
-    e = e || window.event;
+    e = e || env.root.event;
     var wrapped = evt.createEvent(e);
     evt.trigger.call(this, normalize(wrapped));
 }

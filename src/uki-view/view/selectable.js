@@ -105,7 +105,7 @@ Selectable._toggleSelection = function(p) {
 /** ---------- Selection Events -------------- **/
 
 Selectable.keyPressEvent = function() {
-    var useKeyPress = window.opera || (/mozilla/i.test(env.ua) && !(/(compatible|webkit)/i).test(env.ua));
+    var useKeyPress = evn.root.opera || (/mozilla/i.test(env.ua) && !(/(compatible|webkit)/i).test(env.ua));
     return useKeyPress ? 'keypress' : 'keydown';
 };
 
