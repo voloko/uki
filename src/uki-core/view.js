@@ -14,12 +14,12 @@ module.exports = {
         delete registry[view.dom()[env.expando]];
     },
 
-    registerId: function(comp) {
-        ids[utils.prop(comp, 'id')] = comp;
+    registerId: function(view) {
+        ids[utils.prop(view, 'id')] = view;
     },
     
-    unregisterId: function(comp) {
-        delete ids[utils.prop(comp, 'id')];
+    unregisterId: function(view) {
+        delete ids[utils.prop(view, 'id')];
     },
     
     byId: function(id) {

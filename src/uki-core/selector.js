@@ -37,22 +37,22 @@ var utils = require('./utils'),
         }
     },
     reducers = {
-        TYPE: function(comp, match) {
+        TYPE: function(view, match) {
             var expected = match[1];
             if (expected == '*') { return true; }
-            var typeName = utils.prop(comp, 'typeName');
+            var typeName = utils.prop(view, 'typeName');
             return typeName && typeName.length >= expected.length &&
                 ('.' + typeName).indexOf('.' + expected) ==
                     (typeName.length - expected.length);
         },
 
-        INST: function(comp, match) {
+        INST: function(view, match) {
             var obj = utils.path2obj(match[1]);
-            return obj && (comp instanceof obj);
+            return obj && (view instanceof obj);
         },
 
-        PROP: function(comp, match) {
-            var result = utils.prop(comp, match[1]),
+        PROP: function(view, match) {
+            var result = utils.prop(view, match[1]),
                 value = result + '',
                 type = match[2],
                 check = match[4];
@@ -68,11 +68,11 @@ var utils = require('./utils'),
                    false;
         },
 
-        ID: function(comp, match) {
-            return reducers.PROP(comp, ['', 'id', '=', '', match[1]]);
+        ID: function(view, match) {
+            return reducers.PROP(view, ['', 'id', '=', '', match[1]]);
         },
 
-        POS: function(comp, match, i, array) {
+        POS: function(view, match, i, array) {
             var filter = posFilters[match[1]];
             return filter ? filter(i, match, array) : false;
         }
@@ -113,9 +113,9 @@ function nextViews(view) {
     return view.parent().childViews().slice((view._viewIndex || 0) + 1);
 }
 
-function recChildren(comps) {
-    return flatten(utils.map(comps, function(comp) {
-        return [comp].concat(recChildren(utils.prop(comp, 'childViews')));
+function recChildren(views) {
+    return flatten(utils.map(views, function(view) {
+        return [view].concat(recChildren(utils.prop(view, 'childViews')));
     }));
 }
 
@@ -187,8 +187,8 @@ var Selector = {
                 if (!found && (match = exprItem.match(row.regexp))) {
                 /*jsl:end*/
                     found = true;
-                    context = utils.filter(context, function(comp, index) {
-                        return reducers[row.name](comp, match, index, context);
+                    context = utils.filter(context, function(view, index) {
+                        return reducers[row.name](view, match, index, context);
                     });
                     exprItem = exprItem.replace(row.regexp, '');
                     return false;

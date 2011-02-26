@@ -50,10 +50,10 @@ function createSingle(mlRow) {
     return result;
 }
 
-function copyAttrs(comp, mlRow) {
+function copyAttrs(view, mlRow) {
     utils.forEach(mlRow, function(value, name) {
         if (name == 'view' || name == 'type' || name == 'init') { return; }
-        utils.prop(comp, name, value);
+        utils.prop(view, name, value);
     });
-    return comp;
+    return view;
 }
