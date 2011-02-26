@@ -18,15 +18,19 @@ function updateImageOnly () {
 }
 
 proto.html = proto.label = function(value) {
-    if (value === undefined) return this._text.innerHTML;
+    if (value === undefined) {
+        return this._text.innerHTML;
+    }
     this._text.innerHTML = value;
     updateImageOnly.call(this);
     return this;
 };
 
 proto.disabled = function(state) {
-    if (state === undefined) return this._dom.disabled;
-    this._dom.disabled = state ? 'disabled' : '';
+    if (state === undefined) {
+        return this.dom().disabled;
+    }
+    this.dom().disabled = state ? 'disabled' : '';
     this.toggleClass('uki-button_disabled', state);
     return this;
 };

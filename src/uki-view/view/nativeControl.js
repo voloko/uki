@@ -5,7 +5,7 @@ var fun   = require('uki-core/function'),
     dom   = require('uki-core/dom'),
     env   = require('uki-core/env'),
     evt   = require('uki-core/event'),
-    
+
     Binding   = require('uki-core/binding').Binding,
     Focusable = require('./focusable').Focusable,
     Base      = require('uki-core/view/base').Base;
@@ -93,7 +93,7 @@ textProto.typeName = 'nativeControl.Text';
 textProto._createDom = function(initArgs) {
     this._input = dom.createElement('input', { className: 'uki-nc-text__input', type: 'text' });
     this._dom = dom.createElement(initArgs.tagName || 'span', { className: 'uki-nc-text' });
-    this._dom.appendChild(this._input);
+    this.dom().appendChild(this._input);
 };
 
 fun.addProp(textProto, 'placeholder', function(v) {
@@ -112,7 +112,7 @@ textProto.resized = function() {
     this._updatePlaceholderHeight();
     // manual resize box-sizing: border-box for ie 6,7
     if (ieResize) {
-        this._input.style.width = this._dom.offsetWidth - 6;
+        this._input.style.width = this.dom().offsetWidth - 6;
     }
 };
 
@@ -121,7 +121,7 @@ textProto._initPlaceholder = function() {
     this._initedPlaceholder = true;
     this.addClass('uki-nc-text_with-placeholder');
     this._placeholderDom = dom.createElement('span', { className: 'uki-nc-text__placholder' });
-    this._dom.insertBefore(this._placeholderDom, this._dom.firstChild);
+    this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
     evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
         this.focus();
     }, this));

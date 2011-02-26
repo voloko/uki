@@ -63,9 +63,9 @@ proto.text = function(v) {
 * @returns {string|view.Base} current id or self
 */
 proto.id = function(id) {
-    if (id === undefined) { return this._dom.id; }
-    if (this._dom.id) { view.unregisterId(this); }
-    this._dom.id = id;
+    if (id === undefined) { return this.dom().id; }
+    if (this.dom().id) { view.unregisterId(this); }
+    this.dom().id = id;
     view.registerId(this);
     return this;
 };
@@ -205,11 +205,11 @@ proto._applyPosToStyle = function(pos, style) {
 */
 proto.visible = function(state) {
     if (state === undefined) {
-        return this._dom.style.display != 'none';
+        return this.dom().style.display != 'none';
     }
 
     var origState = this.visible();
-    this._dom.style.display = state ? '' : 'none';
+    this.dom().style.display = state ? '' : 'none';
 
     // if we change from invis to vis, and we have dom, and we're attached
     // redraw

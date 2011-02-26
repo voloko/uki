@@ -11,7 +11,7 @@ var Attachment = fun.newClass(Container, {
 
     _setup: function(initArgs) {
         this._dom = initArgs.dom;
-        dom.addClass(this._dom, 'uki-attachment');
+        dom.addClass(this.dom(), 'uki-attachment');
         Container.prototype._setup.call(this, initArgs);
     },
 
