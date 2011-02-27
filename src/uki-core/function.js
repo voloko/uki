@@ -78,8 +78,7 @@ fun.bindOnce = function(fn, context) {
  *
  * @param {object=} superClass If superClass has prototype "real" prototype
  *                             base inheritance is used, otherwise superClass
- *                             properties are simply copied to newClass
- *                             prototype
+ *                             is treated as mixin
  * @param {Array.<object>=} mixins
  * @param {object} constructor Constructor function or an object with class
  *                             methods and init function as constructor

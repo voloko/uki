@@ -8,46 +8,45 @@ var fun   = require('uki-core/function'),
     Container = require('uki-core/view/container').Container;
 
 
-var Flow = fun.newClass(Container, {}),
-    proto = Flow.prototype;
+var Flow = fun.newClass(Container, {
+    typeName: 'Flow',
 
-proto.typeName = 'Flow';
+    spacing: view.newClassMapProp({
+        none: 'uki-flow_spacing-none',
+        small: 'uki-flow_spacing-small',
+        medium: 'uki-flow_spacing-medium',
+        large: 'uki-flow_spacing-large'
+    }),
 
-proto.spacing = view.newClassMapProp({
-    none: 'uki-flow_spacing-none',
-    small: 'uki-flow_spacing-small',
-    medium: 'uki-flow_spacing-medium',
-    large: 'uki-flow_spacing-large'
+    horizontal: view.newToggleClassProp('uki-flow_horizontal'),
+
+    _createDom: function() {
+        this._dom = dom.createElement('ul', {
+            className: 'uki-flow uki-flow_spacing-small'
+        });
+    },
+
+    /* Wrap children in lis */
+    _removeChildFromDom: function(child) {
+        this.dom().removeChild(child.dom().parentNode);
+    },
+
+    _appendChildToDom: function(child) {
+        var flowClass = utils.prop(child, 'flowRowClass');
+        var li = dom.createElement('li', {
+            className: 'uki-flow-item' + (flowClass ? ' ' + flowClass : '')
+        });
+        li.appendChild(child.dom());
+        this.dom().appendChild(li);
+    },
+
+    _insertBeforeInDom: function(child, beforeChild) {
+        this.dom().insertBefore(
+            child.dom().parentNode,
+            beforeChild.dom().parentNode
+        );
+    }
 });
-
-proto.horizontal = view.newToggleClassProp('uki-flow_horizontal');
-
-proto._createDom = function() {
-    this._dom = dom.createElement('ul', {
-        className: 'uki-flow uki-flow_spacing-small'
-    });
-};
-
-/* Wrap children in lis */
-proto._removeChildFromDom = function(child) {
-    this.dom().removeChild(child.dom().parentNode);
-};
-
-proto._appendChildToDom = function(child) {
-    var flowClass = utils.prop(child, 'flowRowClass');
-    var li = dom.createElement('li', {
-        className: 'uki-flow-item' + (flowClass ? ' ' + flowClass : '')
-    });
-    li.appendChild(child.dom());
-    this.dom().appendChild(li);
-};
-
-proto._insertBeforeInDom = function(child, beforeChild) {
-    this.dom().insertBefore(
-        child.dom().parentNode,
-        beforeChild.dom().parentNode
-    );
-};
 
 
 exports.Flow = Flow;

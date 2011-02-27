@@ -11,15 +11,15 @@ uki([
     
     {
         view: 'Button', pos: 'l:50% t:40px w:200px ml:-100px',
-        text: 'Normal Button', tabIndex: 1
+        label: 'Normal Button', tabIndex: 1
     },
     {
         view: 'Button', pos: 'l:50% t:75px w:200px ml:-100px',
-        text: 'Confirm Button', tabIndex: 1, confirm: true
+        label: 'Confirm Button', tabIndex: 1, confirm: true
     },
     {
         view: 'Button', pos: 'l:50% t:110px w:200px ml:-100px',
-        text: 'With Icon', tabIndex: 1, iconSrc: './settings.png'
+        label: 'With Icon', tabIndex: 1, iconSrc: './settings.png'
     },
     {
         view: 'Button', pos: 'l:50% t:145px w:40px ml:-20px',
@@ -28,16 +28,16 @@ uki([
     
     {
         view: 'Button', pos: 'l:50% t:200px w:200px ml:-100px',
-        text: 'Disabled Button', tabIndex: 1, disabled: true
+        label: 'Disabled Button', tabIndex: 1, disabled: true
     },
     {
         view: 'Button', pos: 'l:50% t:235px w:200px ml:-100px',
-        text: 'Disabled Confirm Button', tabIndex: 1, confirm: true,
+        label: 'Disabled Confirm Button', tabIndex: 1, confirm: true,
         disabled: true
     },
     {
         view: 'Button', pos: 'l:50% t:270px w:200px ml:-100px',
-        text: 'Disabled With Icon', tabIndex: 1, iconSrc: './settings.png',
+        label: 'Disabled With Icon', tabIndex: 1, iconSrc: './settings.png',
         disabled: true
     },
     {

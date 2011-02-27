@@ -10,8 +10,10 @@ requireCss('./binding.css');
 var uki = require('uki'),
     Observable = uki.Observable;
 
-var Person = uki.newClass(Observable, {});
-Observable.addProps(Person.prototype, ['name', 'age']);
+var Person = uki.newClass(Observable, {
+    name: Observable.newProp('name'),
+    age: Observable.newProp('age')
+});
 
 global.bob = new Person();
 bob.name('Bob').age(27);

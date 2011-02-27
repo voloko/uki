@@ -6,138 +6,137 @@ var view  = require('../view'),
 
 /**
  * @class
- * @augments view.Base
- * @name view.Container
+ * @augments Base
+ * @name Container
  */
-view.Container = exports.Container = fun.newClass(Base, {});
+var Container = fun.newClass(Base, {
+    typeName: 'Container',
 
-var proto = exports.Container.prototype;
+    _setup: function(initArgs) {
+        Base.prototype._setup.call(this, initArgs);
+        this._childViews = [];
+    },
 
-proto.typeName = 'Container';
+    destruct: function() {
+        this.clear(true);
+        Base.destruct.call(this);
+    },
 
-/** @private */
-proto._setup = function(initArgs) {
-    Base.prototype._setup.call(this, initArgs);
-    this._childViews = [];
-};
+    resized: function() {
+        this._resizeSelf();
+        this._resizeChildViews();
+    },
 
-proto.destruct = function() {
-    this.clear(true);
-    Base.destruct.call(this);
-};
+    _resizeSelf: fun.FS,
 
-proto.resized = function() {
-    this._resizeSelf();
-    this._resizeChildViews();
-};
+    _resizeChildViews: function() {
+        utils.forEach(this.childViews(), function(view) {
+            // do not resize invisible views, save time
+            view.visible() && view.resized();
+        });
+    },
 
-proto._resizeSelf = fun.FS;
+    clear: function(destruct) {
+        utils.forEach(this.childViews(), function(child) {
+            this.removeChild(child);
+            if (destruct !== false) child.destruct();
+        }, this);
+    },
 
-proto._resizeChildViews = function() {
-    utils.forEach(this.childViews(), function(view) {
-        // do not resize invisible views, save time
-        view.visible() && view.resized();
-    });
-};
+    /**
+     * Sets or retrieves view child view.
+     * @param anything build can parse
+     *
+     * Note: if setting on view with child views, all child view will be removed
+     */
+    childViews: function(val, destruct/*=true*/) {
+        if (val === undefined) return this._childViews;
+        this.clear(destruct);
+        require('../builder').build(val).forEach(function(child) {
+            this.appendChild(child);
+        }, this);
+        return this;
+    },
 
-proto.clear = function(destruct) {
-    utils.forEach(this.childViews(), function(child) {
-        this.removeChild(child);
-        if (destruct !== false) child.destruct();
-    }, this);
-};
+    firstChild: function() {
+        return this.childViews()[0];
+    },
 
-/**
- * Sets or retrieves view child view.
- * @param anything build can parse
- *
- * Note: if setting on view with child views, all child view will be removed
- */
-proto.childViews = function(val, destruct/*=true*/) {
-    if (val === undefined) return this._childViews;
-    this.clear(destruct);
-    require('../builder').build(val).forEach(function(child) {
-        this.appendChild(child);
-    }, this);
-    return this;
-};
+    lastChild: function() {
+        return this.childViews()[this.childViews().length - 1];
+    },
 
-proto.firstChild = function() {
-    return this.childViews()[0];
-};
+    /**
+     * Remove particular child
+     */
+    removeChild: function(child) {
+        child.parent(null);
 
-proto.lastChild = function() {
-    return this.childViews()[this.childViews().length - 1];
-};
+        var index = child._viewIndex,
+            i, l;
+        for (i = index+1, l = this._childViews.length; i < l; i++) {
+            this._childViews[i]._viewIndex--;
+        };
+        this._childViews = utils.without(this._childViews, child);
+        this._removeChildFromDom(child);
+        this._childrenChanged();
+        return this;
+    },
 
-/**
- * Remove particular child
- */
-proto.removeChild = function(child) {
-    child.parent(null);
+    _removeChildFromDom: function(child) {
+        dom.removeElement(child.dom());
+    },
 
-    var index = child._viewIndex,
-        i, l;
-    for (i = index+1, l = this._childViews.length; i < l; i++) {
-        this._childViews[i]._viewIndex--;
-    };
-    this._childViews = utils.without(this._childViews, child);
-    this._removeChildFromDom(child);
-    this._childrenChanged();
-    return this;
-};
+    /**
+     * Adds a child.
+     */
+    appendChild: function(child) {
+        child._viewIndex = this._childViews.length;
+        this._childViews.push(child);
+        child.parent(this);
+        this._appendChildToDom(child);
+        this._childrenChanged();
+        return this;
+    },
 
-proto._removeChildFromDom = function(child) {
-    dom.removeElement(child.dom());
-};
+    _appendChildToDom: function(child) {
+        this.dom().appendChild(child.dom());
+    },
 
-/**
- * Adds a child.
- */
-proto.appendChild = function(child) {
-    child._viewIndex = this._childViews.length;
-    this._childViews.push(child);
-    child.parent(this);
-    this._appendChildToDom(child);
-    this._childrenChanged();
-    return this;
-};
+    /**
+     * Insert child before target beforeChild
+     * @param {Base} child Child to insert
+     * @param {Base} beforeChild Existent child before which we should insert
+     */
+    insertBefore: function(child, beforeChild) {
+        var i, l;
+        child._viewIndex = beforeChild._viewIndex;
+        for (i = beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
+            this._childViews[i]._viewIndex++;
+        };
+        this._childViews.splice(beforeChild._viewIndex-1, 0, child);
+        child.parent(this);
+        this._insertBeforeInDom(child, beforeChild);
+        this._childrenChanged();
+        return this;
+    },
 
-proto._appendChildToDom = function(child) {
-    this.dom().appendChild(child.dom());
-};
+    _insertBeforeInDom: function(child, beforeChild) {
+        this.dom().insertBefore(child.dom(), beforeChild.dom());
+    },
 
-/**
- * Insert child before target beforeChild
- * @param {view.Base} child Child to insert
- * @param {view.Base} beforeChild Existent child before which we should insert
- */
-proto.insertBefore = function(child, beforeChild) {
-    var i, l;
-    child._viewIndex = beforeChild._viewIndex;
-    for (i = beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
-        this._childViews[i]._viewIndex++;
-    };
-    this._childViews.splice(beforeChild._viewIndex-1, 0, child);
-    child.parent(this);
-    this._insertBeforeInDom(child, beforeChild);
-    this._childrenChanged();
-    return this;
-};
+    _childrenChanged: function() {
+        // nice hook
+    },
 
-proto._insertBeforeInDom = function(child, beforeChild) {
-    this.dom().insertBefore(child.dom(), beforeChild.dom());
-};
+    /**
+     * Should return a dom node for a child.
+     * Child should append itself to this dom node
+     */
+    domForChild: function(child) {
+        return this.dom();
+    }
+});
 
-proto._childrenChanged = function() {
-    // nice hook
-};
 
-/**
- * Should return a dom node for a child.
- * Child should append itself to this dom node
- */
-proto.domForChild = function(child) {
-    return this.dom();
-};
-/**#@-*/
+exports.Container = Container;
