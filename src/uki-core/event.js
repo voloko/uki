@@ -2,12 +2,12 @@ var utils = require('./utils'),
     fun   = require('./function'),
     dom   = require('./dom'),
     env   = require('./env'),
+
     expando = env.expando;
 
-// base class
 function EventWrapper () {}
 
-EventWrapper.prototype = {
+var EventMethods = {
     targetView: function() {
         return require('./view').closest(this.target);
     },
@@ -37,6 +37,10 @@ EventWrapper.prototype = {
     isDefaultPrevented: fun.FF,
     isPropagationStopped: fun.FF
 };
+
+function DomEventWrapper() {}
+
+utils.extend(DomEventWrapper.prototype, EventMethods);
 
 
 function normalize(e) {
@@ -106,28 +110,47 @@ var listeners = {};
 */
 var domHandlers = {};
 
+var eventProps = "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data dataTransfer detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement type view wheelDelta which".split(" ");
+
+
 /**
 * Handle all listener calls. Should be called with dom element as this
 */
 function domHandler(e) {
     e = e || env.root.event;
-    var wrapped = evt.createEvent(e);
+    var wrapped = wrapDomEvent(e);
     evt.trigger.call(this, normalize(wrapped));
 }
 
-function createEvent(baseEvent, options) {
-    e = new EventWrapper();
+function wrapDomEvent(baseEvent) {
+    e = new DomEventWrapper();
     e.baseEvent = baseEvent;
-    // this is rather expensive, unfortunately it's impossible
-    // to use prototype chain instead of simple inheritance, since
-    // firefox uses read only properties on event, thus preventing
-    // their modification even in descendants
-    for (var i in baseEvent) e[i] = e[i] || baseEvent[i];
+    // This is expensive. I'd rather use much faster createEvent() here.
+    // Unfortunately firefox uses read only properties on native events,
+    // thus preventing modification even in descendants
+    for (var i = eventProps.length, prop; i; i--) {
+        prop = eventProps[i];
+        e[prop] = baseEvent[prop];
+    }
+    return e;
+}
+
+function createEvent(baseEvent, options) {
+    // Poor man Object.create() here.
+    // It's generally cheaper to build a prototype chain for a
+    // dynamicaly created event object than to copy all properties
+    // from base event.
+    EventWrapper.prototype = baseEvent;
+    e = new EventWrapper();
+    utils.extend(e.prototype, EventMethods);
+    e.baseEvent = baseEvent;
     utils.extend(e, options);
     return e;
 }
 
 var evt = module.exports = {
+
+    wrapDomEvent: wrapDomEvent,
 
     createEvent: createEvent,
 
