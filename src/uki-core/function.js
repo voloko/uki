@@ -37,80 +37,89 @@ fun.bindOnce = function(fn, context) {
  * Creates a new class inherited from base classes.
  * Init function is used as constructor
  * @example
- *   baseClass = fun.newClass({
- *      init: function() { this.x = 3 }
- *   });
+ *   var BaseClass = fun.newClass(function() { this.x = 3 });
+ *   // same as
+ *   // var BaseClass = function() { this.x = 3 };
  *
- *   childClass = fun.newClass(baseClass, {
+ *   // extend baseClass
+ *   var ChildClass = fun.newClass(baseClass, {
  *      getSqrt: function() { return this.x*this.x }
  *   });
  *
- *   someMixin = {
+ *   var Mixin = {
  *      happines: function() {
  *          return 'happines';
  *      }
  *   }
  *
- *   childNinja = fun.newClass(baseClass, someMixin,
- *      function(STATIC, Base, Mixin) {
+ *   var ChildNinja = fun.newClass(BaseClass, Mixin, {
  *
- *      this.init = function() {
- *          Base.init.call(this);
- *      };
+ *      // use init as a constructor
+ *      init: function() {
+ *          Base.call(this);
+ *      },
  *
- *      this.happines = function() {
+ *      happines: function() {
  *          return 'Ninja ' + Mixin.happines.call(this);
- *      }
+ *      },
  *
- *      this.publicMethod = function() {
+ *      publicMethod: function() {
  *          // do some public work
  *          privateMethod.call(this);
  *          return this.happines();
- *      };
- *
- *      function privateMethod() {
- *          // do some private stuff
  *      }
  *   });
+ *
+ *   // private ninja method
+ *   function privateMethod() {
+ *       // do some private stuff
+ *   }
+ *
  *
  * @param {object=} superClass If superClass has prototype "real" prototype
  *                             base inheritance is used, otherwise superClass
  *                             properties are simply copied to newClass
  *                             prototype
  * @param {Array.<object>=} mixins
- * @param {object} methods
+ * @param {object} constructor Constructor function or an object with class
+ *                             methods and init function as constructor
+ *
  * @returns Describe what it returns
  */
-fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], methods */) {
-    var klass = function() {
-            this.init.apply(this, arguments);
-        },
-        i, definition, definitionArgs = [klass], base,
-        length = arguments.length;
+fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], constructor */) {
+    var i,
+        length = arguments.length,
+        first = arguments[0],
+        last = arguments[length - 1],
+        klass = utils.isFunction(last) ? last : last.init,
+        baseClass = length > 1 && first.prototype && first;
 
-    for (i = 0; i < length; i++) {
-        base = arguments[i];
-        if (i === 0 && length > 1 && base.prototype) {
-            // real inheritance for the first superclass
-            inheritance.prototype = base.prototype;
-            klass.prototype = new inheritance();
-            definitionArgs.push(inheritance.prototype);
-        } else if (utils.isFunction(base)) {
-            // if function provided instead of {}
-            definition = {};
-            base.apply(definition, definitionArgs);
-            utils.extend(klass.prototype, definition);
-            definitionArgs.push(definition);
+    // if nothing was provided create an empty constructor
+    // calling base class if available
+    if (!klass) {
+        if (baseClass) {
+            klass = function() { baseClass.apply(this, arguments); };
         } else {
-            // just a plain simple mixin
-            utils.extend(klass.prototype, base);
-            definitionArgs.push(base);
+            klass = function() {};
         }
+    }
 
+    // real inheritance for the first superclass
+    if (baseClass) {
+        inheritance.prototype = baseClass.prototype;
+        klass.prototype = new inheritance();
     }
-    if (!klass.prototype.init) {
-        klass.prototype.init = function() {};
+
+    // mixins
+    for (i = baseClass ? 1 : 0; i < length - 1; i++) {
+        utils.extend(klass.prototype, arguments[i]);
     }
+
+    // if class description was provides
+    if (!utils.isFunction(last)) {
+        utils.extend(klass.prototype, last);
+    }
+
     return klass;
 };
 

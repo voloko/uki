@@ -1,24 +1,22 @@
 var view  = require('../view'),
     utils = require('../utils'),
     fun   = require('../function'),
-    view  = require('../view'),
     env   = require('../env'),
     dom   = require('../dom'),
     evt   = require('../event');
 
-var Base = view.Base = exports.Base = fun.newClass({});
 
-var proto = Base.prototype;
-
-proto.typeName = 'Base';
-
-proto.init = function(initArgs) {
+function Base(initArgs) {
     initArgs = initArgs || {};
     this._setup(initArgs);
     this._createDom(initArgs);
     this.dom()[env.expando] = this.dom()[env.expando] || env.guid++;
     view.register(this);
-};
+}
+
+var proto = Base.prototype;
+
+proto.typeName = 'Base';
 
 proto.destruct = function() {
     view.unregisterId(this);
@@ -274,3 +272,6 @@ proto.clientRect = function(ignoreScroll) {
 proto.childViews = function() {
     return [];
 };
+
+
+exports.Base = Base;

@@ -1,10 +1,12 @@
 requireCss('./flow/flow.css');
 
-var fun       = require('uki-core/function'),
-    utils     = require('uki-core/utils'),
-    view      = require('uki-core/view'),
-    dom       = require('uki-core/dom'),
+var fun   = require('uki-core/function'),
+    utils = require('uki-core/utils'),
+    view  = require('uki-core/view'),
+    dom   = require('uki-core/dom'),
+
     Container = require('uki-core/view/container').Container;
+
 
 var Flow = fun.newClass(Container, {}),
     proto = Flow.prototype;
@@ -46,5 +48,6 @@ proto._insertBeforeInDom = function(child, beforeChild) {
         beforeChild.dom().parentNode
     );
 };
+
 
 exports.Flow = Flow;

@@ -57,4 +57,5 @@ Focusable.hasFocus = function() {
 
 fun.addProp(Focusable, 'focusedClass');
 
+
 exports.Focusable = Focusable;

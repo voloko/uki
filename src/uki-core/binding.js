@@ -1,8 +1,8 @@
-var fun = require('./function'),
+var fun   = require('./function'),
     utils = require('./utils');
 
 
-exports.Binding = fun.newClass({
+var Binding = fun.newClass({
     view: null,
     model: null,
     modelProp: 'value',
@@ -59,3 +59,6 @@ exports.Binding = fun.newClass({
         }
     }
 });
+
+
+exports.Binding = Binding;

@@ -1,10 +1,12 @@
-var Container = require('./view/container.js').Container,
-    after     = require('./after').after,
-    utils     = require('./utils'),
-    env       = require('./env'),
-    evt       = require('./event'),
-    dom       = require('./dom'),
-    fun       = require('./function');
+var after = require('./after').after,
+    utils = require('./utils'),
+    env   = require('./env'),
+    evt   = require('./event'),
+    dom   = require('./dom'),
+    fun   = require('./function'),
+
+    Container = require('./view/container.js').Container;
+
 
 var Attachment = fun.newClass(Container, {
     typeName: 'Attachment',
@@ -67,5 +69,6 @@ function register(a) {
 
     return (instances[id] = a);
 }
+
 
 exports.Attachment = Attachment;

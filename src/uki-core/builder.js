@@ -1,6 +1,9 @@
 var utils = require('./utils'),
+
     Collection = require('./collection').Collection;
 
+
+var viewNamespaces = [global];
 /**
  * Creates view tree from JSON-like markup
  *
@@ -9,11 +12,9 @@ var utils = require('./utils'),
  * @param {object} ml JSON-like markup
  * @returns {view.Collection} collection of created elements
  */
-exports.build = function(ml) {
+function build(ml) {
     return new Collection(createMulti((ml.length === undefined) ? [ml] : ml));
 };
-
-exports.viewNamespaces = [global];
 
 function createMulti(ml) {
     return utils.map(ml, function(mlRow) { return createSingle(mlRow); });
@@ -57,3 +58,8 @@ function copyAttrs(view, mlRow) {
     });
     return view;
 }
+
+
+exports.build = build;
+exports.viewNamespaces = viewNamespaces;
+

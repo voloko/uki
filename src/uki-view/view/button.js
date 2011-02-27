@@ -1,13 +1,15 @@
+requireCss('./button/button.css');
+
 var fun  = require('uki-core/function'),
     view = require('uki-core/view'),
     dom  = require('uki-core/dom'),
-    Base = require('uki-core/view/base').Base,
+
+    Base      = require('uki-core/view/base').Base,
     Focusable = require('./focusable').Focusable;
+
 
 var Button = fun.newClass(Base, Focusable, {}),
     proto = Button.prototype;
-
-requireCss('./button/button.css');
 
 proto.typeName = 'Button';
 
@@ -54,5 +56,6 @@ proto.destruct = function() {
     Focusable.destruct.call(this);
     Base.destruct.call(this);
 };
+
 
 exports.Button = Button;

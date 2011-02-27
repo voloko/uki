@@ -6,7 +6,7 @@ var fun   = require('uki-core/function'),
     evt   = require('uki-core/event'),
     dom   = require('uki-core/dom'),
     build = require('uki-core/builder').build,
-    
+
     Mustache  = require('uki-core/mustache').Mustache,
     Container = require('uki-core/view/container').Container,
     Focusable = require('./focusable').Focusable;
@@ -286,5 +286,6 @@ proto._resizeChildViews = function() {
     this._childViews[0].pos(this._leftPos()).resized();
     this._childViews[1].pos(this._rightPos()).resized();
 };
+
 
 exports.SplitPane = SplitPane;
