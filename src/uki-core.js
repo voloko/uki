@@ -44,16 +44,16 @@ function uki(val, context) {
     return builder.build(val);
 }
 
-uki.version = '0.4.0a1';
+uki.version = '0.4.0a2';
 
 // push everything into core namespace
-utils.forEach([
+utils.extend(
+    uki,
+
     env, utils, fun, dom, evt, gesture, builder, selector,
     after, observable, binding, attachment, collection,
     mustache
-], function(mod) {
-    utils.extend(uki, mod);
-});
+);
 
 
 
@@ -68,9 +68,7 @@ uki.view = view;
 builder.viewNamespaces.unshift(view);
 
 // copy views from default view namespaces into view
-utils.forEach([base, container], function(mod) {
-    utils.extend(view, mod);
-});
+utils.extend(view, base, container);
 
 // export uki
 module.exports = uki;
