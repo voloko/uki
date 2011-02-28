@@ -67,15 +67,22 @@ utils.toArray = function(arr) {
 };
 
 utils.pluck = function(array, attr) {
-    return compat.map.call(array, function(v) {
+    function prop() {
         return utils.prop(v, attr);
-    });
+    };
+    return array.map ?
+        array.map(prop) :
+        utils.map(array, prop);
 };
 
 utils.without = function(array, value) {
-    return compat.filter.call(array, function(v) {
+    function filter(v) {
         return v !== value;
-    });
+    };
+
+    return array.filter ?
+        array.filter(filter) :
+        utils.filter(array, filter);
 };
 
 /**
