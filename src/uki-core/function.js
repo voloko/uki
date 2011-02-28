@@ -171,6 +171,19 @@ fun.addProp = fun.addProps = function(proto, prop, setter) {
     }
 };
 
+function newDelegateProp(target, targetName) {
+    return function(value) {
+        var targetObj = utils.prop(this, target);
+        if (value === undefined) {
+            return targetObj ? utils.prop(targetObj, targetName) : null;
+        }
+        targetObj && utils.prop(targetObj, targetName, value);
+        return this;
+    };
+}
+
+fun.newDelegateProp = newDelegateProp;
+
 fun.delegateProp = function(proto, name, target, targetName) {
     if (utils.isArray(name)) {
         utils.forEach(name, function(n, i) {
@@ -178,37 +191,27 @@ fun.delegateProp = function(proto, name, target, targetName) {
         });
     } else {
         targetName = targetName || name;
-        var propName = '_' + name;
-
-        proto[name] = function(value) {
-            if (value === undefined) {
-                if (utils.prop(this, target)) {
-                    return utils.prop(utils.prop(this, target), targetName);
-                }
-                return this[propName];
-            }
-            if (utils.prop(this, target)) {
-                utils.prop(utils.prop(this, target), targetName, value);
-            } else {
-                this[propName] = value;
-            }
-            return this;
-        };
+        proto[name] = newDelegateProp(target, targetName);
     }
 };
+
+function newDelegateCall(target, targetName) {
+    return function() {
+        var obj = utils.prop(this, target);
+        return obj[targetName].apply(obj, arguments);
+    };
+}
+
+fun.newDelegateCall = newDelegateCall;
 
 fun.delegateCall = function(proto, name, target, targetName) {
     if (utils.isArray(name)) {
         utils.forEach(name, function(n, i) {
             fun.delegateCall(proto, n, target, targetName && targetName[i]);
         });
-        return;
     } else {
         targetName = targetName || name;
-        proto[name] = function() {
-            var obj = utils.prop(this, target);
-            return obj[targetName].apply(obj, arguments);
-        };
+        proto[name] = newDelegateCall(target, targetName);
     }
 };
 
