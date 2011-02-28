@@ -67,7 +67,7 @@ utils.toArray = function(arr) {
 };
 
 utils.pluck = function(array, attr) {
-    function prop() {
+    function prop(v) {
         return utils.prop(v, attr);
     };
     return array.map ?
