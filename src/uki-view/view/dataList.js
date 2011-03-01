@@ -24,7 +24,7 @@ var DataList = fun.newClass(Base, Focusable, Selectable, {}),
 fun.addProp(proto, 'throttle', function(v) {
     this._throttle = v;
     if (v > 0) {
-        this._visChanged = fun.trottle(this._originalVisChanged, this._throttle);
+        this._visChanged = fun.throttle(this._originalVisChanged, this._throttle);
     } else {
         this._visChanged = this._originalVisChanged;
     }

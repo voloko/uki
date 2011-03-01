@@ -119,7 +119,7 @@ fun.bindOnce = function(fn, context) {
  *
  * @returns Describe what it returns
  */
-fun.newClass = function(/* [[superClass], mixin1, mixin2, ..], constructor */) {
+fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
     var i,
         length = arguments.length,
         first = arguments[0],
@@ -195,13 +195,13 @@ fun.newProp = newProp;
  * @param {function(object)=} setter
  * @returns {function(object=):object}
  */
-fun.addProp = fun.addProps = function(proto, prop, setter) {
+fun.addProp = fun.addProps = function(source, prop, setter) {
     if (utils.isArray(prop)) {
         for (var i = 0, len = prop.length; i < len; i++) {
-            proto[prop[i]] = newProp(prop[i], setter && setter[i]);
+            source[prop[i]] = newProp(prop[i], setter && setter[i]);
         }
     } else {
-        proto[prop] = newProp(prop, setter);
+        source[prop] = newProp(prop, setter);
     }
 };
 
@@ -218,14 +218,14 @@ function newDelegateProp(target, targetName) {
 
 fun.newDelegateProp = newDelegateProp;
 
-fun.delegateProp = function(proto, name, target, targetName) {
+fun.delegateProp = function(source, name, target, targetName) {
     if (utils.isArray(name)) {
         utils.forEach(name, function(n, i) {
-            fun.delegateProp(proto, n, target, targetName && targetName[i]);
+            fun.delegateProp(source, n, target, targetName && targetName[i]);
         });
     } else {
         targetName = targetName || name;
-        proto[name] = newDelegateProp(target, targetName);
+        source[name] = newDelegateProp(target, targetName);
     }
 };
 
@@ -238,14 +238,14 @@ function newDelegateCall(target, targetName) {
 
 fun.newDelegateCall = newDelegateCall;
 
-fun.delegateCall = function(proto, name, target, targetName) {
+fun.delegateCall = function(source, name, target, targetName) {
     if (utils.isArray(name)) {
         utils.forEach(name, function(n, i) {
-            fun.delegateCall(proto, n, target, targetName && targetName[i]);
+            fun.delegateCall(source, n, target, targetName && targetName[i]);
         });
     } else {
         targetName = targetName || name;
-        proto[name] = newDelegateCall(target, targetName);
+        source[name] = newDelegateCall(target, targetName);
     }
 };
 
@@ -268,7 +268,7 @@ function timer(fn, timeout, debounce) {
     };
 }
 
-fun.trottle = function(fn, timeout) {
+fun.throttle = function(fn, timeout) {
     return timer(fn, timeout);
 };
 
