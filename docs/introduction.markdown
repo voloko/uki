@@ -68,7 +68,7 @@ the collection can be accessed using `[]`:
     var splitPanes = uki('SplitPane');     // find all split panes
 
     alert(splitPanes[0].handlePosition()); // get the handle position of the
-                                         // first split pane
+                                           // first split pane
 
 ### Manipulation
 
@@ -168,17 +168,17 @@ all the core you can use only the utility functions:
 
     var utils = require('uki-core/utils');
     var keys = utils.keys({ foo: 1, bar: 2});
-    
+
     var fun = require('uki-core/function'),
         Observable = require('uki-core/observable').Observable;
-    
+
     var Person = fun.newClass(Observable, {
         name: Observable.newProp('name'),
         age:  Observable.newProp('age')
     });
-    
+
     var build = require('uki-core/builder').build;
-    
+
     var button = build({ view: 'Button', label: 'x' });
 
 When in library mode (`require('uki-core)` or just load uki-core.js) all the
