@@ -75,13 +75,13 @@ the collection can be accessed using `[]`:
 All the properties of a view are modifiable. To modify a property pass a
 value into the property function:
 
-  uki('SplitPane')[1].handlePosition(200); // move handle to 200px
-  uki('DataTable')[0].data(newMessages);   // replace the messages in
-                                           // the table
+    uki('SplitPane')[1].handlePosition(200); // move handle to 200px
+    uki('DataTable')[0].data(newMessages);   // replace the messages in
+                                             // the table
 
 Properties are chainable. Change the label and then make the button large:
 
-  uki('Button').label('New label').large(true);
+    uki('Button').label('New label').large(true);
 
 Views also support dom-like API: `appendChild`, `insertBefore`, `removeChild`,
 `childViews`, `parentView`, `firstChild`, `lastChild`, `nextView`, `prevView`.
