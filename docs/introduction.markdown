@@ -5,6 +5,10 @@ interfaces in a meaningful way. It comes with a collection
 of views like SplitPane or DataList. It also plays nice with client side
 libraries (jQuery, prototype) and with nodejs on the server.
 
+### Compatibility
+IE7+, FF3+, Safari/Chrome latest-1, Opera 10+. Yes, no IE6 any more.
+Prototype neutral. Will not modify any native objects.
+
 ### Build interfaces
 
 Ukijs provides a simple syntax to build interfaces from view components

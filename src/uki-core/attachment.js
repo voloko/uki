@@ -1,5 +1,4 @@
-var after = require('./after').after,
-    utils = require('./utils'),
+var utils = require('./utils'),
     env   = require('./env'),
     evt   = require('./event'),
     dom   = require('./dom'),
@@ -52,14 +51,10 @@ function register(a) {
             if (!timeout) {
                 timeout = true;
                 setTimeout(function(i, len) {
-                    after.start();
-
                     timeout = false;
                     utils.forEach(instances, function(a) {
                        a.resized();
                     });
-
-                    after.stop();
                 }, 1);
             }
         });

@@ -25,7 +25,8 @@ Example:
 ### fun.bindOnce(fn, context)
 
 Special version of `fun.bind`. Guarantied to provide the same result for the
-same fn and context pair provided. Cannot bind arguments.
+same fn and context pair provided. Cannot bind arguments. If `fn` is
+already bound will just return `fn`.
 
 Useful for event handlers:
 
@@ -33,11 +34,12 @@ Useful for event handlers:
     // will unbind bound function here
     x.removeListener('click', fun.bindOnce(handler, this));
 
-Note that `fun.bindOnce` will ad `__bind_NNN` properties to the context.
+Note that `fun.bindOnce` will ad `__bind_NNN` properties to the `context`.
 
 ### fun.newClass([baseClass], [mixin, ...], fn)
 
-Creates a new class with fn as a constructor:
+Bare metal class and inheritance implementation. Creates a new class with
+fn as a constructor:
 
     var Animal = fun.newClass(function() {
         this.name = 'Rex';
@@ -70,7 +72,7 @@ case `init` property will be used as a constructor function:
             Animal.apply(this, arguments);
             this.sound = 'meow';
         },
-        
+
         makeAngry: function() {
             this.sound = 'rrrrr';
         }
@@ -175,6 +177,19 @@ equals to `name`.
 
     fun.delegateCall(Wrapper.prorotype, ['getAttribute', 'setAttribute'],
     'node');
+
+### fun.after(callback)
+
+Executes `callback` after current execution is finished. Currently using
+setTimeout. If called several times with the same `callback` will execute
+it only once.
+
+Redraw only once regardless of the number of children added:
+
+    X.prototype.appendChild = function(view) {
+        Base.prototype.appendChild.call(this, view);
+        fun.after(fun.bindOnce(this.redraw, redraw));
+    }
 
 ### fun.throttle(fn, timeout)
 

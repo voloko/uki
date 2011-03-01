@@ -15,22 +15,22 @@ var fun = exports;
 
 /**
 * Bind a function to a context and optional arguments.
-* 
+*
 * function modifyProp(prop, value) {
 *   this[prop] = value;
 * }
 * var obj = {};
-* 
-* // bind modifyFoo to obj (this == obj) 
+*
+* // bind modifyFoo to obj (this == obj)
 * // with first argument (prop) equals to 'foo'
 * var modifyFoo = fun.bind(modifyFoo, obj, 'foo');
-* 
+*
 * // obj['foo'] = 'bar'
 * modifyFoo('bar');
 * obj.bar === 'bar';
 */
 fun.bind = function(fn, context) {
-    // Optimize: 
+    // Optimize:
     // Do not transform and concat arguments array
     // if optional arguments are not provided
     var args = arrayPrototype.slice.call(arguments, 2),
@@ -249,6 +249,42 @@ fun.delegateCall = function(source, name, target, targetName) {
     }
 };
 
+
+var afterBound = {},
+    afterTimer = 0,
+    afterQueue = [];
+
+fun.after = function(callback) {
+    callback.huid = callback.huid || env.guid++;
+    if (afterBound[callback.huid]) { return; }
+    afterBound[callback.huid] = true;
+    afterQueue.push(callback);
+    if (!afterTimer) { after._startTimer(); }
+};
+
+function runAfterCallbacks() {
+    clearAfterTimer();
+    var queue = afterQueue;
+    afterQueue = [];
+    afterBound = {};
+    for (var i = 0; i < afterQueue.length; i++) {
+        queue[i]();
+    }
+};
+
+function scheduleAfterCallbacks() {
+    if (afterTimer) { return; }
+    afterTimer = setTimeout(runAfterCallbacks, 1);
+};
+
+function clearAfterTimer() {
+    if (!afterTimer) { return; }
+    clearTimeout(afterTimer);
+    afterTimer = 0;
+};
+
+
+
 function timer(fn, timeout, debounce) {
     var running;
 
@@ -278,7 +314,7 @@ fun.debounce = function(fn, timeout) {
 
 fun.defer = function(fn, timeout) {
     timeout = timeout || 0;
-    setTimeout(fn, timeout);
+    return setTimeout(fn, timeout);
 };
 
 

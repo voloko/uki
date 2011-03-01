@@ -17,9 +17,9 @@ var fun = require('./function'),
  */
 var Collection = fun.newClass({
 
-    init: function(elems) {
+    init: function(views) {
         this.length = 0;
-        arrayPrototype.push.apply(this, elems);
+        arrayPrototype.push.apply(this, views);
     },
 
     /**#@+ @memberOf Collection# */
@@ -120,9 +120,9 @@ var Collection = fun.newClass({
         return this;
     },
 
-    attach: function(target) {
+    attach: function(dom) {
         this.forEach(function(view) {
-            require('./attachment').Attachment.attach(target, view);
+            require('./attachment').Attachment.attach(dom, view);
             view.resized();
         });
         return this;

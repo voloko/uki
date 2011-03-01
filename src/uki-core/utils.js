@@ -10,34 +10,34 @@ var marked = '__marked';
 function inheritance() {}
 
 /**
- * Sets or retrieves attribute on an object.
+ * Sets or retrieves property on an object.
  *
- * If target has function with attr it will be called target[attr](value=)
- * If no function present attribute will be set/get directly:
- *   target[attr] = value or return target[attr]</p>
+ * If target has function with prop it will be called target[prop](value=)
+ * If no function present property will be set/get directly:
+ *   target[prop] = value or return target[prop]</p>
  *
  * @example
  *   utils.prop(view, 'name', 'funny') // sets name to funny on view
- *   utils.prop(view, 'id') // gets id attribute of view
+ *   utils.prop(view, 'id') // gets id property of view
  *
  * @param {object} target
- * @param {string} attr Attribute name
+ * @param {string} prop Attribute name
  * @param {object=} value Value to set
  * @returns {object} target if value is being set, retrieved value otherwise
  */
-utils.prop = function(target, attr, value, extra) {
+utils.prop = function(obj, prop, value, extra) {
     if (value !== undefined) {
-        if (target[attr] && target[attr].apply) {
-            target[attr](value, extra);
+        if (obj[prop] && obj[prop].apply) {
+            obj[prop](value, extra);
         } else {
-            target[attr] = value;
+            obj[prop] = value;
         }
-        return target;
+        return obj;
     } else {
-        if (target[attr] && target[attr].apply) {
-            return target[attr]();
+        if (obj[prop] && obj[prop].apply) {
+            return obj[prop]();
         } else {
-            return target[attr];
+            return obj[prop];
         }
     }
 };
@@ -62,13 +62,13 @@ utils.isArray = function(obj) {
     return toString.call(obj) === "[object Array]";
 };
 
-utils.toArray = function(arr) {
-    return slice.call(arr, 0);
+utils.toArray = function(array) {
+    return slice.call(array, 0);
 };
 
-utils.pluck = function(array, attr) {
+utils.pluck = function(array, prop) {
     function prop(v) {
-        return utils.prop(v, attr);
+        return utils.prop(v, prop);
     };
     return array.map ?
         array.map(prop) :

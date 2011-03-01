@@ -2,7 +2,6 @@ var utils = require('./utils'),
     fun   = require('./function'),
     dom   = require('./dom'),
     env   = require('./env'),
-    after = require('./after').after,
 
     expando = env.expando;
 
@@ -118,11 +117,9 @@ var eventProps = "altKey attrChange attrName bubbles button cancelable charCode 
 * Handle all listener calls. Should be called with dom element as this
 */
 function domHandler(e) {
-    after.start();
     e = e || env.root.event;
     var wrapped = wrapDomEvent(e);
     evt.trigger.call(this, normalize(wrapped));
-    after.stop();
 }
 
 function wrapDomEvent(baseEvent) {
