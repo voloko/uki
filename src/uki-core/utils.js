@@ -4,7 +4,7 @@ var toString = Object.prototype.toString,
     utils = exports,
     compat = require('./compat');
 
-var marked = '__uki_marked';
+var marked = '__marked';
 // dummy subclass
 /** @ignore */
 function inheritance() {}

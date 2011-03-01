@@ -80,38 +80,31 @@ var utils = require('./utils'),
     mappers = {
         "+": function(context) {
             return utils.unique(
-                utils.map(context, mapAccessor('nextView'))
+                utils.pluck(context, 'nextView')
             );
         },
 
         ">": function(context) {
             return utils.unique(flatten(
-                utils.map(context, mapAccessor('childViews'))
+                utils.pluck(context, 'childViews')
             ));
         },
 
         "": function(context) {
             return utils.unique(recChildren(flatten(
-                utils.map(context, mapAccessor('childViews'))
+                utils.pluck(context, 'childViews')
             )));
         },
 
         "~": function(context) {
             return utils.unique(flatten(
-                utils.map(context, mapAccessor('nextView'))
+                utils.map(context, function(view) {
+                    return view.parent().childViews().
+                        slice((view._viewIndex || 0) + 1);
+                })
             ));
         }
     };
-
-function mapAccessor(prop) {
-    return function(elem) {
-        return utils.prop(elem, prop);
-    };
-}
-
-function nextViews(view) {
-    return view.parent().childViews().slice((view._viewIndex || 0) + 1);
-}
 
 function recChildren(views) {
     return flatten(utils.map(views, function(view) {
@@ -120,12 +113,11 @@ function recChildren(views) {
 }
 
 function flatten(array) {
-   return utils.reduce(array, reduceFlatten, []);
+   return utils.reduce(array, function(x, e) {
+       return x.concat(e);
+   }, []);
 }
 
-function reduceFlatten(x, e) {
-   return x.concat(e);
-}
 /**#@-*/
 
 /**

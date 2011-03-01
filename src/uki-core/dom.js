@@ -1,6 +1,15 @@
 var env = require('./env'),
     utils = require('./utils');
 
+
+var trans = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;'
+};
+
 /**
  * Basic utils to work with the dom tree
  * @namespace
@@ -100,7 +109,7 @@ module.exports = {
         condition ? this.addClass(elem, className) :
             this.removeClass(elem, className);
     },
-    
+
     /**
      * Converts unsafe symbols to entities
      *
@@ -108,13 +117,6 @@ module.exports = {
      * @returns {string} escaped html
      */
     escapeHTML: function(html) {
-        var trans = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#x27;'
-        };
         return (html + '').replace(/[&<>\"\']/g, function(c) { return trans[c]; });
     }
 };

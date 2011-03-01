@@ -146,11 +146,7 @@ utils.forEach([
 ], function(i, desc) {
     proto[desc[0]] = function() {
         return new Collection(
-            utils.unique(
-                this.map(this, function(view) {
-                    return utils.prop(view, desc[1]);
-                })
-            )
+            utils.unique(utils.pluck(this, desc[1]))
         );
     };
 });

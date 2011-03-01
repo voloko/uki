@@ -164,7 +164,7 @@ function staticRequire (filePath, options) {
     
     var code = 'var global = this;';
     code    += 'function require(index) { if (!require.cache[index]) {var module = require.cache[index] = {exports: {}}; require.modules[index].call(module.exports, global, module);} return require.cache[index].exports; }\n';
-    code    += 'require.modules = []; require.cache = [];';
+    code    += 'var require_modules = require.modules = []; require.cache = [];';
     var body = jsp.parse(code)[1];
     
     if (state.requiredCssUsed) {
@@ -179,7 +179,7 @@ function staticRequire (filePath, options) {
                 ['assign', 
                     true,
                     ['sub',
-                        ['dot', ['name', 'require'], 'modules' ],
+                        ['name', 'require_modules'],
                         ['num', i]
                     ],
                     state.requiredAsts[i][1][0][1]
