@@ -1,6 +1,6 @@
 ## Utils
 
-This module provides core array, object and string utilities.
+This module provides core array, object, and string utilities.
 
 ### utils.prop(obj, prop, [value], [extra])
 
@@ -24,14 +24,14 @@ Checks if if `obj` if a native array.
 
 ### utils.toArray(array)
 
-Converts array like object to array:
+Converts array-like object to array:
 
     var args = utils.toArray(arguments);
 
 ### utils.pluck(array, prop)
 
 Extracts property `prop` from all array items. Will use `utils.prop` to
-read properties. So both function and simple properties are supported:
+read properties so both function and simple properties are supported:
 
     var id = utils.pluck(views, 'id');
     var names = utils.pluck([{name: 'Ben'}, {name: 'Bob'}], 'name');
@@ -52,13 +52,12 @@ Will try to use `array.filter` if available. If not will fallback to
 
 Iterate over all items of an `object`.
 
-If `object` is an array like thing
-(with `length`) `utils.forEach` will try to use `Array.prototype.forEach`
-or if it's not supported compat implementation using
-`for(var i = 0; i < length; i++)`.
+If `object` is array-like (with `length`) `utils.forEach` will try 
+to use `Array.prototype.forEach` or if it's not supported compat 
+implementation using `for(var i = 0; i < length; i++)`.
 
-If `object` is an actual object will iterate over all it's keys. Please
-note that keys will be checked with `hasOwnProperty`.
+If `object` is an actual object `utils.forEach` will iterate over all 
+it's keys. Please note that keys will be checked with `hasOwnProperty`.
 
 Callback will get `value` as a first parameter and `key` or `index` as second.
 It will be executed in `context` if provided.

@@ -34,12 +34,12 @@ Useful for event handlers:
     // will unbind bound function here
     x.removeListener('click', fun.bindOnce(handler, this));
 
-Note that `fun.bindOnce` will ad `__bind_NNN` properties to the `context`.
+Note that `fun.bindOnce` will add `__bind_NNN` properties to the `context`.
 
 ### fun.newClass([baseClass], [mixin, ...], fn)
 
 Bare metal class and inheritance implementation. Creates a new class with
-fn as a constructor:
+`fn` as a constructor:
 
     var Animal = fun.newClass(function() {
         this.name = 'Rex';
@@ -181,7 +181,7 @@ equals to `name`.
 ### fun.after(callback)
 
 Executes `callback` after current execution is finished. Currently using
-setTimeout. If called several times with the same `callback` will execute
+`setTimeout`. If called several times with the same `callback` will execute
 it only once.
 
 Redraw only once regardless of the number of children added:
@@ -212,12 +212,12 @@ Redraw after scrolling is finished and 42ms passed:
 
 ### fun.FF
 
-Function that returns false.
+Function that returns `false`.
 
 ### fun.FT
 
-Function that returns true.
+Function that returns `true`.
 
 ### fun.FS
 
-Function that returns this.
+Function that returns `this`.
