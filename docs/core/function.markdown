@@ -9,7 +9,7 @@ Returns a function that will call `fn` in a given `context` with given `arg1`.
 Example:
 
     function modifyProp(prop, value) {
-      this[prop] = value;
+        this[prop] = value;
     }
     var obj = {};
 
@@ -40,7 +40,7 @@ Note that `fun.bindOnce` will ad `__bind_NNN` properties to the context.
 Creates a new class with fn as a constructor:
 
     var Animal = fun.newClass(function() {
-      this.name = 'Rex';
+        this.name = 'Rex';
     });
 
 It can accept base class as a first parameter. Base class is NOT obliged
@@ -48,32 +48,32 @@ to be created using `fun.newClass`. Anything including simple
 `function` will work:
 
     var Dog = fun.newClass(Animal, function() {
-      // call the base class
-      Animal.apply(this, arguments);
-      this.sound = 'bou wou';
+        // call the base class
+        Animal.apply(this, arguments);
+        this.sound = 'bou wou';
     });
 
 `fun.newClass` accepts mixins between the base class and the constructor
 function. Mixin is just an object containing methods:
 
     var Speakable = {
-      makeSound: function() {
-        alert(this.sound)
-      }
+        makeSound: function() {
+            alert(this.sound)
+        }
     };
 
 Instead of the constructor function a description may be provided. In this
 case `init` property will be used as a constructor function:
 
     var Cat = fun.newClass(Animal, Speakable, {
-      init: function() {
-        Animal.apply(this, arguments);
-        this.sound = 'meow';
-      },
-
-      makeAngry: function() {
-        this.sound = 'rrrrr';
-      }
+        init: function() {
+            Animal.apply(this, arguments);
+            this.sound = 'meow';
+        },
+        
+        makeAngry: function() {
+            this.sound = 'rrrrr';
+        }
     });
 
     var cat = new Cat();

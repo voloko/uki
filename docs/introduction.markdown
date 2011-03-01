@@ -116,7 +116,7 @@ Listeners can also be provided inline during create:
       }
     }});
 
-Views may also provide specific events. Example:
+Views may provide specific events. Example:
 
     uki('DataList')[0].on('selection', function() {
       console.log(this.selectedIndexes());
