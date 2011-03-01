@@ -8,7 +8,7 @@
 var utils = require('./utils'),
     dom   = require('./dom');
 
-
+// this version of mustache does not support pragmas and tag change
 var Renderer = function() {};
 
 var otag = "{{",
@@ -151,7 +151,7 @@ Renderer.prototype = {
                 case "{": // the triple mustache is unescaped
                     return that.find(name, context);
                 default: // escape the value
-                    return utils.escapeHTML(that.find(name, context));
+                    return dom.escapeHTML(that.find(name, context));
             }
         };
         var lines = template.split("\n");

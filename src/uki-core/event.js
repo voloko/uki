@@ -2,6 +2,7 @@ var utils = require('./utils'),
     fun   = require('./function'),
     dom   = require('./dom'),
     env   = require('./env'),
+    after = require('./after').after,
 
     expando = env.expando;
 
@@ -117,9 +118,11 @@ var eventProps = "altKey attrChange attrName bubbles button cancelable charCode 
 * Handle all listener calls. Should be called with dom element as this
 */
 function domHandler(e) {
+    after.start();
     e = e || env.root.event;
     var wrapped = wrapDomEvent(e);
     evt.trigger.call(this, normalize(wrapped));
+    after.stop();
 }
 
 function wrapDomEvent(baseEvent) {
@@ -235,10 +238,17 @@ utils.forEach({
     mouseout: 'mouseleave'
 }, function(specialName, origName){
     function handler(e) {
-        if (!dom.contains(e.relatedTarget)) {
-            var wrapped = evt.createEvent(e, { type: specialName, simulateBubbling: true });
-            evt.trigger.call(this, wrapped);
-        }
+        var parent = e.relatedTarget;
+        try {
+            while (parent && parent !== this) {
+                parent = parent.parentNode;
+            }
+
+            if (parent !== this) {
+                var wrapped = createEvent(e, { type: specialName, simulateBubbling: true });
+                evt.trigger.call(this, wrapped);
+            }
+        } catch(e) { }
     }
 
     evt.special[specialName] = {

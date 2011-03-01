@@ -1,17 +1,8 @@
 var env        = require('./uki-core/env'),
     utils      = require('./uki-core/utils'),
-    fun        = require('./uki-core/function'),
-    dom        = require('./uki-core/dom'),
-    evt        = require('./uki-core/event'),
-    gesture    = require('./uki-core/gesture'),
     builder    = require('./uki-core/builder'),
     selector   = require('./uki-core/selector'),
-    after      = require('./uki-core/after'),
-    observable = require('./uki-core/observable'),
-    binding    = require('./uki-core/binding'),
-    attachment = require('./uki-core/attachment'),
-    collection = require('./uki-core/collection'),
-    mustache   = require('./uki-core/mustache');
+    collection = require('./uki-core/collection');
 
 /**
  * Shortcut access to builder, selector and
@@ -47,19 +38,22 @@ function uki(val, context) {
 uki.version = '0.4.0a2';
 
 // push everything into core namespace
-utils.extend(
-    uki,
-
-    env, utils, fun, dom, evt, gesture, builder, selector,
-    after, observable, binding, attachment, collection,
-    mustache
+utils.extend(uki,
+    utils, builder, selector, collection,
+    require('./uki-core/function'),
+    require('./uki-core/dom'),
+    require('./uki-core/event'),
+    require('./uki-core/gesture'),
+    require('./uki-core/after'),
+    require('./uki-core/observable'),
+    require('./uki-core/binding'),
+    require('./uki-core/attachment'),
+    require('./uki-core/mustache')
 );
 
 
 
-var view      = require('./uki-core/view'),
-    base      = require('./uki-core/view/base'),
-    container = require('./uki-core/view/container');
+var view = require('./uki-core/view');
 
 // add view as uki.view namespace
 uki.view = view;
@@ -68,7 +62,10 @@ uki.view = view;
 builder.viewNamespaces.unshift(view);
 
 // copy views from default view namespaces into view
-utils.extend(view, base, container);
+utils.extend(view, 
+    require('./uki-core/view/base'),        
+    require('./uki-core/view/container')    
+);
 
 // export uki
 module.exports = uki;
