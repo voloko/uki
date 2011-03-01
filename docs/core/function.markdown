@@ -2,9 +2,9 @@
 
 This module provides utilities to manipulate functions and create classes
 
-### fun.build(fn, context, [arg1, ...])
+### fun.build(fn, context, [arg, ...])
 
-Returns a function that will call `fn` in a given `context` with given `arg1`.
+Returns a function that will call `fn` in a given `context` with given `arg`.
 
 Example:
 
@@ -24,7 +24,7 @@ Example:
 
 ### fun.bindOnce(fn, context)
 
-Special version of fn.bind. Guarantied to provide the same result for the
+Special version of `fun.bind`. Guarantied to provide the same result for the
 same fn and context pair provided. Cannot bind arguments.
 
 Useful for event handlers:
@@ -109,14 +109,14 @@ setter pass a function as a second parameter:
 Adds the property created using `fun.newProp` to the given `source`:
 
     var Person = fun.newClass({
-        age:  fun.newProp('age')
+        age: fun.newProp('age')
     });
 
     fun.addProp(Person.prorotype, 'name');
 
 Accepts an array of property names:
 
-  fun.addProp(Person.prorotype, ['firstName', 'lastName']);
+    fun.addProp(Person.prorotype, ['firstName', 'lastName']);
 
 ### fun.newDelegateProp(target, targetName)
 
