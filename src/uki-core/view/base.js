@@ -107,12 +107,18 @@ proto.domForEvent = function(type) {
  * @param {function()} callback
  */
 proto.addListener = function(names, callback) {
-    var wrapper = fun.bindOnce(callback, this);
-    this._eventNames || (this._eventNames = {});
-    utils.forEach(names.split(' '), function(name) {
-        this._eventNames[name] = true;
-        evt.addListener(this.domForEvent(name), name, wrapper);
-    }, this);
+    if (typeof names === 'object') {
+        utils.forEach(names, function(callback, name) {
+            this.addListener(name, callback);
+        }, this);
+    } else {
+        var wrapper = fun.bindOnce(callback, this);
+        this._eventNames || (this._eventNames = {});
+        utils.forEach(names.split(' '), function(name) {
+            this._eventNames[name] = true;
+            evt.addListener(this.domForEvent(name), name, wrapper);
+        }, this);
+    }
     return this;
 };
 

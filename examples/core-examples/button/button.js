@@ -11,7 +11,11 @@ uki([
     
     {
         view: 'Button', pos: 'l:50% t:40px w:200px ml:-100px',
-        label: 'Normal Button', tabIndex: 1
+        label: 'Normal Button', tabIndex: 1, on: {
+            click: function() {
+                alert('Inline click handler for ' + this.label());
+            }
+        }
     },
     {
         view: 'Button', pos: 'l:50% t:75px w:200px ml:-100px',
@@ -46,6 +50,10 @@ uki([
     }
     
 ]).attach();
+
+uki('Button:gt(0)').on('click', function() {
+    alert('Selector click handler for ' + this.label());
+});
 
 // Settings icon comes under http://creativecommons.org/licenses/by-sa/3.0/deed.de LICENSE
 // See http://www.softicons.com/free-icons/web-icons/dusseldorf-icons-by-pc.de/settings-icon

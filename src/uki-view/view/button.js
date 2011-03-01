@@ -57,7 +57,7 @@ var Button = fun.newClass(Base, Focusable, {
 });
 
 function updateImageOnly () {
-    this.toggleClass('uki-button_image-only', !!(this.iconSrc() && !this.html()));
+    this.toggleClass('uki-button_image-only', !!(this.iconSrc() && !this.labelHtml()));
 }
 
 

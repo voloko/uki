@@ -13,7 +13,26 @@ function inheritance() {}
 
 var fun = exports;
 
+/**
+* Bind a function to a context and optional arguments.
+* 
+* function modifyProp(prop, value) {
+*   this[prop] = value;
+* }
+* var obj = {};
+* 
+* // bind modifyFoo to obj (this == obj) 
+* // with first argument (prop) equals to 'foo'
+* var modifyFoo = fun.bind(modifyFoo, obj, 'foo');
+* 
+* // obj['foo'] = 'bar'
+* modifyFoo('bar');
+* obj.bar === 'bar';
+*/
 fun.bind = function(fn, context) {
+    // Optimize: 
+    // Do not transform and concat arguments array
+    // if optional arguments are not provided
     var args = arrayPrototype.slice.call(arguments, 2),
         result = args.length ?
             function() {
@@ -23,13 +42,28 @@ fun.bind = function(fn, context) {
             function() {
                 return fn.apply(context || this, arguments);
             };
+    // mark bound function so we can optimize later
+    result.bound = true;
     return result;
 };
 
+/**
+* Special version of bind. Guarantied to provide the same result
+* for the same fn and context pair provided. Cannot bind arguments
+*
+* Useful for event handlers:
+*   x.on('click', fun.bindOnce(handler, this));
+*   // will unbind bound function here
+*   x.removeListener('click', fun.bindOnce(handler, this));
+*/
 fun.bindOnce = function(fn, context) {
     fn.huid = fn.huid || env.guid++;
-    var bindingName = '__binding_' + fn.huid;
-    context[bindingName] = context[bindingName] || fun.bind(fn, context);
+    var bindingName = '__bind_' + fn.huid;
+    // Optimize:
+    // Do not rebind bound functions for the second time
+    // since this will not affect their behaviour
+    context[bindingName] = context[bindingName] ||
+        (fn.bound ? fn : fun.bind(fn, context));
     return context[bindingName];
 };
 
