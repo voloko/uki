@@ -200,14 +200,12 @@ var evt = module.exports = {
     },
 
     removeListener: function(el, types, listener) {
-        if (!types) {
-            types = Object.keys(listeners[id]).join(' ');
-        }
-
+        var id = el[expando];
+        if (!id || !listeners[id]) return;
+        
+        types || (types = Object.keys(listeners[id]).join(' '));
         utils.forEach(types.split(' '), function(type) {
-            var id = el[expando];
-
-            if (!id || !listeners[id] || !listeners[id][type]) return;
+            if (!listeners[id][type]) return;
 
             listeners[id][type] = listener ? utils.without(listeners[id][type], listener) : [];
 

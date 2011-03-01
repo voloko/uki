@@ -108,7 +108,9 @@ proto.domForEvent = function(type) {
  */
 proto.addListener = function(names, callback) {
     var wrapper = fun.bindOnce(callback, this);
+    this._eventNames || (this._eventNames = {});
     utils.forEach(names.split(' '), function(name) {
+        this._eventNames[name] = true;
         evt.addListener(this.domForEvent(name), name, wrapper);
     }, this);
     return this;
@@ -120,7 +122,8 @@ proto.addListener = function(names, callback) {
  * @param {function()} callback or null to remove all callbacks
  */
 proto.removeListener = function(names, callback) {
-    var wrapper = fun.bindOnce(callback, this);
+    var wrapper = callback && fun.bindOnce(callback, this);
+    names || (names = utils.keys(this._eventNames || {}).join(' '));
     utils.forEach(names.split(' '), function(name) {
         evt.removeListener(this.domForEvent(name), name, wrapper);
     }, this);

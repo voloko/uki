@@ -2,8 +2,8 @@
 Uki is a small js library that helps build complex desktop-class in
 a simple and conscious way. Now with nodejs support
 
-		uki({ view: 'Button', text: 'Click me', pos: 'l:10px t:10px w:100px' }).attach();
-		uki('Button[text^=Click]').on('click', function() { alert(this.text()); });
+  uki({ view: 'Button', text: 'Click me', pos: 'l:10px t:10px w:100px' }).attach();
+  uki('Button[text^=Click]').on('click', function() { alert(this.text()); });
 
 
 = Goals for 0.4
@@ -13,8 +13,8 @@ a simple and conscious way. Now with nodejs support
 * Data Model and Bindings in the core.
 * Use native browser layout instead of rect() + layout()
 * CommonJs require() instead of homegrown include()
-	* Use serverside/clientside js together
-	* `npm install uki-pack` should work on client side without any extra configuration
+	Use serverside/clientside js together
+	`npm install uki-pack` should work on client side without any extra configuration
 * Docs
 * Unit tests for core
 * Perf tests
