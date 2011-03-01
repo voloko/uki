@@ -8,22 +8,23 @@ var gesture = {
     cursor: null
 };
 
-var handlers = {};
+var handlers = {},
+    mark = '__draggesturebound';
 
 // add single drag set of drag events for an element
 // regardless of the number of listeners
 var addDraggestures = {
     setup: function(el) {
-        if (el.__draggesturebound) {
-            el.__draggesturebound++;
+        if (el[mark]) {
+            el[mark]++;
         } else {
-            el.__draggesturebound = 1;
+            el[mark] = 1;
             evt.on(el, 'mousedown', dragGestureStart);
         }
     },
     teardown: function(el) {
-        el.__draggesturebound--;
-        if (!el.__draggesturebound) {
+        el[mark]--;
+        if (!el[mark]) {
             evt.removeListener(el, 'mousedown', dragGestureStart);
         }
     }

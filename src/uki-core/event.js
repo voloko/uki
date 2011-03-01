@@ -243,7 +243,7 @@ utils.forEach({
 
     evt.special[specialName] = {
         setup: function(el, listener) {
-            evt.addListener(el, origName, handler);
+            evt.on(el, origName, handler);
         },
         teardown: function( el, listener ){
             evt.removeListener(el, origName, handler);

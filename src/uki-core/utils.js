@@ -199,10 +199,6 @@ utils.binarySearch = function(value, array) {
 };
 
 
-utils.firstToLower = function(string) {
-    return string.substr(0, 1).toLowerCase() + string.substr(1);
-};
-
 utils.camalize = function(string) {
     return string.replace(/[_-]\S/g, function(v) {
         return v.substr(1).toUpperCase();
@@ -247,3 +243,7 @@ utils.forEach(compat.arrayFunctions, function(name) {
 });
 
 utils.keys = compat.keys;
+
+utils.trim = function(s) {
+    return compat.trim.call(s);
+};

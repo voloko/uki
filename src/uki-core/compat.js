@@ -89,3 +89,7 @@ exports.keys = Object.keys || function(o) {
     }
     return ret;
 };
+
+exports.trim = String.prototype.trim || function(s) {
+    return s.replace(/^\s*|\s*$/g, "");
+};
