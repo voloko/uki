@@ -1,6 +1,7 @@
 requireCss('./nativeControl/nativeControl.css');
 
 var fun   = require('uki-core/function'),
+    view  = require('uki-core/view'),
     utils = require('uki-core/utils'),
     dom   = require('uki-core/dom'),
     env   = require('uki-core/env'),
@@ -17,7 +18,8 @@ var ieResize = env.ua.match(/MSIE 6|7/);
 * Base class for native control wrappers.
 * Map common dom attributes and add binding
 */
-var NativeControl = fun.newClass(Base, Focusable, {
+var NativeControl = view.newClass('NativeControl', Base, Focusable, {
+
     bindingOptions: fun.newProp('bindingOptions'),
 
     binding: fun.newProp('binding', function(val) {
@@ -49,8 +51,7 @@ fun.delegateProp(NativeControl.prototype,
 * Radio button with a label
 * build({ view: 'nativeControl.Radio', name: 'color', value: 'red', text: 'Red' })
 */
-var Radio = fun.newClass(NativeControl, {
-    typeName: 'nativeControl.Radio',
+var Radio = view.newClass('nativeControl.Radio', NativeControl, {
 
     _createDom: function(initArgs) {
         this._input = dom.createElement('input',
@@ -70,8 +71,7 @@ fun.delegateProp(Radio.prototype, 'html', '_label', 'innerHTML');
 * Checkbox with a label
 * build({ view: 'nativeControl.Checkbox', name: 'color', value: 'red', text: 'Red' })
 */
-var Checkbox = fun.newClass(NativeControl, {
-    typeName: 'nativeControl.Checkbox',
+var Checkbox = view.newClass('nativeControl.Checkbox', NativeControl, {
 
     _createDom: function(initArgs) {
         this._input = dom.createElement('input',
@@ -91,8 +91,7 @@ fun.delegateProp(Checkbox.prototype, 'html', '_label', 'innerHTML');
 * Text input
 * build({ view: 'nativeControl.Text', value: 'John Smith', placeholder: 'Name?' })
 */
-var Text = fun.newClass(NativeControl, {
-    typeName: 'nativeControl.Text',
+var Text = view.newClass('nativeControl.Text', NativeControl, {
 
     _createDom: function(initArgs) {
         this._input = dom.createElement('input',
@@ -163,8 +162,7 @@ var Text = fun.newClass(NativeControl, {
 * Native browser button
 * build({ view: 'nativeControl.Button', value: 'Work!'})
 */
-var Button = fun.newClass(NativeControl, {
-    typeName: 'nativeControl.Button',
+var Button = view.newClass('nativeControl.Button', NativeControl, {
 
     _createDom: function(initArgs) {
         this._dom = this._input = dom.createElement('input',
@@ -188,8 +186,7 @@ var Button = fun.newClass(NativeControl, {
 *   { text: 'Custom', value: '' }
 * ]})
 */
-var Select = fun.newClass(NativeControl, {
-    typeName: 'nativeControl.Select',
+var Select = view.newClass('nativeControl.Select', NativeControl, {
 
     _createDom: function(initArgs) {
         this._input = this._dom = dom.createElement('select',

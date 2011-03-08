@@ -8,8 +8,7 @@ var fun  = require('uki-core/function'),
     Focusable = require('./focusable').Focusable;
 
 
-var Button = fun.newClass(Base, Focusable, {
-    typeName: 'Button',
+var Button = view.newClass('Button', Base, Focusable, {
 
     labelHtml: function(value) {
         if (value === undefined) {

@@ -7,37 +7,30 @@ var fun  = require('uki-core/function'),
     Base = require('uki-core/view/base').Base;
 
 
-var Text = fun.newClass(Base, {
-    typeName: 'Text',
-
+var Text = view.newClass('Text', Base, {
     _createDom: function() {
         this._dom = dom.createElement('div', { className: 'uki-text' });
     }
 });
 
 
-var P = fun.newClass(Base, {
-    typeName: 'P',
-
+var P = view.newClass('P', Base, {
     _createDom: function() {
         this._dom = dom.createElement('p', { className: 'uki-text-p' });
     }
 });
 
 
-var Label = fun.newClass(Base, {
-    typeName: 'Label',
-
+var Label = view.newClass('Label', Base, {
     _createDom: function(initArgs) {
         this._dom = dom.createElement(initArgs.tagName || 'label', { className: 'uki-label' });
-    }
+    },
+    
+    'for': fun.newDelegateProp('for', 'dom')
 });
-fun.delegateProp(Label.prototype, 'for', '_dom');
 
 
-var Header = fun.newClass(Base, {
-    typeName: 'Header',
-
+var Header = view.newClass('Header', Base, {
     _createDom: function() {
         this._dom = dom.createElement('h1', { className: 'uki-header uki-header_size_medium' });
     },

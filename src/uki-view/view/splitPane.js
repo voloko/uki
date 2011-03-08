@@ -12,10 +12,8 @@ var fun   = require('uki-core/function'),
     Focusable = require('./focusable').Focusable;
 
 
-var SplitPane = fun.newClass(Container, Focusable, {}),
+var SplitPane = view.newClass('SplitPane', Container, Focusable, {}),
     proto = SplitPane.prototype;
-
-proto.typeName = 'SplitPane';
 
 proto._throttle = 0; // do not try to render more often than every Xms
 proto._handlePosition = 200;

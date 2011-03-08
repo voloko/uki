@@ -5,6 +5,7 @@ var env   = require('uki-core/env'),
     utils = require('uki-core/utils'),
     dom   = require('uki-core/dom'),
     evt   = require('uki-core/event'),
+    view  = require('uki-core/view'),
     build = require('uki-core/builder').build,
     
     Mustache   = require('./uki-core/mustache').Mustache;
@@ -13,7 +14,7 @@ var env   = require('uki-core/env'),
     Selectable = require('./selectable').Selectable;
     
 
-var DataList = fun.newClass(Base, Focusable, Selectable, {}),
+var DataList = view.newClass('DataList', Base, Focusable, Selectable, {}),
     proto = DataList.prototype;
     
 

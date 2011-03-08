@@ -8,8 +8,7 @@ var fun   = require('uki-core/function'),
     Container = require('uki-core/view/container').Container;
 
 
-var Flow = fun.newClass(Container, {
-    typeName: 'Flow',
+var Flow = view.newClass('Flow', Container, {
 
     spacing: view.newClassMapProp({
         none: 'uki-flow_spacing-none',
