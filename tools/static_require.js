@@ -39,7 +39,7 @@ var walker = pro.ast_walker(),
            if (expr[0] === 'name' && expr[1] === REQUIRE) {
                var file = resolvePath(args[0][1]);
                    
-               if (!state.required[file]) {
+               if (state.required[file] === undefined) {
                    addFileToAstList(file, true);
                }
                return [this[0], expr, [['num', state.required[file]]] ];
@@ -173,6 +173,7 @@ function staticRequire (filePath, options) {
         }).join('\n');
         body.push( ['var', [['__requiredCss', ['string', code]]]] );
     }
+
     for (var i=0; i < state.requiredCount; i++) {
         body[body.length] =
             [ 'stat', 
@@ -186,7 +187,12 @@ function staticRequire (filePath, options) {
                 ]
             ];
     };
-    body.push(['stat', ['call', ['name', 'require'], [['num', '0']]]]);
+    if (options.globalize) {
+        var name = options.globalize || 'exports';
+        body = body.concat(jsp.parse('global[' + JSON.stringify(name) + '] = require(0);')[1]);
+    } else {
+        body.push(['stat', ['call', ['name', 'require'], [['num', '0']]]]);
+    }
     
     return [ 'toplevel',
       [ [ 'stat',
@@ -204,11 +210,11 @@ exports.parse = staticRequire;
 
 exports.getAppHandler = function(title, src) {
     return function(req, res) {
-        res.send('<!DOCTYPE html><head><title>' + title + '</title>' + 
+        res.send('<!DOCTYPE html><html><head><title>' + title + '</title>' + 
             '<style>body, html { overflow: hidden; width: 100%; hieght: 100%; padding: 0; margin: 0; }</style>' + 
             '</head><body>' +
             '<script src="' + src + '"></script>' +
-        '</body>');
+        '</body></html>');
     };
 };
 
@@ -221,7 +227,10 @@ exports.getHandler = function(options) {
 exports.handle = function(req, res, options) {
     options = options || {};
     var filePath = options.filePath || (url.parse(req.url).pathname.substr(1));
-    if (!options.serverRoot) options.serverRoot = process.cwd();
+    if (!options.serverRoot) {
+        options.serverRoot = process.cwd();
+    }
+    options.globalize = req.param('globalize');
     try {
         var ast = staticRequire(filePath, options);
         if (req.param('squeeze')) {
@@ -229,11 +238,11 @@ exports.handle = function(req, res, options) {
             ast = pro.ast_squeeze(ast);
             ast = pro.ast_squeeze_more(ast);
         }
-
         var code = pro.gen_code(ast, !req.param('squeeze'));
     } catch (e) {
         require('util').error(e);
-        var code = 'alert(' + JSON.stringify(e.message + '. Current file ' + exports.state.currentPath) + ')';
+        var code = 'alert(' + JSON.stringify(e.stack + '. Current file ' + exports.state.currentPath) + ')';
+        console.log(e.stack);
     }
     res.writeHead(200, { 
         "Content-Type": 'application/javascript',
