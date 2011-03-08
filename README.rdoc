@@ -6,7 +6,7 @@ a simple and conscious way. Now with nodejs support
   uki('Button[text^=Click]').on('click', function() { alert(this.text()); });
 
 = Run locally
-Install [node and npm](https://github.com/joyent/node/wiki/Installation)
+Install {node and npm}[https://github.com/joyent/node/wiki/Installation]
   npm install ukijs
   node express.js
 
