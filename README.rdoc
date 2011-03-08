@@ -17,8 +17,8 @@ Install {node and npm}[https://github.com/joyent/node/wiki/Installation]
 * Data Model and Bindings in the core.
 * Use native browser layout instead of rect() + layout()
 * CommonJs require() instead of homegrown include()
-	Use serverside/clientside js together
-	`npm install uki-pack` should work on client side without any extra configuration
+* Use serverside/clientside js together
+* `npm install uki-pack` should work on client side without any extra configuration
 * Docs
 * Unit tests for core
 * Perf tests
