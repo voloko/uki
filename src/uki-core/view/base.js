@@ -6,17 +6,15 @@ var view  = require('../view'),
     evt   = require('../event');
 
 
-function Base(initArgs) {
+var Base = view.newClass('Base', function(initArgs) {
     initArgs = initArgs || {};
     this._setup(initArgs);
     this._createDom(initArgs);
     this.dom()[env.expando] = this.dom()[env.expando] || env.guid++;
     view.register(this);
-}
+});
 
 var proto = Base.prototype;
-
-proto.typeName = 'Base';
 
 proto.destruct = function() {
     view.unregisterId(this);

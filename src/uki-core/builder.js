@@ -62,4 +62,3 @@ function copyAttrs(view, mlRow) {
 
 exports.build = build;
 exports.viewNamespaces = viewNamespaces;
-

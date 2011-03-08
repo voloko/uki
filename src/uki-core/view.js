@@ -1,4 +1,5 @@
 var utils = require('./utils'),
+    fun   = require('./function'),
     env   = require('./env');
 
 var registry = {},
@@ -41,6 +42,16 @@ module.exports = {
             child = child.parent();
         }
         return false;
+    },
+    
+    /**
+    * Shortcut for X = fun.newClass()
+    * X.prototype.typeName = typeName
+    */
+    newClass: function(typeName) {
+        var View = fun.newClass.apply(fun, utils.toArray(arguments).slice(1));
+        View.prototype.typeName = typeName;
+        return View;
     },
 
     newToggleClassProp: function(className) {

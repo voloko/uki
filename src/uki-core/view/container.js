@@ -9,8 +9,7 @@ var view  = require('../view'),
  * @augments Base
  * @name Container
  */
-var Container = fun.newClass(Base, {
-    typeName: 'Container',
+var Container = view.newClass('Container', Base, {
 
     _setup: function(initArgs) {
         Base.prototype._setup.call(this, initArgs);
@@ -19,7 +18,7 @@ var Container = fun.newClass(Base, {
 
     destruct: function() {
         this.clear(true);
-        Base.destruct.call(this);
+        Base.prototype.destruct.call(this);
     },
 
     resized: function() {

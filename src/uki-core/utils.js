@@ -67,12 +67,12 @@ utils.toArray = function(array) {
 };
 
 utils.pluck = function(array, prop) {
-    function prop(v) {
+    function reader(v) {
         return utils.prop(v, prop);
     };
     return array.map ?
-        array.map(prop) :
-        utils.map(array, prop);
+        array.map(reader) :
+        utils.map(array, reader);
 };
 
 utils.without = function(array, value) {

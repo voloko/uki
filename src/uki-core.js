@@ -35,7 +35,7 @@ function uki(val, context) {
     return builder.build(val);
 }
 
-uki.version = '0.4.0a2';
+uki.version = '0.4.0a3';
 
 // push everything into core namespace
 utils.extend(uki,

@@ -57,13 +57,14 @@ fun.bind = function(fn, context) {
 *   x.removeListener('click', fun.bindOnce(handler, this));
 */
 fun.bindOnce = function(fn, context) {
-    fn.huid = fn.huid || env.guid++;
-    var bindingName = '__bind_' + fn.huid;
     // Optimize:
     // Do not rebind bound functions for the second time
     // since this will not affect their behaviour
-    context[bindingName] = context[bindingName] ||
-        (fn.bound ? fn : fun.bind(fn, context));
+    if (fn.bound) { return fn; }
+    
+    fn.huid = fn.huid || env.guid++;
+    var bindingName = '__bind_' + fn.huid;
+    context[bindingName] = context[bindingName] || fun.bind(fn, context);
     return context[bindingName];
 };
 
@@ -124,7 +125,7 @@ fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
         length = arguments.length,
         first = arguments[0],
         last = arguments[length - 1],
-        klass = utils.isFunction(last) ? last : last.init,
+        klass = utils.isFunction(last) ? last : last && last.init,
         baseClass = length > 1 && first.prototype && first;
 
     // if nothing was provided create an empty constructor
@@ -259,7 +260,7 @@ fun.after = function(callback) {
     if (afterBound[callback.huid]) { return; }
     afterBound[callback.huid] = true;
     afterQueue.push(callback);
-    if (!afterTimer) { after._startTimer(); }
+    scheduleAfterCallbacks();
 };
 
 function runAfterCallbacks() {
@@ -267,7 +268,7 @@ function runAfterCallbacks() {
     var queue = afterQueue;
     afterQueue = [];
     afterBound = {};
-    for (var i = 0; i < afterQueue.length; i++) {
+    for (var i = 0; i < queue.length; i++) {
         queue[i]();
     }
 };

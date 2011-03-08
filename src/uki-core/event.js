@@ -110,7 +110,7 @@ var listeners = {};
 */
 var domHandlers = {};
 
-var eventProps = "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data dataTransfer detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement type view wheelDelta which".split(" ");
+var eventProps = "altKey attrChange attrName bubbles button cancelable charCode clientX clientY clipboardData ctrlKey currentTarget data dataTransfer detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement type view wheelDelta which".split(" ");
 
 
 /**
@@ -200,7 +200,7 @@ var evt = module.exports = {
         var id = el[expando];
         if (!id || !listeners[id]) return;
         
-        types || (types = Object.keys(listeners[id]).join(' '));
+        types || (types = utils.keys(listeners[id]).join(' '));
         utils.forEach(types.split(' '), function(type) {
             if (!listeners[id][type]) return;
 
