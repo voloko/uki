@@ -1,63 +1,81 @@
-var path = require('path'),
-    sr   = require('static_require'),
+var express = require('express'),
+    path = require('path'),
+    sr   = require('./tools/static_require'),
     fs   = require('fs');
+    
+var HOST = '0.0.0.0',
+    PORT = 8000;
 
 var examplesPath = path.join(__dirname, 'examples');
 
-exports.init = function(app) {
-    app.set('views', path.join(examplesPath, 'views'));
+app = express.createServer();
+
+app.set('views', path.join(examplesPath, 'views'));
 
 
-    app.get('/perf', sr.getAppHandler('Benchmark runner', '/perf/runner.js'));
+app.get('/perf', sr.getAppHandler('Benchmark runner', '/perf/runner.js'));
 
-    app.get('/', function(req, res) {
-        res.redirect('/examples/');
+app.get('/', function(req, res) {
+    res.redirect('/examples/');
+});
+
+app.get('/examples/', function(req, res) {
+    var exampleList = listExamples(examplesPath).map(function(name) {
+        var filePath = path.join(examplesPath, name),
+            code = getExampleCode(filePath);
+
+        return {
+            path: name + '/',
+            title: extractExampleTitle(code),
+            order: extractExampleOrder(code)
+        };
+    }).filter(function(a) {
+        return a.order > 0;
+    }).sort(function(a, b) {
+        return a.order*1 - b.order*1;
     });
+    res.render('exampleList.jade', {
+        layout: false,
+        locals: { exampleList: exampleList }
+    });
+});
 
-    app.get('/examples/', function(req, res) {
-        var exampleList = listExamples(examplesPath).map(function(name) {
-            var filePath = path.join(examplesPath, name),
-                code = getExampleCode(filePath);
+app.get('/examples/:type/:example/', function(req, res) {
+    var filePath = path.join(examplesPath, req.param('type'), req.param('example')),
+        page = getExamplePage(filePath);
 
-            return {
-                path: name + '/',
-                title: extractExampleTitle(code),
-                order: extractExampleOrder(code)
-            };
-        }).filter(function(a) {
-            return a.order > 0;
-        }).sort(function(a, b) {
-            return a.order*1 - b.order*1;
-        });
-        res.render('exampleList.jade', {
+    if (page) {
+        res.send(page);
+    } else {
+        var code = getExampleCode(filePath);
+        res.render('example.jade', {
             layout: false,
-            locals: { exampleList: exampleList }
+            locals: {
+                html: extractExampleHtml(code),
+                title: extractExampleTitle(code)
+            }
         });
-    });
+    }
+});
 
-    app.get('/examples/:type/:example/', function(req, res) {
-        var filePath = path.join(examplesPath, req.param('type'), req.param('example')),
-            page = getExamplePage(filePath);
+app.get('/test/*test.js', function(req, res){
+    res.sendfile(req.url.substring(1));
+});
 
-        if (page) {
-            res.send(page);
-        } else {
-            var code = getExampleCode(filePath);
-            res.render('example.jade', {
-                layout: false,
-                locals: {
-                    html: extractExampleHtml(code),
-                    title: extractExampleTitle(code)
-                }
-            });
-        }
-    });
+app.get('/test/qunit/*', function(req, res){
+    res.sendfile(req.url.substring(1));
+});
 
-    app.get('/*.js', sr.getHandler({
-        searchPaths: [fs.realpathSync(path.join(__dirname, 'src'))]
-    }));
+app.get('/*.js', sr.getHandler({
+    searchPaths: [fs.realpathSync(path.join(__dirname, 'src'))]
+}));
 
-};
+app.get('/*', function(req, res) {
+    res.sendfile(req.param(0))
+});
+
+require('util').puts("Server at http://" + HOST + ":" + PORT + "/");
+app.listen(PORT, HOST);
 
 function getExamplePage (filePath) {
     name = path.basename(filePath);
