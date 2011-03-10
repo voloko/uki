@@ -7,8 +7,7 @@ var fun   = require('uki-core/function'),
     env   = require('uki-core/env'),
     evt   = require('uki-core/event'),
 
-    Binding   = require('uki-core/binding').Binding,
-    Focusable = require('./focusable').Focusable,
+    Focusable = require('uki-core/view/focusable').Focusable,
     Base      = require('uki-core/view/base').Base;
 
 
@@ -19,15 +18,6 @@ var ieResize = env.ua.match(/MSIE 6|7/);
 * Map common dom attributes and add binding
 */
 var NativeControl = view.newClass('NativeControl', Base, Focusable, {
-
-    bindingOptions: fun.newProp('bindingOptions'),
-
-    binding: fun.newProp('binding', function(val) {
-        if (this._binding) this._binding.destruct();
-
-        this._binding = val && new Binding(this, val.model,
-            utils.extend(this._bindingOptions, val));
-    }),
 
     domForEvent: function(type) {
         return this._input;

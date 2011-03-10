@@ -5,7 +5,7 @@ var fun  = require('uki-core/function'),
     dom  = require('uki-core/dom'),
 
     Base      = require('uki-core/view/base').Base,
-    Focusable = require('./focusable').Focusable;
+    Focusable = require('uki-core/view/focusable').Focusable;
 
 
 var Button = view.newClass('Button', Base, Focusable, {

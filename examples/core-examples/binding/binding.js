@@ -31,7 +31,10 @@ uki([
         { view: 'Container', addClass: 'form', childViews: [
             { view: 'nativeControl.Text', addClass: 'input', binding: { model: bob, modelProp: 'name' } },
             { view: 'nativeControl.Select', options: options, binding: { model: bob, modelProp: 'age' } }
-        ]}
+        ]},
+        { view: 'Button', bindings: [
+            { model: bob, modelProp: 'name', viewProp: 'label' }
+        ] }
     ]},
     { view: 'Text', addClass: 'help', text: 'Also try changin name and age props of the object "bob" in the browser JavaScript console' }
 ]).attach();

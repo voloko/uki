@@ -6,7 +6,6 @@ var view = require('./uki-core/view.js'),
 utils.extend(
     view,
     
-    require('./uki-view/view/focusable.js'),
     require('./uki-view/view/selectable.js'),
 
     require('./uki-view/view/button.js'),

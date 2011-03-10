@@ -3,10 +3,12 @@ var view  = require('../view'),
     fun   = require('../function'),
     env   = require('../env'),
     dom   = require('../dom'),
-    evt   = require('../event');
+    evt   = require('../event'),
+    
+    Bindable = require('../binding').Bindable;
 
 
-var Base = view.newClass('Base', function(initArgs) {
+var Base = view.newClass('Base', Bindable, function(initArgs) {
     initArgs = initArgs || {};
     this._setup(initArgs);
     this._createDom(initArgs);
@@ -20,6 +22,7 @@ proto.destruct = function() {
     view.unregisterId(this);
     view.unregister(this);
     this.removeListener();
+    this.bindings([]);
     this.destructed = true;
 };
 

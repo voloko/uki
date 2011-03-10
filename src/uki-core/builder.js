@@ -1,64 +1,84 @@
 var utils = require('./utils'),
+    fun   = require('./function'),
 
     Collection = require('./collection').Collection;
 
 
-var viewNamespaces = [global];
-/**
- * Creates view tree from JSON-like markup
- *
- * @function
- *
- * @param {object} ml JSON-like markup
- * @returns {view.Collection} collection of created elements
- */
-function build(ml) {
-    return new Collection(createMulti((ml.length === undefined) ? [ml] : ml));
-};
+var Builder = fun.newClass({
+    /**
+    * @constructor
+    */
+    init: function(ns) {
+        this.namespaces = ns || [global];
+        this.build = fun.bind(this.build, this);
+    },
 
-function createMulti(ml) {
-    return utils.map(ml, function(mlRow) { return createSingle(mlRow); });
-}
-
-function createSingle(mlRow) {
-    if (mlRow.typeName) {
-        return mlRow;
-    }
-
-    var C = mlRow.view,
-        initArgs = mlRow.init || {},
-        result, Obj;
-    if (utils.isFunction(C)) {
-        result = new C(initArgs);
-    } else if (typeof C === 'string') {
-        for (var i = 0, ns = exports.viewNamespaces, length = ns.length;
-            i < length; i++) {
-
-            Obj = utils.path2obj(C, ns[i]);
-            if (Obj) {
-                result = new Obj(initArgs);
-                break;
+    build: function(markup) {
+        return withBuilder(this, function() {
+            if (markup.length === undefined) {
+                markup = [markup];
             }
+            return new Collection(utils.map(markup, function(mRow) {
+                return this.buildOne(mRow);
+            }, this));
+        }, this);
+    },
+    
+    buildOne: function(mRow) {
+        // return prebuilt rows right away
+        if (mRow.typeName) { return mRow; }
+
+        var klass = mRow.view,
+            initArgs = mRow.init || {},
+            result;
+
+        if (typeof klass === 'string') {
+            klass = this.resolvePath(klass);
         }
-        if (!Obj) {
-            throw "build: Can't find view with type '" + C + "'";
+        if (!klass) {
+            throw "builder: Can't find view with type '" + mRow.view + "'";
+        } else {
+            result = new klass(initArgs);
         }
-    } else {
-        result = C;
+
+        copyAttrs(result, mRow);
+        return result;        
+    },
+    
+    resolvePath: function(path) {
+        for (var i = 0, ns = this.namespaces, length = ns.length, res; i < length; i++) {
+            res = utils.path2obj(path, ns[i]);
+            if (res) { return res; }
+        }
+        return false;
     }
+});
 
-    copyAttrs(result, mlRow);
-    return result;
-}
-
-function copyAttrs(view, mlRow) {
-    utils.forEach(mlRow, function(value, name) {
+function copyAttrs(view, mRow) {
+    utils.forEach(mRow, function(value, name) {
         if (name == 'view' || name == 'init') { return; }
         utils.prop(view, name, value);
     });
     return view;
 }
 
+var defaultBuilder;
 
-exports.build = build;
-exports.viewNamespaces = viewNamespaces;
+function setDefault(builder) {
+    exports.build = builder.build;
+    exports.namespaces = builder.namespaces;
+    defaultBuilder = builder;
+}
+
+function withBuilder(builder, callback, context) {
+    var oldBuilder = defaultBuilder;
+    setDefault(builder);
+    var result = callback.call(context || global);
+    setDefault(oldBuilder);
+    return result;
+}
+
+exports.Builder = Builder;
+exports.withBuilder = withBuilder;
+// expose defaultBuilder to everyone
+setDefault(new Builder());

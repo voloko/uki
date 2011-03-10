@@ -17,7 +17,7 @@ exports.applyCompat = function() {
     }
 };
 
-exports.indexOf = arrayPrototype.indexOf || function(searchElement, i) {
+exports.indexOf = function(searchElement, i) {
     var len = this.length;
     if (i === undefined) { i = 0; }
     if (i < 0) { i += len; }
@@ -30,7 +30,7 @@ exports.indexOf = arrayPrototype.indexOf || function(searchElement, i) {
     return -1;
 };
 
-exports.lastIndexOf = arrayPrototype.lastIndexOf || function(searchElement, i) {
+exports.lastIndexOf = function(searchElement, i) {
     var len = this.length;
     if (i === undefined) { i = len - 1; }
     if (i < 0) { i += len; }
@@ -43,7 +43,7 @@ exports.lastIndexOf = arrayPrototype.lastIndexOf || function(searchElement, i) {
     return -1;
 };
 
-exports.forEach = arrayPrototype.forEach || function(fun, context) {
+exports.forEach = function(fun, context) {
     for (var i = 0, n = this.length; i < n; i++) {
         if (i in this) {
             fun.call(context, this[i], i, this);
@@ -51,7 +51,7 @@ exports.forEach = arrayPrototype.forEach || function(fun, context) {
     }
 };
 
-exports.every = arrayPrototype.every || function(fun, context) {
+exports.every = function(fun, context) {
     for (var i = 0, n = this.length; i < n; i++) {
         if (i in this && !fun.call(context, this[i], i, this)) {
             return false;
@@ -60,7 +60,7 @@ exports.every = arrayPrototype.every || function(fun, context) {
     return true;
 };
 
-exports.some = arrayPrototype.some || function(fun, context) {
+exports.some = function(fun, context) {
     for (var i = 0, n = this.length; i < n; i++) {
         if (i in this && fun.call(context, this[i], i, this)) {
             return true;
@@ -69,7 +69,7 @@ exports.some = arrayPrototype.some || function(fun, context) {
     return false;
 };
 
-exports.map = arrayPrototype.map || function(mapper, context) {
+exports.map = function(mapper, context) {
     var other = new Array(this.length);
     for (var i = 0, n = this.length; i < n; i++) {
         if (i in this) {
@@ -79,7 +79,7 @@ exports.map = arrayPrototype.map || function(mapper, context) {
     return other;
 };
 
-exports.filter = arrayPrototype.filter || function(filter, context) {
+exports.filter = function(filter, context) {
     var other = [], v;
     for (var i = 0, n = this.length; i < n; i++) {
         if (i in this && filter.call(context, v = this[i], i, this)) {
@@ -89,7 +89,7 @@ exports.filter = arrayPrototype.filter || function(filter, context) {
     return other;
 };
 
-exports.reduce = arrayPrototype.reduce || function(fun, accumulator) {
+exports.reduce = function(fun, accumulator) {
     if (accumulator === undefined) {
         accumulator = this[0];
     }
@@ -99,7 +99,7 @@ exports.reduce = arrayPrototype.reduce || function(fun, accumulator) {
     return accumulator;
 };
 
-exports.reduceRight = arrayPrototype.reduceRight || function(fun, accumulator) {
+exports.reduceRight = function(fun, accumulator) {
     var len = this.length;
     if (accumulator === undefined) {
         accumulator = this[len - 1];
@@ -110,7 +110,7 @@ exports.reduceRight = arrayPrototype.reduceRight || function(fun, accumulator) {
     return accumulator;
 };
 
-exports.keys = Object.keys || function(o) {
+exports.keys = function(o) {
     var ret = [], p;
     for (p in o) {
         if (o.hasOwnProperty.call(p)) {
@@ -120,6 +120,6 @@ exports.keys = Object.keys || function(o) {
     return ret;
 };
 
-exports.trim = String.prototype.trim || function(s) {
+exports.trim = function(s) {
     return s.replace(/^\s*|\s*$/g, "");
 };

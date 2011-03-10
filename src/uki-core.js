@@ -7,7 +7,6 @@ var env        = require('./uki-core/env'),
 /**
  * Shortcut access to builder, selector and
  * Collection constructor
- * uki('#id') is also a shortcut for search view.byId
  *
  * @param {String|view.Base|Object|Array.<view.Base>} val
  * @param {Array.<view.Base>=} optional context for selector
@@ -18,24 +17,16 @@ var env        = require('./uki-core/env'),
  */
 function uki(val, context) {
     if (typeof val === "string") {
-
-        var m = val.match(/^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/),
-            e = m && view.byId(m[1]);
-        if (m && !context) {
-            return new collection.Collection(e ? [e] : []);
-        }
         return selector.find(val, context);
-
     }
     if (val.length === undefined) { val = [val]; }
     if (val.length > 0 && utils.isFunction(val[0].typeName)) {
         return new collection.Collection(val);
     }
-
     return builder.build(val);
 }
 
-uki.version = '0.4.0a3';
+uki.version = '0.4.0a4';
 
 // push everything into core namespace
 utils.extend(uki,
@@ -46,7 +37,7 @@ utils.extend(uki,
     require('./uki-core/gesture'),
     require('./uki-core/observable'),
     require('./uki-core/binding'),
-    require('./uki-core/attachment'),
+    require('./uki-core/attaching'),
     require('./uki-core/mustache')
 );
 
@@ -58,12 +49,13 @@ var view = require('./uki-core/view');
 uki.view = view;
 
 // register view as default search path for views
-builder.viewNamespaces.unshift(view);
+builder.namespaces.unshift(view);
 
 // copy views from default view namespaces into view
-utils.extend(view, 
-    require('./uki-core/view/base'),        
-    require('./uki-core/view/container')    
+utils.extend(view,
+    require('./uki-core/view/base'),
+    require('./uki-core/view/focusable'),
+    require('./uki-core/view/container')
 );
 
 // export uki

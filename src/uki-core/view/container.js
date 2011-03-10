@@ -24,6 +24,7 @@ var Container = view.newClass('Container', Base, {
     resized: function() {
         this._resizeSelf();
         this._resizeChildViews();
+        return this;
     },
 
     _resizeSelf: fun.FS,

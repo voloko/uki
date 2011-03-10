@@ -7,12 +7,12 @@ var utils = require('./utils'),
     Container = require('./view/container.js').Container;
 
 
-var Attachment = fun.newClass(Container, {
-    typeName: 'Attachment',
+var Attaching = fun.newClass(Container, {
+    typeName: 'Attaching',
 
     _setup: function(initArgs) {
         this._dom = initArgs.dom;
-        dom.addClass(this.dom(), 'uki-attachment');
+        dom.addClass(this.dom(), 'uki-attaching');
         Container.prototype._setup.call(this, initArgs);
     },
 
@@ -25,16 +25,16 @@ var Attachment = fun.newClass(Container, {
 
 var instances = null;
 
-Attachment.attach = function(dom, view) {
+Attaching.attach = function(dom, view) {
     dom = dom || env.doc.body;
     var id = dom[env.expando] = dom[env.expando] || env.guid++;
     if (!instances || !instances[id]) {
-        register(new Attachment({ dom: dom }));
+        register(new Attaching({ dom: dom }));
     }
     return instances[id].appendChild(view);
 };
 
-Attachment.instances = function() {
+Attaching.instances = function() {
     var atts = [];
     utils.forEach(instances || {}, function(a) {
         atts.push(a);
@@ -66,4 +66,4 @@ function register(a) {
 }
 
 
-exports.Attachment = Attachment;
+exports.Attaching = Attaching;

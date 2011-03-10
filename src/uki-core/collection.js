@@ -122,7 +122,7 @@ var Collection = fun.newClass({
 
     attach: function(dom) {
         this.forEach(function(view) {
-            require('./attachment').Attachment.attach(dom, view);
+            require('./attaching').Attaching.attach(dom, view);
             view.resized();
         });
         return this;
@@ -143,7 +143,7 @@ utils.forEach([
     ['parent', 'parent'],
     ['next', 'nextView'],
     ['prev', 'prevView']
-], function(i, desc) {
+], function(desc, i) {
     proto[desc[0]] = function() {
         return new Collection(
             utils.unique(utils.pluck(this, desc[1]))

@@ -1,6 +1,7 @@
 /**#@+ @ignore */
 var utils = require('./utils'),
     Collection = require('./collection').Collection,
+    idRegexp = /^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/,
     chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
     regexps = [ // enforce order
         { name: 'ID', regexp: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/ },
@@ -142,7 +143,14 @@ var Selector = {
      * @return {Collection} found views
      */
     find: function(selector, context, skipFiltering) {
-        context = context || require('./attachment').Attachment.instances();
+        
+        // quick return for #id case
+        var match;
+        if (!context && (match = selector.match(idRegexp))) {
+            var element = require('./view').byId(match[1]);
+            return new Collection(element ? [element] : []);
+        }
+        context = context || require('./attaching').Attaching.instances();
         if (context.length === undefined) { context = [context]; }
 
         var tokens = Selector.tokenize(selector),

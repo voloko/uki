@@ -10,11 +10,8 @@ var Binding = fun.newClass({
     modelEvent: '',
     viewEvent: 'blur',
 
-    init: function(view, model, options) {
+    init: function(options) {
         utils.extend(this, options);
-
-        this.view = view;
-        this.model = model;
         if (!this.modelEvent) {
             this.modelEvent = 'change.' + this.modelProp;
         }
@@ -61,4 +58,27 @@ var Binding = fun.newClass({
 });
 
 
-exports.Binding = Binding;
+var Bindable = {
+    bindingOptions: fun.newProp('bindingOptions'),
+    
+    bindings: fun.newProp('bindings', function(val) {
+        val = val || [];
+        utils.invoke(this.bindings() || [], 'destruct');
+        this._bindings = utils.map(val, this._createBinding, this);
+    }),
+    
+    _createBinding: function(options) {
+        options = utils.extend(this.bindingOptions(), options);
+        options.view = this;
+        return new Binding(options);
+    },
+
+    binding: function(val) {
+        if (val === 'undefined') return this.bindings()[0];
+        return this.bindings([val]);
+    }
+};
+
+
+exports.Binding  = Binding;
+exports.Bindable = Bindable;

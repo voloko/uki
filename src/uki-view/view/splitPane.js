@@ -9,7 +9,7 @@ var fun   = require('uki-core/function'),
 
     Mustache  = require('uki-core/mustache').Mustache,
     Container = require('uki-core/view/container').Container,
-    Focusable = require('./focusable').Focusable;
+    Focusable = require('uki-core/view/focusable').Focusable;
 
 
 var SplitPane = view.newClass('SplitPane', Container, Focusable, {}),

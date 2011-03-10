@@ -8,10 +8,11 @@ var env   = require('uki-core/env'),
     view  = require('uki-core/view'),
     build = require('uki-core/builder').build,
     
-    Mustache   = require('./uki-core/mustache').Mustache;
-    Base       = require('./uki-core/view/base').Base;
-    Focusable  = require('./focusable').Focusable;
-    Selectable = require('./selectable').Selectable;
+    Binding    = require('./dataList/binding').Binding,
+    Mustache   = require('uki-core/mustache').Mustache;
+    Base       = require('uki-core/view/base').Base;
+    Focusable  = require('uki-core/view/focusable').Focusable;
+    Selectable = require('selectable').Selectable;
     
 
 var DataList = view.newClass('DataList', Base, Focusable, Selectable, {}),
@@ -135,11 +136,11 @@ proto._changeOnKeys = [];
 * Bind representation to colleciton.
 * #TBD
 */
-fun.addProp(proto, 'binding', function(val) {
-    if (this._binding) this._binding.destruct();
-    this._binding = val && new require('./dataList/binding').Binding(this, val.model, utils.extend({ viewEvent: 'change.item' }, val));
-    if (val) this.data(val.model);
-});
+proto._createBinding = function() {
+    options = utils.extend(this.bindingOptions(), options);
+    options.view = this;
+    return new Binding(options);
+};
 
 /**
 * #TBD

@@ -4,7 +4,7 @@
 @example_html
     <div id='test' style='width: 50%; height: 100px; background: #EEE; position:relative'>#test</div>
     <script src="/src/uki.js"></script>
-    <script src="attachment.js"></script>
+    <script src="attaching.js"></script>
 */
 
 uki({

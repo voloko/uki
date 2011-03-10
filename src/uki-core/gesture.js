@@ -59,7 +59,7 @@ function stopGesture () {
 }
 
 function dragGestureStart (e) {
-    e = evt.createEvent(e, {type:'draggesturestart'});
+    e = evt.createEvent(e, {type: 'draggesturestart'});
     evt.trigger.call(this, e);
     if (!e.isDefaultPrevented()) {
         gesture.position = { x: e.pageX, y: e.pageY };
@@ -68,7 +68,7 @@ function dragGestureStart (e) {
 }
 
 function dragGesture (e) {
-    e = evt.createEvent(e, {type:'draggesture'});
+    e = evt.createEvent(e, {type: 'draggesture'});
     e.dragOffset = {
         x: e.pageX - gesture.position.x,
         y: e.pageY - gesture.position.y
@@ -79,7 +79,7 @@ function dragGesture (e) {
 }
 
 function dragGestureEnd (e) {
-    e = evt.createEvent(e, {type:'draggestureend'});
+    e = evt.createEvent(e, {type: 'draggestureend'});
     e.dragOffset = {
         x: e.pageX - gesture.position.x,
         y: e.pageY - gesture.position.y

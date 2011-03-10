@@ -2,7 +2,7 @@ var toString = Object.prototype.toString,
     arrayPrototype = Array.prototype,
     slice = arrayPrototype.slice,
     utils = exports,
-    compat = require('./compat');
+    _compat = require('./_compat');
 
 var marked = '__marked';
 // dummy subclass
@@ -85,6 +85,16 @@ utils.without = function(array, value) {
         utils.filter(array, filter);
 };
 
+utils.invoke = function(array, method) {
+    var args = slice.call(arguments, 1);
+    function invoke(item) {
+        return item[method].apply(item, args);
+    }
+    return array.forEach ?
+        array.forEach(invoke) :
+        utils.forEach(array, invoke);
+};
+
 /**
  * Iterates through all non empty values of object or an Array
  *
@@ -108,7 +118,7 @@ utils.forEach = function(object, callback, context) {
                 object[name], name) === false) { break; }
         }
     } else {
-        compat.forEach.call(object, callback, context);
+        _compat.forEach.call(object, callback, context);
     }
     return object;
 };
@@ -230,20 +240,21 @@ utils.range = function(from, to) {
     return result;
 };
 
-utils.applyCompat = compat.applyCompat;
+utils.applyCompat = _compat.applyCompat;
 
-utils.forEach(compat.arrayFunctions, function(name) {
+utils.forEach(_compat.arrayFunctions, function(name) {
     if (!utils[name]) {
         // using temp argument is faster than slicing
         // arguments object
         utils[name] = function(array, a, b) {
-            return compat[name].call(array, a, b);
+            return _compat[name].call(array, a, b);
         };
     }
 });
 
-utils.keys = compat.keys;
+utils.keys = Object.keys || _compat.keys;
 
+var trim = String.prototype.trim || _compat.trim;
 utils.trim = function(s) {
-    return compat.trim.call(s);
+    return trim.call(s);
 };

@@ -1,7 +1,7 @@
 var view  = require('../view'),
     utils = require('../utils'),
 
-    Attachment = require('../attachment').Attachment;
+    Attaching = require('../attaching').Attaching;
 
 
 var RUN_TIMEOUT = 5000;
@@ -13,7 +13,7 @@ exports.OrphanDetector = {
     run: function() {
         var orphans = [];
         utils.forEach(view._registry, function(view) {
-            if (!view.parent() && !view instanceof Attachment) {
+            if (!view.parent() && !view instanceof Attaching) {
                 orphans.push(view);
             }
         });
