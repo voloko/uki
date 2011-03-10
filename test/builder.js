@@ -1,6 +1,6 @@
 var builder = require('../src/uki-core/builder');
 
-builder.viewNamespaces.unshift({
+builder.namespaces.unshift({
     Base: require('../src/uki-core/view/base.js').Base,
     Container: require('../src/uki-core/view/Container.js').Container
 });

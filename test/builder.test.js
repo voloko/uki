@@ -29,7 +29,7 @@ test('set childViews', 3, function() {
 });
 
 test('from constructor', 2, function() {
-    var cl = builder.build({ view: builder.viewNamespaces[0].Base });
+    var cl = builder.build({ view: builder.namespaces[0].Base });
     equal(cl.length, 1);
     equal(cl[0].typeName, 'Base');
 });
@@ -45,4 +45,21 @@ test('set childViews', 5, function() {
     equal(dcl[0].childViews()[0].typeName, 'Base');
     ok(cl[0] === dcl[0]);
     ok(cl[0].childViews()[0] === dcl[0].childViews()[0]);
+});
+
+test('use custom builder', 2, function() {
+    var b = new builder.Builder([{ Dummy: builder.namespaces[0].Base }]);
+    var cl = b.build({ view: 'Dummy' });
+    equal(cl.length, 1);
+    equal(cl[0].typeName, 'Base');
+});
+
+test('custom builder internal call', 3, function() {
+    var b = new builder.Builder([{ MyContainer: builder.namespaces[0].Container }]);
+    var cl = b.build({ view: 'MyContainer', childViews: [
+        { view: 'MyContainer' }
+    ] });
+    equal(cl.length, 1);
+    equal(cl[0].childViews().length, 1);
+    equal(cl[0].childViews()[0].typeName, 'Container');
 });

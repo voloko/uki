@@ -1,7 +1,7 @@
 var builder = require('../src/uki-core/builder'),
     selector = require('../src/uki-core/selector');
     
-builder.viewNamespaces.unshift({
+builder.namespaces.unshift({
     Base: require('../src/uki-core/view/base.js').Base,
     Container: require('../src/uki-core/view/Container.js').Container
 });
@@ -9,6 +9,7 @@ builder.viewNamespaces.unshift({
 module.exports = {
     build: builder.build,
     find: selector.find,
-    viewNamespaces: builder.viewNamespaces,
-    utils: require('../src/uki-core/utils')
+    namespaces: builder.namespaces,
+    utils: require('../src/uki-core/utils'),
+    view: require('../src/uki-core/view')
 };
