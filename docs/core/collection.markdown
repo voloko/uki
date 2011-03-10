@@ -31,4 +31,6 @@ Append all collection elements to `target`.
 Attach all elements in collection to a given `dom` node using
 `Attachement`.
 
-### utility methdos
+### utility methods
+
+
