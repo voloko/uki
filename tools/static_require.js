@@ -4,7 +4,7 @@ var jsp  = require('uglify-js').parser,
     path = require('path'),
     util = require('util'),
     cssom = require('cssom'),
-    mime = require('connect').utils.mime,
+    mime = require('mime'),
     url = require('url'),
     mod = require('module');
     
@@ -70,7 +70,7 @@ var walker = pro.ast_walker(),
     };
     
 function imagePathToDataUri (filePath) {
-    var contentType = mime.type( path.extname(filePath) ),
+    var contentType = mime.lookup( path.extname(filePath) ),
         buffer = fs.readFileSync(filePath);
     return 'data:' + contentType + ';base64,' + buffer.toString('base64');
 }
