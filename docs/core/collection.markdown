@@ -18,10 +18,6 @@ Get `prop` value of the first element in collection. Or set
 
 Run `selector.find` within itself.
 
-### collection.Collection.prototype.append(views)
-
-Append all views to the first element in collection.
-
 ### collection.Collection.prototype.appendTo(target)
 
 Append all collection elements to `target`.
@@ -29,8 +25,35 @@ Append all collection elements to `target`.
 ### collection.Collection.prototype.attach(dom)
 
 Attach all elements in collection to a given `dom` node using
-`Attachement`.
+`Attaching`.
 
-### utility methods
+### collection.Collection.prototype.parent()
+
+Returns a collection of all parents (if any)
+
+### collection.Collection.prototype.next()
+
+Returns a collection of all immediate siblings of the elements
+in collection.
+
+### collection.Collection.prototype.prev()
+
+Returns a collection of all immediate previous siblings of the elements
+in collection.
+
+### collection.Collection.addMethods(methods)
+
+Add methods to collection prototype. When you call a method on collection
+all the containing views will have the method with the same name and params
+being called. By default this methods are delegated: 
+`addListener`, `removeListener`, `trigger`, `on`,
+`addClass`, `removeClass`, `toggleClass`,
+`destruct`, `resized`, `scroll`, `clear`
+
+### collection.Collection.addProps(props)
+
+Add property accessors to collection prototype. Instead of calling `c.prop(name)`
+you can now just use `c.name()`. By default this properties are added:
+`id`, `dom`, `text`, `html`, `pos`, `visible`, `style`
 
 

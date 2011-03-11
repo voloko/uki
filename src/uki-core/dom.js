@@ -56,11 +56,11 @@ module.exports = {
         return style;
     },
 
-    computedStyle: function(el) {
+    computedStyle: function(element) {
         if (env.doc.defaultView && env.doc.defaultView.getComputedStyle) {
-            return env.doc.defaultView.getComputedStyle(el, null);
-        } else if (el.currentStyle) {
-            return el.currentStyle;
+            return env.doc.defaultView.getComputedStyle(element, null);
+        } else if (element.currentStyle) {
+            return element.currentStyle;
         }
     },
 
@@ -70,7 +70,7 @@ module.exports = {
         return fragment.firstChild;
     },
 
-    // client rect adjugested to window scroll
+    // client rect adjusted to window scroll
     clientRect: function(elem, ignoreScroll) {
         var rect = elem.getBoundingClientRect();
         if (ignoreScroll) { return rect; }
@@ -90,16 +90,24 @@ module.exports = {
         return (' ' + elem.className + ' ').indexOf(' ' + className + ' ') > -1;
     },
 
-    addClass: function(elem, className) {
-        if (!this.hasClass(elem, className)) {
-            elem.className += (elem.className ? ' ' : '') + className;
-        }
+    addClass: function(elem, classNames) {
+        var string = elem.className;
+        utils.forEach(classNames.split(/\s+/), function(className) {
+            if (!this.hasClass(elem, className)) {
+                string += (string ? ' ' : '') + className;
+            }
+        }, this);
+        elem.className = string;
     },
 
-    removeClass: function(elem, className) {
-        elem.className = elem.className
-            .replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)', 'g'), ' ')
-            .replace(/\s{2,}/g, ' ');
+    removeClass: function(elem, classNames) {
+        var string = elem.className;
+        utils.forEach(classNames.split(/\s+/), function(className) {
+            string = utils.trim(string
+                .replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)', 'g'), ' ')
+                .replace(/\s{2,}/g, ' '));
+        }, this);
+        elem.className = string;
     },
 
     toggleClass: function(elem, className, condition) {
