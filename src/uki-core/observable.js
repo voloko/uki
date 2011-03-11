@@ -76,7 +76,6 @@ var Observable = {
 };
 
 Observable.on = Observable.addListener;
-Observable.emit = Observable.trigger;
 
 function newProp(prop, setter) {
     var propName = '_' + prop;

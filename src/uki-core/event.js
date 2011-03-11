@@ -226,7 +226,6 @@ var evt = module.exports = {
 };
 
 evt.on = evt.addListener;
-evt.emit = evt.trigger;
 
 utils.forEach({
     mouseover: 'mouseenter',

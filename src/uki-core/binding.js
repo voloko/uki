@@ -58,27 +58,4 @@ var Binding = fun.newClass({
 });
 
 
-var Bindable = {
-    bindingOptions: fun.newProp('bindingOptions'),
-    
-    bindings: fun.newProp('bindings', function(val) {
-        val = val || [];
-        utils.invoke(this.bindings() || [], 'destruct');
-        this._bindings = utils.map(val, this._createBinding, this);
-    }),
-    
-    _createBinding: function(options) {
-        options = utils.extend(this.bindingOptions(), options);
-        options.view = this;
-        return new Binding(options);
-    },
-
-    binding: function(val) {
-        if (val === 'undefined') return this.bindings()[0];
-        return this.bindings([val]);
-    }
-};
-
-
 exports.Binding  = Binding;
-exports.Bindable = Bindable;

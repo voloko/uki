@@ -91,27 +91,6 @@ var Collection = fun.newClass({
         return require('./selector').find(selector, this);
     },
 
-    /**
-     * Appends views to the first item in collection
-     *
-     * @function
-     *
-     * @param {Array.<view.Base>} views Views to append
-     * @returns {view.Collection} self
-     */
-    append: function(views) {
-        var target = this[0];
-        if (!target) { return this; }
-
-        views = views.length !== undefined ? views : [views];
-
-        for (var i = views.length - 1; i >= 0; i--) {
-            target.appendChild(views[i]);
-        }
-
-        return this;
-    },
-
     appendTo: function(target) {
         target = require('./builder').build(target)[0];
         this.forEach(function(view) {
@@ -126,6 +105,14 @@ var Collection = fun.newClass({
             view.resized();
         });
         return this;
+    },
+    
+    remove: function() {
+        this.forEach(function(view) {
+            if (view.parent()) {
+                view.parent().removeChild(view);
+            }
+        });
     }
 });
 
@@ -146,39 +133,45 @@ utils.forEach([
 ], function(desc, i) {
     proto[desc[0]] = function() {
         return new Collection(
-            utils.unique(utils.pluck(this, desc[1]))
+            utils.unique(
+                utils.filter(
+                    utils.pluck(this, desc[1]),
+                    function(v) { return !!v; }
+                )
+            )
         );
     };
 });
 
+Collection.addMethods = function(methods) {
+    utils.forEach(methods, function(name) {
+        proto[name] = function() {
+            for (var i = this.length - 1; i >= 0; i--) {
+                this[i][name].apply(this[i], arguments);
+            }
+            return this;
+        };
+    });
+};
 
-/** @function
-@name Collection#addListener */
-/** @function
-@name Collection#unload */
-/** @function
-@name Collection#trigger */
-/** @function
-@name Collection#layout */
-/** @function
-@name Collection#appendChild */
-/** @function
-@name Collection#removeChild */
-/** @function
-@name Collection#insertBefore */
-/** @function
-@name Collection#toggle */
-utils.forEach([
-    'addListener', 'removeListener', 'trigger', 'on', 'emit',
-    'appendChild', 'removeChild', 'insertBefore', 'toggle'
-], function(name) {
-    proto[name] = function() {
-        for (var i = this.length - 1; i >= 0; i--) {
-            this[i][name].apply(this[i], arguments);
-        }
-        return this;
-    };
-});
+Collection.addProps = function(props) {
+    utils.forEach(props, function(name) {
+        proto[name] = function(value) {
+            return this.prop(name, value);
+        };
+    });
+};
+
+
+Collection.addMethods([
+    'addListener', 'removeListener', 'trigger', 'on',
+    'addClass', 'removeClass', 'toggleClass',
+    'destruct', 'resized', 'scroll', 'clear'
+]);
+
+Collection.addProps([
+    'id', 'dom', 'text', 'html', 'pos', 'visible', 'style'
+]);
 
 
 exports.Collection = Collection;
