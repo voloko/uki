@@ -27,11 +27,11 @@ module.exports = {
         return ids[id];
     },
 
-    closest: function(dom) {
-        while (dom) {
-            var e = dom[env.expando];
+    closest: function(element) {
+        while (element) {
+            var e = element[env.expando];
             if (registry[e]) { return registry[e]; }
-            dom = dom.parentNode;
+            element = element.parentNode;
         }
         return null;
     },
@@ -81,7 +81,7 @@ module.exports = {
     newClassMapProp: function(classMap) {
         return function(state) {
             if (state === undefined) {
-                var res;
+                var res = '';
                 utils.forEach(classMap, function(clasName, enumName) {
                     if (this.hasClass(clasName)) {
                         res = enumName;

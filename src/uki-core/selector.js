@@ -143,7 +143,7 @@ var Selector = {
      * @return {Collection} found views
      */
     find: function(selector, context, skipFiltering) {
-        
+
         // quick return for #id case
         var match;
         if (!context && (match = selector.match(idRegexp))) {
@@ -217,5 +217,6 @@ var Selector = {
         return [parts, extra];
     }
 };
+
 
 exports.find = Selector.find;
