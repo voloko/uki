@@ -1,6 +1,6 @@
 ## Builder
 
-Provides a method to convert json markup into actual views.
+Provides a method to convert JSON markup into actual views.
 
     builder.build({ view: Button, label: 'Hello World' });
 
@@ -46,7 +46,7 @@ Some views can accept construction time arguments. To pass them use the
 
 Note that there's no additional magic in builder. It simply copies properties to
 a view without any modification. For example `childViews` will be just passed
-as a json array to the view. And view will build those `childViews` itself:
+as a JSON array to the view. And view will build those `childViews` itself:
 
     builder.build({ view: 'Container', childViews: [
         { view: 'Button', label: 'Hello' }
@@ -72,22 +72,22 @@ Will evaluate as:
 
 Creates a custom builder tied to `namespaces`.
 
-### Builder.prototype.build(markup)
+### builder.Builder.prototype.build(markup)
 
 Converts `markup` into views and returns `Collection` containing those views.
 
-### Builder.namespaces
+### builder.Builder.prototype.namespaces
 
-Array containing all namespaces to search when resolving view class names.
+`Array` containing all namespaces to search when resolving view class names.
 
 ### Default builder
 
-You can access `build` and `namespaces` directly on the module (`uki`).
-Both of them belong to the default application builder. You can make
+You can access `build` and `namespaces` directly on the builder module (`uki`).
+Both of them belong to the default application builder. You can
 temporary override default builder by calling `builder.withBuilder`.
 
 Be cautious with the default builder. Changing it's `namespaces` will
-affect all you're application. It's better to create a custom builder
+affect all code in the application. It is safer to create a custom builder
 instance and pass it to your building code instead of changing default
 builder `namespaces`.
 
