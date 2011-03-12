@@ -113,13 +113,13 @@ exports.reduceRight = function(fun, accumulator) {
 exports.keys = function(o) {
     var ret = [], p;
     for (p in o) {
-        if (o.hasOwnProperty.call(p)) {
+        if (o.hasOwnProperty(p)) {
             ret.push(p);
         }
     }
     return ret;
 };
 
-exports.trim = function(s) {
-    return s.replace(/^\s*|\s*$/g, "");
+exports.trim = function() {
+    return this.replace(/^\s*|\s*$/g, "");
 };

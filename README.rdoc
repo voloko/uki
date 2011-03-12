@@ -11,12 +11,12 @@ Install {node and npm}[https://github.com/joyent/node/wiki/Installation]
   node express.js
 
 = Goals for 0.4
-* Keep core to bare minimum. Should be under 10KB gziped. Ideally under 9216b (9KB).
+* Keep core to bare minimum. Should be under 10KB gziped..
 * Keep core and common view pack under 30KB gziped.
 * Use css instead of js based themes.
 * Data Model and Bindings in the core.
 * Use native browser layout instead of rect() + layout()
-* CommonJs require() instead of homegrown include()
+* CommonJS require() instead of homegrown include()
 * Use serverside/clientside js together
 * `npm install uki-pack` should work on client side without any extra configuration
 * Docs

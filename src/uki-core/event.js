@@ -9,7 +9,10 @@ function EventWrapper () {}
 
 var EventMethods = {
     targetView: function() {
-        return require('./view').closest(this.target);
+        if (!this._targetView) {
+            this._targetView = require('./view').closest(this.target);
+        }
+        return this._targetView;
     },
 
     simulateBubbles: false,
@@ -119,7 +122,7 @@ var eventProps = "altKey attrChange attrName bubbles button cancelable charCode 
 function domHandler(e) {
     e = e || env.root.event;
     var wrapped = wrapDomEvent(e);
-    evt.trigger.call(this, normalize(wrapped));
+    evt.trigger(this, normalize(wrapped));
 }
 
 function wrapDomEvent(baseEvent) {
@@ -142,7 +145,7 @@ function createEvent(baseEvent, options) {
     // from base event.
     EventWrapper.prototype = baseEvent;
     e = new EventWrapper();
-    utils.extend(e.prototype, EventMethods);
+    utils.extend(e, EventMethods);
     e.baseEvent = baseEvent;
     utils.extend(e, options);
     return e;
@@ -159,17 +162,21 @@ var evt = module.exports = {
     listeners: listeners,
 
     domHandlers: domHandlers,
+    
+    EventMethods: EventMethods,
 
-    trigger: function(e) {
-        var listenerForEl = evt.listeners[this[expando]] || {},
+    trigger: function(el, e) {
+        var listenerForEl = evt.listeners[el[expando]] || {},
             listenersForType = listenerForEl[e.type];
+            
+        if (!e.target) { e.target = el; }
 
         listenersForType && utils.forEach(listenersForType, function(l) {
-            l.call(this, e);
-        }, this);
+            l.call(el, e);
+        });
 
-        if (e.simulateBubbles && !e.isPropagationStopped() && this.parentNode) {
-            evt.trigger(this.parentNode, e);
+        if (e.simulateBubbles && !e.isPropagationStopped() && el.parentNode) {
+            evt.trigger(el.parentNode, e);
         }
     },
 
@@ -240,7 +247,7 @@ utils.forEach({
 
             if (parent !== this) {
                 var wrapped = createEvent(e, { type: specialName, simulateBubbling: true });
-                evt.trigger.call(this, wrapped);
+                evt.trigger(this, wrapped);
             }
         } catch(e) { }
     }

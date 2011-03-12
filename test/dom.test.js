@@ -44,7 +44,8 @@ test('computedStyle', 1, function() {
     dom.createStylesheet('.test-dom-color { color: #FF0000 }');
     document.getElementById('target').appendChild(div);
     var color = dom.computedStyle(div).color;
-    ok(color == '#FF0000' || color == 'rgb(255, 0, 0)');
+    color = color.toLowerCase();
+    ok(color == '#ff0000' || color == 'rgb(255, 0, 0)');
     dom.removeElement(div);
 });
 

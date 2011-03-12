@@ -141,10 +141,10 @@ var Base = view.newClass('Base', {
     scrollLeft: fun.newDelegateProp('dom', 'scrollLeft'),
 
     title: fun.newDelegateProp('dom', 'title'),
-    
+
     style: function(value) {
         var style = this.dom().style;
-        
+
         if (value === undefined) return style;
         if (typeof value === 'string') {
             style.cssText += ';' + value;
@@ -169,6 +169,17 @@ var Base = view.newClass('Base', {
     },
 
     /**
+    * Warning! Controllers are experimental.
+    */
+    controller: function(value) {
+        if (value === undefined) {
+            return this._controller || this.parent() && this.parent().controller();
+        }
+        this._controller = value;
+        return this;
+    },
+
+    /**
      * @param {String} name Event name, or space separated names
      * @param {function()} callback
      */
@@ -178,7 +189,10 @@ var Base = view.newClass('Base', {
                 this.addListener(name, callback);
             }, this);
         } else {
-            var wrapper = fun.bindOnce(callback, this);
+            var wrapper = typeof callback === 'string' ?
+                Base.controllerCallback(callback) :
+                fun.bindOnce(callback, this);
+
             this._eventNames || (this._eventNames = {});
             utils.forEach(names.split(' '), function(name) {
                 this._eventNames[name] = true;
@@ -194,7 +208,11 @@ var Base = view.newClass('Base', {
      * @param {function()} callback or null to remove all callbacks
      */
     removeListener: function(names, callback) {
-        var wrapper = callback && fun.bindOnce(callback, this);
+        var wrapper = callback && (
+            typeof callback === 'string' ?
+                Base.controllerCallback(callback) :
+                fun.bindOnce(callback, this)
+            );
         names || (names = utils.keys(this._eventNames || {}).join(' '));
         utils.forEach(names.split(' '), function(name) {
             evt.removeListener(this.domForEvent(name), name, wrapper);
@@ -204,8 +222,8 @@ var Base = view.newClass('Base', {
 
     trigger: function(e) {
         var node = this.domForEvent(e.type);
-        var wrapped = evt.createEvent(e, { target: node });
-        return evt.trigger.call(node, e);
+        var wrapped = evt.createEvent(e, { _targetView: this });
+        return evt.trigger(node, e);
     },
 
 
@@ -300,17 +318,17 @@ var Base = view.newClass('Base', {
     clientRect: function(ignoreScroll) {
         return dom.clientRect(this.dom(), ignoreScroll);
     },
-    
+
     /* -------------------------------- Binding -----------------------------*/
-    
+
     bindingOptions: fun.newProp('bindingOptions'),
-    
+
     bindings: fun.newProp('bindings', function(val) {
         val = val || [];
         utils.invoke(this.bindings() || [], 'destruct');
         this._bindings = utils.map(val, this._createBinding, this);
     }),
-    
+
     _createBinding: function(options) {
         options = utils.extend(this.bindingOptions(), options);
         options.view = this;
@@ -323,10 +341,22 @@ var Base = view.newClass('Base', {
         }
         return this.bindings([val]);
     }
-    
+
 });
 
 Base.prototype.on = Base.prototype.addListener;
+
+var callbacks = {};
+Base.controllerCallback = function(name) {
+    if (!callbacks[name]) {
+        callbacks[name] = function() {
+            var c = this.controller();
+            if (c && c[name]) {
+                c[name].apply(c, arguments);
+            }
+        };
+    }
+};
 
 
 exports.Base = Base;

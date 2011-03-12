@@ -314,7 +314,7 @@ asyncTest('throttle', 4, function() {
                 equal(count, 2);
                 start();
             }, 20);
-        }, 11);
+        }, 20);
     }, 10);
 });
 
