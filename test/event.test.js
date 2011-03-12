@@ -127,3 +127,14 @@ asyncTest('simulateBubbles', 2, function() {
     evt.on(document, 'click', listener);
     evt.trigger(target(), evt.createEvent({ type: 'click' }, { simulateBubbles: true }));
 });
+
+asyncTest('preventDefaultHanderl', 1, function() {
+    evt.on(target(), 'click', evt.preventDefaultHandler);
+    evt.on(document, 'click', function(e) {
+        ok(e.isDefaultPrevented());
+        evt.removeListener(target(), 'click');
+        evt.removeListener(document, 'click');
+        start();
+    });
+    evt.trigger(target(), evt.createEvent({ type: 'click' }, { simulateBubbles: true }));
+});

@@ -10,13 +10,14 @@ var Observable = {
     },
 
     removeListener: function(names, callback) {
-        if (names) {
+        if (!names) {
             names = utils.keys(this._listeners || {}).join(' ');
         }
         utils.forEach(names.split(' '), function(name) {
             var listeners = this._listenersFor(name, true);
             if (listeners) {
-                this._listeners[name] = utils.without(listeners, callback);
+                this._listeners[name] = callback ? 
+                    utils.without(listeners, callback) : [];
             }
         }, this);
         return this;
