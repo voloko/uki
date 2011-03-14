@@ -167,8 +167,7 @@ Creates a function that will call the `targetName` on `target`:
 
 ### fun.delegateCall(source, name, target, targetName)
 
-Adds a delegate call function to the given `source`. By default `targetName`
-equals to `name`.
+Adds a delegate call function to the given `source`. By default `targetName` is equal to `name`.
 
     fun.delegateProp(Wrapper.prorotype, 'setAttribute', 'node');
 
