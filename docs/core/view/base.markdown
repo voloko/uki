@@ -21,7 +21,7 @@ Extended in subclasses. Should create `this._dom`. `this._dom` it the root
 dom node of the view.
 
 This is the only method you need to extend to create a subclass.
-Everything else is obligatory.
+Everything else is optional.
 
     // create an image view
     var Img = view.newClass('Img', Base, {
@@ -56,14 +56,14 @@ Returns root dom node of the view. By default returns `this._dom` property.
 
 Extended in subclasses. Being called after parent view resized. This usualy
 happens when `window` is being resized. However parent views may trigger this
-event manually, ex: `SplitPane` resizing it's children.
+event manually, ex: `SplitPane` resizing its children.
 
 If a view needs some specific actions on resize they should be done here.
 
 ## Default accessors
 
 `view.Base` provides a number of convenience methods to modify view properties.
-All of them target root dom node by default. However they can be redefined in
+All of them target the dom root node by default. However they can be redefined in
 subclasses.
 
 ### view.Base.prototype.html([value])
