@@ -45,7 +45,7 @@ Bare metal class and inheritance implementation. Creates a new class with
         this.name = 'Rex';
     });
 
-It can accept base class as a first parameter. Base class is NOT obliged
+It can accept base class as the first parameter. Base class is NOT obliged
 to be created using `fun.newClass`. Anything including simple
 `function` will work:
 
@@ -85,7 +85,7 @@ case `init` property will be used as a constructor function:
 
 ### fun.newProp(name, [setter])
 
-Creates a new property accessor function. To get the property value call accessor
+Creates a new property accessor function. To get the property value call the accessor
 function without arguments. To set the value call it passing the value as the
 first argument. Properties are chainable:
 
@@ -142,8 +142,7 @@ Note that delegated properties are chainable.
 
 ### fun.delegateProp(source, name, target, [targetName])
 
-Adds a delegate function to the given `source`. By default `targetName` equals
-to `name`.
+Adds a delegate function to the given `source`. By default `targetName` is equal to `name`.
 
     fun.delegateProp(Wrapper.prorotype, 'id', 'node');
 
