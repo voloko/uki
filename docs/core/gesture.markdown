@@ -1,6 +1,6 @@
 ## Gesture
 
-Ads support for `draggesturestart`, `draggesturestop` and `draggesture` events.
+Adds support for `draggesturestart`, `draggesturestop` and `draggesture` events.
 
     evt.on(handle, 'draggesturestart', function() {
         console.log('start dragging');
