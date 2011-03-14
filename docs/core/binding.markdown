@@ -1,7 +1,7 @@
 ## binding.Binding(options)
 
-Binds given `view` to a `model`. By default will bind `value` property on
-`view` to `value` property on `model` using `view`'s `blur` event. You
+Binds a given `view` to a `model`. By default will bind the `value` property on
+`view` to the `value` property on `model` using `view`'s `blur` event. You
 can override this by providing `options`:
 
     var b = new Binding({
