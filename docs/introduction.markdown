@@ -2,7 +2,7 @@
 
 Ukijs is a small (core under 10KB) library that let's you build complex
 interfaces in a meaningful way. It comes with a collection
-of views like SplitPane or DataList. It also plays nice with client side
+of views like SplitPane or DataList. It also plays nicely with client side
 libraries (jQuery, prototype) and with nodejs on the server.
 
 ### Compatibility
@@ -83,7 +83,7 @@ value into the property function:
     uki('DataTable')[0].data(newMessages);   // replace the messages in
                                              // the table
 
-Properties are chainable. Change the label and then make the button large:
+Properties are chainable. Change the label to make the button large:
 
     uki('Button').label('New label').large(true);
 
@@ -105,7 +105,7 @@ Views also support dom-like API: `appendChild`, `insertBefore`, `removeChild`,
 
 ### Events
 
-You can add event listeners to views. The API is close to dom nodes:
+You can add event listeners to views. The API is similar to dom nodes:
 `addListener` or `on` and `removeListener`:
 
     uki('Button')[0].on('click', function() {
@@ -129,7 +129,7 @@ Views may provide specific events. Example:
 ### Data bindings
 
 You can create observable data models and then bind them to views. So
-when view changes the data gets updated and visa versa.
+when the view changes the data gets updated and visa versa.
 
 First you need a data model:
 
