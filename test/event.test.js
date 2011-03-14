@@ -83,7 +83,7 @@ asyncTest('this is target', 2, function() {
    QUnit.triggerEvent(target(), 'click');
 });
 
-asyncTest('event is wrapped', 11, function() {
+asyncTest('event is wrapped', 12, function() {
    evt.on(target(), 'click', function(e) {
        equal(e.type, 'click');
        e.type = 'dummy';
@@ -96,6 +96,8 @@ asyncTest('event is wrapped', 11, function() {
        
        ok(!e.isDefaultPrevented());
        ok(!e.isPropagationStopped());
+
+       ok(!e.simulatePropagation);
        
        e.preventDefault();
        e.stopPropagation();
@@ -117,7 +119,9 @@ asyncTest('trigger', 1, function() {
     evt.trigger(target(), evt.createEvent({ type: 'click' }));
 });
 
-asyncTest('simulateBubbles', 2, function() {
+module('event simulatePropagation');
+
+asyncTest('exlict true', 2, function() {
     function listener(e) {
         equal(e.target, target());
         ok(e.preventDefault);
@@ -125,10 +129,34 @@ asyncTest('simulateBubbles', 2, function() {
         start();
     }
     evt.on(document, 'click', listener);
-    evt.trigger(target(), evt.createEvent({ type: 'click' }, { simulateBubbles: true }));
+    evt.trigger(target(), evt.createEvent({ type: 'click', simulatePropagation: true }));
 });
 
-asyncTest('preventDefaultHanderl', 1, function() {
+asyncTest('by default', 2, function() {
+    function listener(e) {
+        equal(e.target, target());
+        ok(e.preventDefault);
+        evt.removeListener(document, 'click', listener);
+        start();
+    }
+    evt.on(document, 'click', listener);
+    evt.trigger(target(), evt.createEvent({ type: 'click' }));
+});
+
+asyncTest('exlict false', 1, function() {
+    function listener(e) {
+        ok(false, 'got event on parent');
+    }
+    evt.on(document, 'click', listener);
+    evt.trigger(target(), evt.createEvent({ type: 'click', simulatePropagation: false }));
+    setTimeout(function() {
+        evt.removeListener(document, 'click', listener);
+        ok(1);
+        start();
+    }, 10);
+});
+
+asyncTest('preventDefaultHandler on simulated event', 1, function() {
     evt.on(target(), 'click', evt.preventDefaultHandler);
     evt.on(document, 'click', function(e) {
         ok(e.isDefaultPrevented());
@@ -136,5 +164,23 @@ asyncTest('preventDefaultHanderl', 1, function() {
         evt.removeListener(document, 'click');
         start();
     });
-    evt.trigger(target(), evt.createEvent({ type: 'click' }, { simulateBubbles: true }));
+    evt.trigger(target(), evt.createEvent({ type: 'click', simulatePropagation: true }));
+});
+
+asyncTest('stopPropagation on simulated event', 1, function() {
+    evt.on(target(), 'click', function(e) {
+        e.stopPropagation();
+    });
+    evt.on(document, 'click', function(e) {
+        ok(false, 'propagated');
+    });
+    evt.trigger(target(), evt.createEvent({ type: 'click' }));
+    
+    setTimeout(function() {
+        evt.removeListener(target(), 'click');
+        evt.removeListener(document, 'click');
+        ok(1);
+        start();
+    }, 10);
+    
 });

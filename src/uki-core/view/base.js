@@ -20,6 +20,14 @@ var POS_RULES = [
         mt: 'marginTop', mb: 'marginBottom'
     };
 
+function styleToString(style) {
+    if (typeof style === 'string') return style;
+    var result = [];
+    utils.forEach(style, function(value, key) {
+        result.push(utils.dasherize(key) + ':' + value);
+    });
+    return result.join(';');
+}
 
 var Base = view.newClass('Base', {
 
@@ -140,25 +148,27 @@ var Base = view.newClass('Base', {
 
     scrollLeft: fun.newDelegateProp('dom', 'scrollLeft'),
 
-    title: fun.newDelegateProp('dom', 'title'),
-
-    style: function(value) {
-        var style = this.dom().style;
-
-        if (value === undefined) return style;
-        if (typeof value === 'string') {
-            style.cssText += ';' + value;
-        } else {
-            utils.forEach(value, function(v, k) {
-                style[k] = v;
-            });
-        }
-        return this;
-    },
-
     scroll: function(dx, dy) {
         dx && this.scrollLeft(this.scrollLeft() + dx);
         dy && this.scrollTop(this.scrollTop() + dy);
+    },
+
+    title: fun.newDelegateProp('dom', 'title'),
+    
+    /**
+    * Experimental
+    */
+    style: function(value) {
+        if (value === undefined) {
+            return this.dom().style;
+        }
+        this.dom().style.cssText = styleToString(value);
+        return this;
+    },
+    
+    addStyle: function(value) {
+        this.dom().style.cssText += ';' + styleToString(value);
+        return this;
     },
 
 
@@ -169,7 +179,7 @@ var Base = view.newClass('Base', {
     },
 
     /**
-    * Warning! Controllers are experimental.
+    * Experimental.
     */
     controller: function(value) {
         if (value === undefined) {
@@ -279,7 +289,7 @@ var Base = view.newClass('Base', {
             return this._styleToPos(this.dom().style);
         }
         pos = this._expandPos(pos);
-        this._applyPosToStyle(pos, this.dom().style);
+        this.addStyle(pos);
         return this;
     },
 
@@ -305,14 +315,8 @@ var Base = view.newClass('Base', {
         utils.forEach(POS_MAP, function(longRule, shortRule) {
             if (pos[shortRule]) pos[longRule] = pos[shortRule];
         });
+        pos.position = 'absolute';
         return pos;
-    },
-
-    _applyPosToStyle: function(pos, style) {
-        style.position = 'absolute';
-        utils.forEach(POS_RULES, function(rule) {
-            style[rule] = pos[rule] || '';
-        });
     },
 
     clientRect: function(ignoreScroll) {
@@ -339,7 +343,7 @@ var Base = view.newClass('Base', {
         if (val === 'undefined') {
             return this.bindings()[0];
         }
-        return this.bindings([val]);
+        return this.bindings(val && [val]);
     }
 
 });

@@ -12,11 +12,12 @@ Returns the closest view to event `target`. Same as native `event.target` but
 instead of a dom node will return an instance of view. May be optionally overridden by
 setting `_targetView` property. May return null if no view is found.
 
-### evt.EventMethods.simulateBubbles = false
+### evt.EventMethods.simulatePropagation = true
 
-[Experimental]. Can be used on surrogate events to make it bubble through dom nodes.
+[Experimental]. Propogate surrogate events through dom by default. Set to false to prevent
+this.
 
-    evt.createEvent({ type: 'selection', simulateBubbles: true });
+    evt.createEvent({ type: 'selection', simulatePropagation: false });
 
 ### evt.EventMethods.preventDefault()
 

@@ -12,7 +12,8 @@ var view  = require('../view'),
 var Container = view.newClass('Container', Base, {
 
     _setup: function(initArgs) {
-        Base.prototype._setup.call(this, initArgs);
+        // optimize: base's _setup is empty, so do not call it here.
+        // Base.prototype._setup.call(this, initArgs);
         this._childViews = [];
     },
 

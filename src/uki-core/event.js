@@ -15,7 +15,7 @@ var EventMethods = {
         return this._targetView;
     },
 
-    simulateBubbles: false,
+    // simulatePropagation: false,
 
     preventDefault: function() {
         var e = this.baseEvent;
@@ -135,6 +135,7 @@ function wrapDomEvent(baseEvent) {
         prop = eventProps[i];
         e[prop] = baseEvent[prop];
     }
+    e.simulatePropagation = false;
     return e;
 }
 
@@ -147,6 +148,8 @@ function createEvent(baseEvent, options) {
     e = new EventWrapper();
     utils.extend(e, EventMethods);
     e.baseEvent = baseEvent;
+    e.simulatePropagation = baseEvent.simulatePropagation === undefined ?
+        true : baseEvent.simulatePropagation;
     utils.extend(e, options);
     return e;
 }
@@ -175,7 +178,7 @@ var evt = module.exports = {
             l.call(el, e);
         });
 
-        if (e.simulateBubbles && !e.isPropagationStopped() && el.parentNode) {
+        if (e.simulatePropagation && !e.isPropagationStopped() && el.parentNode) {
             evt.trigger(el.parentNode, e);
         }
     },
@@ -246,7 +249,7 @@ utils.forEach({
             }
 
             if (parent !== this) {
-                var wrapped = createEvent(e, { type: specialName, simulateBubbling: true });
+                var wrapped = createEvent(e, { type: specialName, simulatePropagation: true });
                 evt.trigger(this, wrapped);
             }
         } catch(e) { }
