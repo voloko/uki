@@ -209,7 +209,7 @@ utils.binarySearch = function(value, array) {
 };
 
 
-utils.camalize = function(string) {
+utils.camelize = function(string) {
     return string.replace(/[_-]\S/g, function(v) {
         return v.substr(1).toUpperCase();
     });

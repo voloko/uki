@@ -16,9 +16,9 @@ can be also written as:
 
     builder.build({ view: 'Button', label: 'Hello World' });
 
-For this to work builder uses `builder.namespaces` property. It contains
+For this to work, builder uses `builder.namespaces` property. It contains
 an array of objects tying strings to view constructors. To add a new namespace
-just unshift `builder.namespaces`. By default `namespaces` equals to `global`
+just unshift `builder.namespaces`. By default, `namespaces` equals to `global`
 (`window`).
 
     builder.namespaces.unshift({
@@ -32,7 +32,7 @@ just unshift `builder.namespaces`. By default `namespaces` equals to `global`
 
 #### Passing arguments to view constructor
 
-Some views can accept construction time arguments. To pass them use the
+Some views can accept construction-time arguments. To pass them use the
 "magic" `init` property:
 
     build({ view: 'SplitPane', init: { vertical: true }, handlePosition: 100);
@@ -45,14 +45,14 @@ Some views can accept construction time arguments. To pass them use the
 #### Complex cases
 
 Note that there's no additional magic in builder. It simply copies properties to
-a view without any modification. For example `childViews` will be just passed
+a view without any modification. For example, `childViews` will be just passed
 as a JSON array to the view. And view will build those `childViews` itself:
 
     builder.build({ view: 'Container', childViews: [
         { view: 'Button', label: 'Hello' }
     ]});
 
-`Container` view will then call `builder.build` to continue building it's children.
+`Container` view will then call `builder.build` to continue building its children.
 
 The same applies to event handlers.
 
@@ -84,9 +84,9 @@ Converts `markup` into views and returns `Collection` containing those views.
 
 You can access `build` and `namespaces` directly on the builder module (`uki`).
 Both of them belong to the default application builder. You can
-temporary override default builder by calling `builder.withBuilder`.
+temporary override the default builder by calling `builder.withBuilder`.
 
-Be cautious with the default builder. Changing it's `namespaces` will
+Be cautious with the default builder. Changing its `namespaces` will
 affect all code in the application. It is safer to create a custom builder
 instance and pass it to your building code instead of changing default
 builder `namespaces`.
@@ -107,6 +107,6 @@ Namespaces of the default builder.
 ### builder.withBuilder(builder, callback, [context])
 
 Makes `builder` a default application builder and calls `callback`. 
-After the call restores default builder to it's previous state. This method is 
+After the call restores default builder to its previous state. This method is
 being called within `builder.build`. So all internal calls to `build` will go 
 to the same builder.

@@ -4,7 +4,7 @@ Default API for all views.
 
 Uki views do not have states. After creation a view is fully functional.
 You can change properties on it, append it to other views, bind events.
-The same way as dom nodes behave.
+The same way as DOM nodes behave.
 
 `view.Base` is a normal class (not abstract). You can create instances
 of `view.Base`.
@@ -18,7 +18,7 @@ does.
 ### view.Base.prototype._createDom(initArgs)
 
 Extended in subclasses. Should create `this._dom`. `this._dom` it the root
-dom node of the view.
+DOM node of the view.
 
 This is the only method you need to extend to create a subclass.
 Everything else is optional.
@@ -37,7 +37,7 @@ Everything else is optional.
 ### view.Base.prototype._setup(initArgs)
 
 Extended in subclasses. Called right before _createDom on construction.
-Mostly a convenience method to initialize non dom properties.
+Mostly a convenience method to initialize non DOM properties.
 
     view.newClass('Container', Base, {
         ...
@@ -50,7 +50,7 @@ Mostly a convenience method to initialize non dom properties.
 
 ### view.Base.prototype.dom()
 
-Returns root dom node of the view. By default returns `this._dom` property.
+Returns root DOM node of the view. By default returns `this._dom` property.
 
 ### view.Base.prototype.resized()
 
@@ -63,12 +63,12 @@ If a view needs some specific actions on resize they should be done here.
 ## Default accessors
 
 `view.Base` provides a number of convenience methods to modify view properties.
-All of them target the dom root node by default. However they can be redefined in
+All of them target the DOM root node by default. However they can be redefined in
 subclasses.
 
 ### view.Base.prototype.html([value])
 
-Accessor for `innerHTML` of the view (by default root dom node).
+Accessor for `innerHTML` of the view (by default root DOM node).
 
 ### view.Base.prototype.text([value])
 
@@ -77,11 +77,11 @@ Same as `html` though will escape `value` on set.
 ### view.Base.prototype.id([value])
 
 Accessor for `id` of the view. Registers the view for fast
-search using `#id` selector. By default sets `id` attribute on root dom node.
+search using `#id` selector. By default sets `id` attribute on root DOM node.
 
 ### view.Base.prototype.className([value])
 
-Accessor for `className` of the view (by default root dom node).
+Accessor for `className` of the view (by default root DOM node).
 
 ### view.Base.prototype.addClass(names)
 
@@ -111,11 +111,11 @@ be called when view becomes `visible` again.
 
 ### view.Base.prototype.scrollLeft([value])
 
-Accessor for dom `scrollLeft`
+Accessor for DOM `scrollLeft`
 
 ### view.Base.prototype.scrollTop([value])
 
-Accessor for dom `scrollTop`
+Accessor for DOM `scrollTop`
 
 ### view.Base.prototype.scroll(dx, dy)
 
@@ -123,11 +123,11 @@ Scrolls the view by `dx` an `dy` px.
 
 ### view.Base.prototype.title([value])
 
-Accessor for dom `title`
+Accessor for DOM `title`
 
 ### view.Base.prototype.style([value])
 
-Experimental. Accessor for dom `style`. Returns style object. Accepts
+Experimental. Accessor for DOM `style`. Returns style object. Accepts
 both strings and objects. Suggested for debug or prototyping use only.
 
     view.style('position: absolute; left: 100px');
@@ -144,14 +144,14 @@ Experimental. Adds style to view. Accepts both strings and hashes:
 ## Events
 
 You can add event listeners directly to views. The same way you do it
-with the dom nodes. All views support native dom events, some add their
-own. By default events will be bound to root dom nodes, however views
+with the DOM nodes. All views support native DOM events, some add their
+own. By default events will be bound to root DOM nodes, however views
 may redefine this behavior in a meaningful way. Ex: input can add 'keyup'
 event to the <input type="text"> node and not to wrapper.
 
 ### view.Base.prototype.domForEvent(type)
 
-Returns a dom node to which to event should be added. By default returns `this.dom()`.
+Returns a DOM node to which to event should be added. By default returns `this.dom()`.
 
 ### view.Base.prototype.addListener(types, listener)
 ### view.Base.prototype.on(types, listener)
@@ -217,19 +217,19 @@ Views can be contained only in other views. All views support being contained.
 
 ### view.Base.prototype.parent([parent])
 
-Accessor for the parent view. Similar to `parentNode` on dom nodes.
+Accessor for the parent view. Similar to `parentNode` on DOM nodes.
 
 ### view.Base.prototype.prevView()
 
-Get previous view. Similar to `previousSibling` on dom nodes.
+Get previous view. Similar to `previousSibling` on DOM nodes.
 
 ### view.Base.prototype.nextView()
 
-Get next view. Similar to `nextSibling` on dom nodes.
+Get next view. Similar to `nextSibling` on DOM nodes.
 
 ### view.Base.prototype.childViews()
 
-Get array of childViews. Similar to `childNodes` on dom nodes but returns a normal
+Get array of childViews. Similar to `childNodes` on DOM nodes but returns a normal
 array.
 
 ## Positioning

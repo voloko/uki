@@ -2,7 +2,7 @@
 
 Default API for containers.
 
-Provides dom like container methods: `appendChild`, `removeChild`,
+Provides DOM-like container methods: `appendChild`, `removeChild`,
 `insertBefore`.
 
 ### new Container(initArgs)

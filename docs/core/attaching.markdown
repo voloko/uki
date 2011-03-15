@@ -2,8 +2,8 @@
 
 Views are designed to interact only with other views. To attach them
 to raw DOM nodes you should use a bridge object. Attaching is this
-object. It extends `view.Container` thus providing default `Container`
-api and is capable of wrapping DOM nodes.
+object. It extends `view.Container`, providing the default `Container`
+API and is capable of wrapping DOM nodes.
 
 ### attaching.Attaching.attach([dom], view)
 

@@ -4,7 +4,7 @@ This module provides utilities to manipulate functions and create classes
 
 ### fun.build(fn, context, [arg, ...])
 
-Returns a function that will call `fn` in a given `context` with given `arg`.
+Returns a function that will call `fn` in a given `context` with a given `arg`.
 
 Example:
 
@@ -24,14 +24,14 @@ Example:
 
 ### fun.bindOnce(fn, context)
 
-Special version of `fun.bind`. Guarantied to provide the same result for the
+Special version of `fun.bind`. Guaranteed to provide the same result for the
 same fn and context pair provided. Cannot bind arguments. If `fn` is
 already bound will just return `fn`.
 
 Useful for event handlers:
 
     x.on('click', fun.bindOnce(handler, this));
-    // will unbind bound function here
+    // will unbind the bound function here
     x.removeListener('click', fun.bindOnce(handler, this));
 
 Note that `fun.bindOnce` will add `__bind_NNN` properties to the `context`.
@@ -45,9 +45,8 @@ Bare metal class and inheritance implementation. Creates a new class with
         this.name = 'Rex';
     });
 
-It can accept base class as the first parameter. Base class is NOT obliged
-to be created using `fun.newClass`. Anything including simple
-`function` will work:
+It can accept base class as the first parameter. It's not obligatory to use `fun.newClass`
+to create the base class. Anything, including simple `function` will work:
 
     var Dog = fun.newClass(Animal, function() {
         // call the base class
@@ -85,8 +84,8 @@ case `init` property will be used as a constructor function:
 
 ### fun.newProp(name, [setter])
 
-Creates a new property accessor function. To get the property value call the accessor
-function without arguments. To set the value call it passing the value as the
+Creates a new property accessor function. To get the property value, call the accessor
+function without arguments. To set the value, call it with value as the
 first argument. Properties are chainable:
 
     var Person = fun.newClass({
@@ -123,7 +122,7 @@ Accepts an array of property names:
 ### fun.newDelegateProp(target, targetName)
 
 Creates a function that delegates the property accessor to the `target`.
-If target has an accessor function for `targetName` this function will
+If target has an accessor function for `targetName`, this function will
 be called. Otherwise delegate function will just write, read the hash key.
 
     var Wrapper = fun.newClass({
@@ -142,17 +141,17 @@ Note that delegated properties are chainable.
 
 ### fun.delegateProp(source, name, target, [targetName])
 
-Adds a delegate function to the given `source`. By default `targetName` is equal to `name`.
+Adds a delegate function to the given `source`. By default, `targetName` is equal to `name`.
 
     fun.delegateProp(Wrapper.prorotype, 'id', 'node');
 
-`fun.delegateProp` can accept array of properties:
+`fun.delegateProp` can accept an array of properties:
 
     fun.delegateProp(Wrapper.prorotype, ['id', 'name', 'type'], 'node');
 
 ### fun.newDelegateCall(target, targetName)
 
-Creates a function that will call the `targetName` on `target`:
+Creates a function that will call `targetName` on `target`:
 
     var Wrapper = fun.newClass({
         init: function(node) {
@@ -167,19 +166,19 @@ Creates a function that will call the `targetName` on `target`:
 
 ### fun.delegateCall(source, name, target, targetName)
 
-Adds a delegate call function to the given `source`. By default `targetName` is equal to `name`.
+Adds a delegate call function to the given `source`. By default, `targetName` is equal to `name`.
 
     fun.delegateProp(Wrapper.prorotype, 'setAttribute', 'node');
 
-`fun.delegateCall` can accept array of function names:
+`fun.delegateCall` can accept an array of function names:
 
     fun.delegateCall(Wrapper.prorotype, ['getAttribute', 'setAttribute'],
     'node');
 
 ### fun.after(callback)
 
-Executes `callback` after current execution is finished. Currently using
-`setTimeout`. If called several times with the same `callback` will execute
+Executes `callback` after current execution is finished. Currently uses
+`setTimeout`. If called several times with the same `callback`, will execute
 it only once.
 
 Redraw only once regardless of the number of children added:

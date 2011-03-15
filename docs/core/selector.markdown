@@ -1,12 +1,12 @@
 ## Selector
 
-Provides CSS3-like selector engine on top of view tree. Note that selector works
-on views and NOT on dom nodes.
+Provides a CSS3-like selector engine on top of view tree. Note that selectors work
+on views and NOT on DOM nodes.
 
 ### selector.find(selector, [context])
 
-Search for the views matching `selector` in the `context`. If `context` is not
-provided will search within all attached views.
+Search for views matching `selector` in the `context`. If `context` is not
+provided, will search within all attached views.
 
    // all buttons
    find('Button')
@@ -30,7 +30,7 @@ provided will search within all attached views.
    // immediate child buttons
    find('Container > Button')
    
-   // all labels preceding by button within container
+   // all labels preceded by button within container
    find('Container > Button + Label')
    
    // all paragraphs after buttons

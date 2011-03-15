@@ -4,7 +4,7 @@ Provides view utility functions
 
 ### view.newClass(typeName, [baseClass], [mixin], definition)
 
-Works exactly as `fun.newClass` but also ads typeName property to the
+Works exactly as `fun.newClass` but also adds typeName property to the
 prototype. typeName is used by selector.
 
 ### view.byId(id)
@@ -18,8 +18,8 @@ Finds the view enclosing the `element`.
     parent.on('click', function(e) {
         var button = view.closest(e.target);
         
-        // you can use e.targetView() insted of
-        // calling view.closest manualy
+        // you can use e.targetView() instead of
+        // calling view.closest manually
     });
     
 ### view.contains(parent, child)

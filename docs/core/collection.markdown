@@ -43,9 +43,9 @@ in collection.
 
 ### collection.Collection.addMethods(methods)
 
-Add methods to collection prototype. When you call a method on collection
+Add methods to collection prototype. When you call a method on a collection
 all the containing views will have the method with the same name and params
-being called. By default this methods are delegated: 
+being called. By default, this methods are delegated:
 `addListener`, `removeListener`, `trigger`, `on`,
 `addClass`, `removeClass`, `toggleClass`,
 `destruct`, `resized`, `scroll`, `clear`
@@ -53,7 +53,7 @@ being called. By default this methods are delegated:
 ### collection.Collection.addProps(props)
 
 Add property accessors to collection prototype. Instead of calling `c.prop(name)`
-you can now just use `c.name()`. By default this properties are added:
+you can now just use `c.name()`. By default, this properties are added:
 `id`, `dom`, `text`, `html`, `pos`, `visible`, `style`
 
 

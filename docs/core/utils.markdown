@@ -5,9 +5,9 @@ This module provides core array, object, and string utilities.
 ### utils.prop(obj, prop, [value], [extra])
 
 Sets or retrieves property `prop` of `obj`.
-If target has function named `prop` it will be called `obj[prop](value)`
+If target has a function named `prop`, this function will be called `obj[prop](value)`
 or `return obj[prop]()`.
-If there's no function property will be set/get directly:
+If there's no function, property will be set/get directly:
 `obj[prop] = value` or `return obj[prop]`.
 
     utils.prop(view, 'name', 'funny') // sets name to funny on view
@@ -16,51 +16,51 @@ If there's no function property will be set/get directly:
 
 ### utils.isFunction(obj)
 
-Checks if if `obj` if a function.
+Checks if `obj` is a function.
 
 ### utils.isArray(obj)
 
-Checks if if `obj` if a native array.
+Checks if `obj` is a native array.
 
 ### utils.toArray(array)
 
-Converts array-like object to array:
+Converts an array-like object to array:
 
     var args = utils.toArray(arguments);
 
 ### utils.pluck(array, prop)
 
 Extracts property `prop` from all array items. Will use `utils.prop` to
-read properties so both function and simple properties are supported:
+read properties, so both function and simple properties are supported:
 
     var id = utils.pluck(views, 'id');
     var names = utils.pluck([{name: 'Ben'}, {name: 'Bob'}], 'name');
 
-Will try to use `array.forEach` if available. If not will fallback to
+Will try to use `array.forEach`, if available. If not, will fallback to
 `utils.forEach`.
 
 ### utils.without(array, value)
 
-Returns `array` without `value`. Will filter array using `!==` operation.
+Returns `array` without `value`. Will filter the array using `!==` operation.
 
     listeners = utils.without(listeners, listenerToRemove);
 
-Will try to use `array.filter` if available. If not will fallback to
+Will try to use `array.filter`, if available. If not, will fallback to
 `utils.filter`.
 
 ### utils.forEach(object, callback, [context])
 
 Iterate over all items of an `object`.
 
-If `object` is array-like (with `length`) `utils.forEach` will try 
-to use `Array.prototype.forEach` or if it's not supported compat 
+If `object` is array-like (with `length`), `utils.forEach` will try
+to use `Array.prototype.forEach` or, if it's not supported, compat
 implementation using `for(var i = 0; i < length; i++)`.
 
-If `object` is an actual object `utils.forEach` will iterate over all 
-it's keys. Please note that keys will be checked with `hasOwnProperty`.
+If `object` is an actual object, `utils.forEach` will iterate over all
+of its keys. Please note that keys will be checked with `hasOwnProperty`.
 
 Callback will get `value` as a first parameter and `key` or `index` as second.
-It will be executed in `context` if provided.
+It will be executed in `context`, if provided.
 
     utils.forEach(['a', 'b', 'c'], function(letter, index) {
         console.log(index, letter);
@@ -87,14 +87,14 @@ Copies all properties from `extension` to target and returns the result.
 
 ### utils.binarySearch(value, array)
 
-Searches for `value` in a sorted `array`. If value is in `array` returns
-it's position. Otherwise returns the position where this value should be
+Searches for `value` in a sorted `array`. If value is in `array`, returns
+its position. Otherwise returns the position where this value should be
 added.
 
-### utils.camalize(string)
+### utils.camelize(string)
 
 Converts `string_with_underscores` to `stringWithUnderscores`. Also converts
-`string-with-dashes` into `stringWithDashes`. Useful to convert css property
+`string-with-dashes` to `stringWithDashes`. Useful to convert CSS property
 names.
 
 ### utils.dasherize(string)
@@ -115,17 +115,17 @@ Returns an Array filled with values `from` to `to`.
 
 ### utils.trim(string)
 
-Removes trailing and leading white spaces from `string`. Will use
+Removes trailing and leading whitespaces from `string`. Will use
 String.prototype.trim when available.
 
 ### utils.indexOf(array, find, [i])
 
-Find `find` in `array`. Will use native `Array.prototype.indexOf` when
+Finds `find` in `array`. Will use native `Array.prototype.indexOf` when
 available.
 
 ### utils.lastIndexOf(array, find, [i])
 
-Find `find` in `array` starting from the end. Will use native
+Finds `find` in `array` starting from the end. Will use native
 `Array.prototype.lastIndexOf` when available.
 
 ### utils.map(array, action, [context])
@@ -149,8 +149,7 @@ Will use native `Object.keys` when available.
 
 ### utils.applyCompat
 
-Extends Array prototype with ECMAScript function if they are not provided
-by the browser. Be very cautions. This can not be reverted. And this can
-break (though quite unprobable) other's people code. Functions are
-`indexOf`, `lastIndexOf`, `forEach`, `map`, `filter`, `reduce`.
+Extends the Array prototype with ECMAScript 5 methods if they are not provided
+by the browser. Be very cautious, this can not be reverted. It can also break other peoples' code.
+Functions are `indexOf`, `lastIndexOf`, `forEach`, `map`, `filter`, `reduce`.
 

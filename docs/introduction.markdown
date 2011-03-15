@@ -1,43 +1,43 @@
 ## ukijs
 
-Ukijs is a small (core under 10KB) library that let's you build complex
+Ukijs is a small (core is under 10KB) library that lets you build complex
 interfaces in a meaningful way. It comes with a collection
-of views like SplitPane or DataList. It also plays nicely with client side
-libraries (jQuery, prototype) and with nodejs on the server.
+of views like SplitPane or DataList. It also plays nicely with client-side
+libraries (jQuery, Prototype) and with Node.js on the server.
 
 ### Compatibility
 IE7+, FF3+, Safari/Chrome latest-1, Opera 10+. Yes, no IE6 any more.
-Prototype neutral. Will not modify any native objects.
+Prototype-neutral. Will not modify any native objects.
 
 ### Build interfaces
 
 Ukijs provides a simple syntax to build interfaces from view components
-using json markup. Build a button view and attach it to `document.body`:
+using JSON markup. Build a button view and attach it to `document.body`:
 
     uki({ view: 'Button', label: 'Hello World' }).attach(document.body);
 
-This can be extend to build more complex interfaces like a mail app layout:
+This can be extended to build more complex interfaces like a mail app layout:
 
     uki(
-      // verticaly splitted 2-pane resizable container
+      // vertically splitted 2-pane resizable container
       { view: 'SplitPane', init: { vertical: true },
         leftChildViews: [
           // data list on the left filling all the available space
-          { view: 'ScrollableDataList', pos: 'top:0 left:0 rigth:0 bottom:0',
+          { view: 'ScrollableDataList', pos: 'top:0 left:0 right:0 bottom:0',
             data: folders }
         ],
         rightChildViews: [
-          // horizontaly splitted 2-pane resizable container with large handle
+          // horizontally splitted 2-pane resizable container with a large handle
           { view: 'SplitPane', init: { vertical: false, handleWidth: 5 },
             handlePosition: 300,
             topChildViews: [
               // messages arranged as a table on the right
-              { view: 'DataTable', pos: 'top:0 left:0 rigth:0 bottom:0',
+              { view: 'DataTable', pos: 'top:0 left:0 right:0 bottom:0',
                 data: messages,
                 columns: [
                   { label: 'From', key: 'fromName', width: 200, minWidth: 100 },
                   { label: 'Subject', key: 'title', width: 200, minWidth: 100 },
-                  { label: 'Recieved', key: 'dateRecieved',
+                  { label: 'Received', key: 'dateReceived',
                     width: 100, minWidth: 80, formatter: function(d) {
                       return d.toDateString();
                     } }
@@ -46,10 +46,10 @@ This can be extend to build more complex interfaces like a mail app layout:
             ],
             bottomChildViews: [
               // title
-              { view: 'Text', pos: 'top:0 left:0 rigth:0 height:30px',
+              { view: 'Text', pos: 'top:0 left:0 right:0 height:30px',
                 text: 'message label' },
               // content
-              { view: 'Text', pos: 'top:30px left:0 rigth:0 bottom:0',
+              { view: 'Text', pos: 'top:30px left:0 right:0 bottom:0',
                 id: 'content' }
             ]
           }
@@ -58,13 +58,13 @@ This can be extend to build more complex interfaces like a mail app layout:
 
 ### Traversing
 
-Once the interface is built uki will let you traverse it using css-like
+Once the interface is built, uki will let you traverse it using CSS-like
 selectors. For the previous example you can use:
 
     uki('SplitPane[vertical]') // a vertical split pane
     uki('Text:eq(1)')          // second text
     uki('#content')            // text by id
-    uki('[text~=message]')     // anything where text contains word message
+    uki('[text~=message]')     // anything where text contains a word `message`
 
 Note that `uki()` function returns a Collection of views. Elements within
 the collection can be accessed using `[]`:
@@ -76,7 +76,7 @@ the collection can be accessed using `[]`:
 
 ### Manipulation
 
-All the properties of a view are modifiable. To modify a property pass a
+All the properties of a view are modifiable. To modify a property, pass a
 value into the property function:
 
     uki('SplitPane')[1].handlePosition(200); // move handle to 200px
@@ -87,7 +87,7 @@ Properties are chainable. Change the label to make the button large:
 
     uki('Button').label('New label').large(true);
 
-Views also support dom-like API: `appendChild`, `insertBefore`, `removeChild`,
+Views also support a DOM-like API: `appendChild`, `insertBefore`, `removeChild`,
 `childViews`, `parentView`, `firstChild`, `lastChild`, `nextView`, `prevView`.
 
     uki({ view: 'Flow', horizontal: false, childViews: [
@@ -105,7 +105,7 @@ Views also support dom-like API: `appendChild`, `insertBefore`, `removeChild`,
 
 ### Events
 
-You can add event listeners to views. The API is similar to dom nodes:
+You can add event listeners to views. The API is similar to DOM nodes:
 `addListener` or `on` and `removeListener`:
 
     uki('Button')[0].on('click', function() {
@@ -129,7 +129,7 @@ Views may provide specific events. Example:
 ### Data bindings
 
 You can create observable data models and then bind them to views. So
-when the view changes the data gets updated and visa versa.
+when the view changes the data gets updated and vice versa.
 
 First you need a data model:
 
@@ -161,14 +161,14 @@ Several views can be bound to the same model. Bind age to a text field:
       binding: { model: bob, modelProp: 'age' } }
     ).attach();
 
-### Nodejs require
+### Node.js require
 
 Uki core is a collection of modules each of which can be used separately. Uki
-uses CommonJs specification and `require` function to build modules together.
+uses the Common.JS Modules specification to build modules together.
 
-To use modules separately you need uki tools sever/builder. Once installed you
-can use require in your client side code. For example instead of requiring
-all the core you can use only the utility functions:
+To use modules separately you need the uki tools server/builder. Once installed you
+can use `require` in your client-side code. For example, instead of requiring
+the full core, you can require only the utility functions:
 
     var utils = require('uki-core/utils');
     var keys = utils.keys({ foo: 1, bar: 2});

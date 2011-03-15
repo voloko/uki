@@ -1,11 +1,11 @@
 ## Dom
 
-This module provides minimal set of dom helper function.
+This module provides a minimal set of DOM helper functions.
 
 ### dom.createElement(tagName, [options], [children])
 
-Creates a dom element with given `tagName`. If options are specified
-will copy those to created element. If `children` are given all the
+Creates a DOM element with a given `tagName`. If options are specified,
+they will be copied to the created element. If `children` are given, all the
 children will be appended to the element:
 
     var div = dom.createElement('div', {
@@ -20,7 +20,7 @@ children will be appended to the element:
 
 ### dom.removeElement(element)
 
-Removes element from it's `parentNode`
+Removes element from its `parentNode`
 
 ### dom.createStylesheet(code)
 
@@ -30,17 +30,17 @@ Dynamically creates a stylesheet:
 
 ### dom.computedStyle(element)
 
-Cross browser access to computedStyle of an `element`.
+Cross-browser access to computedStyle of an `element`.
 
 ### dom.fromHTML(html)
 
-Creates an element from provided html:
+Creates an element from provided HTML:
 
     div = dom.fromHTML('<div class="my-class">Hello <strong>world!</strong></div>');
 
 ### dom.clientRect(element, [ignoreScroll])
 
-Returns `element` clientRect adjusted to window scroll. If `ignoreScroll` is set to `true`
+Returns `element` clientRect adjusted to window scroll. If `ignoreScroll` is set to `true`,
 will not adjust to scroll.
 
 ### dom.hasClass(element, className)
@@ -51,7 +51,7 @@ Checks if the `element` has `className`.
 
 ### dom.addClass(element, classNames)
 
-Ads one or several (space separated) `classNames` to the `element`. Will do nothing
+Adds one or several (space-separated) `classNames` to the `element`. Will do nothing
 with classNames that are already added.
 
     div.className = 'my-class class1'
@@ -60,7 +60,7 @@ with classNames that are already added.
 
 ### dom.removeClass(element, classNames)
 
-Removes one or several (space separated) `classNames` from the `element`.
+Removes one or several (space-separated) `classNames` from the `element`.
 
     div.className = 'my-class class1 my-other-class'
     dom.removeClass(div, 'my-class my-other-class');
@@ -68,6 +68,6 @@ Removes one or several (space separated) `classNames` from the `element`.
 
 ### dom.toggleClass(element, className, [condition])
 
-Toggles a give `className` on an `element`.
+Toggles a given `className` on an `element`.
 
 ### dom.escapeHTML(html)
