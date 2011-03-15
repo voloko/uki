@@ -1,10 +1,10 @@
 requireCss('./text/text.css');
 
-var fun  = require('uki-core/function'),
-    dom  = require('uki-core/dom'),
-    view = require('uki-core/view'),
+var fun  = require('../../uki-core/function'),
+    dom  = require('../../uki-core/dom'),
+    view = require('../../uki-core/view'),
 
-    Base = require('uki-core/view/base').Base;
+    Base = require('../../uki-core/view/base').Base;
 
 
 var Text = view.newClass('Text', Base, {
@@ -42,7 +42,9 @@ var Header = view.newClass('Header', Base, {
     })
 });
 
-
+require('../../uki-core/collection').Collection.addProps([
+    'for'
+]);
 exports.Text   = Text;
 exports.P      = P;
 exports.Label  = Label;

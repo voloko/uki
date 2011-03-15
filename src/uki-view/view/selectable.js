@@ -1,7 +1,7 @@
-var env   = require('uki-core/env'),
-    fun   = require('uki-core/function'),
-    utils = require('uki-core/utils'),
-    dom   = require('uki-core/dom');
+var env   = require('../../uki-core/env'),
+    fun   = require('../../uki-core/function'),
+    utils = require('../../uki-core/utils'),
+    dom   = require('../../uki-core/dom');
 
 
 /**

@@ -1,18 +1,18 @@
 requireCss('./dataList/dataList.css');
 
-var env   = require('uki-core/env'),
-    fun   = require('uki-core/function'),
-    utils = require('uki-core/utils'),
-    dom   = require('uki-core/dom'),
-    evt   = require('uki-core/event'),
-    view  = require('uki-core/view'),
-    build = require('uki-core/builder').build,
+var env   = require('../../uki-core/env'),
+    fun   = require('../../uki-core/function'),
+    utils = require('../../uki-core/utils'),
+    dom   = require('../../uki-core/dom'),
+    evt   = require('../../uki-core/event'),
+    view  = require('../../uki-core/view'),
+    build = require('../../uki-core/builder').build,
     
     Binding    = require('./dataList/binding').Binding,
-    Mustache   = require('uki-core/mustache').Mustache;
-    Base       = require('uki-core/view/base').Base;
-    Focusable  = require('uki-core/view/focusable').Focusable;
-    Selectable = require('selectable').Selectable;
+    Mustache   = require('../../uki-core/mustache').Mustache;
+    Base       = require('../../uki-core/view/base').Base;
+    Focusable  = require('../../uki-core/view/focusable').Focusable;
+    Selectable = require('./selectable').Selectable;
     
 
 var DataList = view.newClass('DataList', Base, Focusable, Selectable, {}),

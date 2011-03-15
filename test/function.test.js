@@ -259,14 +259,14 @@ test('delegateCall', 2, function() {
 });
 
 
-module('after');
+module('deferOnce');
 
 asyncTest('is called', 2, function() {
     var count = 0;
     function counter() {
         count++;
     }
-    fun.after(counter);
+    fun.deferOnce(counter);
     equal(count, 0);
     setTimeout(function() {
         equal(count, 1);
@@ -280,7 +280,7 @@ asyncTest('is de-duped', 2, function() {
         count++;
     }
     for(var i = 0; i < 100; i++) {
-        fun.after(counter);
+        fun.deferOnce(counter);
     }
     equal(count, 0);
     setTimeout(function() {

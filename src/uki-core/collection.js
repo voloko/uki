@@ -145,20 +145,24 @@ utils.forEach([
 
 Collection.addMethods = function(methods) {
     utils.forEach(methods, function(name) {
-        proto[name] = function() {
-            for (var i = this.length - 1; i >= 0; i--) {
-                this[i][name].apply(this[i], arguments);
-            }
-            return this;
-        };
+        if (!proto[name]) {
+            proto[name] = function() {
+                for (var i = this.length - 1; i >= 0; i--) {
+                    this[i][name].apply(this[i], arguments);
+                }
+                return this;
+            };
+        }
     });
 };
 
 Collection.addProps = function(props) {
     utils.forEach(props, function(name) {
-        proto[name] = function(value) {
-            return this.prop(name, value);
-        };
+        if (!proto[name]) {
+            proto[name] = function(value) {
+                return this.prop(name, value);
+            };
+        }
     });
 };
 
@@ -170,7 +174,8 @@ Collection.addMethods([
 ]);
 
 Collection.addProps([
-    'id', 'dom', 'text', 'html', 'pos', 'visible', 'style'
+    'id', 'dom', 'text', 'html', 'pos', 'visible', 'style', 'binding',
+    'bindings'
 ]);
 
 

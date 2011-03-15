@@ -131,15 +131,23 @@ function addFileToAstList (filePath, wrap) {
     var text = fs.readFileSync(filePath, 'utf8');
     // remove shebang
     text = text.replace(/^\#\!.*/, '');
-    if (wrap) {
-        text = '(function(global, module) {var exports = this;' + text + '})';
+    var ast;
+    if (text.indexOf('@static_require noprocess') === -1) {
+        if (wrap) {
+            text = '(function(global, module, require) {var exports = this;' + text + '})';
+        }
+        ast = jsp.parse(text);
+        ast = walker.with_walkers(walkers, function() {
+            return walker.walk(ast);
+        });
+    } else {
+        if (wrap) {
+            text = '(function() { var require = undefined;' + text + '})';
+        }
+        ast = jsp.parse(text);
     }
-    var ast = jsp.parse(text);
-    var newAst = walker.with_walkers(walkers, function() {
-        return walker.walk(ast);
-    });
     state.currentPath = oldPath;
-    state.requiredAsts[state.required[filePath]] = newAst;
+    state.requiredAsts[state.required[filePath]] = ast;
 }
 
 function staticRequire (filePath, options) {
@@ -163,7 +171,7 @@ function staticRequire (filePath, options) {
     addFileToAstList(filePath, true);
     
     var code = 'var global = this;';
-    code    += 'function require(index) { if (!require.cache[index]) {var module = require.cache[index] = {exports: {}}; require.modules[index].call(module.exports, global, module);} return require.cache[index].exports; }\n';
+    code    += 'function require(index) { if (!require.cache[index]) {var module = require.cache[index] = {exports: {}}; require.modules[index].call(module.exports, global, module, require);} return require.cache[index].exports; }\n';
     code    += 'var require_modules = require.modules = []; require.cache = [];';
     var body = jsp.parse(code)[1];
     

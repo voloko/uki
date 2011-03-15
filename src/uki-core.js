@@ -30,7 +30,7 @@ uki.version = '0.4.0a4';
 
 // push everything into core namespace
 utils.extend(uki,
-    utils, builder, selector, collection,
+    env, utils, builder, selector, collection,
     require('./uki-core/function'),
     require('./uki-core/dom'),
     require('./uki-core/event'),

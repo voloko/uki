@@ -1,15 +1,15 @@
 requireCss('./splitPane/splitPane.css');
 
-var fun   = require('uki-core/function'),
-    utils = require('uki-core/utils'),
-    view  = require('uki-core/view'),
-    evt   = require('uki-core/event'),
-    dom   = require('uki-core/dom'),
-    build = require('uki-core/builder').build,
+var fun   = require('../../uki-core/function'),
+    utils = require('../../uki-core/utils'),
+    view  = require('../../uki-core/view'),
+    evt   = require('../../uki-core/event'),
+    dom   = require('../../uki-core/dom'),
+    build = require('../../uki-core/builder').build,
 
-    Mustache  = require('uki-core/mustache').Mustache,
-    Container = require('uki-core/view/container').Container,
-    Focusable = require('uki-core/view/focusable').Focusable;
+    Mustache  = require('../../uki-core/mustache').Mustache,
+    Container = require('../../uki-core/view/container').Container,
+    Focusable = require('../../uki-core/view/focusable').Focusable;
 
 
 var SplitPane = view.newClass('SplitPane', Container, Focusable, {}),
@@ -178,11 +178,11 @@ proto._createDom = function() {
     this._dom.appendChild(this._handle = this._createHandle());
 };
 
-proto._scheduleChildResize = function() {
+proto._throttledChildResize = function() {
     this._resizeChildViews();
 };
 
-proto._resizeSelf = function() {
+proto.resized = function() {
     this._moveHandle();
 
     if (!this._prevWidth) {
@@ -192,8 +192,8 @@ proto._resizeSelf = function() {
     } else {
         this._handlePosition = this._normalizeHandlePosition(this._calcDesiredPosition());
         this._moveHandle();
-        this._scheduleChildResize();
     }
+    this._throttledChildResize();
 };
 
 proto._calcDesiredPosition = function() {
@@ -208,6 +208,7 @@ proto._calcDesiredPosition = function() {
 proto._draggesturestart = function(e) {
     e.cursor = dom.computedStyle(this._handle, null).cursor;
     this._positionBeforeDrag = this.handlePosition();
+    this._updatePositionOnDrag(e);
 };
 
 proto._draggesture = function(e) {
@@ -225,7 +226,7 @@ proto._updatePositionOnDrag = function(e, stop) {
     var pos = this._positionBeforeDrag + e.dragOffset[this._x_xName()];
     this._handlePosition = this._normalizeHandlePosition(pos);
     this._moveHandle();
-    this._scheduleChildResize();
+    this._throttledChildResize();
 
     this.trigger({
         type: stop ? 'handleStop' : 'handleMove',
@@ -286,4 +287,8 @@ proto._resizeChildViews = function() {
 };
 
 
+require('../../uki-core/collection').Collection.addProps([
+    'leftMin', 'rightMin', 'leftSpeed', 'rightSpeed', 'throttle',
+    'handlePosition', 'extPositions', 'handleWidth', 'vertical'
+]);
 exports.SplitPane = SplitPane;

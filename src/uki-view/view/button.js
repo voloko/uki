@@ -1,11 +1,11 @@
 requireCss('./button/button.css');
 
-var fun  = require('uki-core/function'),
-    view = require('uki-core/view'),
-    dom  = require('uki-core/dom'),
+var fun  = require('../../uki-core/function'),
+    view = require('../../uki-core/view'),
+    dom  = require('../../uki-core/dom'),
 
-    Base      = require('uki-core/view/base').Base,
-    Focusable = require('uki-core/view/focusable').Focusable;
+    Base      = require('../../uki-core/view/base').Base,
+    Focusable = require('../../uki-core/view/focusable').Focusable;
 
 
 var Button = view.newClass('Button', Base, Focusable, {
@@ -59,5 +59,7 @@ function updateImageOnly () {
     this.toggleClass('uki-button_image-only', !!(this.iconSrc() && !this.labelHtml()));
 }
 
-
+require('../../uki-core/collection').Collection.addProps([
+    'labelHTML', 'label', 'disabled', 'confirm', 'iconSrc'
+]);
 exports.Button = Button;

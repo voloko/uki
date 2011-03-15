@@ -86,10 +86,15 @@ utils.without = function(array, value) {
 };
 
 utils.invoke = function(array, method) {
-    var args = slice.call(arguments, 1);
-    function invoke(item) {
-        return item[method].apply(item, args);
-    }
+    var args = slice.call(arguments, 2),
+        invoke = method ? 
+            function(item) {
+                return item[method].apply(item, args);
+            } :
+            function(item) {
+                return item.apply(null, args);
+            };
+            
     return array.forEach ?
         array.forEach(invoke) :
         utils.forEach(array, invoke);

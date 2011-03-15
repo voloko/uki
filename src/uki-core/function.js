@@ -250,42 +250,6 @@ fun.delegateCall = function(source, name, target, targetName) {
     }
 };
 
-
-var afterBound = {},
-    afterTimer = 0,
-    afterQueue = [];
-
-fun.after = function(callback) {
-    callback.huid = callback.huid || env.guid++;
-    if (afterBound[callback.huid]) { return; }
-    afterBound[callback.huid] = true;
-    afterQueue.push(callback);
-    scheduleAfterCallbacks();
-};
-
-function runAfterCallbacks() {
-    clearAfterTimer();
-    var queue = afterQueue;
-    afterQueue = [];
-    afterBound = {};
-    for (var i = 0; i < queue.length; i++) {
-        queue[i]();
-    }
-};
-
-function scheduleAfterCallbacks() {
-    if (afterTimer) { return; }
-    afterTimer = setTimeout(runAfterCallbacks, 1);
-};
-
-function clearAfterTimer() {
-    if (!afterTimer) { return; }
-    clearTimeout(afterTimer);
-    afterTimer = 0;
-};
-
-
-
 function timer(fn, timeout, debounce) {
     var running;
 
@@ -313,9 +277,53 @@ fun.debounce = function(fn, timeout) {
     return timer(fn, timeout, true);
 };
 
-fun.defer = function(fn, timeout) {
-    timeout = timeout || 0;
-    return setTimeout(fn, timeout);
+if (global.postMessage) {
+    var deferMessage = "uki-defer-" + env.expando,
+        listening = false,
+        deferQueue = [];
+        
+    fun.defer = function(callback) {
+        if (!listening) {
+            global.addEventListener('message', function(e) {
+                if (e.data == deferMessage) {
+                    e.stopPropagation();
+                    var queue = deferQueue;
+                    deferQueue = [];
+                    utils.invoke(queue);
+                }
+            }, false);
+            listening = true;
+        }
+        deferQueue.push(callback);
+        global.postMessage(deferMessage, "*");
+    };
+} else {
+    fun.defer = function(callback) {
+        return global.setTimeout(callback, 0);
+    };
+}
+
+var deferOnceBound = {},
+    deferOnceQueue = [];
+
+fun.deferOnce = function(callback, context) {
+    if (context) {
+        callback = fun.bindOnce(callback, context);
+    }
+    callback.huid = callback.huid || env.guid++;
+    if (deferOnceBound[callback.huid]) { return; }
+    deferOnceBound[callback.huid] = true;
+    deferOnceQueue.push(callback);
+    if (deferOnceQueue.length === 1) {
+        fun.defer(runAfterCallbacks);
+    }
+};
+
+function runAfterCallbacks() {
+    var queue = deferOnceQueue;
+    deferOnceQueue = [];
+    deferOnceBound = {};
+    utils.invoke(queue);
 };
 
 

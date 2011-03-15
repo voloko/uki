@@ -170,10 +170,10 @@ To use modules separately you need the uki tools server/builder. Once installed 
 can use `require` in your client-side code. For example, instead of requiring
 the full core, you can require only the utility functions:
 
-    var utils = require('uki-core/utils');
+    var utils = require('ukijs/src/uki-core/utils');
     var keys = utils.keys({ foo: 1, bar: 2});
 
-    var fun = require('uki-core/function'),
+    var fun = require('ukijs/src/uki-core/function'),
         Observable = require('uki-core/observable').Observable;
 
     var Person = fun.newClass(Observable, {
@@ -181,7 +181,7 @@ the full core, you can require only the utility functions:
         age:  Observable.newProp('age')
     });
 
-    var build = require('uki-core/builder').build;
+    var build = require('ukijs/src/uki-core/builder').build;
 
     var button = build({ view: 'Button', label: 'x' });
 

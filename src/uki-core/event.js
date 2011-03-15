@@ -131,7 +131,7 @@ function wrapDomEvent(baseEvent) {
     // This is expensive. I'd rather use much faster createEvent() here.
     // Unfortunately firefox uses read only properties on native events,
     // thus preventing modification even in descendants
-    for (var i = eventProps.length, prop; i; i--) {
+    for (var i = eventProps.length, prop; i >= -1; i--) {
         prop = eventProps[i];
         e[prop] = baseEvent[prop];
     }

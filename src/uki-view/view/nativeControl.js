@@ -1,14 +1,14 @@
 requireCss('./nativeControl/nativeControl.css');
 
-var fun   = require('uki-core/function'),
-    view  = require('uki-core/view'),
-    utils = require('uki-core/utils'),
-    dom   = require('uki-core/dom'),
-    env   = require('uki-core/env'),
-    evt   = require('uki-core/event'),
+var fun   = require('../../uki-core/function'),
+    view  = require('../../uki-core/view'),
+    utils = require('../../uki-core/utils'),
+    dom   = require('../../uki-core/dom'),
+    env   = require('../../uki-core/env'),
+    evt   = require('../../uki-core/event'),
 
-    Focusable = require('uki-core/view/focusable').Focusable,
-    Base      = require('uki-core/view/base').Base;
+    Focusable = require('../../uki-core/view/focusable').Focusable,
+    Base      = require('../../uki-core/view/base').Base;
 
 
 var ieResize = env.ua.match(/MSIE 6|7/);
@@ -190,6 +190,8 @@ var Select = view.newClass('nativeControl.Select', NativeControl, {
         return this;
     })
 });
+fun.delegateProp(NativeControl.prototype,
+    ['selectedIndex'], '_input');
 
 function appendOptions (root, options) {
     var node;
@@ -214,6 +216,10 @@ function appendOptions (root, options) {
 }
 
 
+require('../../uki-core/collection').Collection.addProps([
+    'name', 'checked', 'disabled', 'value', 'type', 'placeholder', 
+    'disabled', 'options', 'selectedIndex'
+]);
 exports.nativeControl = {
     NativeControl: NativeControl,
     Radio:         Radio,

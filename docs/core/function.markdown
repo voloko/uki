@@ -175,17 +175,21 @@ Adds a delegate call function to the given `source`. By default, `targetName` is
     fun.delegateCall(Wrapper.prorotype, ['getAttribute', 'setAttribute'],
     'node');
 
-### fun.after(callback)
+### fun.defer(callback)
 
-Executes `callback` after current execution is finished. Currently uses
-`setTimeout`. If called several times with the same `callback`, will execute
-it only once.
+Executes `callback` after current execution is finished. Uses `fun.defer`.
+Will use `postMessage` if available. Fallbacks to `setTimeout` if not.
+
+### fun.deferOnce(callback, [context])
+
+Same as `defer`. If called several times with the same `callback`, will 
+execute it only once.
 
 Redraw only once regardless of the number of children added:
 
     X.prototype.appendChild = function(view) {
         Base.prototype.appendChild.call(this, view);
-        fun.after(fun.bindOnce(this.redraw, redraw));
+        fun.deferOnce(this.redraw, redraw);
     }
 
 ### fun.throttle(fn, timeout)

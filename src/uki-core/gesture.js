@@ -58,8 +58,19 @@ function stopGesture () {
     evt.removeListener(env.doc, 'selectstart mousedown', evt.preventDefaultHandler);
 }
 
+function addOffset(e) {
+    e.dragOffset = {
+        x: e.pageX - gesture.position.x,
+        y: e.pageY - gesture.position.y
+    };
+}
+
 function dragGestureStart (e) {
     e = evt.createEvent(e, { type: 'draggesturestart', simulatePropagation: true });
+    e.dragOffset = {
+        x: 0,
+        y: 0
+    };
     evt.trigger(this, e);
     if (!e.isDefaultPrevented()) {
         gesture.position = { x: e.pageX, y: e.pageY };
@@ -69,10 +80,7 @@ function dragGestureStart (e) {
 
 function dragGesture (e) {
     e = evt.createEvent(e, { type: 'draggesture', simulatePropagation: true });
-    e.dragOffset = {
-        x: e.pageX - gesture.position.x,
-        y: e.pageY - gesture.position.y
-    };
+    addOffset(e);
     evt.trigger(gesture.draggable, e);
 
     if (e.isDefaultPrevented()) stopGesture(gesture.draggable);
@@ -80,10 +88,7 @@ function dragGesture (e) {
 
 function dragGestureEnd (e) {
     e = evt.createEvent(e, { type: 'draggestureend', simulatePropagation: true });
-    e.dragOffset = {
-        x: e.pageX - gesture.position.x,
-        y: e.pageY - gesture.position.y
-    };
+    addOffset(e);
     evt.trigger(gesture.draggable, e);
 
     stopGesture(gesture.draggable);

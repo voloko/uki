@@ -1,6 +1,6 @@
 
-var fun = require('uki-core/function'),
-    BaseBinding = require('uki-core/binding').Binding;
+var fun = require('../../../uki-core/function'),
+    BaseBinding = require('../../../uki-core/binding').Binding;
     
     
 var Binding = fun.newClass(BaseBinding, {
