@@ -238,6 +238,7 @@ exports.handle = function(req, res, options) {
     if (!options.serverRoot) {
         options.serverRoot = process.cwd();
     }
+    filePath = path.resolve(options.serverRoot, filePath);
     options.globalize = req.param('globalize');
     try {
         var ast = staticRequire(filePath, options);

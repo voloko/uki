@@ -175,7 +175,7 @@ Collection.addMethods([
 
 Collection.addProps([
     'id', 'dom', 'text', 'html', 'pos', 'visible', 'style', 'binding',
-    'bindings'
+    'bindings', 'clientRect'
 ]);
 
 

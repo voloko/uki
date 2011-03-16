@@ -71,7 +71,7 @@ app.get('/*.js', sr.getHandler({
 }));
 
 app.get('/*', function(req, res) {
-    res.sendfile(req.param(0))
+    res.sendfile(req.param(0));
 });
 
 require('util').puts("Server at http://" + HOST + ":" + PORT + "/");

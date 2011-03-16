@@ -85,7 +85,8 @@
 
 .uki-button_confirm {
     background-position: 0 -120px;
-    border-color: #77C;
+    border-color: #99C;
+    border-bottom-color: #77C;
 }
 
 .uki-button_confirm:hover {
@@ -94,6 +95,7 @@
 
 .uki-button_confirm:active {
     background-position: 0 -200px;
+    border-color: #77A;
 }
 
 .uki-button_confirm.uki-button_disabled,

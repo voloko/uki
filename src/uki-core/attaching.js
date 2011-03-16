@@ -50,12 +50,12 @@ function register(a) {
         evt.on(env.root, 'resize', function() {
             if (!timeout) {
                 timeout = true;
-                setTimeout(function(i, len) {
+                fun.defer(function(i, len) {
                     timeout = false;
                     utils.forEach(instances, function(a) {
                        a.resized();
                     });
-                }, 1);
+                });
             }
         });
     }

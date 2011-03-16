@@ -33,6 +33,7 @@ if (cli.command == 'run') {
     dev_server.init();
     dev_server.app.listen(port, host);
     util.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
+    
 } else if (cli.command == 'build') {
     
 }
