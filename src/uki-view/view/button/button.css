@@ -5,7 +5,6 @@
     border-bottom-color: #777;
     border-radius: 3px;
     background: #D7DAE4 url(button.png) repeat-x 0 0;
-    padding: 4px 0;
     
     white-space: nowrap;
     vertical-align: top;
@@ -13,7 +12,8 @@
     font-size: 12px;
     font-family: Arial, Helvetica, sans-serif;
     color: #111;
-    line-height: 12px;
+    padding: 0;
+    height: 22px;
     text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px;
     
     position: relative;
@@ -25,6 +25,11 @@
     -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
     -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
     box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset;
+}
+
+.uki-button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
 }
 
 .uki-button:hover {
@@ -85,8 +90,8 @@
 
 .uki-button_confirm {
     background-position: 0 -120px;
-    border-color: #99C;
-    border-bottom-color: #77C;
+    border-color: #999;
+    border-bottom-color: #779;
 }
 
 .uki-button_confirm:hover {
