@@ -9,9 +9,9 @@ var env   = require('../../uki-core/env'),
     build = require('../../uki-core/builder').build,
     
     Binding    = require('./dataList/binding').Binding,
-    Mustache   = require('../../uki-core/mustache').Mustache;
-    Base       = require('../../uki-core/view/base').Base;
-    Focusable  = require('../../uki-core/view/focusable').Focusable;
+    Mustache   = require('../../uki-core/mustache').Mustache,
+    Base       = require('../../uki-core/view/base').Base,
+    Focusable  = require('../../uki-core/view/focusable').Focusable,
     Selectable = require('./selectable').Selectable;
     
 
