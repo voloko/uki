@@ -1,0 +1,1 @@
+global.uki = require('../uki');

@@ -3,6 +3,5 @@
 tmp*
 .DS_Store
 *~
-pkg/
 *.swp
 .idea
