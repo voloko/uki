@@ -158,17 +158,17 @@ Creates a function that will call `targetName` on `target`:
             this.node = node;
         },
 
-        setAttribute: fun.newDelegateCall('setAttribute', 'id')
+        blur: fun.newDelegateCall('node', 'blur')
     });
-
+    
     var w = new Wrapper(document.createElement('div'));
-    x.setAttribute('id', 'myid');
+    x.blur();
 
 ### fun.delegateCall(source, name, target, targetName)
 
 Adds a delegate call function to the given `source`. By default, `targetName` is equal to `name`.
 
-    fun.delegateProp(Wrapper.prorotype, 'setAttribute', 'node');
+    fun.delegateCall(Wrapper.prorotype, 'blur', 'node', 'blur');
 
 `fun.delegateCall` can accept an array of function names:
 
