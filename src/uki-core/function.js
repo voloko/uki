@@ -154,6 +154,8 @@ fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
         utils.extend(klass.prototype, last);
     }
 
+    klass.prototype.constructor = klass;
+    
     return klass;
 };
 
