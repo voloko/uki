@@ -1,8 +1,10 @@
 var fun = require('../../../uki-core/function'),
-    utils = require('../../../uki-core/utils');
+    utils = require('../../../uki-core/utils'),
+    
+    Observable = require('../../../uki-core/observable').Observable;
 
 
-var Metrics = fun.newClass({
+var Metrics = fun.newClass(Observable, {
     
     view: fun.newProp('view'),
     
@@ -10,6 +12,7 @@ var Metrics = fun.newClass({
     
     update: function() {
         this._rowHeight = this.view().deduceRowHeight();
+        this.triggerChanges('totalHeight');
     },
     
     rowsForRange: function(fromPx, toPx) {

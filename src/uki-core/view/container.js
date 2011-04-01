@@ -7,7 +7,6 @@ var view  = require('../view'),
 /**
  * @class
  * @augments Base
- * @name Container
  */
 var Container = view.newClass('Container', Base, {
 

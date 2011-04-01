@@ -12,7 +12,6 @@ var env        = require('./uki-core/env'),
  * @param {Array.<view.Base>=} optional context for selector
  * @class
  * @namespace
- * @name uki
  * @return {Collection}
  */
 function uki(val, context) {

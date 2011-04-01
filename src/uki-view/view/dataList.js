@@ -33,7 +33,10 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 
         Base.prototype._setup.call(this, initArgs);
 
-        this._selection.on('update', fun.bind(this._updateSelection, this));
+        this._selection.on('update',
+            fun.bind(this._updateSelection, this));
+        this._metrics.on('change.totalHeight',
+            fun.bind(this._updateHeight, this));
     },
 
     _createDom: function(initArgs) {
@@ -41,13 +44,13 @@ var DataList = view.newClass('DataList', Base, Focusable, {
             className: 'uki-dataList uki-dataList_blured' });
         this.tabIndex(1);
 
-        // prevent dragging of selection
         this.on({
             'mousedown': this._mousedown,
             'mouseup': this._mouseup,
             'focus': this._focus,
             'blur': this._blur
         });
+        // prevent dragging of selection
         this.on('selectstart dragstart', evt.preventDefaultHandler);
         this.on(this.keyPressEvent(), this._keypress);
     },
@@ -67,12 +70,22 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 
             this._scrollableParent().on('scroll',
                 fun.bindOnce(this._scroll, this));
-            this._updateHeight();
+
             this._originalUpdate();
             this._layoutBefore = true;
         }
     },
 
+    _reset: function() {
+        utils.forEach(this._packs, dom.removeElement);
+        this._packs = [];
+        this.selectedIndexes([]);
+        this._layoutBefore = false;
+        if (this._scrollableParent()) {
+            this._scrollableParent().removeListener(
+                'scroll', utils.bindOnce(this._scroll, this));
+        }
+    },
 
     /**
     * Data to render. Data should provide one of the following simple API's:
@@ -93,8 +106,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 
     /**
     * Scroll the parent so row at position gets into view
-    *
-    * @function
     */
     scrollToIndex: function(index) {
         var pxs  = this._visiblePixels(),
@@ -160,7 +171,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     renderMoreRows: fun.newProp('renderMoreRows'),
     _renderMoreRows: 60,
 
-
     deduceRowHeight: function() {
         var data = this.data(),
             sample = utils.prop(data, 'sampleRow') ||
@@ -171,17 +181,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         var rowHeight = pack.offsetHeight;
         this.dom().removeChild(pack);
         return rowHeight;
-    },
-
-    _reset: function() {
-        utils.forEach(this._packs, dom.removeElement);
-        this._packs = [];
-        this.selectedIndexes([]);
-        this._layoutBefore = false;
-        if (this._scrollableParent()) {
-            this._scrollableParent().removeListener(
-                'scroll', utils.bindOnce(this._scroll, this));
-        }
     },
 
     _updateHeight: function() {
@@ -327,7 +326,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     * Actual row selected.
     *
     * Warning! This method will use #slice even for async data
-    * @function
     */
     selectedRow: function() {
         var index = this._selection.index();
@@ -338,7 +336,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     * Array of the the rows selected
     *
     * Warning! This method will use #slice even for async data
-    * @function
     */
     selectedRows: function() {
         var result = [];

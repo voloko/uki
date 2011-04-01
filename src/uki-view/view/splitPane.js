@@ -32,26 +32,6 @@ proto._setup = function(initArgs) {
     Container.prototype._setup.call(this, initArgs);
 };
 
-/**
-* @function
-* @name view.HSplitPane#leftMin
-*/
-/**
-* @function
-* @name view.HSplitPane#rightMin
-*/
-/**
-* @function
-* @name view.HSplitPane#autogrowLeft
-*/
-/**
-* @function
-* @name view.HSplitPane#autogrowRight
-*/
-/**
-* @function
-* @name view.HSplitPane#throttle
-*/
 fun.addProps(proto, ['leftMin', 'rightMin', 'leftSpeed', 'rightSpeed', 'throttle']);
 proto.topMin = proto.leftMin;
 proto.bottomMin = proto.rightMin;
@@ -59,9 +39,7 @@ proto.topSpeed = proto.leftSpeed;
 proto.bottomSpeed = proto.rightSpeed;
 
 /**
-* @function
 * @fires event:handleMove
-* @name view.HSplitPane#handlePosition
 */
 fun.addProp(proto, 'handlePosition', function(val) {
     if (this._x_width()) {
@@ -112,10 +90,6 @@ proto.extPositions = function(positions) {
     return this;
 };
 
-/**
-* @function
-* @name view.HSplitPane#handleWidth
-*/
 proto.handleWidth = function() {
     return this._handleWidth;
 };
@@ -237,26 +211,10 @@ proto._updatePositionOnDrag = function(e, stop) {
 };
 
 
-/**
-* @function
-* @name view.HSplitPane#topChildViews
-*/
-/**
-* @function
-* @name view.HSplitPane#leftChildViews
-*/
 proto.topChildViews = proto.leftChildViews = function(views) {
     return this._childViewsAt(0, views);
 };
 
-/**
-* @function
-* @name view.HSplitPane#rightChildViews
-*/
-/**
-* @function
-* @name view.HSplitPane#bottomChildViews
-*/
 proto.bottomChildViews = proto.rightChildViews = function(views) {
     return this._childViewsAt(1, views);
 };

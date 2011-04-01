@@ -26,8 +26,6 @@ var Collection = fun.newClass({
     /**
      * Iterates trough all items within itself
      *
-     * @function
-     *
      * @param {function(this:view.Base, number, view.Base)} callback
      * @returns {view.Collection} self
      */
@@ -37,8 +35,6 @@ var Collection = fun.newClass({
 
     /**
      * Creates a new Collection populated with found items
-     *
-     * @function
      *
      * @param {function(view.Base, number):boolean} callback
      * @returns {view.Collection} created collection
@@ -60,8 +56,6 @@ var Collection = fun.newClass({
      *                           // collection views
      * c.prop('name') // gets name attribute on the first view
      *
-     * @function
-     *
      * @param {string} name Name of the attribute
      * @param {object=} value Value to set
      * @returns {view.Collection|Object} Self or attribute value
@@ -81,8 +75,6 @@ var Collection = fun.newClass({
      * Finds views within collection context
      * @example
      * c.find('Button')
-     *
-     * @function
      *
      * @param {string} selector
      * @returns {view.Collection} Collection of found items
@@ -120,12 +112,6 @@ var Collection = fun.newClass({
 
 var proto = Collection.prototype;
 
-/** @function
-@name Collection#parent */
-/** @function
-@name Collection#next */
-/** @function
-@name Collection#prev */
 utils.forEach([
     ['parent', 'parent'],
     ['next', 'nextView'],
