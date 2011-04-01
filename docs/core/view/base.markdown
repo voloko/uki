@@ -33,7 +33,7 @@ Everything else is optional.
         src: fun.newDelegateProp('dom', src)
 
     });
-
+    
 ### view.Base.prototype._setup(initArgs)
 
 Extended in subclasses. Called right before _createDom on construction.
@@ -52,13 +52,17 @@ Mostly a convenience method to initialize non DOM properties.
 
 Returns root DOM node of the view. By default returns `this._dom` property.
 
-### view.Base.prototype.resized()
+### view.Base.prototype._initLayout()
 
-Extended in subclasses. Being called after parent view resized. This usualy
-happens when `window` is being resized. However parent views may trigger this
-event manually, ex: `SplitPane` resizing its children.
+Being called when view becomes visible for the first time.
+At this point you can access offsetWidth, offsetHeight and do measurements.
 
-If a view needs some specific actions on resize they should be done here.
+### view.Base.prototype.layout()
+
+Being called when you need to update view's layout. Usually being called
+when parent gets resized. However will be also called when view gains
+visibility. Guarantied to be called only when view is visible and has
+dimensions (in document and not hidden)
 
 ## Default accessors
 
@@ -106,7 +110,7 @@ Toggles a class on the view.
 
 ### view.Base.prototype.visible([state])
 
-Hides/shows a view. Hidden views will not get `resized` event. `resized` will
+Hides/shows a view. Hidden views will not get `layout` call. `layout` will
 be called when view becomes `visible` again.
 
 ### view.Base.prototype.scrollLeft([value])

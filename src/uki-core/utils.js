@@ -2,7 +2,8 @@ var toString = Object.prototype.toString,
     arrayPrototype = Array.prototype,
     slice = arrayPrototype.slice,
     utils = exports,
-    _compat = require('./_compat');
+    _compat = require('./_compat'),
+    forEach = arrayPrototype.forEach || _compat.forEach;
 
 var marked = '__marked';
 // dummy subclass
@@ -123,7 +124,7 @@ utils.forEach = function(object, callback, context) {
                 object[name], name) === false) { break; }
         }
     } else {
-        _compat.forEach.call(object, callback, context);
+        forEach.call(object, callback, context);
     }
     return object;
 };
@@ -202,8 +203,10 @@ utils.extend = function() {
  * @param {array} array sorted array
  * @returns {number} index of closest value
  */
-utils.binarySearch = function(value, array) {
-    var low = 0, high = array.length, mid;
+utils.binarySearch = function(array, value, low, high) {
+    low = low === undefined ? 0 : low;
+    high = high === undefined ? array.length : high;
+    var mid;
 
     while (low < high) {
         mid = (low + high) >> 1;

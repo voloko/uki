@@ -7,7 +7,7 @@ var fun   = require('../../uki-core/function'),
     env   = require('../../uki-core/env'),
     evt   = require('../../uki-core/event'),
 
-    Focusable = require('../../uki-core/view/focusable').Focusable,
+    Focusable = require('./focusable').Focusable,
     Base      = require('../../uki-core/view/base').Base;
 
 
@@ -101,10 +101,10 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
         }
     }),
 
-    resized: function() {
-        NativeControl.prototype.resized.call(this);
+    layout: function() {
+        NativeControl.prototype.layout.call(this);
         this._updatePlaceholderHeight();
-        // manual resize box-sizing: border-box for ie 6,7
+        // manual resize box-sizing: border-box for ie 7
         if (ieResize) {
             this._input.style.width = this.dom().offsetWidth - 6;
         }

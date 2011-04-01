@@ -22,19 +22,17 @@ var Container = view.newClass('Container', Base, {
         Base.prototype.destruct.call(this);
     },
 
-    resized: function() {
-        this._resizeSelf();
-        this._resizeChildViews();
-        return this;
+    layout: function() {
+        Base.prototype.layout.call(this);
+        return this._layoutChildViews();
     },
 
-    _resizeSelf: fun.FS,
-
-    _resizeChildViews: function() {
+    _layoutChildViews: function() {
         utils.forEach(this.childViews(), function(view) {
             // do not resize invisible views, save time
-            view.visible() && view.resized();
+            view.visible() && view.layout();
         });
+        return this;
     },
 
     clear: function(destruct) {

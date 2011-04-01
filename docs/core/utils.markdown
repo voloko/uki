@@ -85,7 +85,7 @@ Copies all properties from `extension` to target and returns the result.
     utils.extend(X.prototype, Mixin1, Mixin2);
     options = utils.extend({}, options, defaultOptions);
 
-### utils.binarySearch(value, array)
+### utils.binarySearch(array, value)
 
 Searches for `value` in a sorted `array`. If value is in `array`, returns
 its position. Otherwise returns the position where this value should be

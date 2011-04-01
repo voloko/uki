@@ -54,7 +54,6 @@ builder.namespaces.unshift(view);
 // copy views from default view namespaces into view
 utils.extend(view,
     require('./uki-core/view/base'),
-    require('./uki-core/view/focusable'),
     require('./uki-core/view/container')
 );
 

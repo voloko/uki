@@ -9,7 +9,7 @@ var fun   = require('../../uki-core/function'),
 
     Mustache  = require('../../uki-core/mustache').Mustache,
     Container = require('../../uki-core/view/container').Container,
-    Focusable = require('../../uki-core/view/focusable').Focusable;
+    Focusable = require('./focusable').Focusable;
 
 
 var SplitPane = view.newClass('SplitPane', Container, Focusable, {}),
@@ -70,7 +70,7 @@ fun.addProp(proto, 'handlePosition', function(val) {
 
         this._prevPosition = this._handlePosition = this._normalizeHandlePosition(val);
         // resize imidiately
-        this.resized();
+        this.layout();
     } else {
         this._handlePosition = val;
     }
@@ -182,7 +182,7 @@ proto._throttledChildResize = function() {
     this._resizeChildViews();
 };
 
-proto.resized = function() {
+proto.layout = function() {
     this._moveHandle();
 
     if (!this._prevWidth) {
@@ -282,8 +282,8 @@ proto._rightPos = function() {
 };
 
 proto._resizeChildViews = function() {
-    this._childViews[0].pos(this._leftPos()).resized();
-    this._childViews[1].pos(this._rightPos()).resized();
+    this._childViews[0].pos(this._leftPos()).layout();
+    this._childViews[1].pos(this._rightPos()).layout();
 };
 
 

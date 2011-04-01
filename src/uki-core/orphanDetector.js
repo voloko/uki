@@ -1,7 +1,7 @@
-var view  = require('../view'),
-    utils = require('../utils'),
+var view  = require('./view'),
+    utils = require('./utils'),
 
-    Attaching = require('../attaching').Attaching;
+    Attaching = require('./attaching').Attaching;
 
 
 var RUN_TIMEOUT = 5000;

@@ -53,7 +53,7 @@ function register(a) {
                 fun.defer(function(i, len) {
                     timeout = false;
                     utils.forEach(instances, function(a) {
-                       a.resized();
+                       a.layout();
                     });
                 });
             }

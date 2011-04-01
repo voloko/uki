@@ -52,10 +52,39 @@ var Base = view.newClass('Base', {
 
     _setup: fun.FS,
 
+    /**
+    * Being called within construction
+    * @protected
+    */
     _createDom: function(initArgs) {
         this._dom = dom.createElement(initArgs.tagName || 'div');
     },
 
+    /**
+    * Being called when view becomes visible for the first time.
+    * 
+    * At this point you can access offsetWidth, offsetHeight and do mesurments
+    * 
+    * @protected
+    */
+    _initLayout: fun.FS,
+    
+    /**
+    * Being called when you need to update view's layout. Usualy being called
+    * when parent gets resized, however will be also called when view gains
+    * visibility. Gurantied to be called only when view is visible and has
+    * dimensions (in document and not hidden)
+    * 
+    * @public
+    */
+    layout: function() {
+        if (!this._layoutBefore) {
+            this._layoutBefore = true;
+            this._initLayout();
+        }
+        return this;
+    },
+    
     /**
     * Get views container dom node.
     * @returns {Element} dom
@@ -65,10 +94,26 @@ var Base = view.newClass('Base', {
     },
 
     /**
-    * Called when view was resized
+    * Accessor for view visibility.
+    *
+    * @param {boolean=} state
+    * @returns {boolean|view.Base} current visibility state of self
     */
-    resized: fun.FS,
+    visible: function(state) {
+        if (state === undefined) {
+            return this.dom().style.display != 'none';
+        }
 
+        var origState = this.visible();
+        this.dom().style.display = state ? '' : 'none';
+
+        // if we change from invis to vis, and we have dom, and we're attached
+        // redraw
+        if (state && !origState && this.dom() && this.dom().offsetWidth) {
+            this.update();
+        }
+        return this;
+    },
 
     /* -------------------------- Common DOM accessors ----------------------*/
 
@@ -121,29 +166,6 @@ var Base = view.newClass('Base', {
         return this;
     },
 
-
-    /**
-    * Accessor for view visibility.
-    *
-    * @param {boolean=} state
-    * @returns {boolean|view.Base} current visibility state of self
-    */
-    visible: function(state) {
-        if (state === undefined) {
-            return this.dom().style.display != 'none';
-        }
-
-        var origState = this.visible();
-        this.dom().style.display = state ? '' : 'none';
-
-        // if we change from invis to vis, and we have dom, and we're attached
-        // redraw
-        if (state && !origState && this.dom() && this.dom().offsetWidth) {
-            this.resized();
-        }
-        return this;
-    },
-
     scrollTop: fun.newDelegateProp('dom', 'scrollTop'),
 
     scrollLeft: fun.newDelegateProp('dom', 'scrollLeft'),
@@ -154,7 +176,7 @@ var Base = view.newClass('Base', {
     },
 
     title: fun.newDelegateProp('dom', 'title'),
-    
+
     /**
     * Experimental
     */
@@ -165,7 +187,7 @@ var Base = view.newClass('Base', {
         this.dom().style.cssText = styleToString(value);
         return this;
     },
-    
+
     addStyle: function(value) {
         this.dom().style.cssText += ';' + styleToString(value);
         return this;
@@ -183,7 +205,8 @@ var Base = view.newClass('Base', {
     */
     controller: function(value) {
         if (value === undefined) {
-            return this._controller || this.parent() && this.parent().controller();
+            return this._controller || this.parent() &&
+                this.parent().controller();
         }
         this._controller = value;
         return this;
@@ -240,8 +263,8 @@ var Base = view.newClass('Base', {
     /* ---------------------------- Container API ---------------------------*/
 
     /**
-    * Accessor attribute for parent view. When parent is set view appends its #dom
-    * to parents #dom
+    * Accessor attribute for parent view. When parent is set view appends
+    * its #dom to parents #dom
     *
     * @param {?view.Base=} parent
     * @returns {view.Base} parent or self

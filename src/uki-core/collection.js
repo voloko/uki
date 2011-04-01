@@ -102,7 +102,7 @@ var Collection = fun.newClass({
     attach: function(dom) {
         this.forEach(function(view) {
             require('./attaching').Attaching.attach(dom, view);
-            view.resized();
+            view.layout();
         });
         return this;
     },
@@ -154,6 +154,7 @@ Collection.addMethods = function(methods) {
             };
         }
     });
+    return this;
 };
 
 Collection.addProps = function(props) {
@@ -164,17 +165,18 @@ Collection.addProps = function(props) {
             };
         }
     });
+    return this;
 };
 
 
 Collection.addMethods([
     'addListener', 'removeListener', 'trigger', 'on',
     'addClass', 'removeClass', 'toggleClass',
-    'destruct', 'resized', 'scroll', 'clear'
+    'destruct', 'layout', 'scroll', 'clear'
 ]);
 
 Collection.addProps([
-    'id', 'dom', 'text', 'html', 'pos', 'visible', 'style', 'binding',
+    'id', 'dom', 'text', 'html', 'pos', 'visible', 'style', 'model',
     'bindings', 'clientRect'
 ]);
 
