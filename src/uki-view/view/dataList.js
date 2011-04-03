@@ -8,9 +8,10 @@ var env   = require('../../uki-core/env'),
     view  = require('../../uki-core/view'),
     build = require('../../uki-core/builder').build,
 
-    Metrics = require('./dataList/metrics').Metrics,
-    Renderer = require('./dataList/renderer').Renderer,
-    Selection = require('./dataList/selection').Selection,
+    Metrics    = require('./dataList/metrics').Metrics,
+    Renderer   = require('./dataList/renderer').Renderer,
+    Selection  = require('./dataList/selection').Selection,
+    Controller = require('./dataList/controller').Controller,
 
     Mustache   = require('../../uki-core/mustache').Mustache,
     Base       = require('../../uki-core/view/base').Base,
@@ -22,12 +23,12 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     _setup: function(initArgs) {
         this._metrics = initArgs.metrics || new Metrics();
         this._renderer = initArgs.metrics || new Renderer();
+		this._controller = initArgs.controller || new Controller();
         this._selection = new Selection();
 
         this._packSize  = initArgs.packSize || this._packSize;
         this._rowTemplate = initArgs.rowTemplate || this._rowTemplate;
 
-        this._metrics.view(this);
         this._data = [];
         this._packs = {};
 
@@ -39,20 +40,24 @@ var DataList = view.newClass('DataList', Base, Focusable, {
             fun.bind(this._updateHeight, this));
     },
 
+    selection: function() {
+        return this._selection;
+    },
+
+	metrics: function() {
+		return this._metrics;
+	},
+	
+	renderer: function() {
+		return this._renderer;
+	},
+	
     _createDom: function(initArgs) {
         this._dom = dom.createElement('div', {
             className: 'uki-dataList uki-dataList_blured' });
         this.tabIndex(1);
-
-        this.on({
-            'mousedown': this._mousedown,
-            'mouseup': this._mouseup,
-            'focus': this._focus,
-            'blur': this._blur
-        });
-        // prevent dragging of selection
-        this.on('selectstart dragstart', evt.preventDefaultHandler);
-        this.on(this.keyPressEvent(), this._keypress);
+        this._metrics.initWithView(this);
+		this._controller.initWithView(this);
     },
 
     layout: function() {
@@ -305,10 +310,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     //  |   << @ >>                                         |
     //  |      V                                            |
     //  |                                                   |
-    selection: function() {
-        return this._selection;
-    },
-
     isSelected: fun.newDelegateCall('_selection', 'isSelected'),
 
     selectedIndexes: fun.newDelegateProp('_selection', 'indexes'),
@@ -348,13 +349,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         return result;
     },
 
-    keyPressEvent: function() {
-        var useKeyPress = env.root.opera ||
-            (/mozilla/i.test(env.ua) && !(/(compatible|webkit)/i).test(env.ua));
-
-        return useKeyPress ? 'keypress' : 'keydown';
-    },
-
     _updateSelection: function(e) {
         var rows  = this._visibleRows(),
             from = -1, to,
@@ -373,13 +367,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         }
     },
 
-    _eventToIndex: function(e) {
-        var o = dom.clientRect(this.dom()),
-            y = e.pageY - o.top;
-
-        return this._metrics.rowForPosition(y);
-    },
-
     _setSelected: function(index, state) {
         var packN = index / this.packSize() << 0,
             pack = this._packs[packN];
@@ -389,145 +376,11 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         }
     },
 
-    _selectionEdit: function(e) {
-    },
-
-    // Events
-    _mousedown: function(e) {
-        var index = this._eventToIndex(e),
-            selection = this._selection;
-
-        this._hadFocusOnSelectionStart =
-            this.hasFocus() && selection.isSelected(index);
-
-        if (this.multiselect()) {
-            this._selectionInProcess = false;
-            if (e.shiftKey && !selection.empty()) {
-                if (selection.isSelected(index)) {
-                    selection.removeRange(
-                        Math.min(index + 1, this.lastClickIndex()),
-                        Math.max(index - 1, this.lastClickIndex())
-                    );
-                } else {
-                    var indexes = selection.indexes();
-                    selection.clear().addRange(
-                        Math.min(index, indexes[0]),
-                        Math.max(index, indexes[indexes.length - 1])
-                    );
-                }
-                this._triggerSelection();
-            } else if (e.metaKey) {
-                selection.toggle(index);
-                this._triggerSelection();
-            } else {
-                if (selection.isSelected(index)) {
-                    this._selectionInProcess = true;
-                    this._hadFocusOnSelectionStart = this.hasFocus();
-                } else {
-                    selection.indexes([index]);
-                    this._triggerSelection();
-                }
-            }
-        } else {
-            selection.index(index);
-            this._triggerSelection();
-        }
-        this.lastClickIndex(index);
-    },
-
-    _mouseup: function(e) {
-        var index = this._eventToIndex(e),
-            selection = this._selection;
-
-        if (!this.multiselect() || !this._selectionInProcess) {
-            if (this.lastClickIndex() === index && !this.multiselect()) {
-                if (this._hadFocusOnSelectionStart) {
-                    this._selectionEdit(e);
-                }
-            }
-            return;
-        };
-
-        if (this.lastClickIndex() === index && selection.isSelected(index)) {
-            if (selection.indexes().length === 1) {
-                if (this._hadFocusOnSelectionStart) {
-                    this._selectionEdit(e);
-                }
-            } else {
-                selection.indexes([index]);
-                this._triggerSelection();
-            }
-        }
-        this._selectionInProcess = false;
-    },
-
-    _keypress: function(e) {
-        if (!this.hasFocus()) return;
-
-        var selection = this._selection,
-            indexes = selection.indexes(),
-            nextIndex = -1;
-
-        if (e.which == 38 || e.keyCode == 38) { // UP
-            nextIndex = Math.max(0, this.lastClickIndex() - 1);
-            e.preventDefault();
-        } else if (e.which == 40 || e.keyCode == 40) { // DOWN
-            nextIndex =
-                Math.min(this.data().length - 1, this.lastClickIndex() + 1);
-            e.preventDefault();
-        } else if (this.multiselect() && // Ctrl + A
-            (e.which == 97 || e.which == 65) && e.metaKey) {
-
-            e.preventDefault();
-            selection.clear().addRange(0, this.data().length);
-            this._triggerSelection();
-        }
-        if (nextIndex > -1 && nextIndex != this.lastClickIndex()) {
-            if (e.shiftKey && this.multiselect()) {
-                if (selection.isSelected(nextIndex)) {
-                    selection.toggle(this.lastClickIndex());
-                } else {
-                    selection.toggle(nextIndex);
-                }
-            } else {
-                selection.index(nextIndex);
-            }
-            this._triggerSelection();
-            this.scrollToIndex(nextIndex);
-            this._lastClickIndex = nextIndex;
-        }
-    },
-
-    _focus: function(e) {
-        var selection = this._selection;
-
-        this.removeClass('uki-dataList_blured');
-        if (selection.empty() && this.data().length > 0) {
-            selection.index(0);
-            this.lastClickIndex(0).scrollToIndex(0);
-            this._triggerSelection();
-        } else {
-            if (this._deferedTriggerSelection) {
-                this._triggerSelection();
-            }
-        }
-    },
-
-    _blur: function(e) {
-        this.addClass('uki-dataList_blured');
-    },
-
-    _triggerSelection: function(force) {
-        if (this.hasFocus() || force) {
-            this.trigger({type: 'selection', target: this});
-            this._deferedTriggerSelection = false;
-        } else {
-            this._deferedTriggerSelection = true;
-        }
+    editSelection: function(e) {
     },
 
     triggerSelection: function() {
-        this._triggerSelection(true);
+        this.trigger({type: 'selection', target: this});
         return this;
     }
 

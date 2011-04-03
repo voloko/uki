@@ -5,13 +5,15 @@ var fun = require('../../../uki-core/function'),
 
 
 var Metrics = fun.newClass(Observable, {
-    
-    view: fun.newProp('view'),
+	
+	initWithView: function(view) {
+		this._view = view;
+	},
     
     _rowHeight: 0,
     
     update: function() {
-        this._rowHeight = this.view().deduceRowHeight();
+        this._rowHeight = this._view.deduceRowHeight();
         this.triggerChanges('totalHeight');
     },
     
@@ -34,7 +36,7 @@ var Metrics = fun.newClass(Observable, {
     },
     
     totalHeight: function() {
-        return this._rowHeight * this.view().data().length;
+        return this._rowHeight * this._view.data().length;
     }
     
 });
