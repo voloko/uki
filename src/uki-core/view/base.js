@@ -201,18 +201,6 @@ var Base = view.newClass('Base', {
     },
 
     /**
-    * Experimental.
-    */
-    controller: function(value) {
-        if (value === undefined) {
-            return this._controller || this.parent() &&
-                this.parent().controller();
-        }
-        this._controller = value;
-        return this;
-    },
-
-    /**
      * @param {String} name Event name, or space separated names
      * @param {function()} callback
      */
@@ -241,11 +229,7 @@ var Base = view.newClass('Base', {
      * @param {function()} callback or null to remove all callbacks
      */
     removeListener: function(names, callback) {
-        var wrapper = callback && (
-            typeof callback === 'string' ?
-                Base.controllerCallback(callback) :
-                fun.bindOnce(callback, this)
-            );
+        var wrapper = callback && fun.bindOnce(callback, this);
         names || (names = utils.keys(this._eventNames || {}).join(' '));
         utils.forEach(names.split(' '), function(name) {
             evt.removeListener(this.domForEvent(name), name, wrapper);
@@ -372,18 +356,5 @@ var Base = view.newClass('Base', {
 });
 
 Base.prototype.on = Base.prototype.addListener;
-
-var callbacks = {};
-Base.controllerCallback = function(name) {
-    if (!callbacks[name]) {
-        callbacks[name] = function() {
-            var c = this.controller();
-            if (c && c[name]) {
-                c[name].apply(c, arguments);
-            }
-        };
-    }
-};
-
 
 exports.Base = Base;

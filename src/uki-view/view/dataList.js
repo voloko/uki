@@ -52,6 +52,10 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 		return this._renderer;
 	},
 	
+	controller: function() {
+		return this._controller;
+	},
+	
     _createDom: function(initArgs) {
         this._dom = dom.createElement('div', {
             className: 'uki-dataList uki-dataList_blured' });

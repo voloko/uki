@@ -193,28 +193,6 @@ Triggers a surrogate event on this. `e` at least have `type`. View will wrap it 
 
     obj.trigger({ type: 'change' });
 
-### view.Base.prototype.controller([object])
-
-Experimental. Sets and retrieves a controller object for the view. Controller is
-used as a default target for view events. If `controller` is not set will try to
-use `parent` view's `controller`. When `controller` is set you can use strings
-instead of function in `addListener`, `removeListener` calls:
-
-    var controller = {
-        handleButtonClick: function() { ... },
-        handleMouseMove: function() { ... }
-    };
-
-    build({ view: 'Container', controller: controller,
-
-      // use own controller to handle clicks
-      on: { mousemove: 'handleMouseMove' },
-      childEvents: [
-
-        // use parent's controller to handle clicks
-        { view: 'Button', on: { click: 'handleButtonClick' } }
-      ] });
-
 ## Container API
 
 Views can be contained only in other views. All views support being contained.
