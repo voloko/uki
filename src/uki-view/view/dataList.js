@@ -64,7 +64,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 
     layout: function() {
         if (this._layoutBefore) {
-            this._update();
+            this._wrappedUpdate();
         } else {
             this._initLayout();
         }
@@ -75,7 +75,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         if (this.data().length) {
             this.metrics().update();
             this.scrollableParent(this.scrollableParent() || this.parent());
-            this._originalUpdate();
+            this._update();
             this._layoutBefore = true;
         }
     },
@@ -122,7 +122,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         } else if (minY < range.from) {
             this.scrollableParent().scroll(0, minY - range.from);
         }
-        this._update();
+        this._wrappedUpdate();
         return this;
     },
 
@@ -160,7 +160,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     /**
      * Do redraw only after value ms after last scroll/update
      */
-    debounce: fun.newProp(proto, 'debounce', function(v) {
+    debounce: fun.newProp('debounce', function(v) {
         this._debounce = v;
         wrapVisChanged.call(this, v, 'debounce');
     }),
@@ -194,7 +194,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     },
 
     _scroll: function() {
-        this._update();
+        this._wrappedUpdate();
     },
 
     scrollableParent: fun.newProp('scrollableParent', function(v) {
@@ -435,13 +435,13 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 });
 
 var proto = DataList.prototype;
-proto._originalUpdate = proto._update;
+proto._wrappedUpdate = proto._update;
 
 function wrapVisChanged(v, method) {
     if (v > 0) {
-        this._update = fun[method](this._originalUpdate, v);
+        this._wrappedUpdate = fun[method](this._update, v);
     } else {
-        this._update = this._originalUpdate;
+        this._wrappedUpdate = this._update;
     }
 }
 
