@@ -21,6 +21,7 @@ var Renderer = fun.newClass({
             i = i + from;
             return {
                 value: this._formatRow(r, i),
+                row: r,
                 index: i,
                 even: i & 1
             };

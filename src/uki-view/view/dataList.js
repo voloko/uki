@@ -22,7 +22,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 
     _setup: function(initArgs) {
         this._metrics = initArgs.metrics || new Metrics();
-        this._renderer = initArgs.metrics || new Renderer();
+        this._renderer = initArgs.renderer || new Renderer();
 		this._controller = initArgs.controller || new Controller();
         this._selection = new Selection();
 

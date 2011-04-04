@@ -17,3 +17,18 @@
     padding: 0px 3px;
     border-radius: 1px;
 }
+
+.with-headers .row-header {
+    padding-top: 21px;
+    font-weight: bold;
+    vertical-align: bottom;
+    background: none;
+    border-bottom: 1px solid #CCC;
+    padding-bottom: 4px;
+    color: #333;
+}
+
+.with-headers .row-header.uki-dataList-row_selected {
+    padding-top: 21px;
+    border-top: none;
+}
