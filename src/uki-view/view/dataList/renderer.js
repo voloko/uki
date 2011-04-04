@@ -16,8 +16,9 @@ var Renderer = fun.newClass({
     key: fun.newProp('key'),
     _key: null,
 
-    renderPack: function(rows, selectedInPack) {
+    renderPack: function(rows, selectedInPack, from) {
         var formated = utils.map(rows, function(r, i) {
+            i = i + from;
             return {
                 value: this._formatRow(r, i),
                 index: i,
@@ -30,7 +31,7 @@ var Renderer = fun.newClass({
             { rows: formated }
         ));
 
-        this._restorePackSelection(pack, selectedInPack || []);
+        this._restorePackSelection(pack, selectedInPack || [], from);
         return pack;
     },
 
@@ -50,9 +51,9 @@ var Renderer = fun.newClass({
             pos);
     },
 
-    _restorePackSelection: function(pack, selectedInPack) {
+    _restorePackSelection: function(pack, selectedInPack, from) {
         for (var i = selectedInPack.length - 1; i >= 0; i--){
-            this.setSelected(pack, selectedInPack[i], true);
+            this.setSelected(pack, selectedInPack[i] - from, true);
         };
     }
 

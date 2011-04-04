@@ -17,11 +17,11 @@ var Metrics = fun.newClass(Observable, {
         this.triggerChanges('totalHeight');
     },
     
-    rowsForRange: function(fromPx, toPx) {
-        return [
-            fromPx / this._rowHeight << 0,
-            toPx   / this._rowHeight + 0.5 << 0
-        ];
+    rowsForRange: function(range) {
+        return { 
+            from: range.from / this._rowHeight << 0,
+            to:   range.to   / this._rowHeight + 0.5 << 0
+        };
     },
     
     rowForPosition: function(px) {

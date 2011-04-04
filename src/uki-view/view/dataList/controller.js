@@ -113,7 +113,7 @@ var Controller = fun.newClass(Observable, {
             (e.which == 97 || e.which == 65) && e.metaKey) {
 
             e.preventDefault();
-            selection.clear().addRange(0, this.data().length);
+            selection.clear().addRange(0, this._view.data().length);
             this._triggerSelection();
         }
         if (nextIndex > -1 && nextIndex != this._view.lastClickIndex()) {
@@ -136,7 +136,7 @@ var Controller = fun.newClass(Observable, {
         var selection = this._view.selection();
 
         this._view.removeClass('uki-dataList_blured');
-        if (selection.empty() && this.data().length > 0) {
+        if (selection.empty() && this._view.data().length > 0) {
             selection.index(0);
             this._view.lastClickIndex(0).scrollToIndex(0);
             this._triggerSelection();

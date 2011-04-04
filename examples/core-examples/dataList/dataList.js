@@ -21,6 +21,7 @@ uki([
     { view: 'Container', pos: 't:10px l:190px w:150px b:10px', addClass: 'scrollable', childViews: [
         { view: 'Header', text: 'Multiselect Data List', size: 'small' },
         { view: 'Text', addClass: 'help', html: requireText('./multiselectHelp.html') },
-        { view: 'DataList', pos: 't:100px r:0 b:0 l:0', data: data, multiselect: true }
+        { view: 'DataList', pos: 't:100px r:0 b:0 l:0', data: data, 
+			multiselect: true }
     ]}
 ]).attach();

@@ -130,3 +130,19 @@ test('shortcuts', 2, function() {
     equal(c[1].text(), 'y');
 });
 
+test('as', 4, function() {
+    var c = collection.builder.build([
+        { view: 'Base', text: 'bar', testid: 1, as: 'view-1' },
+		{ view: 'Container', testid: 2, childViews: [
+	        { view: 'Base', testid: 3, as: 'view-2' },
+	        { view: 'Base', testid: 4 },
+	        { view: 'Base', testid: 5, as: 'test-1' }
+	    ]},
+	   { view: 'Base', testid: 6 }
+    ]);
+
+	equal(c.view('view-1').testid, 1);
+	equal(c.view('view-2').testid, 3);
+	equal(c.view('test-1').testid, 5);
+	equal(c.view('nothere'), null);
+});
