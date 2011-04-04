@@ -74,10 +74,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     _initLayout: function() {
         if (this.data().length) {
             this.metrics().update();
-
-            this._scrollableParent().on('scroll',
-                fun.bindOnce(this._scroll, this));
-
+            this.scrollableParent(this.scrollableParent() || this.parent());
             this._originalUpdate();
             this._layoutBefore = true;
         }
@@ -88,10 +85,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         this._packs = [];
         this.selectedIndexes([]);
         this._layoutBefore = false;
-        if (this._scrollableParent()) {
-            this._scrollableParent().removeListener(
-                'scroll', utils.bindOnce(this._scroll, this));
-        }
+        this.scrollableParent(null);
     },
 
     /**
@@ -121,12 +115,12 @@ var DataList = view.newClass('DataList', Base, Focusable, {
             minY  = dm.top;
 
         if (maxY >= range.to) {
-            this._scrollableParent().scroll(0, maxY - range.to +
+            this.scrollableParent().scroll(0, maxY - range.to +
                 // hackish overflow to compensate for bottom scroll bar
                 (index === this.data().length - 1 ? 100 : 0)
             );
         } else if (minY < range.from) {
-            this._scrollableParent().scroll(0, minY - range.from);
+            this.scrollableParent().scroll(0, minY - range.from);
         }
         this._update();
         return this;
@@ -203,17 +197,25 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         this._update();
     },
 
-    _scrollableParent: function() {
-        return this.parent();
-    },
+    scrollableParent: fun.newProp('scrollableParent', function(v) {
+        if (this._scrollableParent) {
+            this._scrollableParent.removeListener(
+                'scroll', fun.bindOnce(this._scroll, this));
+        }
+        this._scrollableParent = v;
+        if (this._scrollableParent) {
+            this._scrollableParent.on(
+                'scroll', fun.bindOnce(this._scroll, this));
+        }
+    }),
 
     _visibleRange: function() {
-        if (!this._scrollableParent()) {
+        if (!this.scrollableParent()) {
             return null;
         }
 
         var rect = this.clientRect(true),
-            parentRect = this._scrollableParent().clientRect(true),
+            parentRect = this.scrollableParent().clientRect(true),
             topOffset = rect.top - parentRect.top,
             height = parentRect.height - Math.max(0, topOffset),
             top = -Math.min(0, topOffset);
