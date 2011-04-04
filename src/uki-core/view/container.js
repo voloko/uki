@@ -21,12 +21,7 @@ var Container = view.newClass('Container', Base, {
         Base.prototype.destruct.call(this);
     },
 
-    layout: function() {
-        Base.prototype.layout.call(this);
-        return this._layoutChildViews();
-    },
-
-    _layoutChildViews: function() {
+    _layout: function() {
         utils.forEach(this.childViews(), function(view) {
             // do not resize invisible views, save time
             view.visible() && view.layout();

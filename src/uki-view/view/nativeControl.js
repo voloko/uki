@@ -101,8 +101,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
         }
     }),
 
-    layout: function() {
-        NativeControl.prototype.layout.call(this);
+    _layout: function() {
         this._updatePlaceholderHeight();
         // manual resize box-sizing: border-box for ie 7
         if (ieResize) {

@@ -88,14 +88,14 @@ utils.without = function(array, value) {
 
 utils.invoke = function(array, method) {
     var args = slice.call(arguments, 2),
-        invoke = method ? 
+        invoke = method ?
             function(item) {
                 return item[method].apply(item, args);
             } :
             function(item) {
                 return item.apply(null, args);
             };
-            
+
     return array.forEach ?
         array.forEach(invoke) :
         utils.forEach(array, invoke);
@@ -184,6 +184,9 @@ utils.extend = function() {
         if ((options = arguments[i]) != null) {
 
             for (var name in options) {
+                if (!options.hasOwnProperty(name)) {
+                    continue;
+                }
                 var copy = options[name];
 
                 if (copy !== undefined) {

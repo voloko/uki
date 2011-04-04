@@ -46,7 +46,8 @@ fun.addProp(proto, 'handlePosition', function(val) {
         // store width after manual (drag or program) position change
         this._prevWidth = this._x_width();
 
-        this._prevPosition = this._handlePosition = this._normalizeHandlePosition(val);
+        this._prevPosition = this._handlePosition =
+            this._normalizeHandlePosition(val);
         // resize imidiately
         this.layout();
     } else {
@@ -156,7 +157,7 @@ proto._throttledChildResize = function() {
     this._resizeChildViews();
 };
 
-proto.layout = function() {
+proto._layout = function() {
     this._moveHandle();
 
     if (!this._prevWidth) {
@@ -164,7 +165,8 @@ proto.layout = function() {
         this._prevWidth = this._x_width();
         this._prevPosition = this.handlePosition();
     } else {
-        this._handlePosition = this._normalizeHandlePosition(this._calcDesiredPosition());
+        this._handlePosition =
+            this._normalizeHandlePosition(this._calcDesiredPosition());
         this._moveHandle();
     }
     this._throttledChildResize();

@@ -57,12 +57,15 @@ Returns root DOM node of the view. By default returns `this._dom` property.
 Being called when view becomes visible for the first time.
 At this point you can access offsetWidth, offsetHeight and do measurements.
 
+### view.Base.prototype._layout()
+
+Called when you need to update view's layout. Usually when parent gets resized.
+However will be also called when view gains visibility. Guarantied to be called
+only when view is visible and has dimensions (in document and not hidden)
+
 ### view.Base.prototype.layout()
 
-Being called when you need to update view's layout. Usually being called
-when parent gets resized. However will be also called when view gains
-visibility. Guarantied to be called only when view is visible and has
-dimensions (in document and not hidden)
+Force layout process.
 
 ## Default accessors
 

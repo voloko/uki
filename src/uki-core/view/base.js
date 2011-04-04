@@ -61,27 +61,35 @@ var Base = view.newClass('Base', {
     },
 
     /**
-    * Being called when view becomes visible for the first time.
-    * 
-    * At this point you can access offsetWidth, offsetHeight and do mesurments
-    * 
-    * @protected
-    */
+     * Called when view becomes visible for the first time.
+     * 
+     * At this point you can access offsetWidth, offsetHeight and do mesurments
+     * 
+     * @protected
+     */
     _initLayout: fun.FS,
     
     /**
-    * Being called when you need to update view's layout. Usualy being called
+    * Being called when you need to update view's layout. Usualy
     * when parent gets resized, however will be also called when view gains
     * visibility. Gurantied to be called only when view is visible and has
     * dimensions (in document and not hidden)
     * 
-    * @public
+    * @protected
     */
+    _layout: fun.FS,
+    
+    /**
+     * Start layout process manualy
+     * 
+     * @public
+     */
     layout: function() {
         if (!this._layoutBefore) {
             this._layoutBefore = true;
             this._initLayout();
         }
+        this._layout();
         return this;
     },
     
