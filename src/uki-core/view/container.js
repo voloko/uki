@@ -102,9 +102,11 @@ var Container = view.newClass('Container', Base, {
      * @param {Base} beforeChild Existent child before which we should insert
      */
     insertBefore: function(child, beforeChild) {
-        var i, l;
+        var i = beforeChild._viewIndex,
+            l = this._childViews.length;
+
         child._viewIndex = beforeChild._viewIndex;
-        for (i = beforeChild._viewIndex, l = this._childViews.length; i < l; i++) {
+        for (; i < l; i++) {
             this._childViews[i]._viewIndex++;
         };
         this._childViews.splice(beforeChild._viewIndex-1, 0, child);
