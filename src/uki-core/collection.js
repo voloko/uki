@@ -17,16 +17,19 @@ var fun = require('./function'),
  */
 var Collection = fun.newClass({
 
-    init: function(views) {
+    init: function(views, references) {
         this.length = 0;
+		this._references = references || {};
         arrayPrototype.push.apply(this, views);
     },
+
+	view: function(name) {
+		return this._references[name];
+	},
 
     /**#@+ @memberOf Collection# */
     /**
      * Iterates trough all items within itself
-     *
-     * @function
      *
      * @param {function(this:view.Base, number, view.Base)} callback
      * @returns {view.Collection} self
@@ -37,8 +40,6 @@ var Collection = fun.newClass({
 
     /**
      * Creates a new Collection populated with found items
-     *
-     * @function
      *
      * @param {function(view.Base, number):boolean} callback
      * @returns {view.Collection} created collection
@@ -60,8 +61,6 @@ var Collection = fun.newClass({
      *                           // collection views
      * c.prop('name') // gets name attribute on the first view
      *
-     * @function
-     *
      * @param {string} name Name of the attribute
      * @param {object=} value Value to set
      * @returns {view.Collection|Object} Self or attribute value
@@ -82,8 +81,6 @@ var Collection = fun.newClass({
      * @example
      * c.find('Button')
      *
-     * @function
-     *
      * @param {string} selector
      * @returns {view.Collection} Collection of found items
      */
@@ -102,7 +99,7 @@ var Collection = fun.newClass({
     attach: function(dom) {
         this.forEach(function(view) {
             require('./attaching').Attaching.attach(dom, view);
-            view.resized();
+            view.layout();
         });
         return this;
     },
@@ -120,12 +117,6 @@ var Collection = fun.newClass({
 
 var proto = Collection.prototype;
 
-/** @function
-@name Collection#parent */
-/** @function
-@name Collection#next */
-/** @function
-@name Collection#prev */
 utils.forEach([
     ['parent', 'parent'],
     ['next', 'nextView'],
@@ -154,6 +145,7 @@ Collection.addMethods = function(methods) {
             };
         }
     });
+    return this;
 };
 
 Collection.addProps = function(props) {
@@ -164,17 +156,18 @@ Collection.addProps = function(props) {
             };
         }
     });
+    return this;
 };
 
 
 Collection.addMethods([
     'addListener', 'removeListener', 'trigger', 'on',
     'addClass', 'removeClass', 'toggleClass',
-    'destruct', 'resized', 'scroll', 'clear'
+    'destruct', 'layout', 'scroll', 'clear'
 ]);
 
 Collection.addProps([
-    'id', 'dom', 'text', 'html', 'pos', 'visible', 'style', 'binding',
+    'id', 'dom', 'text', 'html', 'pos', 'visible', 'style', 'model',
     'bindings', 'clientRect'
 ]);
 

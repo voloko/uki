@@ -12,7 +12,6 @@ var env        = require('./uki-core/env'),
  * @param {Array.<view.Base>=} optional context for selector
  * @class
  * @namespace
- * @name uki
  * @return {Collection}
  */
 function uki(val, context) {
@@ -30,7 +29,8 @@ uki.version = '0.4.0a4';
 
 // push everything into core namespace
 utils.extend(uki,
-    env, utils, builder, selector, collection,
+    env, utils, selector, collection,
+    { builder: builder },
     require('./uki-core/function'),
     require('./uki-core/dom'),
     require('./uki-core/event'),
@@ -54,7 +54,6 @@ builder.namespaces.unshift(view);
 // copy views from default view namespaces into view
 utils.extend(view,
     require('./uki-core/view/base'),
-    require('./uki-core/view/focusable'),
     require('./uki-core/view/container')
 );
 

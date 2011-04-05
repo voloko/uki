@@ -48,7 +48,7 @@ all the containing views will have the method with the same name and params
 being called. By default, this methods are delegated:
 `addListener`, `removeListener`, `trigger`, `on`,
 `addClass`, `removeClass`, `toggleClass`,
-`destruct`, `resized`, `scroll`, `clear`
+`destruct`, `layout`, `scroll`, `clear`
 
 ### collection.Collection.addProps(props)
 

@@ -7,7 +7,6 @@ var view  = require('../view'),
 /**
  * @class
  * @augments Base
- * @name Container
  */
 var Container = view.newClass('Container', Base, {
 
@@ -22,19 +21,12 @@ var Container = view.newClass('Container', Base, {
         Base.prototype.destruct.call(this);
     },
 
-    resized: function() {
-        this._resizeSelf();
-        this._resizeChildViews();
-        return this;
-    },
-
-    _resizeSelf: fun.FS,
-
-    _resizeChildViews: function() {
+    _layout: function() {
         utils.forEach(this.childViews(), function(view) {
             // do not resize invisible views, save time
-            view.visible() && view.resized();
+            view.visible() && view.layout();
         });
+        return this;
     },
 
     clear: function(destruct) {

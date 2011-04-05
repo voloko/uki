@@ -5,7 +5,7 @@ var fun  = require('../../uki-core/function'),
     dom  = require('../../uki-core/dom'),
 
     Base      = require('../../uki-core/view/base').Base,
-    Focusable = require('../../uki-core/view/focusable').Focusable;
+    Focusable = require('./focusable').Focusable;
 
 
 var Button = view.newClass('Button', Base, Focusable, {
@@ -38,15 +38,18 @@ var Button = view.newClass('Button', Base, Focusable, {
         dom.removeElement(this._iconDom);
         this._iconSrc = src;
         if (src) {
-            this._iconDom = dom.createElement('img', { className: 'uki-button__icon', src: src });
+            this._iconDom = dom.createElement('img',
+                { className: 'uki-button__icon', src: src });
             this.dom().insertBefore(this._iconDom, this._text);
         }
         updateImageOnly.call(this);
     }),
 
     _createDom: function() {
-        this._text = dom.createElement('span', { className: 'uki-button__text' });
-        this._dom = dom.createElement('button', { className: 'uki-button', tabIndex: -1 }, [this._text]);
+        this._text = dom.createElement('span',
+            { className: 'uki-button__text' });
+        this._dom = dom.createElement('button',
+            { className: 'uki-button', tabIndex: -1 }, [this._text]);
     },
 
     destruct: function() {

@@ -61,7 +61,7 @@ fun.bindOnce = function(fn, context) {
     // Do not rebind bound functions for the second time
     // since this will not affect their behaviour
     if (fn.bound) { return fn; }
-    
+
     fn.huid = fn.huid || env.guid++;
     var bindingName = '__bind_' + fn.huid;
     context[bindingName] = context[bindingName] || fun.bind(fn, context);
@@ -155,7 +155,7 @@ fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
     }
 
     klass.prototype.constructor = klass;
-    
+
     return klass;
 };
 
@@ -283,7 +283,7 @@ if (global.postMessage) {
     var deferMessage = "uki-defer-" + env.expando,
         listening = false,
         deferQueue = [];
-        
+
     fun.defer = function(callback) {
         if (!listening) {
             global.addEventListener('message', function(e) {

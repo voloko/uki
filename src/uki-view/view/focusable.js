@@ -1,6 +1,6 @@
-var env = require('../env'),
-    dom = require('../dom'),
-    fun = require('../function');
+var env = require('../../uki-core/env'),
+    dom = require('../../uki-core/dom'),
+    fun = require('../../uki-core/function');
 
 var Focusable = {};
 

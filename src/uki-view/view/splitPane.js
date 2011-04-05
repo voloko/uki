@@ -9,7 +9,7 @@ var fun   = require('../../uki-core/function'),
 
     Mustache  = require('../../uki-core/mustache').Mustache,
     Container = require('../../uki-core/view/container').Container,
-    Focusable = require('../../uki-core/view/focusable').Focusable;
+    Focusable = require('./focusable').Focusable;
 
 
 var SplitPane = view.newClass('SplitPane', Container, Focusable, {}),
@@ -32,26 +32,6 @@ proto._setup = function(initArgs) {
     Container.prototype._setup.call(this, initArgs);
 };
 
-/**
-* @function
-* @name view.HSplitPane#leftMin
-*/
-/**
-* @function
-* @name view.HSplitPane#rightMin
-*/
-/**
-* @function
-* @name view.HSplitPane#autogrowLeft
-*/
-/**
-* @function
-* @name view.HSplitPane#autogrowRight
-*/
-/**
-* @function
-* @name view.HSplitPane#throttle
-*/
 fun.addProps(proto, ['leftMin', 'rightMin', 'leftSpeed', 'rightSpeed', 'throttle']);
 proto.topMin = proto.leftMin;
 proto.bottomMin = proto.rightMin;
@@ -59,18 +39,17 @@ proto.topSpeed = proto.leftSpeed;
 proto.bottomSpeed = proto.rightSpeed;
 
 /**
-* @function
 * @fires event:handleMove
-* @name view.HSplitPane#handlePosition
 */
 fun.addProp(proto, 'handlePosition', function(val) {
     if (this._x_width()) {
         // store width after manual (drag or program) position change
         this._prevWidth = this._x_width();
 
-        this._prevPosition = this._handlePosition = this._normalizeHandlePosition(val);
+        this._prevPosition = this._handlePosition =
+            this._normalizeHandlePosition(val);
         // resize imidiately
-        this.resized();
+        this.layout();
     } else {
         this._handlePosition = val;
     }
@@ -112,10 +91,6 @@ proto.extPositions = function(positions) {
     return this;
 };
 
-/**
-* @function
-* @name view.HSplitPane#handleWidth
-*/
 proto.handleWidth = function() {
     return this._handleWidth;
 };
@@ -182,7 +157,7 @@ proto._throttledChildResize = function() {
     this._resizeChildViews();
 };
 
-proto.resized = function() {
+proto._layout = function() {
     this._moveHandle();
 
     if (!this._prevWidth) {
@@ -190,7 +165,8 @@ proto.resized = function() {
         this._prevWidth = this._x_width();
         this._prevPosition = this.handlePosition();
     } else {
-        this._handlePosition = this._normalizeHandlePosition(this._calcDesiredPosition());
+        this._handlePosition =
+            this._normalizeHandlePosition(this._calcDesiredPosition());
         this._moveHandle();
     }
     this._throttledChildResize();
@@ -237,26 +213,10 @@ proto._updatePositionOnDrag = function(e, stop) {
 };
 
 
-/**
-* @function
-* @name view.HSplitPane#topChildViews
-*/
-/**
-* @function
-* @name view.HSplitPane#leftChildViews
-*/
 proto.topChildViews = proto.leftChildViews = function(views) {
     return this._childViewsAt(0, views);
 };
 
-/**
-* @function
-* @name view.HSplitPane#rightChildViews
-*/
-/**
-* @function
-* @name view.HSplitPane#bottomChildViews
-*/
 proto.bottomChildViews = proto.rightChildViews = function(views) {
     return this._childViewsAt(1, views);
 };
@@ -282,8 +242,8 @@ proto._rightPos = function() {
 };
 
 proto._resizeChildViews = function() {
-    this._childViews[0].pos(this._leftPos()).resized();
-    this._childViews[1].pos(this._rightPos()).resized();
+    this._childViews[0].pos(this._leftPos()).layout();
+    this._childViews[1].pos(this._rightPos()).layout();
 };
 
 

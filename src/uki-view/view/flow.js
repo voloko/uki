@@ -48,4 +48,7 @@ var Flow = view.newClass('Flow', Container, {
 });
 
 
+require('../../uki-core/collection').Collection.addProps([
+    'horizontal'
+]);
 exports.Flow = Flow;
