@@ -2,7 +2,7 @@
 
 This module provides utilities to manipulate functions and create classes
 
-### fun.build(fn, context, [arg, ...])
+### fun.bind(fn, context, [arg, ...])
 
 Returns a function that will call `fn` in a given `context` with a given `arg`.
 

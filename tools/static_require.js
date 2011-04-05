@@ -255,7 +255,7 @@ exports.handle = function(req, res, options) {
     }
     res.writeHead(200, { 
         "Content-Type": 'application/javascript',
-        "Content-Length": code.length
+        "Content-Length": Buffer.byteLength(code.length, 'utf8')
     });
     res.end(req.method === "HEAD" ? "" : code);
 };
