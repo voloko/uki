@@ -6,7 +6,7 @@ var fun = require('../../../uki-core/function'),
 
 
 var Controller = fun.newClass(Observable, {
-	
+
 	initWithView: function(view) {
 		this._view = view;
         this._view.on({
@@ -19,7 +19,7 @@ var Controller = fun.newClass(Observable, {
         this._view.on('selectstart dragstart', evt.preventDefaultHandler);
         this._view.on(this.keyPressEvent(), fun.bind(this._onkeypress, this));
 	},
-	
+
     keyPressEvent: function() {
         var useKeyPress = env.root.opera ||
             (/mozilla/i.test(env.ua) && !(/(compatible|webkit)/i).test(env.ua));
@@ -74,7 +74,8 @@ var Controller = fun.newClass(Observable, {
             selection = this._view.selection();
 
         if (!this._view.multiselect() || !this._selectionInProcess) {
-            if (this._view.lastClickIndex() === index && !this._view.multiselect()) {
+            if (this._view.lastClickIndex() === index &&
+                !this._view.multiselect()) {
                 if (this._hadFocusOnSelectionStart) {
                     this._view.editSelection();
                 }
@@ -82,7 +83,8 @@ var Controller = fun.newClass(Observable, {
             return;
         };
 
-        if (this._view.lastClickIndex() === index && selection.isSelected(index)) {
+        if (this._view.lastClickIndex() === index &&
+            selection.isSelected(index)) {
             if (selection.indexes().length === 1) {
                 if (this._hadFocusOnSelectionStart) {
                     this._view.editSelection();
@@ -107,7 +109,8 @@ var Controller = fun.newClass(Observable, {
             e.preventDefault();
         } else if (e.which == 40 || e.keyCode == 40) { // DOWN
             nextIndex =
-                Math.min(this._view.data().length - 1, this._view.lastClickIndex() + 1);
+                Math.min(this._view.data().length - 1,
+                    this._view.lastClickIndex() + 1);
             e.preventDefault();
         } else if (this._view.multiselect() && // Ctrl + A
             (e.which == 97 || e.which == 65) && e.metaKey) {

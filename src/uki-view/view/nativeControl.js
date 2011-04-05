@@ -19,10 +19,6 @@ var ieResize = env.ua.match(/MSIE 6|7/);
 */
 var NativeControl = view.newClass('NativeControl', Base, Focusable, {
 
-    domForEvent: function(type) {
-        return this._input;
-    },
-
     focusableDom: function() {
         return this._input;
     },
@@ -31,6 +27,7 @@ var NativeControl = view.newClass('NativeControl', Base, Focusable, {
         return Focusable._domForEvent.call(this, type) ||
             Base.prototype.domForEvent.call(this, type);
     }
+
 });
 fun.delegateProp(NativeControl.prototype,
     ['name', 'checked', 'disabled', 'value', 'type'], '_input');
@@ -52,7 +49,12 @@ var Radio = view.newClass('nativeControl.Radio', NativeControl, {
             { className: 'uki-nc-radio' }, [this._input, this._label]);
     },
 
-    _bindingOptions: { viewEvent: 'click', viewProp: 'checked', commitChangesViewEvent: 'click' }
+    _bindingOptions: {
+        viewEvent: 'click',
+        viewProp: 'checked',
+        commitChangesViewEvent: 'click'
+    }
+
 });
 fun.delegateProp(Radio.prototype, 'html', '_label', 'innerHTML');
 
@@ -73,6 +75,7 @@ var Checkbox = view.newClass('nativeControl.Checkbox', NativeControl, {
     },
 
     _bindingOptions: Radio.prototype._bindingOptions
+
 });
 fun.delegateProp(Checkbox.prototype, 'html', '_label', 'innerHTML');
 
@@ -127,7 +130,8 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     },
 
     _updatePlaceholderVis: function() {
-        this._placeholderDom.style.display =  this.hasFocus() || this.value() ? 'none' : '';
+        this._placeholderDom.style.display =
+            (this.hasFocus() || this.value()) ? 'none' : '';
     },
 
     _updatePlaceholderHeight: function() {
@@ -135,13 +139,16 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
         var targetStyle = this._placeholderDom.style,
             sourceStyle = dom.computedStyle(this._input);
 
-        utils.forEach(['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'], function(name) {
+        utils.forEach(['font', 'fontFamily', 'fontSize',
+            'paddingLeft', 'paddingTop', 'padding'], function(name) {
             if (sourceStyle[name] !== undefined) {
                 targetStyle[name] = sourceStyle[name];
             }
         });
-        targetStyle.lineHeight = this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2 + 'px';
-        targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
+        targetStyle.lineHeight = this._input.offsetHeight +
+            (parseInt(sourceStyle.marginTop, 10) || 0)*2 + 'px';
+        targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
+            (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
         textProto._updatePlaceholderHeight = fun.FS;
     }
 });
@@ -216,7 +223,7 @@ function appendOptions (root, options) {
 
 
 require('../../uki-core/collection').Collection.addProps([
-    'name', 'checked', 'disabled', 'value', 'type', 'placeholder', 
+    'name', 'checked', 'disabled', 'value', 'type', 'placeholder',
     'disabled', 'options', 'selectedIndex'
 ]);
 exports.nativeControl = {
