@@ -1,7 +1,7 @@
 ## Writing a view
 
 Uki creates ui from views. You can use predefined views and/or create new ones.
-To crate a view use `view.newClass` (`uki.view.newClass`):
+To create a view use `view.newClass` (`uki.view.newClass`):
 
     var view = require('ukijs/src/uki-core/view'),
         Base = require('ukijs/src/uki-core/view/base.js').Base;
