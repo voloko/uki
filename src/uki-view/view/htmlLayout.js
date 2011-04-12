@@ -86,4 +86,8 @@ function byClassName(dom, className) {
 }
 
 
+require('../../uki-core/collection').Collection
+.addProps([
+    'data', 'template'
+]);
 exports.HTMLLayout = HTMLLayout;
