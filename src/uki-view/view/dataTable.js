@@ -1,12 +1,14 @@
-var env   = require('../../uki-core/env'),
-    fun   = require('../../uki-core/function'),
+requireCss('./dataTable/dataTable.css');
+
+var fun   = require('../../uki-core/function'),
     utils = require('../../uki-core/utils'),
     dom   = require('../../uki-core/dom'),
-    evt   = require('../../uki-core/event'),
     view  = require('../../uki-core/view'),
     build = require('../../uki-core/builder').build,
 
+    Renderer  = require('./dataTable/renderer').Renderer,
     DataList  = require('./dataList').DataList,
+    Mustache  = require('../../uki-core/mustache').Mustache,
     Base      = require('../../uki-core/view/base').Base,
     Container = require('../../uki-core/view/container').Container,
     Focusable = require('./focusable').Focusable;
@@ -43,6 +45,7 @@ var DataTable = view.newClass('DataTable', Container, {
 
         var c = build([
             { view: initArgs.headerView || DataTableHeader, as: 'header',
+              addClass: 'uki-dataTable-header-container',
               on: { resizeColumn: fun.bind(this._resizeColumn, this) } },
 
             { view: Container, pos: 't:0 l:0 r:0 b:0',
@@ -76,7 +79,7 @@ var DataTable = view.newClass('DataTable', Container, {
     },
 
     _resizeColumn: function(e) {
-        this._list._resizeColumn(e.column.pos, e.column.width);
+        this._list._updateColumnSize(e.column.pos);
     }
 });
 
@@ -98,9 +101,8 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     template: fun.newProp('template'),
     _template: requireText('dataTable/header.html'),
 
-    _createDom: function() {
-        this._dom = dom.createElement('div', {
-            className: 'uki-dataTable-header' });
+    _createDom: function(initArgs) {
+        Base.prototype._createDom.call(this, initArgs);
         this.on('draggesturestart', this._dragStart);
         this.on('draggesture', this._drag);
         this.on('draggestureend', this._drag);
@@ -143,13 +145,12 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             width = Math.max(width, column.minWidth);
         }
         column.width = width;
-
         var tr = this.dom().firstChild.firstChild.firstChild,
             td = tr.childNodes[column.visiblePos];
         td.style.width = width + 'px';
 
         this.dom().firstChild.style.width =
-            table.columnWidth(this.columns()) + 'px';
+            table.totalWidth(this.columns()) + 'px';
     },
 
     _formatColumn: function(col) {
@@ -159,7 +160,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             style: 'width:' + col.width + 'px',
             className: col.className +
                 (col.width != col.maxWidth || col.width != col.minWidth ?
-                    ' dataTable-header-cell__resizable' : '')
+                    ' uki-dataTable-header-cell_resizable' : '')
         };
     },
 
@@ -181,12 +182,13 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
 
 
 
-
-
-
-
-
 var DataTableList = view.newClass('DataTableList', DataList, {
+
+    _setup: function(initArgs) {
+        initArgs.renderer = initArgs.renderer || new Renderer();
+        DataList.prototype._setup.call(this, initArgs);
+    },
+
     /**
      * {
      *   key: 'propName',        // optional=index, propName to read from object
@@ -210,47 +212,14 @@ var DataTableList = view.newClass('DataTableList', DataList, {
         this.addClass('uki-dataTable-list');
     },
 
-    _resizeColumn: function(pos, width) {
+    _updateColumnSize: function(pos) {
         var column = this.columns()[pos];
-        column.width = width;
-        if (column.maxWidth > 0) {
-            width = Math.min(width, column.maxWidth);
-        }
-        if (column.minWidth > 0) {
-            width = Math.max(width, column.minWidth);
-        }
-
         utils.forEach(this._packs, function(pack) {
-            var tr = pack.firstChild.childNodes[0],
-                td = tr && tr.childNodes[column.visiblePos];
-            if (td) { td.style.width = width + 'px'; }
-        });
-        this._editorBlur();
+            this.renderer()
+                .resizeColumn(pack.dom, column.visiblePos, column.width);
+        }, this);
     }
 });
-
-
-lProto._setSelected = function(position, state) {
-    var item = this._itemAt(position);
-    if (item) {
-        dom.toggleClass(item, 'dataTable-row_selected', state);
-    }
-};
-
-lProto._formatRow = function(row, pos) {
-    var cols = [];
-    this._columns.forEach(function(col, i) {
-        if (!col.visible) { return; }
-        var val = col.key ? utils.prop(row, col.key) : row[i];
-        cols[i] = {
-            value: col.formatter(val || '', row, pos),
-            className: 'dataTable-col-' + i +
-                (col.className ? ' ' + col.className : ''),
-            style: pos ? '' : 'width:' + col.width + 'px'
-        };
-    });
-    return { columns: cols };
-};
 
 
 
@@ -268,8 +237,6 @@ var table = {
                 visiblePos: visiblePos,
                 pos: pos,
                 width: 200,
-                maxWidth: -1,
-                minWidth: 100,
                 name: '',
                 className: '',
                 visible: true,

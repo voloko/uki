@@ -95,6 +95,10 @@ var Base = view.newClass('Base', {
         return this;
     },
 
+    layoutIfVisible: function() {
+        if (this.dom() && this.dom().offsetWidth) { this.layout(); }
+    },
+
     /**
     * Get views container dom node.
     * @returns {Element} dom
@@ -113,15 +117,14 @@ var Base = view.newClass('Base', {
         var origState = this.visible();
         this.visible = state;
         this.dom().style.display = state ? '' : 'none';
-
         // if we change from invis to vis, and we have dom, and we're attached
         // redraw
-        if (state && !origState && this.dom() && this.dom().offsetWidth) {
-            this.update();
+        if (state && !origState) {
+            this.layoutIfVisible();
         }
         return this;
     }),
-    
+
     _visible: true,
 
     /* -------------------------- Common DOM accessors ----------------------*/

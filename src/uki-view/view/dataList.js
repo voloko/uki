@@ -59,6 +59,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         this._dom = dom.createElement('div', {
             className: 'uki-dataList uki-dataList_blured' });
         this.tabIndex(1);
+        this.renderer().initWithView(this);
         this.metrics().initWithView(this);
 		this.selectionController().initWithView(this);
     },
@@ -87,6 +88,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         this.selectedIndexes([]);
         this._layoutBefore = false;
         this.scrollableParent(null);
+        fun.deferOnce(fun.bindOnce(this.layoutIfVisible, this));
     },
 
     /**
@@ -182,7 +184,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         var data = this.data(),
             sample = utils.prop(data, 'sampleRow') ||
                 (data.slice && data.slice(0, 1)[0]) || '',
-            pack = this.renderer().renderPack([sample]);
+            pack = this.renderer().renderPack([sample], [], 0);
 
         this.dom().appendChild(pack);
         var rowHeight = pack.offsetHeight;

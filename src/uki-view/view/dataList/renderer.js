@@ -15,6 +15,8 @@ var Renderer = fun.newClass({
 
     key: fun.newProp('key'),
     _key: null,
+    
+    initWithView: fun.FS,
 
     renderPack: function(rows, selectedInPack, from) {
         var formated = utils.map(rows, function(r, i) {

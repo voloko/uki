@@ -16,6 +16,10 @@ utils.extend(view,
         require('./uki-view/view/dataList/selectionController'),
         require('./uki-view/view/dataList/selection'),
         require('./uki-view/view/dataList/renderer')
+    ) },
+    require('./uki-view/view/dataTable'),
+    { dataList: utils.extend({},
+        require('./uki-view/view/dataTable/renderer')
     ) }
 );
 
