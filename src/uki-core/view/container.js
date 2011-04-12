@@ -17,20 +17,13 @@ var Container = view.newClass('Container', Base, {
     },
 
     destruct: function() {
-        this.clear(true);
+        utils.invoke(this.childViews(), 'destruct');
         Base.prototype.destruct.call(this);
     },
 
     _layout: function() {
         utils.invoke(this.childViews(), 'layout');
         return this;
-    },
-
-    clear: function(destruct) {
-        utils.forEach(this.childViews(), function(child) {
-            this.removeChild(child);
-            if (destruct !== false) child.destruct();
-        }, this);
     },
 
     /**
