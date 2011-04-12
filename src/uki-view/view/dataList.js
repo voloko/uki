@@ -11,9 +11,9 @@ var env   = require('../../uki-core/env'),
     Metrics    = require('./dataList/metrics').Metrics,
     Renderer   = require('./dataList/renderer').Renderer,
     Selection  = require('./dataList/selection').Selection,
-    Controller = require('./dataList/controller').Controller,
+    SelectionController =
+        require('./dataList/selectionController').SelectionController,
 
-    Mustache   = require('../../uki-core/mustache').Mustache,
     Base       = require('../../uki-core/view/base').Base,
     Focusable  = require('./focusable').Focusable;
 
@@ -23,7 +23,8 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     _setup: function(initArgs) {
         this._metrics = initArgs.metrics || new Metrics();
         this._renderer = initArgs.renderer || new Renderer();
-		this._controller = initArgs.controller || new Controller();
+		this._selectionController = initArgs.selectionController ||
+		    new SelectionController();
         this._selection = new Selection();
 
         this._data = [];
@@ -45,21 +46,21 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 	metrics: function() {
 		return this._metrics;
 	},
-	
+
 	renderer: function() {
 		return this._renderer;
 	},
-	
-	controller: function() {
-		return this._controller;
+
+	selectionController: function() {
+		return this._selectionController;
 	},
-	
+
     _createDom: function(initArgs) {
         this._dom = dom.createElement('div', {
             className: 'uki-dataList uki-dataList_blured' });
         this.tabIndex(1);
         this.metrics().initWithView(this);
-		this.controller().initWithView(this);
+		this.selectionController().initWithView(this);
     },
 
     layout: function() {
@@ -222,12 +223,12 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 
         return { from: top, to: top + height };
     },
-    
+
     _renderingRange: function() {
         var range = this._visibleRange();
         if (!range) { return null; };
         var h = (range.to - range.from) * this.prerender();
-            
+
         range.from = Math.max(0, range.from - h);
         range.to = Math.min(this.metrics().totalHeight(), range.to + h);
         return range;
@@ -243,9 +244,9 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     _update: function() {
         var range = this._renderingRange();
         if (!range) { return; }
-        
+
         var packs = this._packs,
-            fromPX = packs[0] && packs[0].fromPX, 
+            fromPX = packs[0] && packs[0].fromPX,
             toPX = packs[0] && packs[packs.length - 1].toPX,
             i, h = range.to - range.from;
 
@@ -258,7 +259,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
                 this._removePack(packs[i++]);
             }
             packs = packs.slice(i);
-            range.from = packs.length ? 
+            range.from = packs.length ?
                 packs[packs.length - 1].toPX : range.from;
             range.to = Math.min(range.from + h, this.metrics().totalHeight());
         } else if (packs.length && toPX >= range.to) {
@@ -302,7 +303,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 
     _scheduleRenderPack: function(range) {
         var pack = { from: range.from, to: range.to };
-        
+
 		function render(rows) {
 		    if (pack.deleted) { return; }
 			pack.dom = this._renderPack(range, rows);
@@ -386,7 +387,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     selectedRows: function() {
         var result = [],
             indexes = this.selection().indexes();
-            
+
         for (var i=0, l = indexes.length; i < l; i++) {
             var item = this._data.slice(indexes[i], indexes[i]+1)[0];
             if (item) result.push(item);

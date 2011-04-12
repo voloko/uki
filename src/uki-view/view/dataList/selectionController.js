@@ -5,7 +5,7 @@ var fun = require('../../../uki-core/function'),
 	Observable = require('../../../uki-core/observable').Observable;
 
 
-var Controller = fun.newClass(Observable, {
+var SelectionController = fun.newClass(Observable, {
 
 	initWithView: function(view) {
 		this._view = view;
@@ -173,4 +173,4 @@ var Controller = fun.newClass(Observable, {
 });
 
 
-exports.Controller = Controller;
+exports.SelectionController = SelectionController;

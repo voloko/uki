@@ -2,8 +2,8 @@ var builder = require('../src/uki-core/builder'),
     selector = require('../src/uki-core/selector');
     
 builder.namespaces.unshift({
-    Base: require('../src/uki-core/view/base.js').Base,
-    Container: require('../src/uki-core/view/Container.js').Container
+    Base: require('../src/uki-core/view/base').Base,
+    Container: require('../src/uki-core/view/Container').Container
 });
 
 module.exports = {
