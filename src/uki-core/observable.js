@@ -4,48 +4,43 @@ var utils = require('./utils'),
 var Observable = {
     addListener: function(names, callback) {
         utils.forEach(names.split(' '), function(name) {
-            this._listenersFor(name).push(callback);
+            if (!this._listeners) { this._listeners = {}; }
+            if (!this._listeners[name]) { this._listeners[name] = []; }
+            this._listeners[name].push(callback);
         }, this);
         return this;
     },
 
     removeListener: function(names, callback) {
         if (!names) {
-            names = utils.keys(this._listeners || {}).join(' ');
-        }
-        utils.forEach(names.split(' '), function(name) {
-            var listeners = this._listenersFor(name, true);
+            delete this._listeners;
+        } else {
+            var listeners = this._listeners;
             if (listeners) {
-                this._listeners[name] = callback ? 
-                    utils.without(listeners, callback) : [];
+                utils.forEach(names.split(' '), function(name) {
+                    if (listeners[name]) {
+                        listeners[name] = callback ?
+                            utils.without(listeners[name], callback) : [];
+                    }
+                }, this);
             }
-        }, this);
+        }
         return this;
     },
 
     trigger: function(e) {
-        var type = e.type;
-        utils.forEach(this._listenersFor(type, true), function(callback) {
-            callback.call(this, e);
-        }, this);
+        var type = e.type,
+            listeners = this._listeners;
+        if (listeners && listeners[type]) {
+            utils.forEach(listeners[type], function(callback) {
+                callback.call(this, e);
+            }, this);
+        }
         return this;
     },
 
-    _listenersFor: function(name, skipCreate) {
-        if (skipCreate && (!this._listeners || !this._listeners[name])) {
-            return [];
-        }
-        if (!this._listeners) {
-            this._listeners = {};
-        }
-        if (!this._listeners[name]) {
-            this._listeners[name] = [];
-        }
-        return this._listeners[name];
-    },
-
     destruct: function() {
-        this._listeners = null;
+        delete this._listeners;
     },
 
     triggerChanges: function(name, source) {
