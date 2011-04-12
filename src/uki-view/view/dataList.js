@@ -280,10 +280,10 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         if (range.to > range.from) {
             var rowsRange = this.metrics().rowsForRange(range),
                 pack = this._scheduleRenderPack(rowsRange),
-                d = this.metrics().rowDimensions(rowsRange.to);
+                d = this.metrics().rowDimensions(rowsRange.to - 1);
 
             pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
-            pack.toPX = d.top + d.height - 1;
+            pack.toPX = d.top + d.height;
             packs.push(pack);
 
             this._packs = packs.sort(function(a, b) {
@@ -295,6 +295,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     _removePack: function(pack) {
         if (pack.dom) {
             this.dom().removeChild(pack.dom);
+            delete pack.dom;
         }
         pack.deleted = true;
     },

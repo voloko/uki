@@ -27,7 +27,7 @@ uki([
         { view: 'DataList', pos: 't:100px r:0 b:0 l:0', data: data,
 			multiselect: true }
     ]},
-    
+
     { view: 'Container', pos: 't:10px l:390px w:150px b:10px',
         addClass: 'scrollable', childViews: [
         { view: 'Header', text: 'Debounced list 100ms', size: 'small' },
@@ -44,7 +44,7 @@ var DummyAsyncData = uki.newClass({
         this._source = data;
         this.length = data.length;
     },
-    
+
     loadRange: function(from, to, callback) {
         var idxToLoad = [];
         for (var i = from; i < to; i++) {
@@ -63,7 +63,7 @@ var DummyAsyncData = uki.newClass({
             this._trigger(from, to, callback);
         }
     },
-    
+
     _trigger: function(from, to, callback) {
         callback(this.slice(from, to));
     },
@@ -90,35 +90,37 @@ var dataWithHeaders = uki.map(uki.range(1, 10000), function(i) {
 });
 
 var VarHeightMetrics = uki.newClass(uki.view.dataList.Metrics, {
-    
+
     update: function() {
         this._cache = [];
         this._data = this._view.data();
         this.triggerChanges('totalHeight');
     },
-    
+
     rowsForRange: function(range) {
-        return { 
+        return {
             from: this.rowForPosition(range.from),
-            to:   this.rowForPosition(range.to)
+            to:   this.rowForPosition(range.to) + 1
         };
     },
-    
+
     rowForPosition: function(px) {
         var i = this._cache.length - 1;
-        while (this._cache[i] < px) {
-            this.prefilCache(++i);
+        while (this._cache[i] + this.rowHeight(i) < px) {
+            this.prefilCache(i);
         }
-        
+
         var index = uki.binarySearch(this._cache, px);
-        return this._cache[index] > px ? index - 1 : index;
+        return this._cache[index] > px ? index - 1 :
+            Math.min(index, this._data.length - 1);
     },
-    
+
     rowHeight: function(index) {
         return this._data[index].header ? 40 : 24;
     },
-    
+
     prefilCache: function(index) {
+        if (index === 10000) debugger;
         var i = this._cache.length;
         while (i <= index) {
             if (i === 0) {
@@ -129,7 +131,7 @@ var VarHeightMetrics = uki.newClass(uki.view.dataList.Metrics, {
             i++;
         }
     },
-    
+
     rowDimensions: function(index) {
         this.prefilCache(index);
         return {
@@ -137,14 +139,14 @@ var VarHeightMetrics = uki.newClass(uki.view.dataList.Metrics, {
             height: this.rowHeight(index)
         };
     },
-    
+
     // this is expensive
     totalHeight: function() {
         var index = this._data.length - 1;
         this.prefilCache(index);
         return this._cache[index] + this.rowHeight(index);
     }
-    
+
 });
 
 uki([
