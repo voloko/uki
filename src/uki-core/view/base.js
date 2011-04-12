@@ -62,37 +62,39 @@ var Base = view.newClass('Base', {
 
     /**
      * Called when view becomes visible for the first time.
-     * 
+     *
      * At this point you can access offsetWidth, offsetHeight and do mesurments
-     * 
+     *
      * @protected
      */
     _initLayout: fun.FS,
-    
+
     /**
     * Being called when you need to update view's layout. Usualy
     * when parent gets resized, however will be also called when view gains
     * visibility. Gurantied to be called only when view is visible and has
     * dimensions (in document and not hidden)
-    * 
+    *
     * @protected
     */
     _layout: fun.FS,
-    
+
     /**
      * Start layout process manualy
-     * 
+     *
      * @public
      */
     layout: function() {
-        if (!this._layoutBefore) {
-            this._layoutBefore = true;
-            this._initLayout();
+        if (this.visible()) {
+            if (!this._layoutBefore) {
+                this._layoutBefore = true;
+                this._initLayout();
+            }
+            this._layout();
         }
-        this._layout();
         return this;
     },
-    
+
     /**
     * Get views container dom node.
     * @returns {Element} dom
@@ -107,12 +109,9 @@ var Base = view.newClass('Base', {
     * @param {boolean=} state
     * @returns {boolean|view.Base} current visibility state of self
     */
-    visible: function(state) {
-        if (state === undefined) {
-            return this.dom().style.display != 'none';
-        }
-
+    visible: fun.newProp('visible', function(state) {
         var origState = this.visible();
+        this.visible = state;
         this.dom().style.display = state ? '' : 'none';
 
         // if we change from invis to vis, and we have dom, and we're attached
@@ -121,7 +120,9 @@ var Base = view.newClass('Base', {
             this.update();
         }
         return this;
-    },
+    }),
+    
+    _visible: true,
 
     /* -------------------------- Common DOM accessors ----------------------*/
 

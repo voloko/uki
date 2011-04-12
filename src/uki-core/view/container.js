@@ -22,10 +22,7 @@ var Container = view.newClass('Container', Base, {
     },
 
     _layout: function() {
-        utils.forEach(this.childViews(), function(view) {
-            // do not resize invisible views, save time
-            view.visible() && view.layout();
-        });
+        utils.invoke(this.childViews(), 'layout');
         return this;
     },
 
