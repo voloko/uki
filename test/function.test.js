@@ -52,9 +52,18 @@ test('[perf] does not rebind', 1, function() {
 
 module('newClass');
 
-test('from constructor', 1, function() {
+test('without args', 1, function() {
+    var klass = fun.newClass();
+    
+    var obj = new klass();
+    equal(obj.constructor, klass);
+});
+
+test('from executable description', 1, function() {
     var klass = fun.newClass(function() {
-        this.foo = 'bar';
+        this.init = function() {
+            this.foo = 'bar';
+        };
     });
     
     var obj = new klass();
@@ -69,24 +78,53 @@ test('from description', 1, function() {
     
 });
 
-test('from constructor and a base class', 1, function() {
+test('from executable description and a base class', 1, function() {
     var base = fun.newClass({ 
+        init: function() {
+            this.foo = 'bar';
+        },
         getFoo: function() {
             return this.foo;
         } 
     });
     var klass = fun.newClass(base, function() {
-        this.foo = 'bar';
+        this.init = function() {
+            base.call(this);
+        };
     });
     
     var obj = new klass();
     equal(obj.getFoo(), 'bar');
 });
 
-test('from description and a base class', 1, function() {
-    var base = fun.newClass(function() {
-        this.foo = 'bar';
+test('executable description arguments', 1, function() {
+    var base = fun.newClass({ 
+        init: function() {
+            this.foo = 'bar';
+        } 
     });
+    var mixin = {
+        getFoo: function() {
+            return this.foo;
+        }
+    };
+    var klass = fun.newClass(base, mixin, function(b, m) {
+        this.init = function() {
+            b.init.call(this);
+        };
+        this.getFoo = function() {
+            return m.getFoo.call(this) + ' bar';
+        };
+    });
+    
+    var obj = new klass();
+    equal(obj.getFoo(), 'bar bar');
+});
+
+test('from description and a base class', 1, function() {
+    var base = fun.newClass({ init: function() {
+        this.foo = 'bar';
+    }});
     var klass = fun.newClass(base, {
         getFoo: function() {
             return this.foo;
@@ -103,13 +141,28 @@ test('with a mixin', 1, function() {
             return this.foo;
         }
     };
-    var base = fun.newClass(function() {
+    var base = fun.newClass({ init: function() {
         this.foo = 'bar';
-    });
-    var klass = fun.newClass(base, mixin, function() {
+    }});
+    var klass = fun.newClass(base, mixin, { init: function() {
         base.call(this);
         this.foo += ' bar';
-    });
+    }});
+    
+    var obj = new klass();
+    equal(obj.getFoo(), 'bar bar');
+});
+
+test('with only a mixin', 1, function() {
+    var mixin = {
+        getFoo: function() {
+            return this.foo;
+        }
+    };
+    
+    var klass = fun.newClass(mixin, { init: function() {
+        this.foo = 'bar bar';
+    }});
     
     var obj = new klass();
     equal(obj.getFoo(), 'bar bar');

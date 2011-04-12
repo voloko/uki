@@ -36,26 +36,31 @@ Useful for event handlers:
 
 Note that `fun.bindOnce` will add `__bind_NNN` properties to the `context`.
 
-### fun.newClass([baseClass], [mixin, ...], fn)
+### fun.newClass([baseClass], [mixin, ...], [desc])
 
-Bare metal class and inheritance implementation. Creates a new class with
-`fn` as a constructor:
+Bare metal class and inheritance implementation. Creates a new class from
+`desc` as a description. `desc.init` will be used as a constructor.
 
-    var Animal = fun.newClass(function() {
-        this.name = 'Rex';
-    });
+    var Animal = fun.newClass({
+        init: function() {
+            this.name = 'Rex';
+        }
+    );
 
-It can accept base class as the first parameter. It's not obligatory to use `fun.newClass`
-to create the base class. Anything, including simple `function` will work:
+It can accept base class as the first parameter. It's not obligatory to use
+`fun.newClass` to create the base class. Anything, including simple `function`
+will work:
 
-    var Dog = fun.newClass(Animal, function() {
-        // call the base class
-        Animal.apply(this, arguments);
-        this.sound = 'bou wou';
-    });
+    var Dog = fun.newClass(Animal, {
+        init: function() {
+            // call the base class
+            Animal.apply(this, arguments);
+            this.sound = 'bou wou';
+        }
+    );
 
-`fun.newClass` accepts mixins between the base class and the constructor
-function. Mixin is just an object containing methods:
+`fun.newClass` accepts mixins before the description function. Mixin is just an
+object containing methods:
 
     var Speakable = {
         makeSound: function() {
@@ -63,16 +68,18 @@ function. Mixin is just an object containing methods:
         }
     };
 
-Instead of the constructor function a description may be provided. In this
-case `init` property will be used as a constructor function:
+Instead of an object as description you may pass a function. It will be
+executed in context of an empty object. This object will be used as description.
+Function will receive newClass arguments as it's own arguments. It's useful as a
+shortcut for namespaced base classes/mixins.
 
-    var Cat = fun.newClass(Animal, Speakable, {
-        init: function() {
+    var Cat = fun.newClass(Animal, Speakable, function() {
+        this.init = function() {
             Animal.apply(this, arguments);
             this.sound = 'meow';
-        },
+        }
 
-        makeAngry: function() {
+        this.makeAngry = function() {
             this.sound = 'rrrrr';
         }
     });
@@ -160,7 +167,7 @@ Creates a function that will call `targetName` on `target`:
 
         blur: fun.newDelegateCall('node', 'blur')
     });
-    
+
     var w = new Wrapper(document.createElement('div'));
     x.blur();
 
@@ -182,7 +189,7 @@ Will use `postMessage` if available. Fallbacks to `setTimeout` if not.
 
 ### fun.deferOnce(callback, [context])
 
-Same as `defer`. If called several times with the same `callback`, will 
+Same as `defer`. If called several times with the same `callback`, will
 execute it only once.
 
 Redraw only once regardless of the number of children added:

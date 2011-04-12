@@ -125,33 +125,44 @@ fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
         length = arguments.length,
         first = arguments[0],
         last = arguments[length - 1],
-        klass = utils.isFunction(last) ? last : last && last.init,
+        init, desc, descArgs,
+        klass,
         baseClass = length > 1 && first.prototype && first;
 
-    // if nothing was provided create an empty constructor
-    // calling base class if available
-    if (!klass) {
-        if (baseClass) {
-            klass = function() { baseClass.apply(this, arguments); };
-        } else {
-            klass = function() {};
-        }
+    if (utils.isFunction(last)) {
+        descArgs = [];
+        klass = function() { init.apply(this, arguments); };
+    } else if (last && last.init) {
+        klass = last.init;
+    } else if (baseClass) {
+        klass = function() { baseClass.apply(this, arguments); };
+    } else {
+        klass = function() {};
     }
 
     // real inheritance for the first superclass
     if (baseClass) {
         inheritance.prototype = baseClass.prototype;
         klass.prototype = new inheritance();
+        descArgs && descArgs.push(baseClass.prototype);
     }
 
     // mixins
     for (i = baseClass ? 1 : 0; i < length - 1; i++) {
         utils.extend(klass.prototype, arguments[i]);
+        descArgs && descArgs.push(arguments[i]);
     }
 
     // if class description was provides
-    if (!utils.isFunction(last)) {
-        utils.extend(klass.prototype, last);
+    if (last) {
+        if (utils.isFunction(last)) {
+            desc = {};
+            last.apply(desc, descArgs);
+            init = desc.init || uki.FS;
+        } else {
+            desc = last;
+        }
+        utils.extend(klass.prototype, desc);
     }
 
     klass.prototype.constructor = klass;
