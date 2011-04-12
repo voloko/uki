@@ -34,7 +34,10 @@ var Container = view.newClass('Container', Base, {
      */
     childViews: function(val, destruct/*=true*/) {
         if (val === undefined) return this._childViews;
-        this.clear(destruct);
+        utils.forEach(this.childViews(), function(child) {
+            this.removeChild(child);
+            if (destruct !== false) { child.destruct(); }
+        }, this);
         require('../builder').build(val).forEach(function(child) {
             this.appendChild(child);
         }, this);
