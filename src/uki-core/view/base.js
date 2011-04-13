@@ -1,4 +1,4 @@
-requireCss('./base.css');
+requireCss('./base/base.css');
 
 var view  = require('../view'),
     utils = require('../utils'),
