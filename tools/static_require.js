@@ -171,8 +171,8 @@ function staticRequire (filePath, options) {
     addFileToAstList(filePath, true);
     
     var code = 'var global = this;';
-    code    += 'function require(index) { if (!require.cache[index]) {var module = require.cache[index] = {exports: {}}; require.modules[index].call(module.exports, global, module, require);} return require.cache[index].exports; }\n';
-    code    += 'var require_modules = require.modules = []; require.cache = [];';
+    code    += 'function require(index) { if (!require_cache[index]) {var module = require_cache[index] = {exports: {}}; require_modules[index].call(module.exports, global, module, require);} return require_cache[index].exports; }\n';
+    code    += 'var require_modules = require.modules = []; var require_cache = require.cache = [];';
     var body = jsp.parse(code)[1];
     
     if (state.requiredCssUsed) {
