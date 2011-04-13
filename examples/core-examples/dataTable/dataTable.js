@@ -16,7 +16,8 @@ function formatTime (t) {
 }
 
 var views = uki([
-    { view: 'DataTable', as: 'table', pos: 't:0 l:0 r:0 b:0', columns: [
+    { view: 'DataTable', as: 'table', debounce: 1,
+      pos: 't:0 l:0 r:0 b:0', columns: [
         { label: 'ID', width: 40 },
         { label: 'Name', minWidth: 100, width: 250 },
         { label: 'Time', width: 50, formatter: formatTime },
