@@ -3,18 +3,12 @@ var fun   = require('../../../uki-core/function'),
     dom   = require('../../../uki-core/dom'),
 
     Mustache = require('../../../uki-core/mustache').Mustache,
-    Base     = require('../dataList/renderer').Renderer;
+    Base     = require('../dataList/pack').Pack;
 
 
-var Renderer = fun.newClass(Base, {
+var Pack = fun.newClass(Base, {
 
-    _template: requireText('list.html'),
-
-    initWithView: function(view) {
-        this._view = view;
-    },
-
-    renderPack: function(rows, selectedInPack, from) {
+    render: function(rows, selectedInPack, from) {
         var formatedRows = utils.map(rows, function(row, i) {
             var pos = i + from;
             return {
@@ -25,33 +19,39 @@ var Renderer = fun.newClass(Base, {
             };
         }, this);
 
-        var pack = dom.fromHTML(Mustache.to_html(
-            this._template,
-            { rows: formatedRows }
-        ));
+        this._dom.innerHTML = Mustache.to_html(
+            this._template, { rows: formatedRows }
+        );
+        
+        this._tbody = this._dom.getElementsByTagName('tbody')[0];
 
-        this._restorePackSelection(pack, selectedInPack || [], from);
-        return pack;
+        this._restorePackSelection(selectedInPack || [], from);
     },
 
-    rowAt: function(pack, pos) {
-        return pack.childNodes[0].childNodes[pos];
-    },
-    
-    setSelected: function(pack, position, state) {
-        var row = this.rowAt(pack, position);
-        if (row) { dom.toggleClass(row, 'uki-dataTable-row_selected', state); }
-    },
-    
-    resizeColumn: function(pack, visiblePos, width) {
-        var tr = pack.firstChild.childNodes[0],
+    resizeColumn: function(visiblePos, width) {
+        var tr = this._rowAt(0),
             td = tr && tr.childNodes[visiblePos];
         if (td) { td.style.width = width + 'px'; }
     },
 
+    setSelected: function(position, state) {
+        var row = this._rowAt(position);
+        if (row) { dom.toggleClass(row, 'uki-dataTable-row_selected', state); }
+    },
+
+    _createDom: function(initArgs) {
+        this._dom = dom.createElement('div', {
+            className: 'uki-dataList-pack'
+        });
+    },
+
+    _rowAt: function(pos) {
+        return this._tbody && this._tbody.childNodes[pos];
+    },
+
     _formatColumns: function(row, pos, first) {
         var cols = [];
-        this._view.columns().forEach(function(col, i) {
+        this.parent().columns().forEach(function(col, i) {
             if (!col.visible) { return; }
             var val = col.key ? utils.prop(row, col.key) : row[i];
             cols[i] = {
@@ -68,4 +68,4 @@ var Renderer = fun.newClass(Base, {
 
 
 
-exports.Renderer = Renderer;
+exports.Pack = Pack;

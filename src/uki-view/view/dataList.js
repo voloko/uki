@@ -1,37 +1,33 @@
 requireCss('./dataList/dataList.css');
 
-var env   = require('../../uki-core/env'),
-    fun   = require('../../uki-core/function'),
+var fun   = require('../../uki-core/function'),
     utils = require('../../uki-core/utils'),
     dom   = require('../../uki-core/dom'),
-    evt   = require('../../uki-core/event'),
     view  = require('../../uki-core/view'),
     build = require('../../uki-core/builder').build,
 
     Metrics    = require('./dataList/metrics').Metrics,
-    Renderer   = require('./dataList/renderer').Renderer,
     Selection  = require('./dataList/selection').Selection,
+    Pack       = require('./dataList/pack').Pack,
     SelectionController =
         require('./dataList/selectionController').SelectionController,
 
-    Base       = require('../../uki-core/view/base').Base,
-    Focusable  = require('./focusable').Focusable;
+    Container = require('../../uki-core/view/container').Container,
+    Focusable = require('./focusable').Focusable;
 
-
-var DataList = view.newClass('DataList', Base, Focusable, {
+var DataList = view.newClass('DataList', Container, Focusable, {
 
     _setup: function(initArgs) {
         this._metrics = initArgs.metrics || new Metrics();
-        this._renderer = initArgs.renderer || new Renderer();
+        this._packView = initArgs.packView || Pack;
 		this._selectionController = initArgs.selectionController ||
 		    new SelectionController();
         this._selection = new Selection();
 
         this._data = [];
-        this._packs = [];
         this._rendered = {};
 
-        Base.prototype._setup.call(this, initArgs);
+        Container.prototype._setup.call(this, initArgs);
 
         this._selection.on('update',
             fun.bind(this._updateSelection, this));
@@ -47,10 +43,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
 		return this._metrics;
 	},
 
-	renderer: function() {
-		return this._renderer;
-	},
-
 	selectionController: function() {
 		return this._selectionController;
 	},
@@ -59,7 +51,6 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         this._dom = dom.createElement('div', {
             className: 'uki-dataList uki-dataList_blured' });
         this.tabIndex(1);
-        this.renderer().initWithView(this);
         this.metrics().initWithView(this);
 		this.selectionController().initWithView(this);
     },
@@ -83,8 +74,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     },
 
     _reset: function() {
-        utils.forEach(this._packs, dom.removeElement);
-        this._packs = [];
+        this.childViews([]);
         this.selectedIndexes([]);
         this._layoutBefore = false;
         this.scrollableParent(null);
@@ -129,11 +119,14 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         return this;
     },
 
-    template: fun.newDelegateProp('_renderer', 'template'),
+    template: fun.newProp('template'),
+    _template: requireText('dataList/pack.html'),
 
-    formatter: fun.newDelegateProp('_renderer', 'formatter'),
+    formatter: fun.newProp('formatter'),
+    _formatter: dom.escapeHTML,
 
-    key: fun.newDelegateProp('_renderer', 'key'),
+    key: fun.newProp('key'),
+    _key: null,
 
 
     // Rendering strategy
@@ -184,11 +177,12 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         var data = this.data(),
             sample = utils.prop(data, 'sampleRow') ||
                 (data.slice && data.slice(0, 1)[0]) || '',
-            pack = this.renderer().renderPack([sample], [], 0);
+            pack = this._createPack();
 
-        this.dom().appendChild(pack);
-        var rowHeight = pack.offsetHeight;
-        this.dom().removeChild(pack);
+        this.appendChild(pack);
+        pack.render([sample], [], 0);
+        var rowHeight = pack.dom().offsetHeight;
+        this.removeChild(pack);
         return rowHeight;
     },
 
@@ -247,7 +241,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         var range = this._renderingRange();
         if (!range) { return; }
 
-        var packs = this._packs,
+        var packs = this.childViews(),
             fromPX = packs[0] && packs[0].fromPX,
             toPX = packs[0] && packs[packs.length - 1].toPX,
             i, h = range.to - range.from;
@@ -258,7 +252,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         } else if (packs.length && fromPX <= range.from) {
             i = 0;
             while (packs[i] && packs[i].toPX < range.from) {
-                this._removePack(packs[i++]);
+                this.removeChild(packs[i++]);
             }
             packs = packs.slice(i);
             range.from = packs.length ?
@@ -267,7 +261,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         } else if (packs.length && toPX >= range.to) {
             i = packs.length - 1;
             while (packs[i] && packs[i].fromPX > range.to) {
-                this._removePack(packs[i--]);
+                this.removeChild(packs[i--]);
             }
             packs = packs.slice(0, i + 1);
             range.to = packs.length ? packs[0].fromPX : range.to;
@@ -275,7 +269,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         } else {
             i = 0;
             while (packs[i]) {
-                this._removePack(packs[i++]);
+                this.removeChild(packs[i++]);
             }
             packs = [];
         }
@@ -289,27 +283,21 @@ var DataList = view.newClass('DataList', Base, Focusable, {
             pack.toPX = d.top + d.height;
             packs.push(pack);
 
-            this._packs = packs.sort(function(a, b) {
+            this._childViews = packs.sort(function(a, b) {
                 return a.from - b.from;
             });
         }
     },
 
-    _removePack: function(pack) {
-        if (pack.dom) {
-            this.dom().removeChild(pack.dom);
-            delete pack.dom;
-        }
-        pack.deleted = true;
-    },
-
     _scheduleRenderPack: function(range) {
-        var pack = { from: range.from, to: range.to };
+        var pack = this._createPack();
+        pack.from = range.from;
+        pack.to = range.to;
+	    this.appendChild(pack);
 
 		function render(rows) {
-		    if (pack.deleted) { return; }
-			pack.dom = this._renderPack(range, rows);
-	        this.dom().appendChild(pack.dom);
+		    if (pack.destructed) { return; }
+		    this._renderPack(pack, range, rows);
 		}
 
         if (this.data().loadRange) {
@@ -323,12 +311,20 @@ var DataList = view.newClass('DataList', Base, Focusable, {
         return pack;
     },
 
-    _renderPack: function(range, rows) {
+    _createPack: function() {
+        var pack = new this._packView();
+        return pack
+            .template(this.template())
+            .formatter(this.formatter())
+            .key(this.key());
+    },
+
+    _renderPack: function(pack, range, rows) {
         var selectedInPack =
             this.selection().selectedInRange(range.from, range.to);
 
-        var pack = this.renderer().renderPack(rows, selectedInPack, range.from);
-        pack.style.top =
+        pack.render(rows, selectedInPack, range.from);
+        pack.dom().style.top =
             this.metrics().rowDimensions(range.from).top + 'px';
         return pack;
     },
@@ -337,7 +333,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     // _update in throttle and debounce and then revert back
     domForEvent: function(type) {
         return Focusable._domForEvent.call(this, type) ||
-            Base.prototype.domForEvent.call(this, type);
+            Container.prototype.domForEvent.call(this, type);
     },
 
 
@@ -398,7 +394,7 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     },
 
     _updateSelection: function(e) {
-        var packs = this._packs,
+        var packs = this.childViews(),
             from = packs[0] ? packs[0].from : -1,
             to = packs.length ? packs[packs.length - 1].to :
                 this.data().length,
@@ -413,16 +409,13 @@ var DataList = view.newClass('DataList', Base, Focusable, {
     },
 
     _setSelected: function(index, state) {
-        var packs = this._packs,
+        var packs = this.childViews(),
             pack, i, l;
 
         for (i = 0, l = packs.length; i < l; i++) {
             pack = packs[i];
             if (pack.from <= index && pack.to > index) {
-                if (pack.dom) {
-                    this.renderer().setSelected(pack.dom,
-                        index - pack.from, state);
-                }
+                pack.setSelected(index - pack.from, state);
                 break;
             }
         }

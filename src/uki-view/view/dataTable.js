@@ -6,7 +6,7 @@ var fun   = require('../../uki-core/function'),
     view  = require('../../uki-core/view'),
     build = require('../../uki-core/builder').build,
 
-    Renderer  = require('./dataTable/renderer').Renderer,
+    Pack      = require('./dataTable/pack').Pack,
     DataList  = require('./dataList').DataList,
     Mustache  = require('../../uki-core/mustache').Mustache,
     Base      = require('../../uki-core/view/base').Base,
@@ -185,7 +185,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
 var DataTableList = view.newClass('DataTableList', DataList, {
 
     _setup: function(initArgs) {
-        initArgs.renderer = initArgs.renderer || new Renderer();
+        initArgs.packView = initArgs.packView || Pack;
         DataList.prototype._setup.call(this, initArgs);
     },
 
@@ -206,6 +206,8 @@ var DataTableList = view.newClass('DataTableList', DataList, {
      */
     columns: fun.newProp('columns'),
     _columns: [],
+    
+    _template: requireText('dataTable/pack.html'),
 
     _createDom: function(initArgs) {
         DataList.prototype._createDom.call(this, initArgs);
@@ -214,9 +216,8 @@ var DataTableList = view.newClass('DataTableList', DataList, {
 
     _updateColumnSize: function(pos) {
         var column = this.columns()[pos];
-        utils.forEach(this._packs, function(pack) {
-            this.renderer()
-                .resizeColumn(pack.dom, column.visiblePos, column.width);
+        utils.forEach(this.childViews(), function(pack) {
+            pack.resizeColumn(column.visiblePos, column.width);
         }, this);
     }
 });

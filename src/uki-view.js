@@ -15,11 +15,11 @@ utils.extend(view,
         require('./uki-view/view/dataList/metrics'),
         require('./uki-view/view/dataList/selectionController'),
         require('./uki-view/view/dataList/selection'),
-        require('./uki-view/view/dataList/renderer')
+        require('./uki-view/view/dataList/pack')
     ) },
     require('./uki-view/view/dataTable'),
-    { dataList: utils.extend({},
-        require('./uki-view/view/dataTable/renderer')
+    { dataTable: utils.extend({},
+        require('./uki-view/view/dataTable/pack')
     ) }
 );
 
