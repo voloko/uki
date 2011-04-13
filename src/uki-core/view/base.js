@@ -115,7 +115,7 @@ var Base = view.newClass('Base', {
     */
     visible: fun.newProp('visible', function(state) {
         var origState = this.visible();
-        this.visible = state;
+        this._visible = state;
         this.dom().style.display = state ? '' : 'none';
         // if we change from invis to vis, and we have dom, and we're attached
         // redraw
