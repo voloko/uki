@@ -169,7 +169,7 @@ var evt = module.exports = {
     EventMethods: EventMethods,
 
     trigger: function(el, e) {
-        var listenerForEl = evt.listeners[el[expando]] || {},
+        var listenerForEl = listeners[el[expando]] || {},
             listenersForType = listenerForEl[e.type];
             
         if (!e.target) { e.target = el; }
