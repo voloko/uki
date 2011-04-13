@@ -13,14 +13,14 @@ var SelectionController = fun.newClass(Observable, {
             'mousedown': fun.bind(this._onmousedown, this),
             'mouseup': fun.bind(this._onmouseup, this),
             'focus': fun.bind(this._onfocus, this),
-            'blur': fun.bind(this._onblur, this)
+            'blur': fun.bind(this._onblur, this),
+            'keydown': fun.bind(this._onkeydown, this)
         });
         // prevent dragging of selection
-        this._view.on('selectstart dragstart', evt.preventDefaultHandler);
-        this._view.on(this.keyPressEvent(), fun.bind(this._onkeypress, this));
+        this._view.on(this.keyRepeatEvent(), fun.bind(this._onkeyrepeat, this));
 	},
 
-    keyPressEvent: function() {
+    keyRepeatEvent: function() {
         var useKeyPress = env.root.opera ||
             (/mozilla/i.test(env.ua) && !(/(compatible|webkit)/i).test(env.ua));
 
@@ -50,6 +50,7 @@ var SelectionController = fun.newClass(Observable, {
                     );
                 }
                 this._triggerSelection();
+                e.preventDefault();
             } else if (e.metaKey) {
                 selection.toggle(index);
                 this._triggerSelection();
@@ -97,7 +98,16 @@ var SelectionController = fun.newClass(Observable, {
         this._selectionInProcess = false;
     },
 
-    _onkeypress: function(e) {
+    _onkeydown: function(e) {
+        if (this._view.multiselect() && // Ctrl + A
+            (e.which == 97 || e.which == 65) && e.metaKey) {
+            this._view.selection()
+                .clear().addRange(0, this._view.data().length);
+            this._triggerSelection();
+        }
+    },
+
+    _onkeyrepeat: function(e) {
         if (!this._view.hasFocus()) return;
 
         var selection = this._view.selection(),
@@ -112,12 +122,6 @@ var SelectionController = fun.newClass(Observable, {
                 Math.min(this._view.data().length - 1,
                     this._view.lastClickIndex() + 1);
             e.preventDefault();
-        } else if (this._view.multiselect() && // Ctrl + A
-            (e.which == 97 || e.which == 65) && e.metaKey) {
-
-            e.preventDefault();
-            selection.clear().addRange(0, this._view.data().length);
-            this._triggerSelection();
         }
         if (nextIndex > -1 && nextIndex != this._view.lastClickIndex()) {
             if (e.shiftKey && this._view.multiselect()) {

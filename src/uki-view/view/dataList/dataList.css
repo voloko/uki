@@ -1,9 +1,6 @@
 .uki-dataList {
     position: relative;
     outline: none;
-    -moz-user-select: -moz-none;
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 .uki-dataList-pack {

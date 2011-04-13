@@ -53,6 +53,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         this.tabIndex(1);
         this.metrics().initWithView(this);
 		this.selectionController().initWithView(this);
+        this.textSelectable(false);
     },
 
     layout: function() {
