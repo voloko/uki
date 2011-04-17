@@ -142,7 +142,7 @@ function addFileToAstList (filePath, wrap) {
         });
     } else {
         if (wrap) {
-            text = '(function() { var require = undefined;' + text + '})';
+            text = '(function() {' + text + '})';
         }
         ast = jsp.parse(text);
     }
@@ -247,7 +247,7 @@ exports.handle = function(req, res, options) {
             ast = pro.ast_squeeze(ast);
             ast = pro.ast_squeeze_more(ast);
         }
-        var code = pro.gen_code(ast, !req.param('squeeze'));
+        var code = pro.gen_code(ast, { beautify: !req.param('squeeze') });
     } catch (e) {
         require('util').error(e);
         var code = 'alert(' + JSON.stringify(e.stack + '. Current file ' + exports.state.currentPath) + ')';
