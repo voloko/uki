@@ -2,7 +2,7 @@
     "name":"ukijs",
     "description":"Simple client side app framework",
     "keywords":["uki","ukijs","widgets","mvc","view"],
-    "version":"0.4.5",
+    "version":"0.4.6",
     "homepage":"http://ukijs.org/",
     "author":"Vladimir Kolesnikov <voloko@gmail.com>",
     "repository":{"type":"git","url":"git://github.com/voloko/uki"},
