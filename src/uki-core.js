@@ -59,4 +59,3 @@ utils.extend(view,
 
 // export uki
 module.exports = uki;
-uki.createStylesheet(__requiredCss);

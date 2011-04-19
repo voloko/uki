@@ -1,0 +1,2 @@
+.uki-textSelectable_off{-moz-user-select:-moz-none;-webkit-user-select:none;-o-user-select:none;user-select:none;}
+.uki-textSelectable_off::selection{background: transparent;}

@@ -243,7 +243,7 @@ var table = {
                 visible: true,
                 formatter: dom.escapeHTML
             }, col);
-            col.minWidth = Math.min(col.minWidth, col.width);
+            col.minWidth = Math.min(col.minWidth || 20, col.width);
             if (col.maxWidth > 0) {
                 col.maxWidth = Math.max(col.maxWidth, col.width);
             }

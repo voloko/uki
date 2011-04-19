@@ -11,13 +11,13 @@ var Builder = fun.newClass({
     init: function(ns) {
         this.namespaces = ns || [global];
         this.build = fun.bind(this.build, this);
-		this._stack = 0;
+        this._stack = 0;
     },
 
     build: function(markup) {
-		if (!this._stack++) {
-			this._references = {};
-		}
+        if (!this._stack++) {
+            this._references = {};
+        }
         var collection = withBuilder(this, function() {
             if (markup.length === undefined) {
                 markup = [markup];
@@ -26,10 +26,10 @@ var Builder = fun.newClass({
                 return this.buildOne(mRow);
             }, this), this._references);
         }, this);
-		if (!this._stack--) {
-			this._references = null;
-		}
-		return collection;
+        if (!this._stack--) {
+            this._references = null;
+        }
+        return collection;
     },
     
     buildOne: function(mRow) {
@@ -48,9 +48,9 @@ var Builder = fun.newClass({
         } else {
             result = new klass(initArgs);
         }
-		if (mRow.as) {
-			this._references[mRow.as] = result;
-		}
+        if (mRow.as) {
+            this._references[mRow.as] = result;
+        }
 
         copyAttrs(result, mRow);
         return result;
@@ -58,7 +58,7 @@ var Builder = fun.newClass({
     
     resolvePath: function(path) {
         for (var i = 0, ns = this.namespaces, length = ns.length, res; 
-			i < length; i++) {
+            i < length; i++) {
             res = utils.path2obj(path, ns[i]);
             if (res) { return res; }
         }

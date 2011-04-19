@@ -47,43 +47,50 @@ utils.extend(DomEventWrapper.prototype, EventMethods);
 
 
 function normalize(e) {
-	// Fix target property, if necessary
-	if (!e.target) {
-		e.target = e.srcElement || env.doc;
-	}
+    // Fix target property, if necessary
+    if (!e.target) {
+        e.target = e.srcElement || env.doc;
+    }
 
-	// check if target is a textnode (safari)
-	if (e.target.nodeType === 3) {
-		e.target = e.target.parentNode;
-	}
+    // check if target is a textnode (safari)
+    if (e.target.nodeType === 3) {
+        e.target = e.target.parentNode;
+    }
 
-	// Add relatedTarget, if necessary
-	if (!e.relatedTarget && e.fromElement) {
-		e.relatedTarget = e.fromElement === e.target ? e.toElement : e.fromElement;
-	}
+    // Add relatedTarget, if necessary
+    if (!e.relatedTarget && e.fromElement) {
+        e.relatedTarget = e.fromElement === e.target ?
+            e.toElement : e.fromElement;
+    }
 
-	// Calculate pageX/Y if missing and clientX/Y available
-	if (e.pageX == null && e.clientX != null) {
-		var doc = env.doc,
-		    body = doc.body;
+    // Calculate pageX/Y if missing and clientX/Y available
+    if (e.pageX == null && e.clientX != null) {
+        var doc = env.doc,
+            body = doc.body;
 
-		e.pageX = e.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
-		e.pageY = e.clientY + (doc && doc.scrollTop  || body && body.scrollTop  || 0) - (doc && doc.clientTop  || body && body.clientTop  || 0);
-	}
+        e.pageX = e.clientX +
+            (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+            (doc && doc.clientLeft || body && body.clientLeft || 0);
+        e.pageY = e.clientY +
+            (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+            (doc && doc.clientTop  || body && body.clientTop  || 0);
+    }
 
-	// Add which for key events
-	if (e.which == null && (e.charCode != null || e.keyCode != null)) {
-		e.which = e.charCode != null ? e.charCode : e.keyCode;
-	}
+    // Add which for key events
+    if (e.which == null && (e.charCode != null || e.keyCode != null)) {
+        e.which = e.charCode != null ? e.charCode : e.keyCode;
+    }
 
-	// Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
-	e.metaKey = e.metaKey || e.ctrlKey;
+    // Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
+    e.metaKey = e.metaKey || e.ctrlKey;
 
-	// Add which for click: 1 === left; 2 === middle; 3 === right
-	// Note: button is not normalized, so don't use it
-	if (!e.which && e.button !== undefined) {
-		e.which = (e.button & 1 ? 1 : (e.button & 2 ? 3 : (e.button & 4 ? 2 : 0 )));
-	}
+    // Add which for click: 1 === left; 2 === middle; 3 === right
+    // Note: button is not normalized, so don't use it
+    if (!e.which && e.button !== undefined) {
+        e.which = (e.button & 1 ? 1 :
+                  (e.button & 2 ? 3 :
+                  (e.button & 4 ? 2 : 0 )));
+    }
 
     return e;
 };
@@ -165,20 +172,21 @@ var evt = module.exports = {
     listeners: listeners,
 
     domHandlers: domHandlers,
-    
+
     EventMethods: EventMethods,
 
     trigger: function(el, e) {
         var listenerForEl = listeners[el[expando]] || {},
             listenersForType = listenerForEl[e.type];
-            
+
         if (!e.target) { e.target = el; }
 
         listenersForType && utils.forEach(listenersForType, function(l) {
             l.call(el, e);
         });
 
-        if (e.simulatePropagation && !e.isPropagationStopped() && el.parentNode) {
+        if (e.simulatePropagation && !e.isPropagationStopped() &&
+            el.parentNode) {
             evt.trigger(el.parentNode, e);
         }
     },
@@ -195,8 +203,10 @@ var evt = module.exports = {
                 if (evt.special[type]) {
                     evt.special[type].setup(el);
                 } else {
-                    domHandlers[id] = domHandlers[id] || fun.bind(domHandler, el);
-                    el.addEventListener ? el.addEventListener(type, domHandlers[id], false) :
+                    domHandlers[id] = domHandlers[id] ||
+                        fun.bind(domHandler, el);
+                    el.addEventListener ?
+                        el.addEventListener(type, domHandlers[id], false) :
                         el.attachEvent('on' + type, domHandlers[id]);
                 }
             }
@@ -209,19 +219,21 @@ var evt = module.exports = {
     removeListener: function(el, types, listener) {
         var id = el[expando];
         if (!id || !listeners[id]) return;
-        
+
         types || (types = utils.keys(listeners[id]).join(' '));
         utils.forEach(types.split(' '), function(type) {
             if (!listeners[id][type]) return;
 
-            listeners[id][type] = listener ? utils.without(listeners[id][type], listener) : [];
+            listeners[id][type] = listener ?
+                utils.without(listeners[id][type], listener) : [];
 
             // when removing the last listener also remove listener from the dom
             if (!listeners[id][type].length) {
                 if (evt.special[type]) {
                     evt.special[type].teardown(el);
                 } else {
-                    el.removeEventListener ? el.removeEventListener(type, domHandlers[id], false) :
+                    el.removeEventListener ?
+                        el.removeEventListener(type, domHandlers[id], false) :
                         el.detachEvent('on' + type, domHandlers[id]);
                 }
                 delete listeners[id][type];
@@ -249,7 +261,10 @@ utils.forEach({
             }
 
             if (parent !== this) {
-                var wrapped = createEvent(e, { type: specialName, simulatePropagation: true });
+                var wrapped = createEvent(e, {
+                    type: specialName,
+                    simulatePropagation: true
+                });
                 evt.trigger(this, wrapped);
             }
         } catch(e) { }

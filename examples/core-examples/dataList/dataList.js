@@ -25,7 +25,7 @@ uki([
         { view: 'Text', addClass: 'help',
             html: requireText('./multiselectHelp.html') },
         { view: 'DataList', pos: 't:100px r:0 b:0 l:0', data: data,
-			multiselect: true }
+            multiselect: true }
     ]},
 
     { view: 'Container', pos: 't:10px l:390px w:150px b:10px',

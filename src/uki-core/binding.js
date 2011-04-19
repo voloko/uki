@@ -58,4 +58,4 @@ var Binding = fun.newClass({
 });
 
 
-exports.Binding  = Binding;
+exports.Binding = Binding;

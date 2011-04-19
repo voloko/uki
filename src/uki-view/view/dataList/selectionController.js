@@ -1,14 +1,14 @@
 var fun = require('../../../uki-core/function'),
-	evt = require('../../../uki-core/event'),
-	env = require('../../../uki-core/env'),
+    evt = require('../../../uki-core/event'),
+    env = require('../../../uki-core/env'),
 
-	Observable = require('../../../uki-core/observable').Observable;
+    Observable = require('../../../uki-core/observable').Observable;
 
 
 var SelectionController = fun.newClass(Observable, {
 
-	initWithView: function(view) {
-		this._view = view;
+    initWithView: function(view) {
+        this._view = view;
         this._view.on({
             'mousedown': fun.bind(this._onmousedown, this),
             'mouseup': fun.bind(this._onmouseup, this),
@@ -18,7 +18,7 @@ var SelectionController = fun.newClass(Observable, {
         });
         // prevent dragging of selection
         this._view.on(this.keyRepeatEvent(), fun.bind(this._onkeyrepeat, this));
-	},
+    },
 
     keyRepeatEvent: function() {
         var useKeyPress = env.root.opera ||
@@ -160,7 +160,7 @@ var SelectionController = fun.newClass(Observable, {
 
     _triggerSelection: function() {
         if (this._view.hasFocus()) {
-			this._view.triggerSelection();
+            this._view.triggerSelection();
             this._deferedTriggerSelection = false;
         } else {
             this._deferedTriggerSelection = true;

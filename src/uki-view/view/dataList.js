@@ -20,8 +20,8 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     _setup: function(initArgs) {
         this._metrics = initArgs.metrics || new Metrics();
         this._packView = initArgs.packView || Pack;
-		this._selectionController = initArgs.selectionController ||
-		    new SelectionController();
+        this._selectionController = initArgs.selectionController ||
+            new SelectionController();
         this._selection = new Selection();
 
         this._data = [];
@@ -39,20 +39,20 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         return this._selection;
     },
 
-	metrics: function() {
-		return this._metrics;
-	},
+    metrics: function() {
+        return this._metrics;
+    },
 
-	selectionController: function() {
-		return this._selectionController;
-	},
+    selectionController: function() {
+        return this._selectionController;
+    },
 
     _createDom: function(initArgs) {
         this._dom = dom.createElement('div', {
             className: 'uki-dataList uki-dataList_blured' });
         this.tabIndex(1);
         this.metrics().initWithView(this);
-		this.selectionController().initWithView(this);
+        this.selectionController().initWithView(this);
         this.textSelectable(false);
     },
 
@@ -294,12 +294,12 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         var pack = this._createPack();
         pack.from = range.from;
         pack.to = range.to;
-	    this.appendChild(pack);
+        this.appendChild(pack);
 
-		function render(rows) {
-		    if (pack.destructed) { return; }
-		    this._renderPack(pack, range, rows);
-		}
+        function render(rows) {
+            if (pack.destructed) { return; }
+            this._renderPack(pack, range, rows);
+        }
 
         if (this.data().loadRange) {
             this.data().loadRange(
@@ -307,7 +307,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
                 fun.bind(render, this)
             );
         } else {
-			render.call(this, this.data().slice(range.from, range.to));
+            render.call(this, this.data().slice(range.from, range.to));
         }
         return pack;
     },

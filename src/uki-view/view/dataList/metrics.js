@@ -5,10 +5,10 @@ var fun = require('../../../uki-core/function'),
 
 
 var Metrics = fun.newClass(Observable, {
-	
-	initWithView: function(view) {
-		this._view = view;
-	},
+    
+    initWithView: function(view) {
+        this._view = view;
+    },
     
     _rowHeight: 0,
     

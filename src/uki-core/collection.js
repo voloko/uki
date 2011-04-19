@@ -19,13 +19,13 @@ var Collection = fun.newClass({
 
     init: function(views, references) {
         this.length = 0;
-		this._references = references || {};
+        this._references = references || {};
         arrayPrototype.push.apply(this, views);
     },
 
-	view: function(name) {
-		return this._references[name];
-	},
+    view: function(name) {
+        return this._references[name];
+    },
 
     /**#@+ @memberOf Collection# */
     /**
