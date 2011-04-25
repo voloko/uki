@@ -2,7 +2,7 @@ var express = require('express'),
     path = require('path'),
     sr   = require('./tools/static_require'),
     fs   = require('fs');
-    
+
 var HOST = '0.0.0.0',
     PORT = 8000;
 
@@ -67,7 +67,9 @@ app.get('/test/qunit/*', function(req, res){
 });
 
 app.get('/*.js', sr.getHandler({
-    searchPaths: [fs.realpathSync(path.join(__dirname, 'src'))]
+    searchPaths: [
+      fs.realpathSync(path.join(__dirname, 'src'))
+    ].concat(require.paths)
 }));
 
 app.get('/*', function(req, res) {
