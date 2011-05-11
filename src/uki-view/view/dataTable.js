@@ -90,7 +90,7 @@ fun.delegateProp(DataTable.prototype, [
 ], 'list');
 
 fun.delegateCall(DataTable.prototype, [
-    'scrollToIndex', 'triggerSelection'
+    'scrollToIndex', 'triggerSelection', 'redrawRow'
 ], 'list');
 
 
@@ -131,7 +131,6 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
         this._resizeColumn(this._draggableColumn, width);
         this.trigger({
             type: 'resizeColumn',
-            source: this,
             column: this.columns()[this._draggableColumn]
         });
     },

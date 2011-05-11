@@ -36,7 +36,6 @@ uki([
     ]},
 ]).attach();
 
-
 // this list loads data asyncronously, each chunk in 500ms
 var DummyAsyncData = uki.newClass({
     init: function(source) {

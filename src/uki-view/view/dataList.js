@@ -187,6 +187,17 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         return rowHeight;
     },
 
+    redrawRow: function(index) {
+        var pack = this._packFor(index);
+        if (pack) {
+            pack.updateRow(
+                index - pack.from,
+                this.data().slice(index, 1),
+                index);
+            pack.setSelected(index - pack.from, this.isSelected(index));
+        }
+    },
+
     _updateHeight: function() {
         this.dom().style.height = this.metrics().totalHeight() + 'px';
     },
@@ -410,16 +421,23 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     },
 
     _setSelected: function(index, state) {
+        var pack = this._packFor(index);
+        if (pack) {
+            pack.setSelected(index - pack.from, state);
+        }
+    },
+
+    _packFor: function(index) {
         var packs = this.childViews(),
             pack, i, l;
 
         for (i = 0, l = packs.length; i < l; i++) {
             pack = packs[i];
             if (pack.from <= index && pack.to > index) {
-                pack.setSelected(index - pack.from, state);
-                break;
+                return pack;
             }
         }
+        return null;
     },
 
     editSelection: function(e) {
@@ -450,7 +468,7 @@ require('../../uki-core/collection').Collection
     'selectedIndexes', 'selectedIndex', 'lastClickIndex', 'multiselect'
 ])
 .addMethods([
-    'scrollToIndex', 'triggerSelection'
+    'scrollToIndex', 'triggerSelection', 'redrawRow'
 ]);
 
 exports.DataList = DataList;

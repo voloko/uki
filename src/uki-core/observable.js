@@ -43,17 +43,15 @@ var Observable = {
         delete this._listeners;
     },
 
-    triggerChanges: function(name, source) {
+    triggerChanges: function(name) {
         this.trigger({
             type: 'change.' + name,
-            model: this,
-            source: source
+            model: this
         });
         this.trigger({
             type: 'change',
             name: name,
-            model: this,
-            source: source
+            model: this
         });
         return this;
     },
@@ -75,7 +73,7 @@ Observable.on = Observable.addListener;
 
 function newProp(prop, setter) {
     var propName = '_' + prop;
-    return function(value, source) {
+    return function(value) {
         if (value === undefined) { return this[propName]; }
 
         var oldValue = this[prop](),
@@ -87,7 +85,7 @@ function newProp(prop, setter) {
         }
         newValue = this[prop]();
         if (oldValue !== newValue) {
-            this.triggerChanges(prop, source);
+            this.triggerChanges(prop);
         }
         return this;
     };

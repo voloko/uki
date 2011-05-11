@@ -8,24 +8,19 @@ var fun   = require('../../../uki-core/function'),
 
 var Pack = fun.newClass(Base, {
 
-    render: function(rows, selectedInPack, from) {
-        var formatedRows = utils.map(rows, function(row, i) {
-            var pos = i + from;
-            return {
-                columns: this._formatColumns(row, pos, !i),
-                row: row,
-                index: pos,
-                even: pos & 1
-            };
-        }, this);
-
-        this._dom.innerHTML = Mustache.to_html(
-            this._template, { rows: formatedRows }
-        );
-        
+    render: function(rows, selectedInPack, globalIndex) {
+        this._dom.innerHTML = this._toHTML(rows, globalIndex);
         this._tbody = this._dom.getElementsByTagName('tbody')[0];
+        this._restorePackSelection(selectedInPack || [], globalIndex);
+    },
 
-        this._restorePackSelection(selectedInPack || [], from);
+    updateRow: function(index, rows, globalIndex) {
+        var tmp = dom.createElement('div', {
+            html: this._toHTML(rows, globalIndex)
+        });
+        var item = this._rowAt(index);
+        var replaceWith = tmp.getElementsByTagName('tbody')[0].childNodes[0];
+        item.parentNode.replaceChild(replaceWith, item);
     },
 
     resizeColumn: function(visiblePos, width) {
@@ -37,6 +32,22 @@ var Pack = fun.newClass(Base, {
     setSelected: function(position, state) {
         var row = this._rowAt(position);
         if (row) { dom.toggleClass(row, 'uki-dataTable-row_selected', state); }
+    },
+
+    _toHTML: function(rows, globalIndex) {
+        var formated = utils.map(rows, function(row, i) {
+            var pos = i + globalIndex;
+            return {
+                columns: this._formatColumns(row, pos, !i),
+                row: row,
+                index: pos,
+                even: pos & 1
+            };
+        }, this);
+
+        return Mustache.to_html(
+            this.template(), { rows: formated }
+        );
     },
 
     _createDom: function(initArgs) {

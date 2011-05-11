@@ -145,6 +145,11 @@ fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
         inheritance.prototype = baseClass.prototype;
         klass.prototype = new inheritance();
         descArgs && descArgs.push(baseClass.prototype);
+        for (var staticMember in baseClass) {
+            if (!klass[staticMember]) {
+                klass[staticMember] = baseClass[staticMember];
+            }
+        }
     }
 
     // mixins
@@ -171,6 +176,7 @@ fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
 };
 
 function newProp(prop, setter) {
+    prop = prop || '_p' + env.guid++;
     var propName = '_' + prop;
     if (setter) {
         return function(value) {

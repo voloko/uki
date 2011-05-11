@@ -15,9 +15,31 @@ var Pack = view.newClass('dataList.Pack', Base, {
 
     key: fun.newProp('key'),
 
-    render: function(rows, selectedInPack, from) {
+    render: function(rows, selectedInPack, globalIndex) {
+        this._dom.innerHTML = this._toHTML(rows, globalIndex);
+        this._restorePackSelection(selectedInPack || [], globalIndex);
+    },
+
+    updateRow: function(index, rows, globalIndex) {
+        var tmp = dom.createElement('div', {
+            html: this._toHTML(rows, globalIndex)
+        });
+        var item = this._rowAt(index);
+        item.parentNode.replaceChild(tmp.childNodes[0], item);
+    },
+
+    setSelected: function(index, state) {
+        if (this.dom()) {
+            var row = this._rowAt(index);
+            if (row) {
+                dom.toggleClass(row, 'uki-dataList-row_selected', state);
+            }
+        }
+    },
+
+    _toHTML: function(rows, globalIndex) {
         var formated = utils.map(rows, function(r, i) {
-            i = i + from;
+            i = i + globalIndex;
             return {
                 value: this._formatRow(r, i),
                 row: r,
@@ -26,43 +48,32 @@ var Pack = view.newClass('dataList.Pack', Base, {
             };
         }, this);
 
-        this._dom.innerHTML = Mustache.to_html(
+        return Mustache.to_html(
             this.template(), { rows: formated }
         );
-
-        this._restorePackSelection(selectedInPack || [], from);
     },
 
-    setSelected: function(position, state) {
-        if (this.dom()) {
-            var row = this._rowAt(position);
-            if (row) {
-                dom.toggleClass(row, 'uki-dataList-row_selected', state);
-            }
-        }
-    },
-    
-    _formatRow: function(row, pos) {
+    _formatRow: function(row, index) {
         return this.formatter()(
             this.key() ? utils.prop(row, this.key()) : row,
             row,
-            pos);
+            index);
     },
-    
+
     _createDom: function(initArgs) {
         this._dom = dom.createElement('ul', {
             className: 'uki-dataList-pack'
         });
     },
 
-    _restorePackSelection: function(selectedInPack, from) {
+    _restorePackSelection: function(selectedInPack, globalIndex) {
         for (var i = selectedInPack.length - 1; i >= 0; i--){
-            this.setSelected(selectedInPack[i] - from, true);
+            this.setSelected(selectedInPack[i] - globalIndex, true);
         };
     },
 
-    _rowAt: function(pos) {
-        return this.dom().childNodes[pos];
+    _rowAt: function(index) {
+        return this.dom().childNodes[index];
     }
 
 });

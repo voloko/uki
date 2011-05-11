@@ -43,16 +43,27 @@ var Binding = fun.newClass({
     },
 
     updateModel: function(e) {
-        if (this.viewValue() != this.modelValue()) {
+        this._lockUpdate(function() {
             this.modelValue(this.viewValue());
-        }
+        });
     },
 
     updateView: function(e) {
-        if ((!e || e.source !== this) &&
-            this.viewValue() !== this.modelValue()) {
-
+        this._lockUpdate(function() {
             this.viewValue(this.modelValue());
+        });
+    },
+
+    _lockUpdate: function(callback) {
+        if (!this._updating && this.viewValue() != this.modelValue()) {
+            this._updating = true;
+            try {
+                callback.call(this);
+            } catch (e) {
+                this._updating = false;
+                throw e;
+            }
+            this._updating = false;
         }
     }
 });
