@@ -145,7 +145,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
         return {
             pos: col.pos,
             label: col.label,
-            style: 'width:' + col.width + 'px',
+            style: (col.visible) ? "width:" + col.width + "px" : 'display: none',
             className: col.className +
                 (col.width != col.maxWidth || col.width != col.minWidth ?
                     ' uki-dataTable-header-cell_resizable' : '')
