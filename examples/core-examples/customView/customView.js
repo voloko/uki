@@ -14,7 +14,7 @@ var Img = uki.view.newClass('Image', uki.view.Base, {
 
     // manually set/get alt
     src: function(value) {
-        if (value === undefined) return this._dom.src;
+        if (!arguments.length) return this._dom.src;
         this._dom.src = value;
         return this;
     },

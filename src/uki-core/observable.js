@@ -57,7 +57,7 @@ var Observable = {
     },
 
     muteEvents: function(value) {
-        if (value === undefined) {
+        if (!arguments.length) {
             return this._originalTrigger &&
                 this.trigger !== this._originalTrigger;
         }
@@ -74,7 +74,7 @@ Observable.on = Observable.addListener;
 function newProp(prop, setter) {
     var propName = '_' + prop;
     return function(value) {
-        if (value === undefined) { return this[propName]; }
+        if (!arguments.length) { return this[propName]; }
 
         var oldValue = this[prop](),
             newValue;

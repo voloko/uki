@@ -16,7 +16,7 @@ var fun   = require('../../uki-core/function'),
 
 var DataTable = view.newClass('DataTable', Container, {
     columns: function(cols) {
-        if (cols === undefined) {
+        if (!arguments.length) {
             return this._list.columns();
         }
         cols = table.addColumnDefatuls(cols);
@@ -26,7 +26,7 @@ var DataTable = view.newClass('DataTable', Container, {
     },
 
     columnWidths: function(v) {
-        if (v === undefined) {
+        if (!arguments.length) {
             return utils.pluck(this.columns(), 'width');
         }
         this.columns().forEach(function(col, i) {

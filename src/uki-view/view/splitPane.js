@@ -69,7 +69,7 @@ proto._moveHandle = function() {
  * Positions of additional drag zones
  */
 proto.extPositions = function(positions) {
-    if (positions === undefined) {
+    if (!arguments.length) {
         return utils.map(this._exts, function(ext) {
             return this._styleToPos(ext.style);
         }, this);
@@ -222,7 +222,7 @@ proto.bottomChildViews = proto.rightChildViews = function(views) {
 };
 
 proto._childViewsAt = function(i, views) {
-    if (views === undefined) return this._childViews[i].childViews();
+    if (arguments.length < 2) return this._childViews[i].childViews();
     this._childViews[i].childViews(views);
     return this;
 };

@@ -56,7 +56,7 @@ module.exports = {
 
     newToggleClassProp: function(className) {
         return function(state) {
-            if (state === undefined) { return this.hasClass(className); }
+            if (!arguments.length) { return this.hasClass(className); }
             return this.toggleClass(className, state);
         };
     },
@@ -80,7 +80,7 @@ module.exports = {
      */
     newClassMapProp: function(classMap) {
         return function(state) {
-            if (state === undefined) {
+            if (!arguments.length) {
                 var res = '';
                 utils.forEach(classMap, function(clasName, enumName) {
                     if (this.hasClass(clasName)) {

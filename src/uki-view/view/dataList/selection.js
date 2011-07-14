@@ -22,7 +22,7 @@ var Selection = fun.newClass(Observable, {
     }),
 
     index: function(value) {
-        if (value === undefined) {
+        if (!arguments.length) {
             return this.indexes().length ? this.indexes()[0] : -1;
         }
         return this.indexes(value < 0 ? [] : [value]);

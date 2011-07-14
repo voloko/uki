@@ -228,7 +228,7 @@ fun.addProp = fun.addProps = function(source, prop, setter) {
 function newDelegateProp(target, targetName) {
     return function(value) {
         var targetObj = utils.prop(this, target);
-        if (value === undefined) {
+        if (!arguments.length) {
             return targetObj ? utils.prop(targetObj, targetName) : null;
         }
         targetObj && utils.prop(targetObj, targetName, value);

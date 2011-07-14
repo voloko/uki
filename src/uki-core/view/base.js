@@ -144,7 +144,7 @@ var Base = view.newClass('Base', {
     * @returns {string|view.Base} current id or self
     */
     id: function(id) {
-        if (id === undefined) { return this.dom().id; }
+        if (!arguments.length) { return this.dom().id; }
         if (this.dom().id) { view.unregisterId(this); }
         this.dom().id = id;
         view.registerId(this);
@@ -194,7 +194,7 @@ var Base = view.newClass('Base', {
     * Experimental
     */
     style: function(value) {
-        if (value === undefined) {
+        if (!arguments.length) {
             return this.dom().style;
         }
         this.dom().style.cssText = styleToString(value);
@@ -274,7 +274,7 @@ var Base = view.newClass('Base', {
     * @returns {view.Base} parent or self
     */
     parent: function(parent) {
-        if (parent === undefined) {
+        if (!arguments.length) {
             return this._parent;
         }
 
@@ -312,7 +312,7 @@ var Base = view.newClass('Base', {
     *                          'l:10px t:10px r:30% h:200px'
     */
     pos: function(pos) {
-        if (pos === undefined) {
+        if (!arguments.length) {
             return this._styleToPos(this.dom().style);
         }
         pos = this._expandPos(pos);

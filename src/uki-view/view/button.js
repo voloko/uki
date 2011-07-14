@@ -11,7 +11,7 @@ var fun  = require('../../uki-core/function'),
 var Button = view.newClass('Button', Base, Focusable, {
 
     labelHtml: function(value) {
-        if (value === undefined) {
+        if (!arguments.length) {
             return this._text.innerHTML;
         }
         this._text.innerHTML = value;
@@ -24,7 +24,7 @@ var Button = view.newClass('Button', Base, Focusable, {
     },
 
     disabled: function(state) {
-        if (state === undefined) {
+        if (!arguments.length) {
             return this.dom().disabled;
         }
         this.dom().disabled = state ? 'disabled' : '';

@@ -33,7 +33,7 @@ var Container = view.newClass('Container', Base, {
      * Note: if setting on view with child views, all child view will be removed
      */
     childViews: function(val, destruct/*=true*/) {
-        if (val === undefined) return this._childViews;
+        if (!arguments.length) return this._childViews;
         utils.forEach(this.childViews(), function(child) {
             this.removeChild(child);
             if (destruct !== false) { child.destruct(); }
