@@ -111,7 +111,7 @@ module.exports = {
     },
 
     toggleClass: function(elem, className, condition) {
-        if (condition === undefined) {
+        if (arguments.length < 3) {
             condition = !this.hasClass(elem, className);
         }
         condition ? this.addClass(elem, className) :

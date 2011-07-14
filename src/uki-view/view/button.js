@@ -20,7 +20,7 @@ var Button = view.newClass('Button', Base, Focusable, {
     },
 
     label: function(value) {
-        return this.labelHtml(value && dom.escapeHTML(value));
+        return arguments.length ? this.labelHtml(dom.escapeHTML(value)) : this.labelHtml();
     },
 
     disabled: function(state) {

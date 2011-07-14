@@ -133,7 +133,7 @@ var Base = view.newClass('Base', {
     html: fun.newDelegateProp('dom', 'innerHTML'),
 
     text: function(v) {
-        return this.html(v && dom.escapeHTML(v));
+        return arguments.length ? this.html(dom.escapeHTML(v)) : this.html();
     },
 
 

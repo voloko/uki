@@ -66,7 +66,7 @@ var Collection = fun.newClass({
      * @returns {view.Collection|Object} Self or attribute value
      */
     prop: function(name, value) {
-        if (value !== undefined) {
+        if (arguments.length > 1) {
             for (var i = this.length - 1; i >= 0; i--) {
                 utils.prop(this[i], name, value);
             }

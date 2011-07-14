@@ -27,7 +27,7 @@ function inheritance() {}
  * @returns {object} target if value is being set, retrieved value otherwise
  */
 utils.prop = function(obj, prop, value, extra) {
-    if (value !== undefined) {
+    if (arguments.length > 2) {
         if (obj[prop] && obj[prop].apply) {
             obj[prop](value, extra);
         } else {
