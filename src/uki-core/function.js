@@ -180,13 +180,13 @@ function newProp(prop, setter) {
     var propName = '_' + prop;
     if (setter) {
         return function(value) {
-            if (value === undefined) { return this[propName]; }
+            if (!arguments.length) { return this[propName]; }
             setter.apply(this, arguments);
             return this;
         };
     } else {
         return function(value) {
-            if (value === undefined) { return this[propName]; }
+            if (!arguments.length) { return this[propName]; }
             this[propName] = value;
             return this;
         };

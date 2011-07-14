@@ -28,10 +28,12 @@ var Binding = fun.newClass({
     },
 
     destruct: function() {
-        this.view.removeListener(this.viewEvent,
-            fun.bindOnce(this.updateModel, this));
-        this.model.removeListener(this.modelEvent,
-            fun.bindOnce(this.updateView, this));
+        if (this.model && this.view) {
+            this.view.removeListener(this.viewEvent,
+                fun.bindOnce(this.updateModel, this));
+            this.model.removeListener(this.modelEvent,
+                fun.bindOnce(this.updateView, this));
+        }
     },
 
     viewValue: function(value) {

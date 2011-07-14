@@ -257,8 +257,9 @@ utils.forEach(_compat.arrayFunctions, function(name) {
     if (!utils[name]) {
         // using temp argument is faster than slicing
         // arguments object
+        var method = Array.prototype[name] || _compat[name];
         utils[name] = function(array, a, b) {
-            return _compat[name].call(array, a, b);
+            return method.call(array, a, b);
         };
     }
 });
