@@ -296,31 +296,9 @@ fun.debounce = function(fn, timeout) {
     return timer(fn, timeout, true);
 };
 
-if (global.postMessage) {
-    var deferMessage = "uki-defer-" + env.expando,
-        listening = false,
-        deferQueue = [];
-
-    fun.defer = function(callback) {
-        if (!listening) {
-            global.addEventListener('message', function(e) {
-                if (e.data == deferMessage) {
-                    e.stopPropagation();
-                    var queue = deferQueue;
-                    deferQueue = [];
-                    utils.invoke(queue);
-                }
-            }, false);
-            listening = true;
-        }
-        deferQueue.push(callback);
-        global.postMessage(deferMessage, "*");
-    };
-} else {
-    fun.defer = function(callback) {
-        return global.setTimeout(callback, 0);
-    };
-}
+fun.defer = function(callback) {
+    return global.setTimeout(callback, 0);
+};
 
 var deferOnceBound = {},
     deferOnceQueue = [];
