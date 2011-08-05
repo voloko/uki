@@ -260,7 +260,7 @@ var Base = view.newClass('Base', {
     trigger: function(e) {
         var node = this.domForEvent(e.type);
         var wrapped = evt.createEvent(e, { _targetView: this });
-        return evt.trigger(node, e);
+        return evt.trigger(node, wrapped);
     },
 
 
