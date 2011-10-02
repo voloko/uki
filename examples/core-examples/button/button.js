@@ -2,10 +2,9 @@
 @example_title Button
 @example_order 10
 @example_html
+    <script src="/src/pkg/uki.js"></script>
     <script src="button.js"></script>
 */
-
-var uki = require('uki');
 
 uki([
     

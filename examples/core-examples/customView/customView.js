@@ -2,10 +2,9 @@
 @example_title Custom View
 @example_order 80
 @example_html
+    <script src="/src/pkg/uki.js"></script>
     <script src="customView.js"></script>
 */
-
-var uki = require('uki');
 
 var Img = uki.view.newClass('Image', uki.view.Base, {
     _createDom: function(initArgs) {

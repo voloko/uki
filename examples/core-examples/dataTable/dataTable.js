@@ -2,10 +2,9 @@
 @example_title Data table
 @example_order 70
 @example_html
+    <script src="/src/pkg/uki.js"></script>
     <script src="dataTable.js"></script>
 */
-
-var uki = require('uki');
 
 // custom formatter for duration column
 function formatTime (t) {

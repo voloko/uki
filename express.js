@@ -66,6 +66,10 @@ app.get('/test/qunit/*', function(req, res){
     res.sendfile(req.url.substring(1));
 });
 
+app.get('/examples/*.js', function(req, res) {
+    res.sendfile(req.url.substring(1));
+});
+
 app.get('/*.js', sr.getHandler({
     searchPaths: [
       fs.realpathSync(path.join(__dirname, 'src'))

@@ -37,11 +37,15 @@ var Binding = fun.newClass({
     },
 
     viewValue: function(value) {
-        return utils.prop(this.view, this.viewProp, value);
+        return arguments.length ? 
+            utils.prop(this.view, this.viewProp, value) :
+            utils.prop(this.view, this.viewProp);
     },
 
     modelValue: function(value) {
-        return utils.prop(this.model, this.modelProp, value, this);
+        return arguments.length ? 
+            utils.prop(this.model, this.modelProp, value) :
+            utils.prop(this.model, this.modelProp);
     },
 
     updateModel: function(e) {

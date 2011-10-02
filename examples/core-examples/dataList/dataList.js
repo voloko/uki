@@ -2,15 +2,21 @@
 @example_title Data list
 @example_order 60
 @example_html
+    <link rel="stylesheet" href="dataList.css" />
+    <script src="/src/pkg/uki.js"></script>
     <script src="dataList.js"></script>
 */
-
-var uki = require('uki');
-requireCss('./dataList.css');
 
 var data = uki.map(uki.range(1, 50000), function(i) {
     return 'row #' + i;
 });
+
+var multiselectHelp = 'Use ' +
+'<span class="keyboard">Shift</span> + Click, ' + 
+'<span class="keyboard">Cmd/Ctrl</span> + Click,' +
+'<span class="keyboard">Cmd/Ctrl</span> + <span class="keyboard">A</span>, to select multiple rows.';
+
+var withHeaders = '{{#rows}}<li class="uki-dataList-row{{^even}} uki-dataList-row_odd{{/even}}{{#row}}{{#header}} row-header{{/header}}{{/row}}">{{{value}}}</li>{{/rows}}';
 
 uki([
     { view: 'Container', pos: 't:10px l:10px w:150px b:10px',
@@ -23,7 +29,7 @@ uki([
         addClass: 'scrollable', childViews: [
         { view: 'Header', text: 'Multiselect Data List', size: 'small' },
         { view: 'Text', addClass: 'help',
-            html: requireText('./multiselectHelp.html') },
+            html: multiselectHelp },
         { view: 'DataList', pos: 't:100px r:0 b:0 l:0', data: data,
             multiselect: true }
     ]},
@@ -153,7 +159,7 @@ uki([
         addClass: 'scrollable', childViews: [
         { view: 'Header', text: 'Var Height List', size: 'small' },
         { view: 'DataList', pos: 't:20px r:0 b:0 l:0', key: 'value',
-            template: requireText('withHeaders.html'),
+            template: withHeaders,
             addClass: 'with-headers',
             data: dataWithHeaders,
             multiselect: true, init: { metrics: new VarHeightMetrics() } }

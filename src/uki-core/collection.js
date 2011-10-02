@@ -152,7 +152,9 @@ Collection.addProps = function(props) {
     utils.forEach(props, function(name) {
         if (!proto[name]) {
             proto[name] = function(value) {
-                return this.prop(name, value);
+                return arguments.length ? 
+                    this.prop(name, value) :
+                    this.prop(name);
             };
         }
     });

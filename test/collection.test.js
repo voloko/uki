@@ -124,7 +124,6 @@ test('shortcuts', 2, function() {
     ]);
     
     equal(c.text(), 'bar');
-    
     c.text('y');
     
     equal(c[1].text(), 'y');

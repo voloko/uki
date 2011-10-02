@@ -2,10 +2,9 @@
 @example_title Text
 @example_order 40
 @example_html
+    <script src="/src/pkg/uki.js"></script>
     <script src="text.js"></script>
 */
-
-var uki = require('uki');
 
 uki({ view: 'Container', pos: 'w:30em', childViews: [
     { view: 'Header', size: 'large', text: 'Header' },

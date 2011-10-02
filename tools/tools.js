@@ -1,7 +1,10 @@
 require.paths.unshift(__dirname);
 
 var cli = require('cli'),
-    options = cli.parse(null, ['run', 'build']),
+    options = cli.parse(
+    {
+        squeeze: ['s', 'Squeeze output']
+    }, ['run', 'build']),
     util = require('util');
     
 if (cli.command == 'run') {
@@ -36,5 +39,10 @@ if (cli.command == 'run') {
     
 } else if (cli.command == 'build') {
     
+    var static_require = require('./static_require');
+    var file = cli.args[0];
+    var options = { filePath: cli.args[0], squeeze: cli.options.squeeze };
+    var code = static_require.require(options);
+    console.log(code);
 }
     

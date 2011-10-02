@@ -336,6 +336,7 @@ var Base = view.newClass('Base', {
             pos = {};
             utils.forEach(p.split(/\s+/), function(rule) {
                 var parts = rule.split(':');
+                parts[1].match(/\D/) || (parts[1] += 'px');
                 pos[parts[0]] = parts[1];
             });
         }

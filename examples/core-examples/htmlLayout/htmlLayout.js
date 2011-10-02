@@ -2,14 +2,19 @@
 @example_title HTMLLayout
 @example_order 90
 @example_html
+    <script src="/src/pkg/uki.js"></script>
     <script src="htmlLayout.js"></script>
 */
 
-var uki = require('uki');
+var template = '{{{header}}}' +
+'<dl>' +
+  '<dt>{{label_text}}</dt><dd>{{{input}}}</dd>' +
+  '<dt>{{label_select}}</dt><dd>{{{select}}}</dd>' +
+'</dl>';
 
 uki({
     view: 'HTMLLayout',
-    template: requireText('template.html'),
+    template: template,
     data: {
         header: { view: 'Header',
             text: 'This views are rendered inside HTML template' },

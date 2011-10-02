@@ -52,7 +52,7 @@ node. You can create properties manually or use one of the generator functions:
 
         // manually set/get alt
         src: function(value) {
-            if (value === undefined) return this._dom.src;
+            if (!arguments.length) return this._dom.src;
             this._dom.src = value;
             return this;
         },

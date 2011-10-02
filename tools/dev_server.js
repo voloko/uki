@@ -1,5 +1,5 @@
 var express = require('express'),
-    sr      = require('static_require'),
+    sr      = require('./static_require'),
     url     = require('url'),
     pro     = require('uglify-js').uglify,
     app     = express.createServer();

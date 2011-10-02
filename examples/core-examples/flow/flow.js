@@ -2,12 +2,11 @@
 @example_title Flow
 @example_order 20
 @example_html
+    <script src="/src/pkg/uki.js"></script>
     <script src="flow.js"></script>
 */
 
-var uki = require('uki');
 uki.createStylesheet('html, body { width: 100%; height: 100%; padding: 0; margin: 0 }');
-
 
 uki([
     { view: 'Flow', pos: 'l:10px t:10px', 
