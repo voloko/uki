@@ -31,7 +31,8 @@ Attaching.attach = function(dom, view) {
     if (!instances || !instances[id]) {
         register(new Attaching({ dom: dom }));
     }
-    return instances[id].appendChild(view);
+    instances[id].appendChild(view);
+    view.layout();
 };
 
 Attaching.instances = function() {

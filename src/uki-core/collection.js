@@ -99,7 +99,6 @@ var Collection = fun.newClass({
     attach: function(dom) {
         this.forEach(function(view) {
             require('./attaching').Attaching.attach(dom, view);
-            view.layout();
         });
         return this;
     },
