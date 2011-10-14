@@ -163,7 +163,7 @@ fun.newClass = function(/* [[baseClass], mixin1, mixin2, ..], constructor */) {
         if (utils.isFunction(last)) {
             desc = {};
             last.apply(desc, descArgs);
-            init = desc.init || uki.FS;
+            init = desc.init || fun.FS;
         } else {
             desc = last;
         }
