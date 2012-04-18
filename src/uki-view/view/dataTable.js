@@ -48,7 +48,7 @@ var DataTable = view.newClass('DataTable', Container, {
               addClass: 'uki-dataTable-header-container',
               on: { resizeColumn: fun.bind(this._resizeColumn, this) } },
 
-            { view: Container, pos: 't:0 l:0 r:0 b:0',
+            { view: Container,
               addClass: 'uki-dataTable-container', as: 'container',
               on: { scroll: fun.bind(this._scrollHeader, this) },
               childViews: [
@@ -59,19 +59,8 @@ var DataTable = view.newClass('DataTable', Container, {
         ]).appendTo(this);
 
         this._header = c.view('header');
-        this._header.on('render', fun.bindOnce(this._updateHeaderHeight, this));
         this._container = c.view('container');
         this._list = c.view('list');
-    },
-
-    _updateHeaderHeight: function() {
-        var pos = this._container.pos();
-        pos.t = this._header.clientRect().height + 'px';
-        this._container.pos(pos);
-    },
-
-    _initLayout: function() {
-        this._updateHeaderHeight();
     },
 
     _scrollHeader: function(e) {
@@ -156,7 +145,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
         return {
             pos: col.pos,
             label: col.label,
-            style: 'width:' + col.width + 'px',
+            style: (col.visible) ? "width:" + col.width + "px" : 'display: none',
             className: col.className +
                 (col.width != col.maxWidth || col.width != col.minWidth ?
                     ' uki-dataTable-header-cell_resizable' : '')
