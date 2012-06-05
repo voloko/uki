@@ -1,5 +1,3 @@
-require.paths.unshift(__dirname);
-
 var cli = require('cli'),
     options = cli.parse(
     {
@@ -24,7 +22,7 @@ if (cli.command == 'run') {
         }
     }
     
-    var dev_server = require('dev_server');
+    var dev_server = require('./dev_server');
     var fs = require('fs'),
         path = require('path');
         
