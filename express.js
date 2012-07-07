@@ -86,7 +86,7 @@ app.listen(PORT, HOST);
 function getExamplePage (filePath) {
     name = path.basename(filePath);
     htmlPath = path.join(filePath, name + '.html');
-    if (path.existsSync(htmlPath)) {
+    if (fs.existsSync(htmlPath)) {
         return fs.readFileSync(htmlPath);
     } else {
         return false;
@@ -96,7 +96,7 @@ function getExamplePage (filePath) {
 function listExamples (filePath) {
     var result = [];
     fs.readdirSync(filePath).forEach(function(name) {
-        if (path.existsSync(path.join(filePath, name, name + '.js'))) {
+        if (fs.existsSync(path.join(filePath, name, name + '.js'))) {
             result.push(name);
         } else if ( fs.statSync(path.join(filePath, name)).isDirectory() ) {
             result = result.concat(listExamples(path.join(filePath, name)).map(function(subname) {
