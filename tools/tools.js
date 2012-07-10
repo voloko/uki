@@ -1,4 +1,5 @@
-var cli = require('cli'),
+var cli     = require('cli'),
+    fs      = require('fs'),
     options = cli.parse(
     {
         squeeze: ['s', 'Squeeze output']
@@ -31,7 +32,8 @@ if (cli.command == 'run') {
         util.puts("Loaded express.js");
     } catch(e) {}
     
-    dev_server.init();
+    var here = fs.realpathSync(process.cwd());
+    dev_server.init(here);
     dev_server.app.listen(port, host);
     util.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
     

@@ -118,9 +118,14 @@ function processCssIncludes (cssPath) {
 }
 
 function resolvePath (filePath) {
-    var resolvedPath = mod._findPath(filePath,
-        [path.dirname(state.currentPath)].concat(state.options.searchPaths));
-    if (!resolvedPath) throw new Error('Path ' + filePath + ' not found.');
+    var parent = new mod.Module('tmp');
+    var seachPaths = [path.dirname(state.currentPath)]
+        .concat(state.options.searchPaths)
+        .concat(mod._nodeModulePaths(state.currentPath));
+    var resolvedPath = mod._findPath(filePath, seachPaths);
+    if (!resolvedPath) {
+        throw new Error('Path ' + filePath + ' not found. Required from ' + state.currentPath);
+    }
     return fs.realpathSync(resolvedPath);
 }
 
@@ -134,7 +139,10 @@ function addFileToAstList (filePath, wrap) {
     var ast;
     if (text.indexOf('@static_require noprocess') === -1) {
         if (wrap) {
-            text = '(function(global, module, require) {var exports = this;' + text + '})';
+            text = 
+                '(function(global, module, require) {' + 
+                '"' + filePath + '";' +
+                'var exports = this;' + text + '})';
         }
         ast = jsp.parse(text);
         ast = walker.with_walkers(walkers, function() {

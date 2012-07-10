@@ -1,12 +1,10 @@
 var express = require('express'),
     sr      = require('./static_require'),
-    url     = require('url'),
-    pro     = require('uglify-js').uglify,
     app     = express.createServer();
 
-exports.init = function() {
+exports.init = function(here) {
     app.get('/*.js', sr.getHandler({
-        searchPaths: []
+        searchPaths: [here]
     }));
 
     app.get('/*', function(req, res) {
