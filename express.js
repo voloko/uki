@@ -7,6 +7,7 @@ var HOST = '0.0.0.0',
     PORT = 8000;
 
 var examplesPath = path.join(__dirname, 'examples');
+var existsSync = fs.existsSync || path.existsSync;
 
 app = express.createServer();
 
@@ -66,14 +67,10 @@ app.get('/test/qunit/*', function(req, res){
     res.sendfile(req.url.substring(1));
 });
 
-app.get('/examples/*.js', function(req, res) {
-    res.sendfile(req.url.substring(1));
-});
-
-app.get('/*.js', sr.getHandler({
+app.get('*.js', sr.getHandler({
     searchPaths: [
       fs.realpathSync(path.join(__dirname, 'src'))
-    ].concat(require.paths)
+    ]
 }));
 
 app.get('/*', function(req, res) {
@@ -86,7 +83,7 @@ app.listen(PORT, HOST);
 function getExamplePage (filePath) {
     name = path.basename(filePath);
     htmlPath = path.join(filePath, name + '.html');
-    if (fs.existsSync(htmlPath)) {
+    if (existsSync(htmlPath)) {
         return fs.readFileSync(htmlPath);
     } else {
         return false;
@@ -96,7 +93,7 @@ function getExamplePage (filePath) {
 function listExamples (filePath) {
     var result = [];
     fs.readdirSync(filePath).forEach(function(name) {
-        if (fs.existsSync(path.join(filePath, name, name + '.js'))) {
+        if (existsSync(path.join(filePath, name, name + '.js'))) {
             result.push(name);
         } else if ( fs.statSync(path.join(filePath, name)).isDirectory() ) {
             result = result.concat(listExamples(path.join(filePath, name)).map(function(subname) {
