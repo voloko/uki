@@ -33,7 +33,7 @@ uki(
 ).attachTo( window, '1000 600', {minSize: '600 0'} );
 
 // when we resize second split pane and hit border, try resizing first pane
-var top = uki('#top')[0];
+var topView = uki('#top')[0];
 uki('HSplitPane:eq(1)').bind('handleMove', function(e) { 
-    if (e.handlePosition > e.dragValue) top.handlePosition(top.handlePosition() - (e.handlePosition - e.dragValue) ).layout();
+    if (e.handlePosition > e.dragValue) topView.handlePosition(top.handlePosition() - (e.handlePosition - e.dragValue) ).layout();
 });
